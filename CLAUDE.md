@@ -2,6 +2,18 @@
 
 > Read `.claude/ds-config.json` to get the prefix, package name, token paths, and all directory paths before doing any work.
 
+## Personal knowledge (sacha-agent MCP)
+
+This repo’s rules below are **Scorp DS–specific** (structure, tokens, TUI language). For **Sacha’s cross-project notes** (identity, process, comms style, generic DS patterns, Flutter/product context when indexed), use the **`sacha-agent`** MCP tools before guessing:
+
+- **`search_knowledge`** — semantic search over the KB at `~/Projects/sacha-agent` (parameters: `query`, optional `top_k`, optional `filter_folder` e.g. `knowledge/design-system`).
+- **`reindex`** — after KB markdown changes in that repo.
+- **`list_sources`** — debug what is indexed.
+
+Requires Ollama + Chroma running; see `sacha-agent/docs/portable-setup.md`. Server config: `.claude/mcp.json` in this repo.
+
+---
+
 You are working on **Scorp DS**, a TUI-inspired React/TypeScript design system. It is built from the `ds-framework` template and is brand-specific to the Scorp identity.
 
 ## Design Language
