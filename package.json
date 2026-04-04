@@ -1,0 +1,25 @@
+{
+  "name": "scorp-ds",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Scorp Design System — TUI-inspired React/TypeScript component library",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run --workspace=packages/storybook storybook",
+    "storybook": "npm run --workspace=packages/storybook storybook",
+    "build": "npm run build --workspaces --if-present",
+    "build:tokens": "npm run build --workspace=packages/tokens",
+    "build:components": "npm run build --workspace=packages/components",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "lint": "eslint packages/*/src --ext .ts,.tsx",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^9.0.0",
+    "typescript": "~5.9.3",
+    "vitest": "^2.0.0"
+  }
+}

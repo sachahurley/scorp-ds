@@ -1,0 +1,42 @@
+{
+  "project": {
+    "name": "Scorp DS",
+    "prefix": "Scorp",
+    "package": "scorp-ds",
+    "storybookUrl": "http://localhost:6006"
+  },
+  "notion": {
+    "databaseName": "Scorp DS Component Specs",
+    "parentPageId": null
+  },
+  "paths": {
+    "foundation": "packages/tokens/src",
+    "components": "packages/components/src/components",
+    "primitives": "packages/components/src/primitives",
+    "lab": "packages/components/src/lab",
+    "stories": "packages/storybook/stories",
+    "samples": "packages/storybook/samples",
+    "presets": "packages/storybook/presets",
+    "shared": "packages/storybook/shared",
+    "specs": "docs/specs",
+    "tests": "packages/components/src/__tests__"
+  },
+  "tokens": {
+    "classPrefix": "Scorp",
+    "cssVariablePrefix": "--scorp",
+    "classes": {
+      "colors": "ScorpColors",
+      "spacing": "ScorpSpacing",
+      "typography": "ScorpTypography",
+      "motion": "ScorpMotion",
+      "opacity": "ScorpOpacity"
+    }
+  },
+  "stack": "react-ts",
+  "forbiddenPackages": ["@sachahurley/scorpion-ui"],
+  "_notes": {
+    "tokenSource": "packages/tokens/src/tokens.json is the single source of truth for all tokens",
+    "componentNaming": "React components are not prefixed (Button not ScorpButton) — the package import provides namespace",
+    "cssVarPrefix": "CSS variables use --color-* not --scorp-color-* to stay compatible with existing Tailwind preset"
+  }
+}

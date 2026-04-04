@@ -1,0 +1,350 @@
+/**
+ * SCORPION UI - DESIGN TOKENS AS CSS VARIABLES
+ * 
+ * These CSS custom properties power the entire design system.
+ * They switch automatically based on the light/dark theme.
+ * 
+ * TUI Tier 1: Sharp corners (0px radius), no shadows, full monospace, snappy animations
+ * TUI Tier 2: ANSI terminal accent colors, amber CRT tint in dark mode
+ * 
+ * Usage in CSS: background-color: var(--color-amber-500);
+ * Usage in Tailwind: Already configured! Just use: bg-amber-500
+ */
+
+:root {
+  /* Light theme CSS variables */
+  --color-amber-50: #FFFBEB;
+  --color-amber-100: #FEF3C7;
+  --color-amber-200: #FDE68A;
+  --color-amber-300: #FCD34D;
+  --color-amber-400: #FBBF24;
+  --color-amber-500: #F59E0B;
+  --color-amber-600: #D97706;
+  --color-amber-700: #B45309;
+  --color-amber-800: #92400E;
+  --color-amber-900: #78350F;
+  --color-amber-950: #451A03;
+  --color-amber-975: #2D1102;
+  --color-amber-1000: #1A0A01;
+  
+  --color-sepia-50: #FDFCFB;
+  --color-sepia-100: #FCFBFA;
+  --color-sepia-200: #F7F5F2;
+  --color-sepia-300: #F0EBE4;
+  --color-sepia-400: #E0DACE;
+  --color-sepia-500: #BFB4A3;
+  --color-sepia-600: #968A75;
+  --color-sepia-700: #695F4D;
+  --color-sepia-800: #474030;
+  --color-sepia-900: #2B2718;
+  --color-sepia-925: #221E13;
+  --color-sepia-950: #1A150F;
+  --color-sepia-975: #120D09;
+  --color-sepia-1000: #0A0704;
+  
+  --color-green-50: #F0FDF4;
+  --color-green-100: #DCFCE7;
+  --color-green-200: #BBF7D0;
+  --color-green-300: #86EFAC;
+  --color-green-400: #4ADE80;
+  --color-green-500: #22C55E;
+  --color-green-600: #16A34A;
+  --color-green-700: #15803D;
+  --color-green-800: #166534;
+  --color-green-900: #14532D;
+  --color-green-950: #052E16;
+  
+  --color-blue-50: #EFF6FF;
+  --color-blue-100: #DBEAFE;
+  --color-blue-200: #BFDBFE;
+  --color-blue-300: #93C5FD;
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;
+  --color-blue-600: #2563EB;
+  --color-blue-700: #1D4ED8;
+  --color-blue-800: #1E40AF;
+  --color-blue-900: #1E3A8A;
+  --color-blue-950: #172554;
+  
+  --color-purple-50: #FAF5FF;
+  --color-purple-100: #F3E8FF;
+  --color-purple-200: #E9D5FF;
+  --color-purple-300: #D8B4FE;
+  --color-purple-400: #C084FC;
+  --color-purple-500: #A855F7;
+  --color-purple-600: #9333EA;
+  --color-purple-700: #7E22CE;
+  --color-purple-800: #6B21A8;
+  --color-purple-900: #581C87;
+  --color-purple-950: #3B0764;
+  
+  --color-red-50: #FEF2F2;
+  --color-red-100: #FEE2E2;
+  --color-red-200: #FECACA;
+  --color-red-300: #FCA5A5;
+  --color-red-400: #F87171;
+  --color-red-500: #EF4444;
+  --color-red-600: #DC2626;
+  --color-red-700: #B91C1C;
+  --color-red-800: #991B1B;
+  --color-red-900: #7F1D1D;
+  --color-red-950: #450A0A;
+  
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+  
+  /* Primary, secondary, and semantic colors (reference amber/sepia) */
+  --color-primary-50: #FFFBEB;
+  --color-primary-100: #FEF3C7;
+  --color-primary-200: #FDE68A;
+  --color-primary-300: #FCD34D;
+  --color-primary-400: #FBBF24;
+  --color-primary-500: #F59E0B;
+  --color-primary-600: #D97706;
+  --color-primary-700: #B45309;
+  --color-primary-800: #92400E;
+  --color-primary-900: #78350F;
+  --color-primary-950: #451A03;
+  --color-primary-975: #2D1102;
+  --color-primary-1000: #1A0A01;
+  
+  --color-secondary-50: #FDFCFB;
+  --color-secondary-100: #FCFBFA;
+  --color-secondary-200: #F7F5F2;
+  --color-secondary-300: #F0EBE4;
+  --color-secondary-400: #E0DACE;
+  --color-secondary-500: #BFB4A3;
+  --color-secondary-600: #968A75;
+  --color-secondary-700: #695F4D;
+  --color-secondary-800: #474030;
+  --color-secondary-900: #2B2718;
+  --color-secondary-925: #221E13;
+  --color-secondary-950: #1A150F;
+  --color-secondary-975: #120D09;
+  --color-secondary-1000: #0A0704;
+  
+  /* Success colors (green) */
+  --color-success-50: #F0FDF4;
+  --color-success-100: #DCFCE7;
+  --color-success-200: #BBF7D0;
+  --color-success-300: #86EFAC;
+  --color-success-400: #4ADE80;
+  --color-success-500: #22C55E;
+  --color-success-600: #16A34A;
+  --color-success-700: #15803D;
+  --color-success-800: #166534;
+  --color-success-900: #14532D;
+  --color-success-950: #052E16;
+  
+  /* Info colors (blue) */
+  --color-info-50: #EFF6FF;
+  --color-info-100: #DBEAFE;
+  --color-info-200: #BFDBFE;
+  --color-info-300: #93C5FD;
+  --color-info-400: #60A5FA;
+  --color-info-500: #3B82F6;
+  --color-info-600: #2563EB;
+  --color-info-700: #1D4ED8;
+  --color-info-800: #1E40AF;
+  --color-info-900: #1E3A8A;
+  --color-info-950: #172554;
+  
+  /* Warning colors (purple) */
+  --color-warning-50: #FAF5FF;
+  --color-warning-100: #F3E8FF;
+  --color-warning-200: #E9D5FF;
+  --color-warning-300: #D8B4FE;
+  --color-warning-400: #C084FC;
+  --color-warning-500: #A855F7;
+  --color-warning-600: #9333EA;
+  --color-warning-700: #7E22CE;
+  --color-warning-800: #6B21A8;
+  --color-warning-900: #581C87;
+  --color-warning-950: #3B0764;
+  
+  /* Error colors (red) */
+  --color-error-50: #FEF2F2;
+  --color-error-100: #FEE2E2;
+  --color-error-200: #FECACA;
+  --color-error-300: #FCA5A5;
+  --color-error-400: #F87171;
+  --color-error-500: #EF4444;
+  --color-error-600: #DC2626;
+  --color-error-700: #B91C1C;
+  --color-error-800: #991B1B;
+  --color-error-900: #7F1D1D;
+  --color-error-950: #450A0A;
+  
+  /* Font tokens */
+  --font-family-mono: 'Fragment Mono', ui-monospace, monospace;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 48px;
+  --font-size-4xl: 64px;
+  --font-size-5xl: 80px;
+  --font-size-6xl: 96px;
+  
+  /* Font line height tokens */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
+  /* Font weight tokens */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  
+  /* Border radius tokens -- TUI: sharp corners, no curves */
+  --radius-button: 0px;
+  --radius-container: 0px;
+  
+  /* Spacing tokens (matches Tailwind's 4px-based scale) */
+  --spacing-0: 0;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  
+  /* Focus state tokens (global - same for both themes) */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  
+  /* Animation/Duration tokens -- TUI: snappy, near-instant responses */
+  --duration-instant: 0ms;
+  --duration-fast: 50ms;
+  --duration-normal: 75ms;
+  --duration-slow: 100ms;
+  --duration-slower: 150ms;
+  
+  /* Easing/Timing functions */
+  --easing-linear: linear;
+  --easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Z-Index layering system */
+  --z-index-base: 0;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-overlay: 1030;
+  --z-index-modal: 1040;
+  --z-index-popover: 1050;
+  --z-index-tooltip: 1060;
+  
+  /* Opacity scale */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-100: 1;
+  
+  /* ANSI terminal accent colors -- TUI Tier 2 */
+  --color-term-green: #00CC33;
+  --color-term-amber: #CC8800;
+  --color-term-cyan: #00AACC;
+  --color-term-magenta: #CC00CC;
+  --color-term-red: #CC0022;
+  --color-term-blue: #0066CC;
+  --color-term-white: #E0E0E0;
+  --color-term-dim: #666666;
+  
+  /* Light theme surface and text colors */
+  --surface-page: #FDFCFB;
+  --surface-container: #FDFCFB;
+  --surface-card: #FFFFFF;
+  --surface-container-stroke: #BFB4A3;
+  --text-primary: #2B2718;
+  --text-secondary: #968A75;
+  
+  /* Light theme focus ring colors */
+  --focus-ring-primary: #FBBF24;
+  --focus-ring-secondary: #695F4D;
+  --focus-ring-error: #DC2626;
+  --focus-ring-destructive: #DC2626;
+  --focus-offset-color: #FDFCFB;
+  
+  /* Light theme button colors */
+  --button-primary-background: #FBBF24;
+  --button-primary-background-hover: #F59E0B;
+  --button-primary-text: #000000;
+  --button-secondary-background: #695F4D;
+  --button-secondary-background-hover: #968A75;
+  --button-secondary-text: #FDFCFB;
+  
+  /* Light theme elevation tokens -- TUI: flat, no shadows, borders only */
+  --elevation-0-shadow: none;
+  --elevation-0-border: transparent;
+  --elevation-1-shadow: none;
+  --elevation-1-border: #F7F5F2;
+  --elevation-2-shadow: none;
+  --elevation-2-border: #F0EBE4;
+  --elevation-3-shadow: none;
+  --elevation-3-border: #F0EBE4;
+}
+
+.dark {
+  /* Dark theme ANSI colors -- brighter for dark backgrounds */
+  --color-term-green: #39FF14;
+  --color-term-amber: #FFD700;
+  --color-term-cyan: #00E5FF;
+  --color-term-magenta: #FF44FF;
+  --color-term-red: #FF3344;
+  --color-term-blue: #4499FF;
+  --color-term-white: #F0F0F0;
+  --color-term-dim: #888888;
+  
+  /* Dark theme overrides -- TUI: amber CRT monitor tint on text */
+  --surface-page: #0A0704;
+  --surface-container: #0A0704;
+  --surface-card: #120D09;
+  --surface-container-stroke: #474030;
+  --text-primary: #FFE8B0;
+  --text-secondary: #E0DACE;
+  
+  /* Dark theme focus ring colors */
+  --focus-ring-primary: #FBBF24;
+  --focus-ring-secondary: #695F4D;
+  --focus-ring-error: #EF4444;
+  --focus-ring-destructive: #EF4444;
+  --focus-offset-color: #0A0704;
+  
+  /* Dark theme button colors */
+  --button-primary-background: #FBBF24;
+  --button-primary-background-hover: #F59E0B;
+  --button-primary-text: #000000;
+  --button-secondary-background: #695F4D;
+  --button-secondary-background-hover: #968A75;
+  --button-secondary-text: #FDFCFB;
+  
+  /* Dark theme elevation tokens -- TUI: flat, no shadows, borders only */
+  --elevation-0-shadow: none;
+  --elevation-0-border: transparent;
+  --elevation-1-shadow: none;
+  --elevation-1-border: rgba(255, 255, 255, 0.08);
+  --elevation-2-shadow: none;
+  --elevation-2-border: rgba(255, 255, 255, 0.10);
+  --elevation-3-shadow: none;
+  --elevation-3-border: rgba(255, 255, 255, 0.12);
+}
