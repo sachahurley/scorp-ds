@@ -1,19 +1,15 @@
 import type { Preview } from '@storybook/react';
 import { INITIAL_VIEWPORTS, MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { ThemeProvider } from '@scorp-ds/components';
 import '../styles/global.css';
 
 /**
  * Scorp DS Storybook Preview Configuration
  *
- * Viewport presets cover three environments:
- * - Mobile (native app conventions: 375px, 390px, 430px)
- * - Mobile web (browser chrome, smaller safe area: 375px @ 667px)
- * - Tablet (768px, 1024px)
- * - Desktop web (1280px, 1440px, 1920px)
+ * ThemeProvider enables next-themes (class on html) for components like ThemeToggle
+ * and dark-mode Tailwind variants across all stories.
  */
-
 const SCORP_VIEWPORTS = {
-  // Mobile — native app dimensions (no browser chrome)
   mobileSmall: {
     name: 'Mobile S (375)',
     styles: { width: '375px', height: '812px' },
@@ -29,13 +25,11 @@ const SCORP_VIEWPORTS = {
     styles: { width: '430px', height: '932px' },
     type: 'mobile' as const,
   },
-  // Mobile web — browser chrome accounts for ~80px
   mobileWeb: {
     name: 'Mobile Web (375)',
     styles: { width: '375px', height: '667px' },
     type: 'mobile' as const,
   },
-  // Tablet
   tabletPortrait: {
     name: 'Tablet Portrait (768)',
     styles: { width: '768px', height: '1024px' },
@@ -46,7 +40,6 @@ const SCORP_VIEWPORTS = {
     styles: { width: '1024px', height: '768px' },
     type: 'tablet' as const,
   },
-  // Desktop web
   desktopSm: {
     name: 'Desktop S (1280)',
     styles: { width: '1280px', height: '800px' },
@@ -65,6 +58,15 @@ const SCORP_VIEWPORTS = {
 };
 
 const preview: Preview = {
+  decorators: [
+    (Story) => (
+      <ThemeProvider>
+        <div className="text-secondary-900 dark:text-secondary-50 antialiased">
+          <Story />
+        </div>
+      </ThemeProvider>
+    ),
+  ],
   parameters: {
     viewport: {
       viewports: {
@@ -75,7 +77,6 @@ const preview: Preview = {
       defaultViewport: 'desktopSm',
     },
     backgrounds: {
-      // Disable backgrounds addon — Scorp DS manages its own theming via ThemeProvider
       disable: true,
     },
     controls: {

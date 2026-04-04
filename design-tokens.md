@@ -65,32 +65,43 @@ Scorp DS uses a three-layer token architecture:
 
 ## Spacing Tokens
 
-Base unit: 4px
+Base unit: **4px** per step (see `global.spacing` in `tokens.json`). Tailwind spacing classes (`p-4`, `gap-6`) map to these steps.
 
 | Token | Value | Use For |
 |-------|-------|---------|
+| `spacing.0` | 0 | Flush layouts |
 | `spacing.1` | 4px | Tight gaps |
 | `spacing.2` | 8px | Small padding, icon gaps |
 | `spacing.3` | 12px | Input padding, compact items |
 | `spacing.4` | 16px | Standard padding |
+| `spacing.5` | 20px | Comfortable inline spacing |
 | `spacing.6` | 24px | Card padding, section gaps |
 | `spacing.8` | 32px | Large section spacing |
+| `spacing.10` | 40px | Hero / section padding |
+| `spacing.12` | 48px | Major section breaks |
+| `spacing.16` | 64px | Page-level rhythm |
+| `spacing.20` | 80px | Marketing / landing blocks |
+| `spacing.24` | 96px | Maximum layout rhythm |
 
 ## Motion Tokens
 
-| Token | Duration | Use For |
-|-------|----------|---------|
+**Source of truth in `tokens.json`** (`global.duration`):
+
+| Token | Duration (JSON) | Use For |
+|-------|-----------------|--------|
 | `duration.instant` | 0ms | No animation |
-| `duration.fast` | 150ms | Hover states, color transitions |
+| `duration.fast` | 150ms | Hover, color transitions |
 | `duration.normal` | 200ms | Show/hide, expand/collapse |
 | `duration.slow` | 300ms | Modal enter/exit |
 | `duration.slower` | 500ms | Full-page transitions |
 
+**Runtime CSS (`packages/tokens/src/styles/tokens.css`)** currently exposes **shorter** values for the TUI tier (e.g. `--duration-fast: 50ms`). Components using Tailwind `duration-200` or CSS `var(--duration-*)` follow **whatever is in the CSS file** until the stylesheet is regenerated to match JSON. When in doubt, inspect `tokens.css` or Storybook **Foundation / Motion**.
+
 ## Radius Tokens
 
-| Token | Value | Use For |
-|-------|-------|---------|
-| `radius.button` | 12px | (Not used — Scorp DS uses sharp corners) |
-| `radius.container` | 24px | (Not used — Scorp DS uses sharp corners) |
+| Token | Value in `tokens.json` | Value in `tokens.css` (current) |
+|-------|------------------------|----------------------------------|
+| `radius.button` | 12px | `0px` (TUI sharp corners) |
+| `radius.container` | 24px | `0px` (TUI sharp corners) |
 
-> Note: Scorp DS TUI design language uses `rounded-none` everywhere. The radius tokens are defined for reference and potential future tiers, but are not applied to any current components.
+> **Scorp DS** ships **sharp corners** in product UI (`rounded-none`). JSON retains non-zero radii for tooling / future tiers; CSS variables used in apps are **0px** today.

@@ -9,17 +9,25 @@
   "scripts": {
     "dev": "npm run --workspace=packages/storybook storybook",
     "storybook": "npm run --workspace=packages/storybook storybook",
+    "storybook:clean": "rm -rf node_modules/.cache/storybook node_modules/.vite node_modules/.cache/vite packages/storybook/node_modules/.vite",
     "build": "npm run build --workspaces --if-present",
     "build:tokens": "npm run build --workspace=packages/tokens",
     "build:components": "npm run build --workspace=packages/components",
+    "generate-specs": "node scripts/generate-draft-specs.mjs",
     "type-check": "npm run type-check --workspaces --if-present",
-    "lint": "eslint packages/*/src --ext .ts,.tsx",
-    "test": "vitest run"
+    "lint": "eslint packages/*/src packages/storybook/stories packages/storybook/presets packages/storybook/.storybook",
+    "test": "vitest run --config vitest.config.mts"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "@types/node": "^20.0.0",
+    "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^9.0.0",
+    "jsdom": "^25.0.1",
     "typescript": "~5.9.3",
+    "typescript-eslint": "^8.58.0",
     "vitest": "^2.0.0"
   }
 }

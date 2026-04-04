@@ -9,7 +9,7 @@
  * Think of this as the "translator" between your design tokens and the CSS/Tailwind system.
  */
 
-import tokensData from '../tokens/tokens.json';
+import tokensData from '../tokens.json';
 
 // Type definitions for our tokens
 type TokenValue = {

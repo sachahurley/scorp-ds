@@ -8,7 +8,7 @@
  *   import { tokens, getToken, generateCSSVariables } from '@scorp-ds/tokens';
  *
  * For CSS variables, import the stylesheet in your app entry:
- *   import '@scorp-ds/tokens/src/styles/tokens.css';
+ *   import '@scorp-ds/tokens/styles/tokens.css';
  *
  * For Tailwind integration, add the preset to tailwind.config.js:
  *   presets: [require('@scorp-ds/tokens/tailwind.preset')]

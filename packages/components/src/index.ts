@@ -60,8 +60,9 @@ export { ThemeToggle } from './components/ThemeToggle';
 export { TuiIcon } from './components/TuiIcon';
 export type { TuiIconProps } from './components/TuiIcon';
 
-// Primitives barrel (empty — add as primitives are built)
-// export * from './primitives';
+// Primitives
+export { Stack } from './primitives/Stack';
+export type { StackProps, StackGap } from './primitives/Stack';
 
 // Lab barrel (empty — add as experimental components are built)
 // export * from './lab';

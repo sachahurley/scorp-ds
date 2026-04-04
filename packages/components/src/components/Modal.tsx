@@ -96,7 +96,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
         - Uses z-index token for modal layer (1040) to ensure it covers sidebar
       */}
       <div
-        className="fixed inset-0 bg-black/50 flex items-center justify-center p-5 animate-in fade-in duration-[200ms]"
+        className="fixed inset-0 bg-black/50 flex items-center justify-center p-5 animate-in fade-in duration-200"
         style={{ zIndex: 'var(--z-index-modal)' }}
         onClick={onClose}
       >
