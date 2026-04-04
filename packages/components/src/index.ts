@@ -57,8 +57,30 @@ export type { DropdownProps, DropdownItem } from './components/Dropdown';
 
 export { ThemeToggle } from './components/ThemeToggle';
 
-export { TuiIcon } from './components/TuiIcon';
-export type { TuiIconProps } from './components/TuiIcon';
+export { TuiIcon, TUI_ICON_GLYPHS } from './components/TuiIcon';
+export type { TuiIconProps, TuiIconName } from './components/TuiIcon';
+
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs';
+export type { TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps } from './components/Tabs';
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+} from './components/Table';
+export type {
+  TableProps,
+  TableHeaderProps,
+  TableBodyProps,
+  TableFooterProps,
+  TableRowProps,
+  TableHeadProps,
+  TableCellProps,
+} from './components/Table';
 
 // Primitives
 export { Stack } from './primitives/Stack';

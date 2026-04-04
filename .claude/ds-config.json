@@ -9,7 +9,8 @@
     "npmScope": "@scorp-ds",
     "tokens": "@scorp-ds/tokens",
     "components": "@scorp-ds/components",
-    "storybook": "@scorp-ds/storybook"
+    "storybook": "@scorp-ds/storybook",
+    "site": "@scorp-ds/site"
   },
   "notion": {
     "databaseName": "Scorp DS Component Specs",
@@ -24,6 +25,8 @@
     "samples": "packages/storybook/samples",
     "presets": "packages/storybook/presets",
     "shared": "packages/storybook/shared",
+    "tuiArt": "packages/tui-art/src",
+    "site": "packages/site",
     "specs": "docs/specs",
     "tests": "packages/components/src/__tests__"
   },

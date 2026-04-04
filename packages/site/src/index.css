@@ -1,0 +1,20 @@
+/* Same token + font stack as Storybook — keeps the marketing shell visually aligned with the catalog */
+@import "@scorp-ds/tokens/styles/tokens.css";
+@import url("https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font-family-mono);
+}

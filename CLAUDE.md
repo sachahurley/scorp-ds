@@ -24,6 +24,9 @@ packages/
       styles/tokens.css       # Generated CSS custom properties
       index.ts                # Barrel export
     tailwind.preset.js        # Tailwind theme extension — import in consumer projects
+  tui-art/                    # @scorp-ds/tui-art — TUI frames & table rows (plain strings; no React)
+    src/
+      index.ts                # frameBox, formatTableRow, BOX_CHARS
   components/                 # @scorp-ds/components — all UI components
     src/
       components/             # Exported UI components (Button, Card, Badge, etc.)
@@ -32,6 +35,7 @@ packages/
       theme/                  # ThemeProvider (next-themes)
       lib/utils.ts            # cn() utility
       index.ts                # Barrel export
+  site/                       # @scorp-ds/site — light marketing / portfolio front door (Vite; links to Storybook)
   storybook/                  # Documentation and preview app
     .storybook/               # Storybook 8 config
     stories/                  # Story files (Foundation/, Components/, Patterns/, Screens/)
@@ -61,7 +65,7 @@ docs/
 - **Files**: PascalCase for components (`Button.tsx`), kebab-case for utilities (`token-parser.ts`)
 - **Props**: camelCase
 - **CSS variables**: `--color-{scale}-{step}` (e.g., `--color-amber-400`) — never use `--scorp-` prefix
-- **Package names**: `@scorp-ds/tokens`, `@scorp-ds/components`
+- **Package names**: `@scorp-ds/tokens`, `@scorp-ds/tui-art`, `@scorp-ds/components`
 
 ## Token Architecture
 
@@ -101,6 +105,7 @@ tokens ← components ← storybook
 ```
 
 - `packages/tokens` may only import from: its own `src/`
+- `packages/tui-art` may only import from: its own `src/` (no tokens/components)
 - `packages/components` may only import from: its own `src/`, `@scorp-ds/tokens`
 - `packages/storybook` may import from: all packages
 
@@ -141,6 +146,7 @@ Follow the structure in `design-system-doc-requirements.md`. Use `/storybook-che
 - **Pin:** `@storybook/test-runner` must match the Storybook major version (this repo uses Storybook **8** → `test-runner@0.19.x`; do not install `0.24+` without upgrading Storybook).
 - **Browsers:** Install Playwright browsers once: `npx playwright install` (from repo root or `packages/storybook`).
 - **Run:** Start Storybook (`npm run storybook`), then in another terminal: `npm run test-storybook`. Config: `packages/storybook/.storybook/test-runner.ts` (injects axe and runs `checkA11y` on `#storybook-root` per story).
+- **CI / fresh index:** `npm run test-storybook:ci` builds `storybook-static`, serves it on the first free port in `6006–6015` via `scripts/test-storybook-ci.mjs`, runs the test-runner **twice** (`STORYBOOK_TEST_THEME=light` then `dark`, set in `test-runner.ts` `preVisit`), then stops the server. Use the Storybook **Theme** toolbar (sun/moon) in `preview.tsx` to preview **dark mode**; **Docs** uses `parameters.docs.container` so autodocs match Canvas tokens.
 - **Skip:** Stories tagged `skip-test` are excluded from the runner (e.g. raw pigment atlas, semantic text-token swatches, and graphical elevation/focus specimens where axe is not meaningful). Prefer fixing real product stories first; use the tag only when the page’s purpose is to display tokens that intentionally break contrast rules.
 
 ## PR Checklist
