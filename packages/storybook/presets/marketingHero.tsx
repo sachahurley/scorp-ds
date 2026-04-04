@@ -23,7 +23,7 @@ export function MarketingHeroScreen() {
         }
       >
         <Stack gap="3">
-          <p className="font-mono text-sm text-secondary-600 dark:text-secondary-400">
+          <p className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
             Built from Card, Stack, and Button. Extend presets under{' '}
             <code className="text-secondary-800 dark:text-secondary-200">packages/storybook/presets/</code>.
           </p>

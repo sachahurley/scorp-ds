@@ -5,6 +5,12 @@
     "package": "scorp-ds",
     "storybookUrl": "http://localhost:6006"
   },
+  "packages": {
+    "npmScope": "@scorp-ds",
+    "tokens": "@scorp-ds/tokens",
+    "components": "@scorp-ds/components",
+    "storybook": "@scorp-ds/storybook"
+  },
   "notion": {
     "databaseName": "Scorp DS Component Specs",
     "parentPageId": null
@@ -22,21 +28,30 @@
     "tests": "packages/components/src/__tests__"
   },
   "tokens": {
+    "sourceFile": "packages/tokens/src/tokens.json",
+    "cssFile": "packages/tokens/src/styles/tokens.css",
+    "tailwindPreset": "packages/tokens/tailwind.preset.js",
     "classPrefix": "Scorp",
-    "cssVariablePrefix": "--scorp",
     "classes": {
       "colors": "ScorpColors",
       "spacing": "ScorpSpacing",
       "typography": "ScorpTypography",
       "motion": "ScorpMotion",
       "opacity": "ScorpOpacity"
+    },
+    "cssVariables": {
+      "_comment": "React/CSS stack: Tailwind preset maps to these custom properties. Do not use a --scorp-* color prefix.",
+      "foundationColorScales": "--color-{scale}-{step} (e.g. --color-amber-400, --color-secondary-900; scales include primary/secondary aliases)",
+      "semanticSurfacesAndChrome": "--surface-*, --text-*, --border-*, --field-*, --focus-ring-*, --focus-offset-color, --button-*, --elevation-*",
+      "globalUtilities": "--opacity-*, --z-index-*, --duration-*, --easing-*, --font-*, --line-height-*, --font-weight-*, --radius-*, --focus-ring-width, --focus-ring-offset",
+      "terminalTier2": "--color-term-* (ANSI-style accents; values differ in .dark)"
     }
   },
   "stack": "react-ts",
   "forbiddenPackages": ["@sachahurley/scorpion-ui"],
   "_notes": {
-    "tokenSource": "packages/tokens/src/tokens.json is the single source of truth for all tokens",
-    "componentNaming": "React components are not prefixed (Button not ScorpButton) — the package import provides namespace",
-    "cssVarPrefix": "CSS variables use --color-* not --scorp-color-* to stay compatible with existing Tailwind preset"
+    "tokenSource": "packages/tokens/src/tokens.json is the single source of truth; tokens.css is the runtime contract for apps.",
+    "componentNaming": "React components are not prefixed (Button not ScorpButton) — the @scorp-ds/components import provides namespace.",
+    "skillTemplates": "tokens.classPrefix + tokens.classes are Flutter-style names used by Claude skills and shared docs templates; this repo implements tokens via CSS variables and Tailwind, not Dart classes."
   }
 }

@@ -17,13 +17,18 @@
  * - error: Red border to indicate validation issues
  */
 
-import { forwardRef, type InputHTMLAttributes } from "react";
+import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 
 // Define the props interface for the Input component
 // Omit the native HTML 'size' attribute to avoid conflict with our custom size prop
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: "small" | "medium" | "large";
   error?: boolean;
+  /**
+   * Optional visible label. When set, renders a `<label>` associated with the input via `htmlFor` / `id`.
+   * Prefer this or `aria-label` so the field is announced correctly by screen readers.
+   */
+  label?: ReactNode;
 }
 
 /**
@@ -33,6 +38,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * @param error - Whether input has a validation error
  * @param disabled - Whether input is disabled
  * @param className - Additional CSS classes to apply
+ * @param label - Optional visible label wired to the input with matching `id`
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -41,10 +47,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       error = false,
       disabled = false,
       className = "", 
+      label,
+      id: idProp,
       ...props 
     },
     ref
   ) => {
+    const generatedId = useId();
+    const controlId =
+      idProp ?? (label != null && label !== "" ? generatedId : undefined);
     // BASE STYLES - Applied to all inputs
     // Uses tokens: font.size.sm (14px)
     // Border width: 1px for all states
@@ -88,13 +99,30 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `;
 
-    return (
+    const inputEl = (
       <input
         ref={ref}
+        id={controlId}
         disabled={disabled}
         className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
         {...props}
       />
+    );
+
+    if (label == null || label === "") {
+      return inputEl;
+    }
+
+    return (
+      <div className="w-full space-y-1">
+        <label
+          htmlFor={controlId}
+          className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+        >
+          {label}
+        </label>
+        {inputEl}
+      </div>
     );
   }
 );

@@ -5,21 +5,20 @@ import { Checkbox } from "../components/Checkbox";
 describe("Checkbox", () => {
   afterEach(() => cleanup());
 
-  it("toggles via onCheckedChange when the custom control is clicked", () => {
+  it("toggles via onCheckedChange when the label is clicked (native checkbox only in a11y tree)", () => {
     const onCheckedChange = vi.fn();
     render(
       <Checkbox label="Accept" checked={false} onCheckedChange={onCheckedChange} />
     );
-    const control = screen.getAllByRole("checkbox").find((el) => el.tagName === "DIV");
-    expect(control).toBeTruthy();
-    fireEvent.click(control!);
+    fireEvent.click(screen.getByText("Accept"));
     expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 
-  it("applies error state using semantic field tokens on the control", () => {
+  it("applies error state using semantic field tokens on the visual control", () => {
     render(<Checkbox label="E" error checked={false} />);
-    const control = screen.getAllByRole("checkbox").find((el) => el.tagName === "DIV");
-    expect(control).toBeTruthy();
-    expect(control!.className).toContain("--field-border-error");
+    const input = screen.getByRole("checkbox");
+    const visual = input.nextElementSibling as HTMLElement;
+    expect(visual).toBeTruthy();
+    expect(visual.className).toContain("--field-border-error");
   });
 });

@@ -24,12 +24,16 @@
  * - Maintains form compatibility with hidden native select
  */
 
-import { useState, useRef, useEffect, forwardRef, useImperativeHandle, type ReactNode, type SelectHTMLAttributes } from "react";
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useId, type ReactNode, type SelectHTMLAttributes } from "react";
 
 // Define the props interface for the Select component
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   size?: "small" | "medium" | "large";
   error?: boolean;
+  /**
+   * Optional visible label; associates with the custom trigger via `htmlFor` / `id` on the button.
+   */
+  label?: ReactNode;
 }
 
 /**
@@ -43,6 +47,7 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
  * @param value - Controlled value
  * @param defaultValue - Uncontrolled default value
  * @param onChange - Change handler
+ * @param label - Optional visible label for the custom trigger (preferred over relying on `aria-label` alone)
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
   size = "medium",
@@ -54,8 +59,13 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   defaultValue,
   onChange,
   name,
+  label,
+  "aria-label": ariaLabel,
+  id: htmlId,
   ...props
 }, ref) {
+  const autoId = useId();
+  const triggerId = htmlId ?? `${autoId}-trigger`;
   // Parse option elements from children
   const parseOptions = (): Array<{ value: string; label: string; disabled?: boolean }> => {
     const options: Array<{ value: string; label: string; disabled?: boolean }> = [];
@@ -298,8 +308,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
     `;
 
-  return (
-    <div ref={dropdownRef} className={`relative inline-block w-full ${className}`}>
+  const triggerBlock = (
+    <div ref={dropdownRef} className="relative inline-block w-full">
       {/* Hidden native select for form submission */}
       <select
         ref={hiddenSelectRef}
@@ -321,6 +331,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       {/* Custom trigger button */}
       <button
         type="button"
+        id={triggerId}
         onClick={toggleDropdown}
         disabled={disabled}
         className={`
@@ -336,7 +347,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
         `}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-label={props['aria-label'] || 'Select an option'}
+        aria-label={
+          label != null && label !== ""
+            ? undefined
+            : ariaLabel ?? "Select an option"
+        }
       >
         <span className="truncate text-left flex-1">{selectedLabel || 'Select...'}</span>
         {/* TUI Tier 2: Unicode ▼ instead of Lucide ChevronDown */}
@@ -413,6 +428,22 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           })}
         </div>
       )}
+    </div>
+  );
+
+  if (label == null || label === "") {
+    return <div className={`w-full ${className}`.trim()}>{triggerBlock}</div>;
+  }
+
+  return (
+    <div className={`w-full space-y-1 ${className}`.trim()}>
+      <label
+        htmlFor={triggerId}
+        className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+      >
+        {label}
+      </label>
+      {triggerBlock}
     </div>
   );
 });

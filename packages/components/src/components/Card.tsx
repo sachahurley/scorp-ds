@@ -71,17 +71,17 @@ export function Card({
               {title && (
                 <h3 className="text-base font-mono font-bold text-[var(--text-primary)] mb-1 flex items-center gap-0">
                   {/* Box-drawing prefix */}
-                  <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true">┌── </span>
+                  <span className="text-secondary-600 dark:text-secondary-400 whitespace-pre" aria-hidden="true">┌── </span>
                   {title}
                   {/* Box-drawing suffix -- flexible line fills remaining width */}
-                  <span className="text-term-dim dark:text-term-amber ml-1 flex-1 overflow-hidden whitespace-nowrap" aria-hidden="true">
+                  <span className="text-secondary-600 dark:text-secondary-400 ml-1 flex-1 overflow-hidden whitespace-nowrap" aria-hidden="true">
                     {"─".repeat(80)}
                   </span>
-                  <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true"> ──┐</span>
+                  <span className="text-secondary-600 dark:text-secondary-400 whitespace-pre" aria-hidden="true"> ──┐</span>
                 </h3>
               )}
               {subtitle && (
-                <p className="text-sm font-mono text-[var(--text-secondary)] pl-[3ch]">
+                <p className="pl-[3ch] font-mono text-sm text-secondary-800 dark:text-secondary-300">
                   {subtitle}
                 </p>
               )}

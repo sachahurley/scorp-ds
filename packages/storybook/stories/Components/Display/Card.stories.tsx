@@ -16,7 +16,7 @@ export const Default: Story = {
     title: 'Account',
     subtitle: 'Manage billing and seats',
     children: (
-      <p className="font-mono text-sm text-secondary-600 dark:text-secondary-400">
+      <p className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
         Card body copy uses semantic text tokens.
       </p>
     ),
@@ -29,7 +29,7 @@ export const WithFooter: Story = {
     subtitle: 'Production',
     className: 'w-96 flex flex-col',
     children: (
-      <p className="font-mono text-sm text-secondary-600 dark:text-secondary-400">
+      <p className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
         Ready to ship this release?
       </p>
     ),

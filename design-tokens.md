@@ -37,7 +37,7 @@ Dot paths in this doc map to custom properties by flattening with hyphens:
 
 ## Color Tokens
 
-**Storybook:** **Foundation / Colors** — raw scales (primary, secondary, feedback, terminal accents) · **Semantic / Colors** — surfaces, text, borders, fields, buttons, and focus swatches (light/dark).
+**Storybook:** **Foundation / Colors** — every scale from `tokens.json` (amber, sepia, green, blue, purple, red, primary/secondary/success/info/warning/error aliases, black/white, plus terminal accents from `tokens.css`) · **Semantic / Colors** — surfaces, text, borders, fields, buttons, and focus swatches (light/dark).
 
 ### Surface
 

@@ -25,15 +25,27 @@ export function TokenDocTable({ rows, caption }: { rows: TokenDocRow[]; caption?
   return (
     <div className="overflow-x-auto rounded-none border border-secondary-300 dark:border-secondary-700">
       <table className="w-full min-w-[720px] border-collapse text-left font-mono text-xs">
-        {caption ? <caption className="caption-bottom p-2 text-secondary-600 dark:text-secondary-400">{caption}</caption> : null}
+        {caption ? <caption className="caption-bottom p-2 text-secondary-800 dark:text-secondary-300">{caption}</caption> : null}
         <thead>
           <tr className="border-b border-secondary-300 bg-secondary-100 dark:border-secondary-700 dark:bg-secondary-950">
-            <th className="p-3 font-bold text-secondary-900 dark:text-secondary-100">Swatch</th>
-            <th className="p-3 font-bold text-secondary-900 dark:text-secondary-100">Token name</th>
-            <th className="p-3 font-bold text-secondary-900 dark:text-secondary-100">Raw value</th>
-            <th className="p-3 font-bold text-secondary-900 dark:text-secondary-100">Light mode</th>
-            <th className="p-3 font-bold text-secondary-900 dark:text-secondary-100">Dark mode</th>
-            <th className="p-3 font-bold text-secondary-900 dark:text-secondary-100">Usage</th>
+            <th scope="col" className="p-3 font-bold text-secondary-900 dark:text-secondary-100">
+              Swatch
+            </th>
+            <th scope="col" className="p-3 font-bold text-secondary-900 dark:text-secondary-100">
+              Token name
+            </th>
+            <th scope="col" className="p-3 font-bold text-secondary-900 dark:text-secondary-100">
+              Raw value
+            </th>
+            <th scope="col" className="p-3 font-bold text-secondary-900 dark:text-secondary-100">
+              Light mode
+            </th>
+            <th scope="col" className="p-3 font-bold text-secondary-900 dark:text-secondary-100">
+              Dark mode
+            </th>
+            <th scope="col" className="p-3 font-bold text-secondary-900 dark:text-secondary-100">
+              Usage
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -45,12 +57,12 @@ export function TokenDocTable({ rows, caption }: { rows: TokenDocRow[]; caption?
               <td className="align-middle p-3">{row.swatch}</td>
               <td className="align-top p-3 text-secondary-900 dark:text-secondary-100">
                 <div className="font-bold">{row.tokenLabel}</div>
-                <div className="mt-0.5 text-secondary-500">{row.cssVar}</div>
+                <div className="mt-0.5 text-secondary-800 dark:text-secondary-300">{row.cssVar}</div>
               </td>
-              <td className="align-top p-3 break-all text-secondary-700 dark:text-secondary-300">{row.rawValue}</td>
-              <td className="align-top p-3 break-all text-secondary-700 dark:text-secondary-300">{row.lightValue}</td>
-              <td className="align-top p-3 break-all text-secondary-700 dark:text-secondary-300">{row.darkValue}</td>
-              <td className="align-top p-3 text-secondary-600 dark:text-secondary-400">{row.usage}</td>
+              <td className="align-top p-3 break-all text-secondary-800 dark:text-secondary-300">{row.rawValue}</td>
+              <td className="align-top p-3 break-all text-secondary-800 dark:text-secondary-300">{row.lightValue}</td>
+              <td className="align-top p-3 break-all text-secondary-800 dark:text-secondary-300">{row.darkValue}</td>
+              <td className="align-top p-3 text-secondary-800 dark:text-secondary-300">{row.usage}</td>
             </tr>
           ))}
         </tbody>

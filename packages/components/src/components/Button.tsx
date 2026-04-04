@@ -15,7 +15,7 @@
  * - large: 48px height
  */
 
-import { forwardRef, type ButtonHTMLAttributes } from "react";
+import { forwardRef, useEffect, type ButtonHTMLAttributes, type CSSProperties } from "react";
 
 // Define the props interface for the Button component
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -37,6 +37,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * @param children - Button content (text, icons, etc.)
  * @param iconLeft - Icon element to display on the left side of text
  * @param iconRight - Icon element to display on the right side of text
+ *
+ * Icon-only usage: pass `aria-label` or `aria-labelledby` (standard button attributes) so assistive tech has an accessible name.
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -48,6 +50,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       iconLeft,
       iconRight,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
       ...props 
     },
     ref
@@ -92,6 +96,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       
       return false;
     };
+
+    useEffect(() => {
+      if (process.env.NODE_ENV === "production") return;
+      const iconOnly = variant === "icon" || isIconOnly();
+      if (!iconOnly) return;
+      const named =
+        (ariaLabel != null && String(ariaLabel).trim() !== "") ||
+        (ariaLabelledBy != null && String(ariaLabelledBy).trim() !== "");
+      if (!named) {
+        console.warn(
+          "[@scorp-ds/components] Button: icon-only buttons should include aria-label or aria-labelledby for screen readers."
+        );
+      }
+    }, [variant, size, children, iconLeft, iconRight, ariaLabel, ariaLabelledBy]);
 
     // SIZE STYLES - All values from tokens.json
     // Small: 32px height, 16px horizontal padding, 6px corner radius
@@ -249,7 +267,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     // Focus ring color — semantic tokens (values swap under .dark in tokens.css)
-    const focusRingStyles: React.CSSProperties = {
+    const focusRingStyles = {
       '--tw-ring-color':
         variant === 'primary' || variant === 'link'
           ? 'var(--focus-ring-primary)'
@@ -259,7 +277,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               ? 'var(--focus-ring-icon)'
               : 'var(--focus-ring-secondary)',
       outline: 'none',
-    } as React.CSSProperties;
+    } as CSSProperties;
 
     return (
       <button
@@ -267,6 +285,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         className={`${baseStyles} ${getSizeStyles()} ${variantStyles[variant]} ${gapStyles[size]} ${className}`}
         style={focusRingStyles}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
         {...props}
       >
         {/* Left icon (if provided) */}

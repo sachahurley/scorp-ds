@@ -15,4 +15,9 @@ describe("Input", () => {
     expect(el.className).toContain("--field-border-error");
     expect(el.className).toContain("--field-background-error");
   });
+
+  it("associates visible label with the control", () => {
+    render(<Input label="Username" placeholder="you" />);
+    expect(screen.getByLabelText(/username/i)).toBeVisible();
+  });
 });

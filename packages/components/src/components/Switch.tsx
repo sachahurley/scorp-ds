@@ -115,7 +115,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             ${checked
               ? 'bg-[var(--button-primary-background)]'
-              : 'bg-[var(--field-border)]'
+              : 'bg-secondary-300 dark:bg-secondary-700'
             }
           `}
           {...props}
@@ -145,7 +145,9 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
         {/* Optional Label */}
         {label && (
-          <span className={`text-sm font-mono text-[var(--text-primary)] ${disabled ? 'opacity-50' : ''}`}>
+          <span
+            className={`text-sm font-mono ${disabled ? 'text-secondary-700 dark:text-secondary-400' : 'text-[var(--text-primary)]'}`}
+          >
             {label}
           </span>
         )}

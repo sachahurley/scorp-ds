@@ -87,6 +87,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     // Priority: error > disabled > checked > default
     // Includes hover states for unchecked radios
     // Includes focus states with ring
+    // Focus ring lives on the visual (peer of native input) so only one radio is exposed to assistive tech.
     const radioStyles = error
       ? `
         border-[var(--field-border-error)]
@@ -94,8 +95,6 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           ? 'bg-[var(--field-border-error)] border-[var(--field-border-error)]'
           : 'bg-[var(--field-background)] hover:border-[var(--field-border-error)] hover:bg-[var(--field-background-error)]'
         }
-        focus:ring-2 focus:ring-[var(--focus-ring-error)]
-        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
         transition-all [transition-duration:var(--duration-normal)]
       `
       : `
@@ -104,10 +103,12 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           ? 'bg-[var(--button-primary-background)] border-[var(--button-primary-background)] hover:bg-[var(--button-primary-background-hover)]'
           : 'bg-[var(--field-background)] hover:border-[var(--field-border-hover)] hover:bg-[var(--surface-subtle)]'
         }
-        focus:ring-2 focus:ring-[var(--focus-ring-primary)]
-        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
         transition-all [transition-duration:var(--duration-normal)]
       `;
+
+    const focusPeerRing = error
+      ? `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-error)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`
+      : `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-primary)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
@@ -118,84 +119,56 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       }
     };
 
-    const handleClick = () => {
-      if (!disabled) {
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
+    const hasLabel = label != null && label !== false && label !== '';
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if ((e.key === ' ' || e.key === 'Enter') && !disabled) {
-        e.preventDefault();
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
-
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {/* Hidden native radio for form submission and accessibility */}
+    const control = (
+      <>
         <input
           ref={ref}
           type="radio"
           checked={checked}
           disabled={disabled}
           onChange={handleChange}
-          className="sr-only"
-          aria-invalid={error}
+          className="peer sr-only"
+          aria-invalid={error || undefined}
           {...props}
         />
-        
-        {/* Custom styled radio */}
-        <div
+        <span
+          aria-hidden="true"
           className={`
-            relative inline-flex items-center justify-center
+            relative inline-flex shrink-0 items-center justify-center
             ${currentSizeStyles.radio}
             rounded-none
             border-2
-            ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+            ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
             ${radioStyles}
+            ${focusPeerRing}
           `}
-          role="radio"
-          aria-checked={checked}
-          aria-disabled={disabled}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          tabIndex={disabled ? -1 : 0}
         >
-          {/* Inner dot - only visible when checked */}
           {checked && (
-            <div 
+            <span
               className={`
                 ${currentSizeStyles.dot}
                 rounded-none
-                ${error 
-                  ? 'bg-white dark:bg-white' 
-                  : 'bg-black dark:bg-black'
-                }
+                ${error ? 'bg-white dark:bg-white' : 'bg-black dark:bg-black'}
               `}
             />
           )}
-        </div>
+        </span>
+      </>
+    );
 
-        {/* Optional Label */}
-        {label && (
-          <label 
-            className={`
-              ${currentSizeStyles.label} 
-              font-mono 
-              text-[var(--text-primary)] 
-              ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            `}
-            onClick={handleClick}
+    return (
+      <div className={`flex items-center gap-2 ${className}`}>
+        {hasLabel ? (
+          <label
+            className={`inline-flex items-center gap-2 font-mono ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
           >
-            {label}
+            {control}
+            <span className={`${currentSizeStyles.label} text-[var(--text-primary)]`}>{label}</span>
           </label>
+        ) : (
+          <span className="inline-flex items-center gap-2">{control}</span>
         )}
       </div>
     );

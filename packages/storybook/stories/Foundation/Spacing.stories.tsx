@@ -24,12 +24,12 @@ const STEPS = [
 
 function SpacingPage() {
   return (
-    <div className="max-w-2xl p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
+    <div className="min-h-screen max-w-2xl bg-[var(--surface-page)] p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
       <h1 className="mb-2 text-xl font-bold">Foundation / Spacing</h1>
-      <p className="mb-2 text-secondary-600 dark:text-secondary-400">
+      <p className="mb-2 text-secondary-800 dark:text-secondary-300">
         [Stable] · Last updated Apr 2026
       </p>
-      <p className="mb-8 text-secondary-600 dark:text-secondary-400">
+      <p className="mb-8 text-secondary-800 dark:text-secondary-300">
         Visual: bar width = token value. Use semantic layout with Tailwind (`gap-4`, `p-6`) — never raw px in
         components.
       </p>
@@ -38,14 +38,14 @@ function SpacingPage() {
         {STEPS.map(({ step, varName, tailwind }) => (
           <div key={step} className="flex items-center gap-4 border border-secondary-300 dark:border-secondary-700 p-3">
             <div
+              aria-hidden="true"
               className="h-8 shrink-0 bg-primary-400 dark:bg-primary-500"
               style={{ width: `var(${varName})` }}
-              title={varName}
             />
             <div className="min-w-0 flex-1">
-              <div className="font-bold">spacing.{step}</div>
-              <div className="text-secondary-600 dark:text-secondary-400">{varName}</div>
-              <div className="text-xs text-secondary-500">Tailwind scale: {tailwind}</div>
+              <div className="font-bold text-[var(--text-primary)]">spacing.{step}</div>
+              <div className="text-secondary-800 dark:text-secondary-300">{varName}</div>
+              <div className="text-xs text-secondary-800 dark:text-secondary-300">Tailwind scale: {tailwind}</div>
             </div>
           </div>
         ))}

@@ -136,6 +136,13 @@ Every documentation page in Storybook MUST follow the rules in `design-system-do
 ### New Storybook Story
 Follow the structure in `design-system-doc-requirements.md`. Use `/storybook-check` to verify compliance.
 
+### Storybook accessibility tests (test-runner + axe)
+
+- **Pin:** `@storybook/test-runner` must match the Storybook major version (this repo uses Storybook **8** → `test-runner@0.19.x`; do not install `0.24+` without upgrading Storybook).
+- **Browsers:** Install Playwright browsers once: `npx playwright install` (from repo root or `packages/storybook`).
+- **Run:** Start Storybook (`npm run storybook`), then in another terminal: `npm run test-storybook`. Config: `packages/storybook/.storybook/test-runner.ts` (injects axe and runs `checkA11y` on `#storybook-root` per story).
+- **Skip:** Stories tagged `skip-test` are excluded from the runner (e.g. raw pigment atlas, semantic text-token swatches, and graphical elevation/focus specimens where axe is not meaningful). Prefer fixing real product stories first; use the tag only when the page’s purpose is to display tokens that intentionally break contrast rules.
+
 ## PR Checklist
 
 - [ ] No hardcoded color, font, spacing, or radius values in components

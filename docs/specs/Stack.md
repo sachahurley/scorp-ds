@@ -1,6 +1,6 @@
 # Stack
 
-> Primitive spec — layout helper. Last synced 2026-04-04.
+> Primitive spec — layout helper. Last synced 2026-04-05.
 
 ## Status
 
@@ -13,7 +13,7 @@
 | Story | `Primitives/Layout/Stack` |
 | Version | `v1` |
 | Status | `draft` |
-| Last synced | 2026-04-04 |
+| Last synced | 2026-04-05 |
 | Notion Page | `` |
 
 ---

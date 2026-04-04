@@ -62,32 +62,31 @@ export function Badge({
     large: "h-7 px-3 py-1.5 text-sm",    // h-7 = 28px, px-3 = 12px, text-sm = 14px
   };
 
-  // TUI Tier 2: bracket-style badges with ANSI terminal accent colors
-  // Transparent background, colored text only -- e.g. [SUCCESS]
+  // TUI Tier 2: bracket-style badges [LABEL] — semantic text scales meet WCAG on surface-page (terminal hexes do not).
   const variantStyles = {
     default: `
       bg-transparent
-      text-term-dim
+      text-secondary-800 dark:text-secondary-200
     `,
     primary: `
       bg-transparent
-      text-term-amber
+      text-primary-800 dark:text-primary-300
     `,
     success: `
       bg-transparent
-      text-term-green
+      text-success-800 dark:text-success-300
     `,
     warning: `
       bg-transparent
-      text-term-magenta
+      text-warning-800 dark:text-warning-300
     `,
     error: `
       bg-transparent
-      text-term-red
+      text-error-800 dark:text-error-300
     `,
     info: `
       bg-transparent
-      text-term-cyan
+      text-info-800 dark:text-info-300
     `,
   };
 
@@ -126,6 +125,7 @@ export function Badge({
       {/* Close Button -- TUI text "x" instead of Lucide icon */}
       {onClose && (
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             onClose();
@@ -133,7 +133,8 @@ export function Badge({
           className={`
             inline-flex items-center justify-center
             font-mono font-bold
-            hover:text-term-red
+            text-secondary-800 dark:text-secondary-200
+            hover:text-error-700 dark:hover:text-error-400
             transition-colors [transition-duration:var(--duration-fast)]
             flex-shrink-0
             focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring-primary)]

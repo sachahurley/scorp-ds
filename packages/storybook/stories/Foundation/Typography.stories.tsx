@@ -16,12 +16,12 @@ const SIZES = [
 
 function TypographyPage() {
   return (
-    <div className="max-w-3xl p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
+    <div className="min-h-screen max-w-3xl bg-[var(--surface-page)] p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
       <h1 className="mb-2 text-xl font-bold">Foundation / Typography</h1>
-      <p className="mb-2 text-secondary-600 dark:text-secondary-400">
+      <p className="mb-2 text-secondary-800 dark:text-secondary-300">
         [Stable] · Last updated Apr 2026
       </p>
-      <p className="mb-8 text-secondary-600 dark:text-secondary-400">
+      <p className="mb-8 text-secondary-800 dark:text-secondary-300">
         Scorp DS uses Fragment Mono site-wide. Sizes map to CSS variables via the Tailwind preset.
       </p>
 
@@ -35,9 +35,9 @@ function TypographyPage() {
         <div className="space-y-4 border border-secondary-300 dark:border-secondary-700 p-4">
           {SIZES.map(({ token, cls, varName }) => (
             <div key={token} className="flex flex-wrap items-baseline gap-4 border-b border-secondary-200 pb-3 last:border-0 dark:border-secondary-800">
-              <span className={`shrink-0 ${cls} font-mono`}>Ag — {token}</span>
-              <span className="text-xs text-secondary-500">{varName}</span>
-              <span className="text-xs text-secondary-500">class: {cls}</span>
+              <span className={`shrink-0 ${cls} font-mono text-[var(--text-primary)]`}>Ag — {token}</span>
+              <span className="text-xs text-secondary-800 dark:text-secondary-300">{varName}</span>
+              <span className="text-xs text-secondary-800 dark:text-secondary-300">class: {cls}</span>
             </div>
           ))}
         </div>

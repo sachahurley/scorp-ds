@@ -128,18 +128,19 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           <div className="flex items-center justify-between px-8 py-6 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]">
             {/* Title with double-line box-drawing decoration */}
             <h2 className="text-base font-mono text-[var(--text-primary)] font-medium flex items-center gap-0 flex-1 min-w-0">
-              <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true">╔══ </span>
+              <span className="whitespace-pre text-secondary-600 dark:text-secondary-400" aria-hidden="true">╔══ </span>
               <span className="truncate">{title}</span>
-              <span className="text-term-dim dark:text-term-amber ml-1 flex-1 overflow-hidden whitespace-nowrap" aria-hidden="true">
+              <span className="ml-1 flex-1 overflow-hidden whitespace-nowrap text-secondary-600 dark:text-secondary-400" aria-hidden="true">
                 {"═".repeat(80)}
               </span>
-              <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true"> ══╗</span>
+              <span className="whitespace-pre text-secondary-600 dark:text-secondary-400" aria-hidden="true"> ══╗</span>
             </h2>
 
             {/* TUI close button: [x] text instead of icon */}
             <button
+              type="button"
               onClick={onClose}
-              className="ml-4 font-mono text-sm text-term-dim dark:text-term-amber hover:text-term-red dark:hover:text-term-red transition-colors [transition-duration:var(--duration-normal)] leading-none"
+              className="ml-4 font-mono text-sm leading-none text-secondary-700 transition-colors [transition-duration:var(--duration-normal)] hover:text-error-700 dark:text-secondary-300 dark:hover:text-error-400"
               aria-label="Close modal"
             >
               [x]
@@ -153,7 +154,8 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             - 24px padding matches card padding
             - overflow-y-auto adds scrollbar only when needed
           */}
-          <div className="overflow-y-auto px-8 py-6">
+          {/* tabIndex allows keyboard focus into the scroll region (axe scrollable-region-focusable / Safari). */}
+          <div className="overflow-y-auto px-8 py-6" tabIndex={0}>
             {children}
           </div>
         </div>

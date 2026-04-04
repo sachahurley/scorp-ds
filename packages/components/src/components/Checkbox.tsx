@@ -91,8 +91,6 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           ? 'bg-[var(--field-border-error)] border-[var(--field-border-error)]'
           : 'bg-[var(--field-background)] hover:border-[var(--field-border-error)] hover:bg-[var(--field-background-error)]'
         }
-        focus:ring-2 focus:ring-[var(--focus-ring-error)]
-        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
         transition-all [transition-duration:var(--duration-normal)]
       `
       : `
@@ -101,10 +99,12 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           ? 'bg-[var(--button-primary-background)] border-[var(--button-primary-background)] hover:bg-[var(--button-primary-background-hover)]'
           : 'bg-[var(--field-background)] hover:border-[var(--field-border-hover)] hover:bg-[var(--surface-subtle)]'
         }
-        focus:ring-2 focus:ring-[var(--focus-ring-primary)]
-        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
         transition-all [transition-duration:var(--duration-normal)]
       `;
+
+    const focusPeerRing = error
+      ? `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-error)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`
+      : `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-primary)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
@@ -115,86 +115,58 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
     };
 
-    const handleClick = () => {
-      if (!disabled) {
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
+    const hasLabel = label != null && label !== false && label !== '';
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if ((e.key === ' ' || e.key === 'Enter') && !disabled) {
-        e.preventDefault();
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
-
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {/* Hidden native checkbox for form submission and accessibility */}
+    const control = (
+      <>
         <input
           ref={ref}
           type="checkbox"
           checked={checked}
           disabled={disabled}
           onChange={handleChange}
-          className="sr-only"
-          aria-invalid={error}
+          className="peer sr-only"
+          aria-invalid={error || undefined}
           {...props}
         />
-        
-        {/* Custom styled checkbox */}
-        <div
+        <span
+          aria-hidden="true"
           className={`
-            relative inline-flex items-center justify-center
+            relative inline-flex shrink-0 items-center justify-center
             ${currentSizeStyles.checkbox}
             border-2
-            ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+            ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
             ${checkboxStyles}
+            ${focusPeerRing}
           `}
-          role="checkbox"
-          aria-checked={checked}
-          aria-disabled={disabled}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          tabIndex={disabled ? -1 : 0}
         >
-          {/* TUI Tier 2: Unicode checkmark ✓ instead of Lucide Check icon */}
           {checked && (
             <span
               className={`
                 ${currentSizeStyles.icon}
                 inline-flex items-center justify-center font-mono font-bold leading-none
-                ${error 
-                  ? 'text-white dark:text-white' 
-                  : 'text-black dark:text-black'
-                }
+                ${error ? 'text-white dark:text-white' : 'text-black dark:text-black'}
               `}
               aria-hidden="true"
             >
               ✓
             </span>
           )}
-        </div>
+        </span>
+      </>
+    );
 
-        {/* Optional Label */}
-        {label && (
-          <label 
-            className={`
-              ${currentSizeStyles.label} 
-              font-mono 
-              text-[var(--text-primary)] 
-              ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            `}
-            onClick={handleClick}
+    return (
+      <div className={`flex items-center gap-2 ${className}`}>
+        {hasLabel ? (
+          <label
+            className={`inline-flex items-center gap-2 font-mono ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
           >
-            {label}
+            {control}
+            <span className={`${currentSizeStyles.label} text-[var(--text-primary)]`}>{label}</span>
           </label>
+        ) : (
+          <span className="inline-flex items-center gap-2">{control}</span>
         )}
       </div>
     );

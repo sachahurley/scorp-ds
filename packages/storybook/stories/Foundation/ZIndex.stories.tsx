@@ -67,7 +67,8 @@ function StackPreview() {
           return (
             <div
               key={layer.cssVar}
-              className="absolute flex items-center justify-center rounded-none border-2 border-line-strong font-mono text-xs text-foreground-tertiary shadow-none"
+              aria-hidden="true"
+              className="absolute rounded-none border-2 border-line-strong shadow-none"
               style={{
                 left,
                 top,
@@ -77,9 +78,7 @@ function StackPreview() {
                 backgroundColor: STACK_FILLS[i] ?? 'var(--surface-card)',
               }}
               title={`${shortName} — ${layer.cssVar}`}
-            >
-              <span className="select-none text-foreground-secondary">{i + 1}</span>
-            </div>
+            />
           );
         })}
       </div>
@@ -127,11 +126,11 @@ function StackPreview() {
                 transform: 'translateY(-50%)',
               }}
             >
-              <span className="text-base font-bold text-foreground-primary">{shortName}</span>
-              <span className="text-sm text-foreground-secondary">
-                z-index: <span className="text-foreground-primary">{zNum}</span>
+              <span className="text-base font-bold text-secondary-900 dark:text-secondary-100">{shortName}</span>
+              <span className="text-sm text-secondary-800 dark:text-secondary-300">
+                z-index: <span className="text-secondary-900 dark:text-secondary-100">{zNum}</span>
               </span>
-              <code className="break-all text-xs text-foreground-tertiary">{layer.cssVar}</code>
+              <code className="break-all text-xs text-secondary-800 dark:text-secondary-300">{layer.cssVar}</code>
             </div>
           );
         })}
@@ -169,34 +168,34 @@ function buildRows(): TokenDocRow[] {
 const ROWS = buildRows();
 
 function Note({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <p className={`text-secondary-600 dark:text-secondary-400 ${className}`.trim()}>{children}</p>;
+  return <p className={`text-secondary-800 dark:text-secondary-300 ${className}`.trim()}>{children}</p>;
 }
 
 function ZIndexPage() {
   return (
-    <div className="p-8 font-mono text-sm">
+    <div className="min-h-screen bg-surface-page p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
       <h1 className="mb-2 text-xl font-bold text-secondary-900 dark:text-secondary-50">Foundation / Z-index</h1>
-      <p className="mb-2 text-secondary-600 dark:text-secondary-400">[Stable] · Last updated Apr 2026</p>
-      <p className="mb-4 max-w-3xl text-secondary-600 dark:text-secondary-400">
+      <p className="mb-2 text-secondary-800 dark:text-secondary-300">[Stable] · Last updated Apr 2026</p>
+      <p className="mb-4 max-w-3xl text-secondary-800 dark:text-secondary-300">
         Use the numbered scale so overlays, modals, and tooltips stay predictable across products. Values are global —
         they do not swap between light and dark.
       </p>
 
       <nav aria-label="On this page" className="mb-8 max-w-3xl border border-secondary-300 p-4 dark:border-secondary-700">
         <div className="font-bold text-secondary-900 dark:text-secondary-100">On this page</div>
-        <ul className="mt-2 list-inside list-disc text-secondary-600 dark:text-secondary-400">
+        <ul className="mt-2 list-inside list-disc text-secondary-800 dark:text-secondary-300">
           <li>
-            <a className="text-primary-700 underline dark:text-primary-400" href="#visual">
+            <a className="text-primary-900 underline dark:text-primary-300" href="#visual">
               Stacking preview
             </a>
           </li>
           <li>
-            <a className="text-primary-700 underline dark:text-primary-400" href="#tokens">
+            <a className="text-primary-900 underline dark:text-primary-300" href="#tokens">
               Token table
             </a>
           </li>
           <li>
-            <a className="text-primary-700 underline dark:text-primary-400" href="#code">
+            <a className="text-primary-900 underline dark:text-primary-300" href="#code">
               Code
             </a>
           </li>
@@ -208,7 +207,7 @@ function ZIndexPage() {
         <Note>
           Cards step diagonally and use real token z-index (back → front). <strong>Names, numbers, and CSS variables</strong>{' '}
           sit in a column to the right, with leader lines pointing at each card — nothing is typed inside the stack, so
-          nothing gets covered. The card stack uses <code className="text-primary-600">isolation: isolate</code> so it
+          nothing gets covered. The card stack uses <code className="text-primary-800 dark:text-primary-400">isolation: isolate</code> so it
           cannot paint over the token table below.
         </Note>
         <div className="mt-6 flex justify-start">
@@ -218,14 +217,14 @@ function ZIndexPage() {
 
       <section id="tokens" className="mb-12">
         <h2 className="mb-2 font-mono text-lg font-bold text-secondary-800 dark:text-secondary-200">Token table</h2>
-        <Note className="mb-4">Parser keys use camelCase (<code className="text-primary-600">zIndex.modal</code>); CSS variables are kebab-case.</Note>
+        <Note className="mb-4">Parser keys use camelCase (<code className="text-primary-800 dark:text-primary-400">zIndex.modal</code>); CSS variables are kebab-case.</Note>
         <TokenDocTable rows={ROWS} />
       </section>
 
       <section id="code" className="mb-8">
         <h2 className="mb-2 font-mono text-lg font-bold text-secondary-800 dark:text-secondary-200">Code</h2>
         <Note className="mb-4">
-          Pass the custom property to <code className="text-primary-600">z-index</code> (works when the variable resolves
+          Pass the custom property to <code className="text-primary-800 dark:text-primary-400">z-index</code> (works when the variable resolves
           to an integer).
         </Note>
         <pre className="overflow-x-auto rounded-none border border-secondary-300 bg-secondary-50 p-4 text-xs dark:border-secondary-700 dark:bg-secondary-950">
@@ -246,7 +245,7 @@ function ZIndexPage() {
         <h2 id="related-heading" className="mb-2 font-mono text-lg font-bold text-secondary-800 dark:text-secondary-200">
           Related
         </h2>
-        <p className="text-secondary-600 dark:text-secondary-400">
+        <p className="text-secondary-800 dark:text-secondary-300">
           <strong>Semantic / Elevation</strong> handles borders and shadows on surfaces; z-index handles overlap order.
         </p>
       </section>

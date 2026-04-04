@@ -62,7 +62,10 @@ const preview: Preview = {
     (Story) => (
       <ThemeProvider>
         <div className="text-secondary-900 dark:text-secondary-50 antialiased">
-          <Story />
+          {/* One landmark per Storybook iframe — satisfies axe region / document-structure rules */}
+          <main className="min-h-0 min-w-0" aria-label="Story preview">
+            <Story />
+          </main>
         </div>
       </ThemeProvider>
     ),

@@ -73,9 +73,9 @@ export function Alert({
         bg-[var(--surface-subtle)]
         border-[var(--border-default)]
       `,
-      icon: "text-[var(--text-secondary)]",
+      icon: "text-secondary-800 dark:text-secondary-300",
       title: "text-[var(--text-primary)]",
-      description: "text-[var(--text-secondary)]",
+      description: "text-secondary-800 dark:text-secondary-300",
     },
     
     // Success: Green for positive states
@@ -84,9 +84,9 @@ export function Alert({
         bg-success-50 dark:bg-success-950
         border-success-300 dark:border-success-700
       `,
-      icon: "text-success-600 dark:text-success-400",
+      icon: "text-success-800 dark:text-success-400",
       title: "text-success-900 dark:text-success-50",
-      description: "text-success-700 dark:text-success-300",
+      description: "text-success-900 dark:text-success-300",
     },
     
     // Warning: Purple for warnings
@@ -95,9 +95,9 @@ export function Alert({
         bg-warning-50 dark:bg-warning-950
         border-warning-300 dark:border-warning-700
       `,
-      icon: "text-warning-600 dark:text-warning-400",
+      icon: "text-warning-800 dark:text-warning-400",
       title: "text-warning-900 dark:text-warning-50",
-      description: "text-warning-700 dark:text-warning-300",
+      description: "text-warning-900 dark:text-warning-300",
     },
     
     // Error: Red for errors
@@ -106,9 +106,9 @@ export function Alert({
         bg-error-50 dark:bg-error-950
         border-error-300 dark:border-error-700
       `,
-      icon: "text-error-600 dark:text-error-500",
+      icon: "text-error-700 dark:text-error-400",
       title: "text-error-900 dark:text-error-50",
-      description: "text-error-700 dark:text-error-400",
+      description: "text-error-900 dark:text-error-300",
     },
     
     // Info: Blue for informational messages
@@ -117,9 +117,9 @@ export function Alert({
         bg-info-50 dark:bg-info-950
         border-info-300 dark:border-info-700
       `,
-      icon: "text-info-600 dark:text-info-400",
+      icon: "text-info-800 dark:text-info-400",
       title: "text-info-900 dark:text-info-50",
-      description: "text-info-700 dark:text-info-300",
+      description: "text-info-900 dark:text-info-300",
     },
   };
 
@@ -165,7 +165,7 @@ export function Alert({
             flex-shrink-0
             font-mono text-xs font-bold
             ${styles.description}
-            hover:text-term-red
+            hover:text-error-800 dark:hover:text-error-300
             transition-colors [transition-duration:var(--duration-fast)]
             focus:outline-none focus:ring-1 focus:ring-offset-1
           `}

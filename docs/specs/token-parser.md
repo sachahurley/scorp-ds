@@ -10,10 +10,10 @@
 | Layer | `foundation` |
 | Category | `tokens` |
 | File | `packages/tokens/src/lib/token-parser.ts` |
-| Story | `Foundation/Colors (indirect — CSS vars from tokens)` |
+| Story | `Foundation/Colors` |
 | Version | `v1` |
-| Status | `draft` |
-| Last synced | 2026-04-04 |
+| Status | `design-complete` |
+| Last synced | 2026-04-05 |
 | Notion Page | `` |
 
 ---

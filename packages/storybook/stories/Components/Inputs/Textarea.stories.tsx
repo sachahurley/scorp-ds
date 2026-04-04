@@ -18,6 +18,7 @@ type Story = StoryObj<typeof Textarea>;
 
 export const Default: Story = {
   args: {
+    label: 'Notes',
     placeholder: 'Notes…',
     rows: 4,
     className: 'w-96',
@@ -26,6 +27,7 @@ export const Default: Story = {
 
 export const Error: Story = {
   args: {
+    label: 'Feedback',
     error: true,
     defaultValue: '',
     placeholder: 'Fix validation errors',
@@ -36,6 +38,7 @@ export const Error: Story = {
 
 export const Disabled: Story = {
   args: {
+    label: 'Comments',
     disabled: true,
     defaultValue: 'Read only copy.',
     className: 'w-96',
@@ -46,9 +49,9 @@ export const AllSizes: Story = {
   name: 'All sizes',
   render: () => (
     <div className="flex w-96 flex-col gap-3">
-      <Textarea size="small" placeholder="Small" rows={2} />
-      <Textarea size="medium" placeholder="Medium" rows={3} />
-      <Textarea size="large" placeholder="Large" rows={3} />
+      <Textarea label="Small" size="small" placeholder="Small" rows={2} />
+      <Textarea label="Medium" size="medium" placeholder="Medium" rows={3} />
+      <Textarea label="Large" size="large" placeholder="Large" rows={3} />
     </div>
   ),
 };

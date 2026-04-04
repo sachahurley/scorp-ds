@@ -110,9 +110,9 @@ export function Avatar({
 
   // STATUS INDICATOR COLORS
   const statusColors = {
-    online: "bg-success-500",
-    offline: "bg-secondary-400 dark:bg-secondary-600",
-    away: "bg-warning-500",
+    online: "bg-success-600 dark:bg-success-500",
+    offline: "bg-secondary-500 dark:bg-secondary-600",
+    away: "bg-warning-600 dark:bg-warning-500",
   };
 
   return (
@@ -154,15 +154,16 @@ export function Avatar({
 
         {/* TUI Tier 2: @ character instead of Lucide User icon */}
         {showDefaultIcon && (
-          <span className={`${currentSize.icon} inline-flex items-center justify-center font-mono font-bold text-secondary-600 dark:text-secondary-400`} aria-hidden="true">@</span>
+          <span className={`${currentSize.icon} inline-flex items-center justify-center font-mono font-bold text-secondary-900 dark:text-secondary-100`} aria-hidden="true">@</span>
         )}
       </div>
 
       {/* Status Indicator */}
       {status && (
-        <div
+        <span
+          role="img"
           className={`
-            absolute
+            absolute block
             ${currentSize.statusOffset}
             ${currentSize.status}
             ${statusColors[status]}

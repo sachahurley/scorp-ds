@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test-storybook": "test-storybook --url http://127.0.0.1:6006"
   },
   "dependencies": {
     "@scorp-ds/components": "*",
@@ -19,10 +20,13 @@
     "@storybook/react": "8.6.18",
     "@storybook/react-vite": "8.6.18",
     "@storybook/test": "8.6.18",
+    "@storybook/test-runner": "^0.19.1",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
+    "axe-playwright": "^2.2.2",
+    "playwright": "^1.59.1",
     "postcss": "^8.5.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

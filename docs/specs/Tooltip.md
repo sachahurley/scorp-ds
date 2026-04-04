@@ -13,7 +13,7 @@
 | Story | `Components/Display/Tooltip` |
 | Version | `v1` |
 | Status | `draft` |
-| Last synced | 2026-04-04 |
+| Last synced | 2026-04-05 |
 | Notion Page | `` |
 
 ---

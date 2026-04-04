@@ -119,6 +119,16 @@ export const DisabledState: Story = {
   ),
 };
 
+/** Icon-only triggers must include `aria-label` (or `aria-labelledby`) so assistive tech knows the purpose. */
+export const IconWithAriaLabel: Story = {
+  name: 'Icon (aria-label)',
+  render: () => (
+    <Button variant="icon" size="medium" aria-label="Open menu">
+      ☰
+    </Button>
+  ),
+};
+
 // Playground — single interactive instance with all controls
 export const Playground: Story = {
   args: {

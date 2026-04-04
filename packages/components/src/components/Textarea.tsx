@@ -17,12 +17,16 @@
  * - error: Red border to indicate validation issues
  */
 
-import { forwardRef, type TextareaHTMLAttributes } from "react";
+import { forwardRef, useId, type ReactNode, type TextareaHTMLAttributes } from "react";
 
 // Define the props interface for the Textarea component
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   size?: "small" | "medium" | "large";
   error?: boolean;
+  /**
+   * Optional visible label. When set, renders a `<label>` associated with the textarea via `htmlFor` / `id`.
+   */
+  label?: ReactNode;
 }
 
 /**
@@ -32,6 +36,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  * @param error - Whether textarea has a validation error
  * @param disabled - Whether textarea is disabled
  * @param className - Additional CSS classes to apply
+ * @param label - Optional visible label wired to the control with matching `id`
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
@@ -40,10 +45,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       error = false,
       disabled = false,
       className = "", 
+      label,
+      id: idProp,
       ...props 
     },
     ref
   ) => {
+    const generatedId = useId();
+    const controlId =
+      idProp ?? (label != null && label !== "" ? generatedId : undefined);
     // BASE STYLES - Applied to all textareas
     // Uses tokens: font.size.sm (14px)
     // Border width: 1px for all states
@@ -89,13 +99,30 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `;
 
-    return (
+    const areaEl = (
       <textarea
         ref={ref}
+        id={controlId}
         disabled={disabled}
         className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
         {...props}
       />
+    );
+
+    if (label == null || label === "") {
+      return areaEl;
+    }
+
+    return (
+      <div className="w-full space-y-1">
+        <label
+          htmlFor={controlId}
+          className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+        >
+          {label}
+        </label>
+        {areaEl}
+      </div>
     );
   }
 );

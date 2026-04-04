@@ -10,6 +10,7 @@
     "dev": "npm run --workspace=packages/storybook storybook",
     "storybook": "npm run --workspace=packages/storybook storybook",
     "storybook:clean": "rm -rf node_modules/.cache/storybook node_modules/.vite node_modules/.cache/vite packages/storybook/node_modules/.vite",
+    "test-storybook": "npm run test-storybook --workspace=@scorp-ds/storybook",
     "build": "npm run build --workspaces --if-present",
     "build:tokens": "npm run build --workspace=packages/tokens",
     "build:components": "npm run build --workspace=packages/components",

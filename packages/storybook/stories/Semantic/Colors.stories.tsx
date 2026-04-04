@@ -150,7 +150,7 @@ function TableFill({ rows, title }: { rows: Row[]; title: string }) {
             <FillSwatch varName={row.varName} />
             <div className="min-w-0 flex-1 font-mono text-xs">
               <div className="font-bold text-secondary-900 dark:text-secondary-100">{row.label}</div>
-              <div className="text-secondary-500">{row.varName}</div>
+              <div className="text-secondary-600 dark:text-secondary-400">{row.varName}</div>
               <div className="mt-1 text-secondary-600 dark:text-secondary-400">{row.usage}</div>
             </div>
           </div>
@@ -173,7 +173,7 @@ function TableText({ rows, title }: { rows: Row[]; title: string }) {
             <TextSwatch varName={row.varName} />
             <div className="min-w-0 flex-1 font-mono text-xs">
               <div className="font-bold text-secondary-900 dark:text-secondary-100">{row.label}</div>
-              <div className="text-secondary-500">{row.varName}</div>
+              <div className="text-secondary-600 dark:text-secondary-400">{row.varName}</div>
               <div className="mt-1 text-secondary-600 dark:text-secondary-400">{row.usage}</div>
             </div>
           </div>
@@ -196,7 +196,7 @@ function TableBorder({ rows, title }: { rows: Row[]; title: string }) {
             <BorderSwatch varName={row.varName} />
             <div className="min-w-0 flex-1 font-mono text-xs">
               <div className="font-bold text-secondary-900 dark:text-secondary-100">{row.label}</div>
-              <div className="text-secondary-500">{row.varName}</div>
+              <div className="text-secondary-600 dark:text-secondary-400">{row.varName}</div>
               <div className="mt-1 text-secondary-600 dark:text-secondary-400">{row.usage}</div>
             </div>
           </div>
@@ -238,7 +238,7 @@ function SemanticPanel({ forcedDark }: { forcedDark?: boolean }) {
 
 function SemanticColorsPage() {
   return (
-    <div className="p-8 font-mono text-sm">
+    <div className="min-h-screen bg-surface-page p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
       <h1 className="mb-2 text-xl font-bold text-secondary-900 dark:text-secondary-50">Semantic / Colors</h1>
       <p className="mb-2 text-secondary-600 dark:text-secondary-400">[Stable] · Last updated Apr 2026</p>
       <p className="mb-6 max-w-3xl text-secondary-600 dark:text-secondary-400">
@@ -260,7 +260,11 @@ function SemanticColorsPage() {
 const meta: Meta = {
   title: 'Semantic/Colors',
   component: SemanticColorsPage,
-  tags: ['autodocs'],
+  /**
+   * `skip-test`: TextSwatch renders real `--text-*` tokens (including tertiary/disabled), which are allowed
+   * to be low-contrast by design — excluded from axe test-runner via `.storybook/test-runner.ts`.
+   */
+  tags: ['autodocs', 'skip-test'],
   parameters: { layout: 'fullscreen' },
 };
 
