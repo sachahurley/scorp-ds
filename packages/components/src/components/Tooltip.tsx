@@ -120,7 +120,7 @@ export function Tooltip({
             ${positionStyles[position]}
             z-[var(--z-index-tooltip)]
             ${showTooltip ? "opacity-100" : "opacity-0"}
-            transition-opacity duration-150
+            transition-opacity [transition-duration:var(--duration-fast)]
             pointer-events-none
           `}
           style={{ maxWidth }}
@@ -129,11 +129,11 @@ export function Tooltip({
           <div
             className={`
               bg-[var(--surface-card)]
-              border-[0.5px] border-solid border-sepia-500 dark:border-sepia-800
+              border-[0.5px] border-solid border-[var(--surface-container-stroke)]
               rounded-none
               px-3 py-2
               font-mono text-xs
-              text-sepia-900 dark:text-sepia-50
+              text-[var(--text-primary)]
               shadow-none
               whitespace-normal
             `}

@@ -53,8 +53,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       w-full
       font-mono text-sm
       border
-      transition-all duration-200
-      placeholder:text-sepia-400 dark:placeholder:text-sepia-600
+      transition-all [transition-duration:var(--duration-normal)]
+      placeholder:text-[var(--field-placeholder)]
       disabled:cursor-not-allowed disabled:opacity-50
       focus:outline-none
     `;
@@ -74,20 +74,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     // Error state overrides all other visual states
     const stateStyles = error
       ? `
-        border-error-600 dark:border-error-500
-        bg-error-50 dark:bg-error-950/20
-        text-sepia-900 dark:text-sepia-50
-        focus:ring-2 focus:ring-error-600 dark:focus:ring-error-500 
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        focus:border-error-600 dark:focus:border-error-500
+        border-[var(--field-border-error)]
+        bg-[var(--field-background-error)]
+        text-[var(--text-primary)]
+        focus:ring-2 focus:ring-[var(--focus-ring-error)]
+        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+        focus:border-[var(--field-border-error)]
       `
       : `
-        border-sepia-300 dark:border-sepia-700
-        hover:border-sepia-400 dark:hover:border-sepia-600
-        bg-white dark:bg-sepia-975
-        text-sepia-900 dark:text-sepia-50
-        focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        border-[var(--field-border)] hover:border-[var(--field-border-hover)]
+        bg-[var(--field-background)] text-[var(--text-primary)]
+        focus:ring-2 focus:ring-[var(--focus-ring-primary)]
+        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `;
 
     return (

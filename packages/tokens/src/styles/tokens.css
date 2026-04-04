@@ -224,12 +224,12 @@
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
   
-  /* Animation/Duration tokens -- TUI: snappy, near-instant responses */
+  /* Animation/Duration tokens — aligned with tokens.json global.duration */
   --duration-instant: 0ms;
-  --duration-fast: 50ms;
-  --duration-normal: 75ms;
-  --duration-slow: 100ms;
-  --duration-slower: 150ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
   
   /* Easing/Timing functions */
   --easing-linear: linear;
@@ -270,29 +270,75 @@
   --color-term-white: #E0E0E0;
   --color-term-dim: #666666;
   
-  /* Light theme surface and text colors */
+  /* Light theme — semantic surfaces */
   --surface-page: #FDFCFB;
   --surface-container: #FDFCFB;
   --surface-card: #FFFFFF;
   --surface-container-stroke: #BFB4A3;
+  --surface-subtle: #FCFBFA;
+  --surface-muted: #F7F5F2;
+  --surface-overlay: rgba(10, 7, 4, 0.65);
+  --surface-inverse: #2B2718;
+  --surface-raised: #FFFFFF;
+
+  /* Light theme — semantic text */
   --text-primary: #2B2718;
   --text-secondary: #968A75;
-  
-  /* Light theme focus ring colors */
+  --text-tertiary: #BFB4A3;
+  --text-disabled: #E0DACE;
+  --text-link: #B45309;
+  --text-link-hover: #92400E;
+  --text-on-inverse: #FDFCFB;
+
+  /* Light theme — semantic borders */
+  --border-default: #F0EBE4;
+  --border-muted: #F7F5F2;
+  --border-strong: #968A75;
+  --border-error: #EF4444;
+  --border-focus: #FBBF24;
+
+  /* Light theme — form fields */
+  --field-background: #FFFFFF;
+  --field-border: #F0EBE4;
+  --field-border-hover: #E0DACE;
+  --field-border-focus: #FBBF24;
+  --field-border-error: #DC2626;
+  --field-placeholder: #BFB4A3;
+  --field-background-error: #FEF2F2;
+
+  /* Light theme — focus rings */
   --focus-ring-primary: #FBBF24;
   --focus-ring-secondary: #695F4D;
   --focus-ring-error: #DC2626;
   --focus-ring-destructive: #DC2626;
+  --focus-ring-icon: #FBBF24;
   --focus-offset-color: #FDFCFB;
-  
-  /* Light theme button colors */
+
+  /* Light theme — button fills (pair with button.size.* from tokens.json) */
   --button-primary-background: #FBBF24;
   --button-primary-background-hover: #F59E0B;
   --button-primary-text: #000000;
   --button-secondary-background: #695F4D;
   --button-secondary-background-hover: #968A75;
   --button-secondary-text: #FDFCFB;
-  
+  --button-ghost-background: transparent;
+  --button-ghost-background-hover: #F7F5F2;
+  --button-ghost-text: #2B2718;
+  --button-outline-border: #BFB4A3;
+  --button-outline-background: transparent;
+  --button-outline-background-hover: #FCFBFA;
+  --button-outline-text: #2B2718;
+  --button-destructive-background: #DC2626;
+  --button-destructive-background-hover: #B91C1C;
+  --button-destructive-text: #FDFCFB;
+  --button-link-text: #B45309;
+  --button-link-text-hover: #92400E;
+  --button-icon-background: #FCFBFA;
+  --button-icon-background-hover: #F7F5F2;
+  --button-icon-text: #2B2718;
+  --button-icon-disabled-background: #FDFCFB;
+  --button-icon-disabled-text: #F0EBE4;
+
   /* Light theme elevation tokens -- TUI: flat, no shadows, borders only */
   --elevation-0-shadow: none;
   --elevation-0-border: transparent;
@@ -315,29 +361,75 @@
   --color-term-white: #F0F0F0;
   --color-term-dim: #888888;
   
-  /* Dark theme overrides -- TUI: amber CRT monitor tint on text */
+  /* Dark theme — semantic surfaces (TUI: warm CRT tint on primary text) */
   --surface-page: #0A0704;
   --surface-container: #0A0704;
   --surface-card: #120D09;
   --surface-container-stroke: #474030;
-  --text-primary: #FFE8B0;
+  --surface-subtle: #1A150F;
+  --surface-muted: #221E13;
+  --surface-overlay: rgba(0, 0, 0, 0.72);
+  --surface-inverse: #F7F5F2;
+  --surface-raised: #120D09;
+
+  /* Dark theme — semantic text */
+  --text-primary: #FDFCFB;
   --text-secondary: #E0DACE;
-  
-  /* Dark theme focus ring colors */
+  --text-tertiary: #968A75;
+  --text-disabled: #695F4D;
+  --text-link: #FBBF24;
+  --text-link-hover: #FCD34D;
+  --text-on-inverse: #2B2718;
+
+  /* Dark theme — semantic borders */
+  --border-default: #695F4D;
+  --border-muted: #474030;
+  --border-strong: #BFB4A3;
+  --border-error: #EF4444;
+  --border-focus: #FBBF24;
+
+  /* Dark theme — form fields */
+  --field-background: #120D09;
+  --field-border: #695F4D;
+  --field-border-hover: #968A75;
+  --field-border-focus: #FBBF24;
+  --field-border-error: #EF4444;
+  --field-placeholder: #BFB4A3;
+  --field-background-error: #450A0A;
+
+  /* Dark theme — focus rings */
   --focus-ring-primary: #FBBF24;
   --focus-ring-secondary: #695F4D;
   --focus-ring-error: #EF4444;
   --focus-ring-destructive: #EF4444;
+  --focus-ring-icon: #FBBF24;
   --focus-offset-color: #0A0704;
-  
-  /* Dark theme button colors */
+
+  /* Dark theme — button fills */
   --button-primary-background: #FBBF24;
   --button-primary-background-hover: #F59E0B;
   --button-primary-text: #000000;
   --button-secondary-background: #695F4D;
   --button-secondary-background-hover: #968A75;
   --button-secondary-text: #FDFCFB;
-  
+  --button-ghost-background: transparent;
+  --button-ghost-background-hover: #474030;
+  --button-ghost-text: #FDFCFB;
+  --button-outline-border: #BFB4A3;
+  --button-outline-background: transparent;
+  --button-outline-background-hover: #221E13;
+  --button-outline-text: #FDFCFB;
+  --button-destructive-background: #DC2626;
+  --button-destructive-background-hover: #B91C1C;
+  --button-destructive-text: #FDFCFB;
+  --button-link-text: #FBBF24;
+  --button-link-text-hover: #FCD34D;
+  --button-icon-background: #474030;
+  --button-icon-background-hover: #695F4D;
+  --button-icon-text: #FDFCFB;
+  --button-icon-disabled-background: #2B2718;
+  --button-icon-disabled-text: #695F4D;
+
   /* Dark theme elevation tokens -- TUI: flat, no shadows, borders only */
   --elevation-0-shadow: none;
   --elevation-0-border: transparent;

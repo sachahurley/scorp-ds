@@ -186,18 +186,18 @@ export function Dropdown({
         inline-flex items-center justify-center gap-2
         font-mono text-sm
         ${currentSizeStyles.button}
-        transition-colors duration-200
+        transition-colors [transition-duration:var(--duration-normal)]
         cursor-pointer
-        bg-secondary-700 hover:bg-secondary-600 active:bg-secondary-500 text-secondary-50
-        dark:bg-secondary-700 dark:hover:bg-secondary-600 dark:active:bg-secondary-500 dark:text-secondary-50
-        focus:ring-2 focus:ring-secondary-700 dark:focus:ring-secondary-700 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-[var(--button-secondary-background)] hover:bg-[var(--button-secondary-background-hover)] active:brightness-95
+        text-[var(--button-secondary-text)]
+        focus:ring-2 focus:ring-[var(--focus-ring-secondary)] focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `}
       aria-haspopup="true"
       aria-expanded={isOpen}
     >
       {label}
       {/* TUI Tier 2: Unicode ▼ instead of Lucide ChevronDown */}
-      <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono leading-none transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true">▼</span>
+      <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono leading-none transition-transform [transition-duration:var(--duration-normal)] ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true">▼</span>
     </button>
   );
 
@@ -224,16 +224,16 @@ export function Dropdown({
           ref={menuRef}
           role="menu"
           aria-orientation="vertical"
+          style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2
             ${align === "right" ? "right-0" : "left-0"}
             min-w-[200px]
-            bg-white dark:bg-sepia-975
-            border border-sepia-300 dark:border-sepia-700
+            bg-[var(--surface-card)] border border-[var(--border-default)]
             ${currentSizeStyles.menu}
             shadow-none
             z-[1051]
-            animate-in fade-in slide-in-from-top-2 duration-200
+            animate-in fade-in slide-in-from-top-2
           `}
         >
           {items.map((item, index) => {
@@ -251,14 +251,14 @@ export function Dropdown({
                   w-full flex items-center gap-2
                   px-4 py-3
                   font-mono text-sm text-left
-                  transition-colors duration-150
+                  transition-colors [transition-duration:var(--duration-fast)]
                   ${isDisabled
                     ? 'opacity-50 cursor-not-allowed'
                     : isDestructive
-                      ? 'text-error-600 dark:text-error-500 hover:bg-error-50 dark:hover:bg-error-950/20'
-                      : 'text-sepia-900 dark:text-sepia-50 hover:bg-sepia-200 dark:hover:bg-sepia-900'
+                      ? 'text-error-600 hover:bg-[var(--field-background-error)]'
+                      : 'text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]'
                   }
-                  ${isFocused && !isDisabled ? 'bg-sepia-200 dark:bg-sepia-900' : ''}
+                  ${isFocused && !isDisabled ? 'bg-[var(--surface-subtle)]' : ''}
                   ${currentSizeStyles.menuItem}
                 `}
               >

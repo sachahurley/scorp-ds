@@ -134,9 +134,10 @@ export function Badge({
             inline-flex items-center justify-center
             font-mono font-bold
             hover:text-term-red
-            transition-colors duration-150
+            transition-colors [transition-duration:var(--duration-fast)]
             flex-shrink-0
-            focus:outline-none focus:ring-1 focus:ring-offset-1
+            focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring-primary)]
+            focus:ring-offset-1 focus:ring-offset-[var(--focus-offset-color)]
           `}
           aria-label="Remove badge"
         >

@@ -54,7 +54,7 @@ export function Card({
     <div
       className={`
         bg-[var(--surface-card)]
-        border-[0.5px] border-solid border-sepia-500 dark:border-sepia-800
+        border-[0.5px] border-solid border-[var(--surface-container-stroke)]
         rounded-none
         overflow-visible
         ${isFlexLayout ? 'flex flex-col' : ''}
@@ -63,13 +63,13 @@ export function Card({
     >
       {/* Header Section -- TUI Tier 2: box-drawing title bar ┌── Title ──┐ */}
       {(title || subtitle || headerContent) && (
-        <div className="p-4 lg:p-6 border-b-[0.5px] border-solid border-sepia-500 dark:border-sepia-800 overflow-hidden rounded-none">
+        <div className="p-4 lg:p-6 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)] overflow-hidden rounded-none">
           {headerContent ? (
             headerContent
           ) : (
             <div>
               {title && (
-                <h3 className="text-base font-mono font-bold text-sepia-900 dark:text-sepia-50 mb-1 flex items-center gap-0">
+                <h3 className="text-base font-mono font-bold text-[var(--text-primary)] mb-1 flex items-center gap-0">
                   {/* Box-drawing prefix */}
                   <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true">┌── </span>
                   {title}
@@ -81,7 +81,7 @@ export function Card({
                 </h3>
               )}
               {subtitle && (
-                <p className="text-sm font-mono text-sepia-600 dark:text-sepia-400 pl-[3ch]">
+                <p className="text-sm font-mono text-[var(--text-secondary)] pl-[3ch]">
                   {subtitle}
                 </p>
               )}
@@ -97,7 +97,7 @@ export function Card({
 
       {/* Footer Section */}
       {footerContent && (
-        <div className="p-4 lg:p-6 border-t-[0.5px] border-solid border-sepia-500 dark:border-sepia-800 bg-sepia-50 dark:bg-sepia-975 overflow-hidden rounded-none">
+        <div className="p-4 lg:p-6 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)] overflow-hidden rounded-none">
           {footerContent}
         </div>
       )}

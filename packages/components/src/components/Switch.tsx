@@ -110,12 +110,12 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             relative inline-flex items-center
             ${currentSizeStyles.track}
             rounded-none
-            transition-colors duration-300
-            focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+            transition-colors [transition-duration:var(--duration-slow)]
+            focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring-primary)] focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            ${checked 
-              ? 'bg-primary-400 dark:bg-primary-400' 
-              : 'bg-sepia-300 dark:bg-sepia-700'
+            ${checked
+              ? 'bg-[var(--button-primary-background)]'
+              : 'bg-[var(--field-border)]'
             }
           `}
           {...props}
@@ -126,9 +126,9 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
               inline-flex items-center justify-center
               ${currentSizeStyles.knob}
               rounded-none
-              bg-white dark:bg-secondary-900
+              bg-[var(--field-background)]
               shadow-none
-              transform transition-transform duration-300
+              transform transition-transform [transition-duration:var(--duration-slow)]
             `}
             style={{
               transform: currentSizeStyles.knobTranslate,
@@ -145,7 +145,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
         {/* Optional Label */}
         {label && (
-          <span className={`text-sm font-mono text-sepia-900 dark:text-sepia-50 ${disabled ? 'opacity-50' : ''}`}>
+          <span className={`text-sm font-mono text-[var(--text-primary)] ${disabled ? 'opacity-50' : ''}`}>
             {label}
           </span>
         )}

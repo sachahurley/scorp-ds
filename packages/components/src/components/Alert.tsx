@@ -67,15 +67,15 @@ export function Alert({
   // VARIANT STYLES - Color combinations using semantic tokens
   // All variants support light and dark themes
   const variantStyles = {
-    // Default: Neutral secondary (sepia) colors
+    // Default: neutral semantic surfaces (surface + border roles)
     default: {
       container: `
-        bg-secondary-50 dark:bg-secondary-950
-        border-secondary-300 dark:border-secondary-700
+        bg-[var(--surface-subtle)]
+        border-[var(--border-default)]
       `,
-      icon: "text-secondary-700 dark:text-secondary-300",
-      title: "text-secondary-900 dark:text-secondary-50",
-      description: "text-secondary-600 dark:text-secondary-400",
+      icon: "text-[var(--text-secondary)]",
+      title: "text-[var(--text-primary)]",
+      description: "text-[var(--text-secondary)]",
     },
     
     // Success: Green for positive states
@@ -166,7 +166,7 @@ export function Alert({
             font-mono text-xs font-bold
             ${styles.description}
             hover:text-term-red
-            transition-colors duration-150
+            transition-colors [transition-duration:var(--duration-fast)]
             focus:outline-none focus:ring-1 focus:ring-offset-1
           `}
           aria-label="Close alert"

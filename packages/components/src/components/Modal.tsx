@@ -20,9 +20,8 @@
  * - Border radius: 24px (radius.container token)
  * 
  * TOKENS USED:
- * - surface.card: Card background color
- * - sepia.500/800: Border colors (light/dark)
- * - sepia.900/50: Primary text colors (light/dark)
+ * - surface.card, surface.container-stroke, surface.overlay
+ * - text.primary (title)
  * - radius.container: 24px border radius
  * - elevation.2: Drop shadow
  */
@@ -96,8 +95,8 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
         - Uses z-index token for modal layer (1040) to ensure it covers sidebar
       */}
       <div
-        className="fixed inset-0 bg-black/50 flex items-center justify-center p-5 animate-in fade-in duration-200"
-        style={{ zIndex: 'var(--z-index-modal)' }}
+        className="fixed inset-0 flex items-center justify-center p-5 animate-in fade-in bg-[var(--surface-overlay)]"
+        style={{ zIndex: "var(--z-index-modal)", animationDuration: "var(--duration-normal)" }}
         onClick={onClose}
       >
         {/* 
@@ -126,9 +125,9 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             - Border bottom separates header from content
           */}
           {/* TUI Tier 2: double-line box-drawing title bar ╔══ Title ══╗ */}
-          <div className="flex items-center justify-between px-8 py-6 border-b-[0.5px] border-solid border-sepia-500 dark:border-sepia-800">
+          <div className="flex items-center justify-between px-8 py-6 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]">
             {/* Title with double-line box-drawing decoration */}
-            <h2 className="text-base font-mono text-sepia-900 dark:text-sepia-50 font-medium flex items-center gap-0 flex-1 min-w-0">
+            <h2 className="text-base font-mono text-[var(--text-primary)] font-medium flex items-center gap-0 flex-1 min-w-0">
               <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true">╔══ </span>
               <span className="truncate">{title}</span>
               <span className="text-term-dim dark:text-term-amber ml-1 flex-1 overflow-hidden whitespace-nowrap" aria-hidden="true">
@@ -140,7 +139,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             {/* TUI close button: [x] text instead of icon */}
             <button
               onClick={onClose}
-              className="ml-4 font-mono text-sm text-term-dim dark:text-term-amber hover:text-term-red dark:hover:text-term-red transition-colors duration-200 leading-none"
+              className="ml-4 font-mono text-sm text-term-dim dark:text-term-amber hover:text-term-red dark:hover:text-term-red transition-colors [transition-duration:var(--duration-normal)] leading-none"
               aria-label="Close modal"
             >
               [x]

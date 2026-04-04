@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Foundation / Motion
  *
- * Durations and easing from `tokens.json`. Resolved values may appear in `tokens.css` (Scorp TUI uses snappy motion).
+ * Durations and easing from `tokens.json`; `--duration-*` in `tokens.css` matches JSON (single source of truth).
  */
 const DURATIONS = [
   { name: 'instant', varName: '--duration-instant' },

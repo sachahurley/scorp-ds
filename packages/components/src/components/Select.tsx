@@ -284,20 +284,18 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   // STATE STYLES - Color combinations for different states using SEMANTIC TOKENS
   const triggerStyles = error
     ? `
-      border-error-600 dark:border-error-500
-      bg-error-50 dark:bg-error-950/20
-      text-sepia-900 dark:text-sepia-50
-      focus:ring-2 focus:ring-error-600 dark:focus:ring-error-500 
-      focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-      focus:border-error-600 dark:focus:border-error-500
+      border-[var(--field-border-error)]
+      bg-[var(--field-background-error)]
+      text-[var(--text-primary)]
+      focus:ring-2 focus:ring-[var(--focus-ring-error)]
+      focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+      focus:border-[var(--field-border-error)]
     `
     : `
-      border-sepia-300 dark:border-sepia-700
-      hover:border-sepia-400 dark:hover:border-sepia-600
-      bg-white dark:bg-sepia-975
-      text-sepia-900 dark:text-sepia-50
-      focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400
-      focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+      border-[var(--field-border)] hover:border-[var(--field-border-hover)]
+      bg-[var(--field-background)] text-[var(--text-primary)]
+      focus:ring-2 focus:ring-[var(--focus-ring-primary)]
+      focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
     `;
 
   return (
@@ -330,7 +328,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           flex items-center justify-between
           font-mono text-sm
           border
-          transition-all duration-200
+          transition-all [transition-duration:var(--duration-normal)]
           ${currentSizeStyles.trigger}
           ${triggerStyles}
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
@@ -346,8 +344,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           className={`
             ${currentSizeStyles.icon}
             inline-flex items-center justify-center font-mono leading-none
-            text-sepia-600 dark:text-sepia-400
-            transition-transform duration-200
+            text-[var(--text-secondary)]
+            transition-transform [transition-duration:var(--duration-normal)]
             flex-shrink-0 ml-2
             ${isOpen ? 'rotate-180' : ''}
             ${disabled ? 'opacity-50' : ''}
@@ -363,15 +361,15 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
         <div
           ref={menuRef}
           role="listbox"
+          style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2 left-0 right-0
             min-w-[200px]
-            bg-white dark:bg-sepia-975
-            border border-sepia-300 dark:border-sepia-700
+            bg-[var(--surface-card)] border border-[var(--border-default)]
             ${currentSizeStyles.menu}
             shadow-none
             z-[1051]
-            animate-in fade-in slide-in-from-top-2 duration-200
+            animate-in fade-in slide-in-from-top-2
             max-h-[300px] overflow-y-auto
           `}
         >
@@ -394,12 +392,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
                   w-full flex items-center gap-2
                   px-4 py-3
                   font-mono text-sm text-left
-                  transition-colors duration-150
+                  transition-colors [transition-duration:var(--duration-fast)]
                   ${isDisabled
                     ? 'opacity-50 cursor-not-allowed'
-                    : 'text-sepia-900 dark:text-sepia-50 hover:bg-sepia-200 dark:hover:bg-sepia-900 cursor-pointer'
+                    : 'text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] cursor-pointer'
                   }
-                  ${isFocused && !isDisabled ? 'bg-sepia-200 dark:bg-sepia-900' : ''}
+                  ${isFocused && !isDisabled ? 'bg-[var(--surface-subtle)]' : ''}
                   ${currentSizeStyles.menuItem}
                 `}
               >
@@ -408,7 +406,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
                 
                 {/* TUI Tier 2: Unicode ✓ instead of Lucide Check */}
                 {isSelected && (
-                  <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono font-bold text-primary-400 dark:text-primary-400 flex-shrink-0`} aria-hidden="true">✓</span>
+                  <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono font-bold text-[var(--border-focus)] flex-shrink-0`} aria-hidden="true">✓</span>
                 )}
               </button>
             );

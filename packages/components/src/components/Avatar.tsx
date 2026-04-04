@@ -167,7 +167,7 @@ export function Avatar({
             ${currentSize.status}
             ${statusColors[status]}
             rounded-none
-            border-2 border-white dark:border-sepia-950
+            border-2 border-[var(--field-background)]
           `}
           aria-label={`Status: ${status}`}
         />

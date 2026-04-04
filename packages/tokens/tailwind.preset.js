@@ -193,6 +193,43 @@ module.exports = {
           900: 'var(--color-error-900)',
           950: 'var(--color-error-950)',
         },
+        // Semantic roles (light / dark via CSS variables — use in components instead of raw scales)
+        surface: {
+          page: 'var(--surface-page)',
+          container: 'var(--surface-container)',
+          card: 'var(--surface-card)',
+          'container-stroke': 'var(--surface-container-stroke)',
+          subtle: 'var(--surface-subtle)',
+          muted: 'var(--surface-muted)',
+          overlay: 'var(--surface-overlay)',
+          inverse: 'var(--surface-inverse)',
+          raised: 'var(--surface-raised)',
+        },
+        foreground: {
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          tertiary: 'var(--text-tertiary)',
+          disabled: 'var(--text-disabled)',
+          link: 'var(--text-link)',
+          'link-hover': 'var(--text-link-hover)',
+          'on-inverse': 'var(--text-on-inverse)',
+        },
+        line: {
+          default: 'var(--border-default)',
+          muted: 'var(--border-muted)',
+          strong: 'var(--border-strong)',
+          error: 'var(--border-error)',
+          focus: 'var(--border-focus)',
+        },
+        field: {
+          bg: 'var(--field-background)',
+          'bg-error': 'var(--field-background-error)',
+          border: 'var(--field-border)',
+          'border-hover': 'var(--field-border-hover)',
+          'border-focus': 'var(--field-border-focus)',
+          'border-error': 'var(--field-border-error)',
+          placeholder: 'var(--field-placeholder)',
+        },
       },
       // Border radius from tokens
       borderRadius: {
@@ -203,7 +240,7 @@ module.exports = {
       fontFamily: {
         mono: 'var(--font-family-mono)',
       },
-      // Font sizes from tokens
+      // Font sizes from tokens (matches tokens.css / tokens.json global.font.size)
       fontSize: {
         xs: 'var(--font-size-xs)',
         sm: 'var(--font-size-sm)',
@@ -211,6 +248,10 @@ module.exports = {
         lg: 'var(--font-size-lg)',
         xl: 'var(--font-size-xl)',
         '2xl': 'var(--font-size-2xl)',
+        '3xl': 'var(--font-size-3xl)',
+        '4xl': 'var(--font-size-4xl)',
+        '5xl': 'var(--font-size-5xl)',
+        '6xl': 'var(--font-size-6xl)',
       },
     },
   },

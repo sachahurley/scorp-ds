@@ -86,24 +86,24 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // Includes focus states with ring
     const checkboxStyles = error
       ? `
-        border-error-600 dark:border-error-500
-        ${checked 
-          ? 'bg-error-600 dark:bg-error-500 border-error-600 dark:border-error-500' 
-          : 'bg-white dark:bg-sepia-975 hover:border-error-500 dark:hover:border-error-400 hover:bg-error-50 dark:hover:bg-error-950/20'
+        border-[var(--field-border-error)]
+        ${checked
+          ? 'bg-[var(--field-border-error)] border-[var(--field-border-error)]'
+          : 'bg-[var(--field-background)] hover:border-[var(--field-border-error)] hover:bg-[var(--field-background-error)]'
         }
-        focus:ring-2 focus:ring-error-600 dark:focus:ring-error-500
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        transition-all duration-200
+        focus:ring-2 focus:ring-[var(--focus-ring-error)]
+        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+        transition-all [transition-duration:var(--duration-normal)]
       `
       : `
-        border-sepia-300 dark:border-sepia-700
-        ${checked 
-          ? 'bg-primary-400 dark:bg-primary-400 border-primary-400 dark:border-primary-400 hover:bg-primary-500 dark:hover:bg-primary-500' 
-          : 'bg-white dark:bg-sepia-975 hover:border-sepia-400 dark:hover:border-sepia-600 hover:bg-sepia-50 dark:hover:bg-sepia-900'
+        border-[var(--field-border)]
+        ${checked
+          ? 'bg-[var(--button-primary-background)] border-[var(--button-primary-background)] hover:bg-[var(--button-primary-background-hover)]'
+          : 'bg-[var(--field-background)] hover:border-[var(--field-border-hover)] hover:bg-[var(--surface-subtle)]'
         }
-        focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        transition-all duration-200
+        focus:ring-2 focus:ring-[var(--focus-ring-primary)]
+        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+        transition-all [transition-duration:var(--duration-normal)]
       `;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -188,7 +188,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             className={`
               ${currentSizeStyles.label} 
               font-mono 
-              text-sepia-900 dark:text-sepia-50 
+              text-[var(--text-primary)] 
               ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             `}
             onClick={handleClick}
