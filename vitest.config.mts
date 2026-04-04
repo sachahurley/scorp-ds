@@ -11,6 +11,7 @@ export default defineConfig({
     alias: {
       "@scorp-ds/components": path.resolve(dirname, "packages/components/src/index.ts"),
       "@scorp-ds/tokens": path.resolve(dirname, "packages/tokens/src/index.ts"),
+      "@scorp-ds/tui-art": path.resolve(dirname, "packages/tui-art/src/index.ts"),
     },
   },
   test: {

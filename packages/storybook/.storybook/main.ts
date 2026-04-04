@@ -42,6 +42,7 @@ const config: StorybookConfig = {
       repoRoot,
       path.join(repoRoot, 'packages', 'components'),
       path.join(repoRoot, 'packages', 'tokens'),
+      path.join(repoRoot, 'packages', 'tui-art'),
       ...priorAllow,
     ]);
 
@@ -60,12 +61,13 @@ const config: StorybookConfig = {
             'src',
             'index.ts'
           ),
+          '@scorp-ds/tui-art': path.join(repoRoot, 'packages', 'tui-art', 'src', 'index.ts'),
         },
         dedupe: ['react', 'react-dom'],
       },
       optimizeDeps: {
         // Linked TS source: pre-bundling this package often causes stale chunks → dynamic import fetch failures
-        exclude: ['@scorp-ds/components'],
+        exclude: ['@scorp-ds/components', '@scorp-ds/tui-art'],
         include: ['react', 'react-dom', 'react/jsx-runtime', 'next-themes'],
       },
     });

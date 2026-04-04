@@ -260,15 +260,16 @@
   --opacity-90: 0.9;
   --opacity-100: 1;
   
-  /* ANSI terminal accent colors -- TUI Tier 2 */
-  --color-term-green: #00CC33;
-  --color-term-amber: #CC8800;
-  --color-term-cyan: #00AACC;
-  --color-term-magenta: #CC00CC;
-  --color-term-red: #CC0022;
-  --color-term-blue: #0066CC;
-  --color-term-white: #E0E0E0;
-  --color-term-dim: #666666;
+  /* ANSI terminal accent colors -- TUI Tier 2 (light: higher chroma / less mud than legacy muted ANSI) */
+  --color-term-green: #16D955;
+  --color-term-amber: #F5A200;
+  --color-term-cyan: #00BFE6;
+  --color-term-magenta: #E012E0;
+  --color-term-red: #EF1A3C;
+  --color-term-blue: #1A7FFF;
+  /* On light paper, “ANSI white” reads as ink; “dim” stays sepia-adjacent */
+  --color-term-white: #52525B;
+  --color-term-dim: #78716C;
   
   /* Light theme — semantic surfaces */
   --surface-page: #FDFCFB;

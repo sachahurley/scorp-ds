@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@scorp-ds/components": "*",
-    "@scorp-ds/tokens": "*"
+    "@scorp-ds/tokens": "*",
+    "@scorp-ds/tui-art": "*"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.0.0",

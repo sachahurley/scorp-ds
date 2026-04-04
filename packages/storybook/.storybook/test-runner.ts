@@ -13,6 +13,18 @@ const config: TestRunnerConfig = {
     skip: ['skip-test'],
   },
   async preVisit(page) {
+    const t = process.env.STORYBOOK_TEST_THEME;
+    if (t === 'dark' || t === 'light') {
+      await page.evaluate((theme) => {
+        (window as unknown as { __STORYBOOK_TEST_THEME__?: 'light' | 'dark' }).__STORYBOOK_TEST_THEME__ =
+          theme;
+      }, t);
+    } else {
+      await page.evaluate(() => {
+        delete (window as unknown as { __STORYBOOK_TEST_THEME__?: 'light' | 'dark' }).__STORYBOOK_TEST_THEME__;
+      });
+    }
+
     const hasAxe = await page.evaluate(
       () => typeof (window as unknown as { axe?: unknown }).axe !== 'undefined'
     );
