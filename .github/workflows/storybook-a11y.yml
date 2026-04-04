@@ -1,0 +1,28 @@
+# Builds static Storybook, serves it locally, runs @storybook/test-runner + axe on all non-skipped stories.
+name: Storybook a11y
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  storybook-test-runner:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright (Chromium) for test-runner
+        run: npx playwright install chromium --with-deps
+
+      - name: Build static Storybook + run test-runner
+        run: npm run test-storybook:ci
