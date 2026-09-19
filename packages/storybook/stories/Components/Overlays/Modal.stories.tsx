@@ -90,3 +90,38 @@ export const WithFooter: Story = {
     );
   },
 };
+
+/**
+ * Docked: on wide viewports the panel pins bottom-center with no scrim and
+ * no scroll lock — a non-modal dialog acting on a page that stays visible
+ * (the portfolio's equip/compare card). Narrow the viewport below 960px and
+ * the same props render the standard centered modal.
+ */
+export const Docked: Story = {
+  render: function DockedModalDemo() {
+    const [open, setOpen] = useState(false);
+    return (
+      <div>
+        <Button type="button" onClick={() => setOpen(true)}>
+          Open docked panel
+        </Button>
+        <Modal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Compare"
+          docked
+          width={640}
+          footerContent={
+            <Button variant="primary" size="small" type="button" onClick={() => setOpen(false)}>
+              Equip
+            </Button>
+          }
+        >
+          <div className="p-2 font-mono text-sm text-secondary-800 dark:text-secondary-200">
+            The page behind stays visible and interactive; Esc or the close plate dismisses.
+          </div>
+        </Modal>
+      </div>
+    );
+  },
+};

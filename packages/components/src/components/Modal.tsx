@@ -10,6 +10,11 @@
  * - Scrollable content area (max-height: 66vh)
  * - Fade in/out animations (200ms duration)
  * - Backdrop scrim (semi-transparent overlay)
+ * - `docked` variant: on wide viewports (>=960px) the panel skips the scrim
+ *   and pins bottom-center as a NON-modal dialog (no aria-modal, no scroll
+ *   lock, page stays interactive), so the content behind stays in view while
+ *   the dialog acts on it. Below 960px docked falls back to the standard
+ *   centered modal, so consumers never branch on breakpoint themselves.
  * - Drop shadow using elevation tokens
  * - Click outside to close
  * - ESC key to close
@@ -30,7 +35,7 @@
  * - plate.round-lg: panel silhouette
  */
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "./Button";
 import { TuiIcon } from "./TuiIcon";
 
@@ -50,6 +55,14 @@ export interface ModalProps {
    * (e.g. "min(320px, 90vw)"). Small celebratory dialogs want ~320.
    */
   width?: number | string;
+  /**
+   * Dock instead of covering: on viewports >= 960px the panel pins
+   * bottom-center with no scrim and no scroll lock (a non-modal dialog),
+   * keeping the page behind visible and interactive. Below 960px this is
+   * ignored and the standard centered modal renders, so the responsive
+   * fallback lives here, not in the consumer.
+   */
+  docked?: boolean;
 }
 
 /**
@@ -60,9 +73,22 @@ export interface ModalProps {
  * @param title - Header title text
  * @param children - Modal content (will be scrollable if it exceeds max-height)
  */
-export function Modal({ isOpen, onClose, title, children, footerContent, width = 740 }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, footerContent, width = 740, docked = false }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
+
+  // Docked applies on wide viewports only; below the breakpoint the docked
+  // request degrades to the standard centered modal.
+  const [wideViewport, setWideViewport] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(min-width: 960px)").matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 960px)");
+    const onChange = () => setWideViewport(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  const isDocked = docked && wideViewport;
 
   // FOCUS MANAGEMENT: on open, remember the invoker and move focus into the
   // dialog (the panel itself, so screen readers announce the dialog name);
@@ -99,10 +125,10 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
     };
   }, [isOpen, onClose]);
 
-  // EFFECT: Prevent body scroll when modal is open
-  // This keeps the background page from scrolling while modal is active
+  // EFFECT: Prevent body scroll when modal is open. Docked mode is
+  // non-modal, so the page keeps scrolling underneath.
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isDocked) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -112,39 +138,23 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isOpen]);
+  }, [isOpen, isDocked]);
 
   // Don't render anything if modal is closed
   if (!isOpen) return null;
 
-  return (
-    <>
-      {/* 
-        BACKDROP / SCRIM
-        - Full-screen semi-transparent overlay
-        - Covers entire viewport with dark shade (including sidebar)
-        - Clicking it closes the modal
-        - Uses fade-in/fade-out animation
-        - Uses z-index token for modal layer (1040) to ensure it covers sidebar
-      */}
-      <div
-        className="fixed inset-0 flex items-center justify-center p-5 animate-in fade-in bg-[var(--surface-overlay)]"
-        style={{ zIndex: "var(--z-index-modal)", animationDuration: "var(--duration-normal)" }}
-        onClick={onClose}
-      >
-        {/*
-          MODAL CONTAINER — plate ring recipe
-          - Outer layer: stroke color clipped to the large plate (the ring)
-          - Inner layer: card fill clipped 1px inset (p-px on the outer)
-          - Clicking inside the modal does NOT close it (stopPropagation)
-        */}
+  // MODAL CONTAINER — plate ring recipe
+  // - Outer layer: stroke color clipped to the large plate (the ring)
+  // - Inner layer: card fill clipped 1px inset (p-px on the outer)
+  // - Clicking inside the panel does NOT close it (stopPropagation)
+  const panel = (
         <div
           ref={panelRef}
           tabIndex={-1}
           className="max-w-full max-h-[80vh] plate-round-lg p-px bg-[var(--surface-container-stroke)] flex focus:outline-none"
           style={{ width: typeof width === "number" ? `${width}px` : width }}
           role="dialog"
-          aria-modal="true"
+          aria-modal={isDocked ? undefined : "true"}
           aria-label={title}
           onClick={(e) => e.stopPropagation()}
         >
@@ -197,6 +207,45 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
           )}
         </div>
         </div>
+  );
+
+  // DOCKED (wide viewports): no scrim, no backdrop click-away — the panel
+  // floats bottom-center over a live page. Elevation is a drop-shadow, not
+  // the boxShadow tokens: the plate clip-path slices box shadows off, and
+  // drop-shadow follows the stepped silhouette (values track
+  // elevation.high's dark blur).
+  if (isDocked) {
+    return (
+      <div
+        className="fixed left-1/2 -translate-x-1/2 animate-in fade-in"
+        style={{
+          zIndex: "var(--z-index-modal)",
+          bottom: "48px",
+          animationDuration: "var(--duration-normal)",
+          filter: "drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))",
+        }}
+      >
+        {panel}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {/*
+        BACKDROP / SCRIM
+        - Full-screen semi-transparent overlay
+        - Covers entire viewport with dark shade (including sidebar)
+        - Clicking it closes the modal
+        - Uses fade-in/fade-out animation
+        - Uses z-index token for modal layer (1040) to ensure it covers sidebar
+      */}
+      <div
+        className="fixed inset-0 flex items-center justify-center p-5 animate-in fade-in bg-[var(--surface-overlay)]"
+        style={{ zIndex: "var(--z-index-modal)", animationDuration: "var(--duration-normal)" }}
+        onClick={onClose}
+      >
+        {panel}
       </div>
     </>
   );
