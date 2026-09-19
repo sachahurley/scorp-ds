@@ -7,8 +7,9 @@
  *
  * ANATOMY:
  * - Track: a thin muted bar (surface.muted), sharp corners per the TUI tier
- * - Thumb: a small solid accent block (no radius; the pixel grid is the
- *   brand), sized for a 44px-tall touch target via the input's hit area
+ * - Thumb: a solid accent plate wearing the button silhouette
+ *   (--plate-round, the stepped one-bit corners), sized for a 44px-tall
+ *   touch target via the input's hit area
  * - Focus: the inset box-shadow ring recipe (outlines get clipped elsewhere
  *   in the system, so focus is consistent ring-style everywhere)
  *
@@ -66,17 +67,17 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
           [&::-webkit-slider-runnable-track]:bg-[var(--surface-muted)]
           [&::-webkit-slider-runnable-track]:rounded-none
           [&::-webkit-slider-thumb]:appearance-none
-          [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-2
-          [&::-webkit-slider-thumb]:-mt-1.5
+          [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-3.5
+          [&::-webkit-slider-thumb]:-mt-2
           [&::-webkit-slider-thumb]:bg-[var(--accent)]
-          [&::-webkit-slider-thumb]:rounded-none
+          [&::-webkit-slider-thumb]:[clip-path:var(--plate-round)]
           [&::-moz-range-track]:h-1
           [&::-moz-range-track]:bg-[var(--surface-muted)]
           [&::-moz-range-track]:rounded-none
-          [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-2
+          [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-3.5
           [&::-moz-range-thumb]:bg-[var(--accent)]
           [&::-moz-range-thumb]:border-0
-          [&::-moz-range-thumb]:rounded-none
+          [&::-moz-range-thumb]:[clip-path:var(--plate-round)]
         `}
         {...rest}
       />
