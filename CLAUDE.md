@@ -161,6 +161,14 @@ Follow the structure in `design-system-doc-requirements.md`. Use `/storybook-che
 - **CI / fresh index:** `npm run test-storybook:ci` builds `storybook-static`, serves it on the first free port in `6006–6015` via `scripts/test-storybook-ci.mjs`, runs the test-runner **twice** (`STORYBOOK_TEST_THEME=light` then `dark`, set in `test-runner.ts` `preVisit`), then stops the server. Use the Storybook **Theme** toolbar (sun/moon) in `preview.tsx` to preview **dark mode**; **Docs** uses `parameters.docs.container` so autodocs match Canvas tokens.
 - **Skip:** Stories tagged `skip-test` are excluded from the runner (e.g. raw pigment atlas, semantic text-token swatches, and graphical elevation/focus specimens where axe is not meaningful). Prefer fixing real product stories first; use the tag only when the page’s purpose is to display tokens that intentionally break contrast rules.
 
+## After ANY merge to main — vendor the portfolio
+
+The portfolio site consumes this DS as a committed `vendor/` copy; merging
+here does **not** update the site. Every time a scorp-ds PR merges to `main`,
+immediately run the `/vendor-portfolio` skill (pull `~/Projects/scorp-ds`,
+`npm run vendor:ds` + `npm run ds:check` in a portfolio branch, PR → merge).
+Sacha has asked agents to own this follow-through without being reminded.
+
 ## PR Checklist
 
 - [ ] No hardcoded color, font, spacing, or radius values in components
