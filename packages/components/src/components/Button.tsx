@@ -32,6 +32,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   // Icon support - can be any React element (TUI: typically TuiIcon or Unicode characters)
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
+  /**
+   * Render as an `<a>` with this destination instead of a `<button>` — same
+   * plate styling for link CTAs ("view project ↗"). Disabled anchors drop the
+   * href and set `aria-disabled`.
+   */
+  href?: string;
+  /** Anchor target (only with `href`), e.g. "_blank". */
+  target?: string;
+  /** Anchor rel (only with `href`); pair `target="_blank"` with "noopener noreferrer". */
+  rel?: string;
 }
 
 /**
@@ -57,6 +67,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       iconLeft,
       iconRight,
+      href,
+      target,
+      rel,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       ...props 
@@ -286,6 +299,30 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               : 'var(--focus-ring-secondary)',
       outline: 'none',
     } as CSSProperties;
+
+    // Anchor rendering: same classes and focus ring, real link semantics.
+    if (href) {
+      return (
+        <a
+          ref={ref as unknown as React.Ref<HTMLAnchorElement>}
+          href={disabled ? undefined : href}
+          target={target}
+          rel={rel}
+          aria-disabled={disabled || undefined}
+          className={`${baseStyles} ${getSizeStyles()} ${variantStyles[variant]} ${gapStyles[size]} no-underline ${
+            disabled ? "pointer-events-none opacity-50" : ""
+          } ${className}`}
+          style={focusRingStyles}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          {...(props as unknown as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {iconLeft && renderIcon(iconLeft)}
+          {renderChildren()}
+          {iconRight && renderIcon(iconRight)}
+        </a>
+      );
+    }
 
     return (
       <button
