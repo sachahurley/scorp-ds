@@ -5,7 +5,8 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * FEATURES:
- * - Fixed header with title and close button (always visible)
+ * - Fixed header with title and a secondary-plate close button (always visible)
+ * - Optional fixed footer band for CTAs via `footerContent`
  * - Scrollable content area (max-height: 66vh)
  * - Fade in/out animations (200ms duration)
  * - Backdrop scrim (semi-transparent overlay)
@@ -17,16 +18,21 @@
  * DIMENSIONS:
  * - Width: 740px fixed
  * - Max height: 80% of viewport height
- * - Border radius: 24px (radius.container token)
- * 
+ *
+ * SHAPE: the panel is a large plate (--plate-round-lg, stepped one-bit corners)
+ * built with the ring recipe — outer layer is the stroke color clipped to the
+ * plate, inner layer is the card fill clipped 1px inset (clip-path slices real
+ * borders, so a border property cannot draw the ring).
+ *
  * TOKENS USED:
  * - surface.card, surface.container-stroke, surface.overlay
  * - text.primary (title)
- * - radius.container: 24px border radius
- * - elevation.2: Drop shadow
+ * - plate.round-lg: panel silhouette
  */
 
 import { useEffect, type ReactNode } from "react";
+import { Button } from "./Button";
+import { TuiIcon } from "./TuiIcon";
 
 // Define the props interface for the Modal component
 export interface ModalProps {
@@ -34,6 +40,11 @@ export interface ModalProps {
   onClose: () => void;                // Function to call when modal should close
   title: string;                      // Title text displayed in fixed header
   children: ReactNode;                // Content to display in scrollable area
+  /**
+   * Optional fixed footer for CTAs. Render DS Buttons here (e.g. a secondary
+   * "Cancel" + primary confirm); actions align to the right on a subtle band.
+   */
+  footerContent?: ReactNode;
 }
 
 /**
@@ -44,7 +55,7 @@ export interface ModalProps {
  * @param title - Header title text
  * @param children - Modal content (will be scrollable if it exceeds max-height)
  */
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, footerContent }: ModalProps) {
   
   // EFFECT: Handle ESC key press to close modal
   // This listens for keyboard events and closes the modal when ESC is pressed
@@ -99,23 +110,20 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
         style={{ zIndex: "var(--z-index-modal)", animationDuration: "var(--duration-normal)" }}
         onClick={onClose}
       >
-        {/* 
-          MODAL CONTAINER
-          - 740px fixed width
-          - Max height: 80% of viewport (80vh)
-          - Card styling with background, border, and shadow
+        {/*
+          MODAL CONTAINER — plate ring recipe
+          - Outer layer: stroke color clipped to the large plate (the ring)
+          - Inner layer: card fill clipped 1px inset (p-px on the outer)
           - Clicking inside the modal does NOT close it (stopPropagation)
-          - Uses elevation-2 shadow tokens for medium elevation
-          - rounded-[24px] uses radius.container token
         */}
         <div
-          className="w-[740px] max-h-[80vh] bg-[var(--surface-card)] rounded-none flex flex-col overflow-hidden"
-          style={{
-            boxShadow: 'var(--elevation-2-shadow)',
-            border: '0.5px solid var(--elevation-2-border)'
-          }}
+          className="w-[740px] max-h-[80vh] plate-round-lg p-px bg-[var(--surface-container-stroke)] flex"
+          role="dialog"
+          aria-modal="true"
+          aria-label={title}
           onClick={(e) => e.stopPropagation()}
         >
+        <div className="w-full plate-round-lg bg-[var(--surface-card)] flex flex-col overflow-hidden">
           {/* 
             FIXED HEADER
             - Always visible at top (does not scroll)
@@ -124,27 +132,23 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             - 24px padding matches card padding from Colors page
             - Border bottom separates header from content
           */}
-          {/* TUI Tier 2: double-line box-drawing title bar ╔══ Title ══╗ */}
+          {/* Header — plain title (box-drawing decoration retired with the TUI tier) */}
           <div className="flex items-center justify-between px-8 py-6 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]">
-            {/* Title with double-line box-drawing decoration */}
-            <h2 className="text-base font-mono text-[var(--text-primary)] font-medium flex items-center gap-0 flex-1 min-w-0">
-              <span className="whitespace-pre text-secondary-600 dark:text-secondary-400" aria-hidden="true">╔══ </span>
-              <span className="truncate">{title}</span>
-              <span className="ml-1 flex-1 overflow-hidden whitespace-nowrap text-secondary-600 dark:text-secondary-400" aria-hidden="true">
-                {"═".repeat(80)}
-              </span>
-              <span className="whitespace-pre text-secondary-600 dark:text-secondary-400" aria-hidden="true"> ══╗</span>
+            <h2 className="text-base font-mono text-[var(--text-primary)] font-medium flex-1 min-w-0 truncate">
+              {title}
             </h2>
 
-            {/* TUI close button: [x] text instead of icon */}
-            <button
+            {/* Close control: icon-only secondary plate button (square, gold ✗ glyph) */}
+            <Button
+              variant="secondary"
+              size="small"
               type="button"
               onClick={onClose}
-              className="ml-4 font-mono text-sm leading-none text-secondary-700 transition-colors [transition-duration:var(--duration-normal)] hover:text-error-700 dark:text-secondary-300 dark:hover:text-error-400"
               aria-label="Close modal"
+              className="ml-4 shrink-0"
             >
-              [x]
-            </button>
+              <TuiIcon name="X" />
+            </Button>
           </div>
 
           {/* 
@@ -158,6 +162,14 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           <div className="overflow-y-auto px-8 py-6" tabIndex={0}>
             {children}
           </div>
+
+          {/* Optional fixed footer — CTA band, actions right-aligned */}
+          {footerContent && (
+            <div className="flex items-center justify-end gap-3 px-8 py-5 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)]">
+              {footerContent}
+            </div>
+          )}
+        </div>
         </div>
       </div>
     </>

@@ -9,10 +9,14 @@
  * - medium: 32px height (h-8) - matches small button/input - default
  * - large: 40px height (h-10) - matches medium button/input
  * 
+ * SHAPE: track and knob are both clipped to the small plate (--plate-round).
+ * Focus is an inset ring (the clip swallows outside outlines) and the knob
+ * hops on steps(3) — plate motion, not a glide.
+ *
  * Features:
  * - Accessible (ARIA attributes, keyboard support)
  * - Focus states matching design system
- * - Smooth animations
+ * - Pixel-grid knob motion
  * - Optional label
  * - Optional icon inside knob (for special use cases like theme toggle)
  */
@@ -109,9 +113,9 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           className={`
             relative inline-flex items-center
             ${currentSizeStyles.track}
-            rounded-none
+            plate-round
             transition-colors [transition-duration:var(--duration-slow)]
-            focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring-primary)] focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+            focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             ${checked
               ? 'bg-[var(--button-primary-background)]'
@@ -125,10 +129,10 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             className={`
               inline-flex items-center justify-center
               ${currentSizeStyles.knob}
-              rounded-none
+              plate-round
               bg-[var(--field-background)]
               shadow-none
-              transform transition-transform [transition-duration:var(--duration-slow)]
+              transform transition-transform [transition-duration:var(--duration-slow)] [transition-timing-function:steps(3)]
             `}
             style={{
               transform: currentSizeStyles.knobTranslate,

@@ -121,7 +121,7 @@ export function Avatar({
       <div
         className={`
           ${currentSize.container}
-          rounded-none
+          plate-round
           overflow-hidden
           flex items-center justify-center
           bg-secondary-200 dark:bg-secondary-800
@@ -145,9 +145,10 @@ export function Avatar({
           <span className="select-none">{initials}</span>
         )}
 
-        {/* Custom Icon */}
+        {/* Custom Icon — centered in its box like the default glyph (a bare
+            sized div leaves glyph icons sitting off-position) */}
         {showIcon && (
-          <div className={`${currentSize.icon} text-secondary-700 dark:text-secondary-300`}>
+          <div className={`${currentSize.icon} inline-flex items-center justify-center leading-none text-secondary-700 dark:text-secondary-300`}>
             {icon}
           </div>
         )}

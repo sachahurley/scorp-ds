@@ -67,9 +67,9 @@ export const InspectorLayout: Story = {
           </nav>
         </aside>
         {/* Pane: main card */}
-        <div className="min-w-0 flex-1 border-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-card)]">
+        <div className="min-w-0 flex-1">
           <Card
-            className="h-full min-h-[50vh] !border-0 shadow-none"
+            className="h-full min-h-[50vh] shadow-none"
             title="sessions.log"
             subtitle="Tail · last 200 lines"
           >

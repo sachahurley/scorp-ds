@@ -88,3 +88,34 @@ export const Striped: Story = {
     </div>
   ),
 };
+
+/** Row padding rhythm: compact (default) · comfortable · spacious. */
+export const Densities: Story = {
+  render: () => (
+    <div className="flex flex-col gap-8">
+      {(['compact', 'comfortable', 'spacious'] as const).map((density) => (
+        <div key={density} className="space-y-2">
+          <div className="font-mono text-xs text-secondary-700 dark:text-secondary-400">{density}</div>
+          <Table bordered density={density}>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Item</TableHead>
+                <TableHead>XP</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Copper scarab</TableCell>
+                <TableCell>120</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Gilded stinger</TableCell>
+                <TableCell>450</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      ))}
+    </div>
+  ),
+};

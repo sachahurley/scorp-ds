@@ -29,6 +29,7 @@ module.exports = {
           950: 'var(--color-amber-950)',
           975: 'var(--color-amber-975)',
           1000: 'var(--color-amber-1000)',
+          gold: 'var(--color-amber-gold)',
         },
         sepia: {
           50: 'var(--color-sepia-50)',
@@ -124,6 +125,7 @@ module.exports = {
           950: 'var(--color-primary-950)',
           975: 'var(--color-primary-975)',
           1000: 'var(--color-primary-1000)',
+          gold: 'var(--color-primary-gold)',
         },
         secondary: {
           50: 'var(--color-secondary-50)',
@@ -218,8 +220,17 @@ module.exports = {
           default: 'var(--border-default)',
           muted: 'var(--border-muted)',
           strong: 'var(--border-strong)',
+          hairline: 'var(--border-hairline)',
           error: 'var(--border-error)',
           focus: 'var(--border-focus)',
+        },
+        // Brand accent (single role; theme eggs may override --accent at runtime)
+        accent: 'var(--accent)',
+        // Fire ramp (theme-invariant dither-art sepia tones)
+        fire: {
+          bright: 'var(--fire-bright)',
+          mid: 'var(--fire-mid)',
+          dim: 'var(--fire-dim)',
         },
         field: {
           bg: 'var(--field-background)',
@@ -231,17 +242,14 @@ module.exports = {
           placeholder: 'var(--field-placeholder)',
         },
       },
-      // Border radius from tokens
-      borderRadius: {
-        button: 'var(--radius-button)',
-        container: 'var(--radius-container)',
-      },
       // Font families from tokens
       fontFamily: {
         mono: 'var(--font-family-mono)',
       },
       // Font sizes from tokens (matches tokens.css / tokens.json global.font.size)
       fontSize: {
+        '3xs': 'var(--font-size-3xs)',
+        '2xs': 'var(--font-size-2xs)',
         xs: 'var(--font-size-xs)',
         sm: 'var(--font-size-sm)',
         base: 'var(--font-size-base)',
@@ -257,5 +265,16 @@ module.exports = {
   },
   plugins: [
     require("tailwindcss-animate"),
+    // Plate silhouettes: the system's shape language (replaces the retired
+    // radius tokens). clip-path slices real borders, so build rings as
+    // element = ring color clipped + ::before = fill clipped 1px inset,
+    // and use inset focus rings.
+    function scorpPlates({ addUtilities }) {
+      addUtilities({
+        '.plate-round': { 'clip-path': 'var(--plate-round)' },
+        '.plate-round-lg': { 'clip-path': 'var(--plate-round-lg)' },
+        '.plate-round-lg-top': { 'clip-path': 'var(--plate-round-lg-top)' },
+      });
+    },
   ],
 };

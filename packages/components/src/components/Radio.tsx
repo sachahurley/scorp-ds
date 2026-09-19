@@ -39,7 +39,8 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * @param label - Optional label text displayed next to radio
  * @param error - Whether radio has a validation error
  * @param disabled - Whether radio is disabled
- * @param checked - Whether radio is checked
+ * @param checked - Controlled checked state; omit it to use the native
+ *                  uncontrolled behavior (`defaultChecked` + radio-group name)
  * @param name - Name attribute for radio group (required for grouping)
  * @param value - Value attribute for this radio option
  * @param onCheckedChange - Callback when radio state changes (alternative to onChange)
@@ -51,7 +52,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       label,
       error = false,
       disabled = false,
-      checked = false,
+      checked,
       onChange,
       onCheckedChange,
       className = "",
@@ -88,22 +89,23 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     // Includes hover states for unchecked radios
     // Includes focus states with ring
     // Focus ring lives on the visual (peer of native input) so only one radio is exposed to assistive tech.
+    // Selection is rendered from the NATIVE input via peer-checked, so both
+    // controlled (`checked`) and uncontrolled (`defaultChecked` + group name)
+    // radios show state — a JS-only visual misses native group deselection.
     const radioStyles = error
       ? `
         border-[var(--field-border-error)]
-        ${checked
-          ? 'bg-[var(--field-border-error)] border-[var(--field-border-error)]'
-          : 'bg-[var(--field-background)] hover:border-[var(--field-border-error)] hover:bg-[var(--field-background-error)]'
-        }
-        transition-all [transition-duration:var(--duration-normal)]
+        bg-[var(--field-background)] hover:bg-[var(--field-background-error)]
+        peer-checked:bg-[var(--field-border-error)]
+        transition-colors [transition-duration:var(--duration-fast)]
       `
       : `
-        border-[var(--field-border)]
-        ${checked
-          ? 'bg-[var(--button-primary-background)] border-[var(--button-primary-background)] hover:bg-[var(--button-primary-background-hover)]'
-          : 'bg-[var(--field-background)] hover:border-[var(--field-border-hover)] hover:bg-[var(--surface-subtle)]'
-        }
-        transition-all [transition-duration:var(--duration-normal)]
+        border-[var(--field-border)] hover:border-[var(--field-border-hover)]
+        bg-[var(--field-background)]
+        peer-checked:border-[var(--button-primary-background)]
+        peer-checked:bg-[var(--button-primary-background)]
+        peer-checked:hover:bg-[var(--button-primary-background-hover)]
+        transition-colors [transition-duration:var(--duration-fast)]
       `;
 
     const focusPeerRing = error
@@ -126,7 +128,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         <input
           ref={ref}
           type="radio"
-          checked={checked}
+          {...(checked !== undefined ? { checked } : {})}
           disabled={disabled}
           onChange={handleChange}
           className="peer sr-only"
@@ -138,22 +140,23 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           className={`
             relative inline-flex shrink-0 items-center justify-center
             ${currentSizeStyles.radio}
-            rounded-none
+            rounded-full
             border-2
             ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
             ${radioStyles}
             ${focusPeerRing}
+            peer-checked:[&>span]:opacity-100
           `}
         >
-          {checked && (
-            <span
-              className={`
-                ${currentSizeStyles.dot}
-                rounded-none
-                ${error ? 'bg-white dark:bg-white' : 'bg-black dark:bg-black'}
-              `}
-            />
-          )}
+          {/* Inner dot — revealed by peer-checked on the outer span */}
+          <span
+            className={`
+              ${currentSizeStyles.dot}
+              rounded-full opacity-0
+              transition-opacity [transition-duration:var(--duration-fast)]
+              ${error ? 'bg-white' : 'bg-[var(--button-primary-text)]'}
+            `}
+          />
         </span>
       </>
     );

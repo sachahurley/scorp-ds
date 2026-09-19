@@ -5,9 +5,16 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * VARIANTS (fills from semantic CSS variables in tokens.css — theme switches via `.dark`):
- * - primary / secondary: `--button-*` pairs for background, hover, text
+ * - primary: gold CTA fill · secondary: the quiet plate that flips to gold on hover
  * - ghost / outline / destructive / link: same semantic layer
- * - icon: square chrome using `--button-icon-*` (background, hover, text, disabled)
+ * - icon: square plate using `--button-icon-*` (background, hover, text, disabled)
+ *
+ * SHAPE: every button is clipped to the plate silhouette (--plate-round, stepped
+ * one-bit corners). The clip swallows outside focus outlines, so focus renders as
+ * an INSET ring (box-shadow) using the --focus-ring-* tokens. The outline variant
+ * uses the ring recipe (element = border color clipped, ::before = opaque fill
+ * clipped 1px inset) so its border walks the stepped corners like every other
+ * bordered plate; its fill is the page surface, not transparent.
  * 
  * SIZES: All defined in tokens.json
  * - small: 32px height
@@ -62,10 +69,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = `
       inline-flex items-center justify-center
       font-mono text-sm
-      transition-colors [transition-duration:var(--duration-normal)]
+      transition-colors [transition-duration:var(--duration-fast)]
       cursor-pointer
       disabled:cursor-not-allowed disabled:opacity-50
       focus:outline-none
+      focus-visible:![box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--btn-ring)]
     `;
 
     // Helper function to check if button is icon-only (no text label)
@@ -112,40 +120,41 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }, [variant, size, children, iconLeft, iconRight, ariaLabel, ariaLabelledBy]);
 
     // SIZE STYLES - All values from tokens.json
-    // Small: 32px height, 16px horizontal padding, 6px corner radius
-    // Medium: 40px height, 20px horizontal padding, 8px corner radius
-    // Large: 48px height, 24px horizontal padding, 12px corner radius (rounded-button)
+    // Small: 32px height, 16px horizontal padding
+    // Medium: 40px height, 20px horizontal padding
+    // Large: 48px height, 24px horizontal padding
+    // Corners: plate silhouette (--plate-round) is the shape language; radius tokens are retired
     // Icon-only buttons: Square buttons matching size dimensions (no padding, uses flex centering)
     // Function to get size styles based on variant and whether button is icon-only
     const getSizeStyles = () => {
       const iconOnly = isIconOnly();
       
       // For icon-only buttons (any variant), use square dimensions matching the size
-      // TUI: all corners sharp (rounded-none)
+      // TUI: all corners sharp (plate-round)
       if (iconOnly || variant === "icon") {
         switch (size) {
           case "small":
-            return "h-8 w-8 rounded-none";
+            return "h-8 w-8 plate-round";
           case "large":
-            return "h-12 w-12 rounded-none";
+            return "h-12 w-12 plate-round";
           case "icon":
-            return "h-10 w-10 rounded-none";
+            return "h-10 w-10 plate-round";
           default: // medium
-            return "h-10 w-10 rounded-none";
+            return "h-10 w-10 plate-round";
         }
       }
       
       // For regular buttons with labels, use standard size styles
-      // TUI: all corners sharp (rounded-none)
+      // TUI: all corners sharp (plate-round)
       switch (size) {
         case "small":
-          return "h-8 px-4 py-1.5 rounded-none";
+          return "h-8 px-4 py-1.5 plate-round";
         case "large":
-          return "h-12 px-6 py-3.5 rounded-none";
+          return "h-12 px-6 py-3.5 plate-round";
         case "icon":
-          return "h-10 w-10 rounded-none";
+          return "h-10 w-10 plate-round";
         default: // medium
-          return "h-10 px-5 py-2.5 rounded-none";
+          return "h-10 px-5 py-2.5 plate-round";
       }
     };
 
@@ -154,45 +163,44 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary: `
         bg-[var(--button-primary-background)] hover:bg-[var(--button-primary-background-hover)] active:brightness-95
         text-[var(--button-primary-text)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `,
 
       secondary: `
         bg-[var(--button-secondary-background)] hover:bg-[var(--button-secondary-background-hover)] active:brightness-95
-        text-[var(--button-secondary-text)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+        text-[var(--button-secondary-text)] hover:text-[var(--button-secondary-text-hover)]
       `,
 
       ghost: `
         bg-[var(--button-ghost-background)] hover:bg-[var(--button-ghost-background-hover)] active:brightness-95
         text-[var(--button-ghost-text)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `,
 
       link: `
         bg-transparent hover:underline
         text-[var(--button-link-text)] hover:text-[var(--button-link-text-hover)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `,
 
       outline: `
-        border border-[var(--button-outline-border)]
-        bg-[var(--button-outline-background)] hover:bg-[var(--button-outline-background-hover)] active:brightness-95
+        relative isolate
+        bg-[var(--button-outline-border)]
         text-[var(--button-outline-text)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+        before:content-[''] before:absolute before:inset-px before:-z-[1]
+        before:[clip-path:var(--plate-round)]
+        before:bg-[var(--button-outline-background)] hover:before:bg-[var(--button-outline-background-hover)]
+        before:transition-colors before:[transition-duration:var(--duration-fast)]
+        active:brightness-95
+        focus-visible:before:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--btn-ring)]
       `,
 
       destructive: `
         bg-[var(--button-destructive-background)] hover:bg-[var(--button-destructive-background-hover)] active:brightness-95
         text-[var(--button-destructive-text)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `,
 
       icon: `
         bg-[var(--button-icon-background)] hover:bg-[var(--button-icon-background-hover)] active:brightness-95
         text-[var(--button-icon-text)]
         disabled:bg-[var(--button-icon-disabled-background)] disabled:text-[var(--button-icon-disabled-text)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
       `,
     };
 
@@ -268,7 +276,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Focus ring color — semantic tokens (values swap under .dark in tokens.css)
     const focusRingStyles = {
-      '--tw-ring-color':
+      '--btn-ring':
         variant === 'primary' || variant === 'link'
           ? 'var(--focus-ring-primary)'
           : variant === 'destructive'

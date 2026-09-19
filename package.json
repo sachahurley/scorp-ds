@@ -10,6 +10,8 @@
     "dev": "npm run --workspace=packages/storybook storybook",
     "site": "npm run dev --workspace=@scorp-ds/site",
     "storybook": "npm run --workspace=packages/storybook storybook",
+    "preview": "node scripts/preview.mjs",
+    "preview:fresh": "node scripts/preview.mjs --fresh",
     "storybook:clean": "rm -rf node_modules/.cache/storybook node_modules/.vite node_modules/.cache/vite packages/storybook/node_modules/.vite",
     "test-storybook": "npm run test-storybook --workspace=@scorp-ds/storybook",
     "test-storybook:ci": "npm run build-storybook --workspace=@scorp-ds/storybook && node scripts/test-storybook-ci.mjs",

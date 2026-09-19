@@ -3,37 +3,63 @@
  * Compose `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, and `TableCell`.
  */
 
-import { forwardRef, type HTMLAttributes, type TdHTMLAttributes, type ThHTMLAttributes, type TableHTMLAttributes } from "react";
+import { createContext, forwardRef, useContext, type HTMLAttributes, type TdHTMLAttributes, type ThHTMLAttributes, type TableHTMLAttributes } from "react";
 import { cn } from "../lib/utils";
+
+/** Row padding density. `compact` is the default data-grid rhythm; the other
+ *  two step up the cell padding on the 4px grid for lower-density reading. */
+export type TableDensity = "compact" | "comfortable" | "spacious";
+
+/** Cell padding per density (shared by TableHead + TableCell via context). */
+const DENSITY_CELL_PADDING: Record<TableDensity, string> = {
+  compact: "px-3 py-2",      // 12 / 8
+  comfortable: "px-4 py-3",  // 16 / 12
+  spacious: "px-5 py-4",     // 20 / 16
+};
+
+const TableDensityContext = createContext<TableDensity>("compact");
 
 export type TableProps = TableHTMLAttributes<HTMLTableElement> & {
   /** Zebra striping for body rows (even rows use `surface-subtle`). */
   striped?: boolean;
   /** Full outer border around the table. */
   bordered?: boolean;
+  /** Row padding rhythm (default `compact`); cells read it via context. */
+  density?: TableDensity;
 };
 
 /**
  * Root `<table>`. Wrap in a scroll container in product code when needed (`overflow-x-auto`).
+ * `bordered` frames the table on the large plate via the ring recipe (outer layer =
+ * stroke clipped to the plate, inner layer = fill clipped 1px inset) — clip-path
+ * slices real borders, so a border property cannot draw the frame.
  */
 export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
-  { className, striped, bordered, children, ...props },
+  { className, striped, bordered, density = "compact", children, ...props },
   ref
 ) {
+  const table = (
+    <TableDensityContext.Provider value={density}>
+      <table
+        ref={ref}
+        className={cn(
+          "w-full border-collapse font-mono text-sm text-[var(--text-primary)]",
+          striped && "[&_tbody_tr:nth-child(even)]:bg-[var(--surface-subtle)]",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </table>
+    </TableDensityContext.Provider>
+  );
+
+  if (!bordered) return table;
+
   return (
-    <table
-      ref={ref}
-      className={cn(
-        "w-full border-collapse font-mono text-sm text-[var(--text-primary)]",
-        bordered &&
-          "border-[0.5px] border-solid border-[var(--surface-container-stroke)]",
-        striped && "[&_tbody_tr:nth-child(even)]:bg-[var(--surface-subtle)]",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </table>
+    <div className="plate-round-lg p-px bg-[var(--surface-container-stroke)]">
+      <div className="plate-round-lg bg-[var(--surface-card)]">{table}</div>
+    </div>
   );
 });
 
@@ -123,12 +149,14 @@ export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(functi
   { className, scope = "col", ...props },
   ref
 ) {
+  const density = useContext(TableDensityContext);
   return (
     <th
       ref={ref}
       scope={scope}
       className={cn(
-        "px-3 py-2 text-left font-semibold text-[var(--text-primary)]",
+        DENSITY_CELL_PADDING[density],
+        "text-left font-semibold text-[var(--text-primary)]",
         className
       )}
       {...props}
@@ -145,11 +173,13 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
   { className, ...props },
   ref
 ) {
+  const density = useContext(TableDensityContext);
   return (
     <td
       ref={ref}
       className={cn(
-        "px-3 py-2 align-middle text-secondary-800 dark:text-secondary-200",
+        DENSITY_CELL_PADDING[density],
+        "align-middle text-secondary-800 dark:text-secondary-200",
         className
       )}
       {...props}

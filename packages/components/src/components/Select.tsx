@@ -270,20 +270,20 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   // Size styles matching Dropdown component exactly
   const sizeStyles = {
     small: {
-      trigger: "h-8 pl-3 pr-7 py-1.5 rounded-none",       // TUI: sharp corners
-      menu: "rounded-none",
+      trigger: "h-8 px-4 py-1.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-4 h-4",
     },
     medium: {
-      trigger: "h-10 pl-4 pr-8 py-2.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      trigger: "h-10 px-4 py-2.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-5 h-5",
     },
     large: {
-      trigger: "h-12 pl-5 pr-9 py-3.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      trigger: "h-12 px-4 py-3.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-6 h-6",
     },
@@ -293,20 +293,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
 
   // STATE STYLES - Color combinations for different states using SEMANTIC TOKENS
   const triggerStyles = error
-    ? `
-      border-[var(--field-border-error)]
-      bg-[var(--field-background-error)]
-      text-[var(--text-primary)]
-      focus:ring-2 focus:ring-[var(--focus-ring-error)]
-      focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
-      focus:border-[var(--field-border-error)]
-    `
-    : `
-      border-[var(--field-border)] hover:border-[var(--field-border-hover)]
-      bg-[var(--field-background)] text-[var(--text-primary)]
-      focus:ring-2 focus:ring-[var(--focus-ring-primary)]
-      focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
-    `;
+    ? `bg-[var(--field-background-error)] text-[var(--text-primary)]`
+    : `bg-[var(--field-background)] text-[var(--text-primary)]`;
+
+  // PLATE RING RECIPE — wrapper carries the border color (portfolio ramp:
+  // idle hairline → hover mut → focus accent); the trigger is the inset fill.
+  const triggerRing = error
+    ? "bg-[var(--field-border-error)]"
+    : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
 
   const triggerBlock = (
     <div ref={dropdownRef} className="relative inline-block w-full">
@@ -328,7 +322,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
         ))}
       </select>
 
-      {/* Custom trigger button */}
+      {/* Custom trigger button — inset fill of the plate ring */}
+      <div className={`plate-round p-px transition-colors [transition-duration:var(--duration-fast)] ${triggerRing} ${disabled ? 'opacity-50' : ''}`}>
       <button
         type="button"
         id={triggerId}
@@ -338,11 +333,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           w-full
           flex items-center justify-between
           font-mono text-sm
-          border
-          transition-all [transition-duration:var(--duration-normal)]
+          transition-colors [transition-duration:var(--duration-fast)]
           ${currentSizeStyles.trigger}
           ${triggerStyles}
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+          ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
           focus:outline-none
         `}
         aria-haspopup="listbox"
@@ -370,23 +364,24 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           ▼
         </span>
       </button>
+      </div>
 
-      {/* Custom dropdown menu - matching Dropdown component exactly */}
+      {/* Custom dropdown menu — plate ring recipe, matching Dropdown */}
       {isOpen && (
         <div
-          ref={menuRef}
-          role="listbox"
           style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2 left-0 right-0
             min-w-[200px]
-            bg-[var(--surface-card)] border border-[var(--border-default)]
-            ${currentSizeStyles.menu}
-            shadow-none
+            plate-round p-px bg-[var(--border-default)]
             z-[1051]
             animate-in fade-in slide-in-from-top-2
-            max-h-[300px] overflow-y-auto
           `}
+        >
+        <div
+          ref={menuRef}
+          role="listbox"
+          className={`plate-round bg-[var(--surface-card)] ${currentSizeStyles.menu} max-h-[300px] overflow-y-auto`}
         >
           {options.map((option, index) => {
             const isDisabled = option.disabled;
@@ -426,6 +421,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
               </button>
             );
           })}
+        </div>
         </div>
       )}
     </div>

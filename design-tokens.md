@@ -3,7 +3,7 @@
 > This is the prescriptive reference that maps every UI context to the correct token.
 > Source of truth: `packages/tokens/src/tokens.json` · Runtime CSS: `packages/tokens/src/styles/tokens.css`
 
-**Last updated:** Apr 2026
+**Last updated:** Sep 2026 (portfolio merge: gold accent, fire ramp, hairline border, plate silhouettes, dark re-pins)
 
 ## How Tokens Work
 
@@ -43,8 +43,8 @@ Dot paths in this doc map to custom properties by flattening with hyphens:
 
 | Token | Light (via) | Dark (via) | Use For |
 |-------|------------|------------|---------|
-| `surface.page` | secondary.50 | secondary.1000 | Page/app background |
-| `surface.container` | secondary.50 | secondary.1000 | Sections, panels |
+| `surface.page` | secondary.50 | secondary.950 | Page/app background (dark pinned to 950 so sepia-950-baked dither art blends) |
+| `surface.container` | secondary.50 | secondary.950 | Sections, panels |
 | `surface.card` | white | secondary.975 | Cards, modal panels |
 | `surface.raised` | white | secondary.975 | Lifted surface (often same as card) |
 | `surface.container-stroke` | secondary.500 | secondary.800 | Hairline chrome |
@@ -65,12 +65,25 @@ ANSI-style accents for terminal-inspired UI. CSS: `--color-term-green`, `--color
 
 **Storybook:** **Foundation / Colors** (terminal swatches).
 
+### Accent + Fire (merged portfolio identity)
+
+| Token | Light (via) | Dark (via) | Use For |
+|-------|------------|------------|---------|
+| `accent` | amber.700 | amber.gold (#E0A26A) | Brand accent: links, active nav, XP bar, selection. Light uses amber.700 (AA for body text on paper). Theme eggs may override `--accent` inline at runtime; the contract is the variable, not the value |
+| `fire.bright` | secondary.400 | secondary.400 | Flame/impact effects, bright band |
+| `fire.mid` | secondary.600 | secondary.600 | Flame mid band |
+| `fire.dim` | secondary.800 | secondary.800 | Flame dim band |
+
+The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits between amber-400 and amber-600. Fire is theme-invariant (dither-art sepia tones).
+
+**Tailwind:** `text-accent`, `bg-accent`, `bg-fire-bright`, `bg-fire-mid`, `bg-fire-dim`.
+
 ### Text
 
 | Token | Light (via) | Dark (via) | Use For |
 |-------|------------|------------|---------|
 | `text.primary` | secondary.900 | secondary.50 | Body, headings |
-| `text.secondary` | secondary.600 | secondary.400 | Supporting copy |
+| `text.secondary` | secondary.600 | secondary.500 | Supporting copy (dark stepped down one so body sits below accent) |
 | `text.tertiary` | secondary.500 | secondary.600 | Meta, timestamps |
 | `text.disabled` | secondary.400 | secondary.700 | Disabled labels |
 | `text.link` | primary.700 | primary.400 | Links |
@@ -86,6 +99,7 @@ ANSI-style accents for terminal-inspired UI. CSS: `--color-term-green`, `--color
 | `border.default` | Default dividers, controls |
 | `border.muted` | Soft separators |
 | `border.strong` | Emphasized outlines |
+| `border.hairline` | Quiet chrome hairline just off the page surface (dark: near-black sepia-900) |
 | `border.error` | Validation |
 | `border.focus` | Focus outline color (pair with global ring width) |
 
@@ -96,9 +110,9 @@ ANSI-style accents for terminal-inspired UI. CSS: `--color-term-green`, `--color
 | Token | Use For |
 |-------|---------|
 | `field.background` | Input fill |
-| `field.border` | Default border |
-| `field.border-hover` | Hovered |
-| `field.border-focus` | Focused |
+| `field.border` | Default border (dark: hairline sepia-900 — the portfolio ramp) |
+| `field.border-hover` | Hovered (dark: sepia-600) |
+| `field.border-focus` | Focused (dark: accent gold) |
 | `field.border-error` | Invalid |
 | `field.placeholder` | Placeholder text color |
 | `field.background-error` | Invalid field background |
@@ -198,6 +212,8 @@ Global stacking scale (`global.zIndex`). Theme-independent — same numbers in l
 | Token | CSS variable | Value | Use For |
 |-------|--------------|-------|---------|
 | `font.family.mono` | `--font-family-mono` | Fragment Mono (stack) | All text — Scorp DS is monospace everywhere |
+| `font.size.3xs` | `--font-size-3xs` | 10px | Dense game chrome; use sparingly |
+| `font.size.2xs` | `--font-size-2xs` | 11px | Tooltips, meta captions |
 | `font.size.xs` | `--font-size-xs` | 12px | Labels, captions |
 | `font.size.sm` | `--font-size-sm` | 14px | Body text, buttons |
 | `font.size.base` | `--font-size-base` | 16px | Default body |
@@ -261,7 +277,7 @@ Base unit: **4px** per step (see `global.spacing` in `tokens.json`). Tailwind sp
 | Token | Duration (JSON) | Use For |
 |-------|-----------------|--------|
 | `duration.instant` | 0ms | No animation |
-| `duration.fast` | 150ms | Hover, color transitions |
+| `duration.fast` | 120ms | Hover, color transitions (plate hovers; was 150ms pre-merge) |
 | `duration.normal` | 200ms | Show/hide, expand/collapse |
 | `duration.slow` | 300ms | Modal enter/exit |
 | `duration.slower` | 500ms | Full-page transitions |
@@ -272,16 +288,18 @@ Easing curves live in `global.easing` as `--easing-linear`, `--easing-ease-in`, 
 
 **Storybook:** **Foundation / Motion** — interactive duration demos and easing variable list.
 
-## Radius Tokens
+## Plate Tokens (shape language)
 
-| Token | CSS variable | Value in `tokens.json` | Value in `tokens.css` (current) |
-|-------|--------------|------------------------|----------------------------------|
-| `radius.button` | `--radius-button` | 12px | `0px` (TUI sharp corners) |
-| `radius.container` | `--radius-container` | 24px | `0px` (TUI sharp corners) |
+The radius tokens are **retired**. Corners are stepped one-bit "plate" silhouettes, applied as `clip-path` polygons:
 
-> **Scorp DS** ships **sharp corners** in product UI (`rounded-none`). JSON retains non-zero radii for tooling / future tiers; CSS variables used in apps are **0px** today.
+| Token | CSS variable | Silhouette | Use For |
+|-------|--------------|-----------|---------|
+| `plate.round` | `--plate-round` | 6px stepped corner (2px steps) | Controls, list rows, tooltips, toasts |
+| `plate.round-lg` | `--plate-round-lg` | 12px stepped corner (4px steps, the small plate at 2x) | Cards, tables, modals, bottom sheets |
 
-**Tailwind:** `rounded-button`, `rounded-container` (both resolve to the variables above).
+> **Ring recipe:** `clip-path` slices real borders, so a bordered plate is two layers: the element itself is the **ring color** clipped to the polygon, and a `::before` (or inner element) is the **fill** clipped to the same polygon 1px inset. Outside focus outlines get swallowed by the clip; use an **inset ring** (`box-shadow: inset 0 0 0 2px …`) on plate-clipped controls.
+
+**Tailwind:** `plate-round`, `plate-round-lg` (utilities from the preset plugin).
 
 ---
 

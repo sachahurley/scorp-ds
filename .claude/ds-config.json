@@ -46,7 +46,7 @@
       "_comment": "React/CSS stack: Tailwind preset maps to these custom properties. Do not use a --scorp-* color prefix.",
       "foundationColorScales": "--color-{scale}-{step} (e.g. --color-amber-400, --color-secondary-900; scales include primary/secondary aliases)",
       "semanticSurfacesAndChrome": "--surface-*, --text-*, --border-*, --field-*, --focus-ring-*, --focus-offset-color, --button-*, --elevation-*",
-      "globalUtilities": "--opacity-*, --z-index-*, --duration-*, --easing-*, --font-*, --line-height-*, --font-weight-*, --radius-*, --focus-ring-width, --focus-ring-offset",
+      "globalUtilities": "--opacity-*, --z-index-*, --duration-*, --easing-*, --font-*, --line-height-*, --font-weight-*, --plate-round, --plate-round-lg, --focus-ring-width, --focus-ring-offset (radius tokens retired; plates are the shape language)",
       "terminalTier2": "--color-term-* (ANSI-style accents; values differ in .dark)"
     }
   },

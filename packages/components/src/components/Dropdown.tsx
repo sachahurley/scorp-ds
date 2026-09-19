@@ -152,25 +152,24 @@ export function Dropdown({
   }, [focusedIndex]);
 
   // Size styles matching buttons and inputs
-  // Small: 32px height, 6px corner radius (rounded-md)
-  // Medium: 40px height, 8px corner radius (rounded-lg)
-  // Large: 48px height, 12px corner radius (rounded-button)
+  // Small: 32px height / Medium: 40px / Large: 48px
+  // Corners: plate silhouette (--plate-round) is the shape language; radius tokens are retired
   const sizeStyles = {
     small: {
-      button: "h-8 px-4 py-1.5 rounded-none",       // TUI: sharp corners
-      menu: "rounded-none",
+      button: "h-8 px-4 py-1.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-4 h-4",
     },
     medium: {
-      button: "h-10 px-5 py-2.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      button: "h-10 px-5 py-2.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-5 h-5",
     },
     large: {
-      button: "h-12 px-6 py-3.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      button: "h-12 px-6 py-3.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-6 h-6",
     },
@@ -189,8 +188,8 @@ export function Dropdown({
         transition-colors [transition-duration:var(--duration-normal)]
         cursor-pointer
         bg-[var(--button-secondary-background)] hover:bg-[var(--button-secondary-background-hover)] active:brightness-95
-        text-[var(--button-secondary-text)]
-        focus:ring-2 focus:ring-[var(--focus-ring-secondary)] focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+        text-[var(--button-secondary-text)] hover:text-[var(--button-secondary-text-hover)]
+        focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-secondary)]
       `}
       aria-haspopup="true"
       aria-expanded={isOpen}
@@ -218,23 +217,25 @@ export function Dropdown({
       {/* Trigger */}
       {triggerElement}
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu — plate ring recipe (border color clipped + fill inset 1px;
+          clip-path slices real borders, so the ring is a wrapper layer) */}
       {isOpen && (
         <div
-          ref={menuRef}
-          role="menu"
-          aria-orientation="vertical"
           style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2
             ${align === "right" ? "right-0" : "left-0"}
             min-w-[200px]
-            bg-[var(--surface-card)] border border-[var(--border-default)]
-            ${currentSizeStyles.menu}
-            shadow-none
+            plate-round p-px bg-[var(--border-default)]
             z-[1051]
             animate-in fade-in slide-in-from-top-2
           `}
+        >
+        <div
+          ref={menuRef}
+          role="menu"
+          aria-orientation="vertical"
+          className={`plate-round bg-[var(--surface-card)] ${currentSizeStyles.menu}`}
         >
           {items.map((item, index) => {
             const isDestructive = item.variant === "destructive";
@@ -282,6 +283,7 @@ export function Dropdown({
               </button>
             );
           })}
+        </div>
         </div>
       )}
     </div>

@@ -35,6 +35,7 @@ const BORDER: Row[] = [
   { label: 'border.default', varName: '--border-default', usage: 'Default dividers, input borders' },
   { label: 'border.muted', varName: '--border-muted', usage: 'Softer separators' },
   { label: 'border.strong', varName: '--border-strong', usage: 'Emphasized outlines' },
+  { label: 'border.hairline', varName: '--border-hairline', usage: 'Quiet chrome hairline (near-black in dark)' },
   { label: 'border.error', varName: '--border-error', usage: 'Validation / error chrome' },
   { label: 'border.focus', varName: '--border-focus', usage: 'Focus outline color (with ring width from global)' },
 ];
@@ -65,9 +66,18 @@ const BUTTON_PRIMARY: Row[] = [
 ];
 
 const BUTTON_SECONDARY: Row[] = [
-  { label: 'button.secondary.background', varName: '--button-secondary-background', usage: 'Secondary fill' },
-  { label: 'button.secondary.background-hover', varName: '--button-secondary-background-hover', usage: 'Secondary hover' },
+  { label: 'button.secondary.background', varName: '--button-secondary-background', usage: 'Secondary fill (the quiet plate)' },
+  { label: 'button.secondary.background-hover', varName: '--button-secondary-background-hover', usage: 'Secondary hover (flips to gold)' },
   { label: 'button.secondary.text', varName: '--button-secondary-text', usage: 'Label on secondary' },
+  { label: 'button.secondary.text-hover', varName: '--button-secondary-text-hover', usage: 'Label on hover (flips dark)' },
+];
+
+/** Merged portfolio identity: the brand accent + flame ramp. Theme eggs override --accent inline; the variable is the contract. */
+const ACCENT_FIRE: Row[] = [
+  { label: 'accent', varName: '--accent', usage: 'Brand accent: links, active nav, XP bar, selection' },
+  { label: 'fire.bright', varName: '--fire-bright', usage: 'Flame / impact effects, bright band (sepia-400)' },
+  { label: 'fire.mid', varName: '--fire-mid', usage: 'Flame mid band (sepia-600)' },
+  { label: 'fire.dim', varName: '--fire-dim', usage: 'Flame dim band (sepia-800)' },
 ];
 
 const BUTTON_GHOST: Row[] = [
@@ -222,6 +232,7 @@ function SemanticPanel({ forcedDark }: { forcedDark?: boolean }) {
       </p>
       <TableFill rows={SURFACE} title="Surface" />
       <TableText rows={TEXT} title="Text" />
+      <TableFill rows={ACCENT_FIRE} title="Accent + Fire" />
       <TableBorder rows={BORDER} title="Border" />
       <TableFill rows={FIELD} title="Field" />
       <TableFill rows={FOCUS} title="Focus" />

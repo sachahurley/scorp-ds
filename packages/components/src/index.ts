@@ -55,6 +55,18 @@ export type { SwitchProps } from './components/Switch';
 export { Dropdown } from './components/Dropdown';
 export type { DropdownProps, DropdownItem } from './components/Dropdown';
 
+export { CaseStudyBlocks } from './components/CaseStudy';
+export type { CaseStudyBlock } from './components/CaseStudy';
+
+export { ListRow } from './components/ListRow';
+export type { ListRowProps } from './components/ListRow';
+
+export { Toast, Toaster } from './components/Toast';
+export type { ToastItem, ToasterProps } from './components/Toast';
+
+export { BottomSheet } from './components/BottomSheet';
+export type { BottomSheetProps } from './components/BottomSheet';
+
 export { ThemeToggle } from './components/ThemeToggle';
 
 export { TuiIcon, TUI_ICON_GLYPHS } from './components/TuiIcon';
@@ -73,6 +85,7 @@ export {
   TableCell,
 } from './components/Table';
 export type {
+  TableDensity,
   TableProps,
   TableHeaderProps,
   TableBodyProps,

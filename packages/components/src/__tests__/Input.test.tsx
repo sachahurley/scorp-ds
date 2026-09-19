@@ -12,7 +12,9 @@ describe("Input", () => {
   it("applies error state classes using semantic field tokens", () => {
     render(<Input error aria-label="Error field" />);
     const el = screen.getByRole("textbox", { name: /error field/i });
-    expect(el.className).toContain("--field-border-error");
+    // Plate ring recipe: the error border color lives on the ring wrapper,
+    // the error fill on the input itself.
+    expect(el.parentElement?.className).toContain("--field-border-error");
     expect(el.className).toContain("--field-background-error");
   });
 

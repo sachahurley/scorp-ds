@@ -63,8 +63,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const baseStyles = `
       w-full
       font-mono text-sm
-      border
-      transition-all [transition-duration:var(--duration-normal)]
+      transition-colors [transition-duration:var(--duration-fast)]
       placeholder:text-[var(--field-placeholder)]
       disabled:cursor-not-allowed disabled:opacity-50
       focus:outline-none
@@ -75,38 +74,37 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     // Horizontal padding slightly less than buttons for better text alignment
     // Corner radius matches button sizes: 6px (small), 8px (medium), 12px (large)
     const sizeStyles = {
-      small: "h-8 px-3 py-1.5 rounded-none",       // TUI: sharp corners
-      medium: "h-10 px-4 py-2.5 rounded-none",    // TUI: sharp corners
-      large: "h-12 px-5 py-3.5 rounded-none",     // TUI: sharp corners
+      small: "h-8 px-3 py-1.5 plate-round",
+      medium: "h-10 px-4 py-2.5 plate-round",
+      large: "h-12 px-5 py-3.5 plate-round",
     };
 
     // STATE STYLES - Color combinations for different states using SEMANTIC TOKENS
     // Priority: error > disabled > default
     // Error state overrides all other visual states
     const stateStyles = error
-      ? `
-        border-[var(--field-border-error)]
-        bg-[var(--field-background-error)]
-        text-[var(--text-primary)]
-        focus:ring-2 focus:ring-[var(--focus-ring-error)]
-        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
-        focus:border-[var(--field-border-error)]
-      `
-      : `
-        border-[var(--field-border)] hover:border-[var(--field-border-hover)]
-        bg-[var(--field-background)] text-[var(--text-primary)]
-        focus:ring-2 focus:ring-[var(--focus-ring-primary)]
-        focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
-      `;
+      ? `bg-[var(--field-background-error)] text-[var(--text-primary)]`
+      : `bg-[var(--field-background)] text-[var(--text-primary)]`;
+
+    // PLATE RING RECIPE — the wrapper is the border color clipped to the plate;
+    // the input is the fill clipped 1px inset. The ring walks the portfolio ramp:
+    // idle hairline → hover mut → focus accent (via --field-border-* tokens).
+    const ringStyles = error
+      ? "bg-[var(--field-border-error)]"
+      : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
 
     const inputEl = (
-      <input
-        ref={ref}
-        id={controlId}
-        disabled={disabled}
-        className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
-        {...props}
-      />
+      <div
+        className={`w-full plate-round p-px transition-colors [transition-duration:var(--duration-fast)] ${ringStyles}`}
+      >
+        <input
+          ref={ref}
+          id={controlId}
+          disabled={disabled}
+          className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
+          {...props}
+        />
+      </div>
     );
 
     if (label == null || label === "") {

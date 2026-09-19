@@ -21,7 +21,7 @@ function MotionPage() {
         [Stable] · Last updated Apr 2026
       </p>
       <p className="mb-8 text-secondary-800 dark:text-secondary-300">
-        Prefer Tailwind `duration-*` / `transition-*` classes that map to tokens. Interactive motion target: 150–200ms.
+        Prefer Tailwind `duration-*` / `transition-*` classes that map to tokens. Interactive motion target: 120–200ms (fast = 120ms, the plate-hover workhorse); ambient choreography may use steps() for pixel-grid hops.
       </p>
 
       <section className="mb-10">

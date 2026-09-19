@@ -21,7 +21,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <div className="w-full max-w-md border-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-card)]">
+    <div className="w-full max-w-md plate-round-lg p-px bg-[var(--surface-container-stroke)]">
+      <div className="plate-round-lg bg-[var(--surface-card)]">
       <Tabs defaultValue="general">
         <TabsList aria-label="Account sections">
           <TabsTrigger value="general">General</TabsTrigger>
@@ -38,6 +39,7 @@ export const Default: Story = {
           <p className="text-sm text-secondary-800 dark:text-secondary-200">Plans and invoices.</p>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   ),
 };
@@ -45,7 +47,8 @@ export const Default: Story = {
 export const WithFormFields: Story = {
   name: 'With inputs (forceMount)',
   render: () => (
-    <div className="w-full max-w-md border-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-card)]">
+    <div className="w-full max-w-md plate-round-lg p-px bg-[var(--surface-container-stroke)]">
+      <div className="plate-round-lg bg-[var(--surface-card)]">
       <Tabs defaultValue="a">
         <TabsList aria-label="Editable sections">
           <TabsTrigger value="a">Panel A</TabsTrigger>
@@ -63,6 +66,7 @@ export const WithFormFields: Story = {
           </Stack>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   ),
 };

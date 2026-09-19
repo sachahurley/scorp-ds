@@ -24,6 +24,8 @@ describe("Select", () => {
       </Select>
     );
     const trigger = screen.getByRole("button", { name: /broken field/i });
-    expect(trigger.className).toContain("--field-border-error");
+    // Plate ring recipe: the error border color lives on the ring wrapper.
+    expect(trigger.parentElement?.className).toContain("--field-border-error");
+    expect(trigger.className).toContain("--field-background-error");
   });
 });

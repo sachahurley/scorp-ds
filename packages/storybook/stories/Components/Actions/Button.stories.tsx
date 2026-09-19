@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@scorp-ds/components';
+import { Button, TuiIcon, type TuiIconName } from '@scorp-ds/components';
 
 /**
  * Components / Actions / Button
  *
  * The primary interactive element. All variants and sizes are built from
- * tokens. Scorp DS buttons use sharp corners and Fragment Mono font.
+ * tokens. Scorp DS buttons wear the stepped plate silhouette and Fragment Mono.
  *
  * Variants: primary, secondary, ghost, link, outline, destructive, icon
  * Sizes: small (32px), medium (40px), large (48px)
@@ -136,5 +136,38 @@ export const Playground: Story = {
     size: 'medium',
     disabled: false,
     children: 'Button label',
+  },
+};
+
+/**
+ * Icon buttons: every Button variant works icon-only. A lone icon element as
+ * children makes the button a square plate at the matching size; always pass
+ * `aria-label` so the control has an accessible name.
+ */
+export const IconButtons: Story = {
+  name: 'Icon buttons (all variants)',
+  render: () => {
+    const variants = ['primary', 'secondary', 'ghost', 'outline', 'destructive', 'icon'] as const;
+    const sizes = ['small', 'medium', 'large'] as const;
+    const glyphs = { primary: 'Check', secondary: 'Edit', ghost: 'Copy', outline: 'Download', destructive: 'X', icon: 'Bell' } as const;
+    return (
+      <div className="flex flex-col gap-4">
+        {variants.map((variant) => (
+          <div key={variant} className="flex items-center gap-4">
+            <span className="w-28 font-mono text-xs text-secondary-700 dark:text-secondary-400">{variant}</span>
+            {sizes.map((size) => (
+              <Button
+                key={size}
+                variant={variant}
+                size={size}
+                aria-label={`${glyphs[variant] ?? 'Action'} (${variant}, ${size})`}
+              >
+                <TuiIcon name={(glyphs[variant] ?? 'Bell') as TuiIconName} />
+              </Button>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
   },
 };

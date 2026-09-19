@@ -56,3 +56,37 @@ export const LongContent: Story = {
     );
   },
 };
+
+/** Footer variant: right-aligned CTA band (secondary cancel + primary confirm). */
+export const WithFooter: Story = {
+  name: 'With footer CTAs',
+  render: function ModalFooterDemo() {
+    const [open, setOpen] = useState(false);
+    return (
+      <div>
+        <Button type="button" onClick={() => setOpen(true)}>
+          Open modal with footer
+        </Button>
+        <Modal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Claim reward"
+          footerContent={
+            <>
+              <Button variant="secondary" size="small" type="button" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="small" type="button" onClick={() => setOpen(false)}>
+                Claim
+              </Button>
+            </>
+          }
+        >
+          <p className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
+            A new theme egg is hatching on the progress track. Claim it now or keep it for later.
+          </p>
+        </Modal>
+      </div>
+    );
+  },
+};

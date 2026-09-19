@@ -6,6 +6,8 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Font family (mono), sizes, weights, and line heights from tokens.
  */
 const SIZES = [
+  { token: '3xs', cls: 'text-3xs', varName: '--font-size-3xs' },
+  { token: '2xs', cls: 'text-2xs', varName: '--font-size-2xs' },
   { token: 'xs', cls: 'text-xs', varName: '--font-size-xs' },
   { token: 'sm', cls: 'text-sm', varName: '--font-size-sm' },
   { token: 'base', cls: 'text-base', varName: '--font-size-base' },

@@ -7,3 +7,6 @@ dist/
 .env.production
 storybook-static/
 coverage/
+
+# Conductor machine-local settings
+.conductor/settings.local.toml
