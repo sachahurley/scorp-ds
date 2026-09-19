@@ -56,3 +56,12 @@ export const AllVariants: Story = {
     </div>
   ),
 };
+
+/**
+ * Bone: the tier-neutral filled chip. Identical in both themes on purpose,
+ * for state markers that must never ride the accent or re-theme (equipped
+ * gear, loot tiers).
+ */
+export const Bone: Story = {
+  args: { variant: 'bone', size: 'small', children: 'equipped' },
+};
