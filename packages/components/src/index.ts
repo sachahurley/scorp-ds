@@ -43,6 +43,9 @@ export type { SelectProps } from './components/Select';
 export { Checkbox } from './components/Checkbox';
 export type { CheckboxProps } from './components/Checkbox';
 
+export { Slider } from './components/Slider';
+export type { SliderProps } from './components/Slider';
+
 export { Radio } from './components/Radio';
 export type { RadioProps } from './components/Radio';
 
