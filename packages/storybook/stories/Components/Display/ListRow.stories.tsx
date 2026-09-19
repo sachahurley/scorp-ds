@@ -41,3 +41,49 @@ export const Default: Story = {
     </div>
   ),
 };
+
+/**
+ * Thumbnail slot: a fixed image beside the shrinking text column (long
+ * titles ellipsize instead of pushing the image). thumbPosition="end"
+ * mirrors it for the mobile right-thumb layout.
+ */
+export const WithThumbnail: Story = {
+  render: () => (
+    <div className="w-96 flex flex-col gap-1">
+      <ListRow
+        href="#"
+        meta="2026"
+        title="Sealed case study"
+        description="A password-protected write-up with a cover image."
+        thumb={<span className="block w-28 aspect-video bg-[var(--surface-muted)]" />}
+      />
+      <ListRow
+        href="#"
+        meta="2026"
+        title="Right-hand thumb"
+        description="The mobile variant keeps the image trailing."
+        thumb={<span className="block w-16 aspect-[3/4] bg-[var(--surface-muted)]" />}
+        thumbPosition="end"
+      />
+    </div>
+  ),
+};
+
+/**
+ * Router links: pass the router's Link via `as` and its props via
+ * `asProps`, so client-side navigation keeps working. (Demoed with an
+ * anchor stand-in; in an app: as={Link} asProps={{ to: '/projects/x' }}.)
+ */
+export const AsRouterLink: Story = {
+  render: () => (
+    <div className="w-96">
+      <ListRow
+        as="a"
+        asProps={{ href: '#demo' }}
+        meta="lab"
+        title="Client-side navigation"
+        description="Rendered through a custom link component."
+      />
+    </div>
+  ),
+};
