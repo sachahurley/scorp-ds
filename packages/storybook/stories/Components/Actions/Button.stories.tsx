@@ -171,3 +171,18 @@ export const IconButtons: Story = {
     );
   },
 };
+
+/** Link CTAs: pass `href` (+ target/rel) to render an anchor with identical plate styling. */
+export const AsLink: Story = {
+  name: 'As link (href)',
+  render: () => (
+    <div className="flex items-center gap-4">
+      <Button variant="secondary" size="small" href="https://example.com" target="_blank" rel="noopener noreferrer">
+        view project <span aria-hidden="true">↗</span>
+      </Button>
+      <Button variant="primary" href="https://example.com">
+        Open docs
+      </Button>
+    </div>
+  ),
+};
