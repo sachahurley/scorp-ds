@@ -188,9 +188,10 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
             {children}
           </div>
 
-          {/* Optional fixed footer — CTA band, actions right-aligned */}
+          {/* Optional fixed footer — CTA band, actions right-aligned. Same
+              card fill as the header (no tint), separated by the hairline. */}
           {footerContent && (
-            <div className="flex items-center justify-end gap-3 px-8 py-5 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)]">
+            <div className="flex items-center justify-end gap-3 px-8 py-5 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)]">
               {footerContent}
             </div>
           )}
