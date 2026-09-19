@@ -4,13 +4,17 @@
  * Reusable button component with multiple variants and sizes
  * Built entirely from design tokens defined in tokens.json
  * 
- * VARIANTS:
- * - primary: Main call-to-action button (has tokens in light/dark themes)
- * - secondary: Secondary actions (has tokens in light/dark themes)
- * - ghost: ⚠️ ASSUMPTION - Transparent background, visible text
- * - link: ⚠️ ASSUMPTION - Text-only button with underline on hover
- * - outline: ⚠️ ASSUMPTION - Transparent with border
- * - destructive: ⚠️ ASSUMPTION - Red/error colored for dangerous actions
+ * VARIANTS (fills from semantic CSS variables in tokens.css — theme switches via `.dark`):
+ * - primary: gold CTA fill · secondary: the quiet plate that flips to gold on hover
+ * - ghost / outline / destructive / link: same semantic layer
+ * - icon: square plate using `--button-icon-*` (background, hover, text, disabled)
+ *
+ * SHAPE: every button is clipped to the plate silhouette (--plate-round, stepped
+ * one-bit corners). The clip swallows outside focus outlines, so focus renders as
+ * an INSET ring (box-shadow) using the --focus-ring-* tokens. The outline variant
+ * uses the ring recipe (element = border color clipped, ::before = opaque fill
+ * clipped 1px inset) so its border walks the stepped corners like every other
+ * bordered plate; its fill is the page surface, not transparent.
  * 
  * SIZES: All defined in tokens.json
  * - small: 32px height
@@ -18,7 +22,7 @@
  * - large: 48px height
  */
 
-import { forwardRef, type ButtonHTMLAttributes } from "react";
+import { forwardRef, useEffect, type ButtonHTMLAttributes, type CSSProperties } from "react";
 
 // Define the props interface for the Button component
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -40,6 +44,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * @param children - Button content (text, icons, etc.)
  * @param iconLeft - Icon element to display on the left side of text
  * @param iconRight - Icon element to display on the right side of text
+ *
+ * Icon-only usage: pass `aria-label` or `aria-labelledby` (standard button attributes) so assistive tech has an accessible name.
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -51,6 +57,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       iconLeft,
       iconRight,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
       ...props 
     },
     ref
@@ -61,10 +69,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = `
       inline-flex items-center justify-center
       font-mono text-sm
-      transition-colors duration-200
+      transition-colors [transition-duration:var(--duration-fast)]
       cursor-pointer
       disabled:cursor-not-allowed disabled:opacity-50
       focus:outline-none
+      focus-visible:![box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--btn-ring)]
     `;
 
     // Helper function to check if button is icon-only (no text label)
@@ -96,124 +105,102 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return false;
     };
 
+    useEffect(() => {
+      if (process.env.NODE_ENV === "production") return;
+      const iconOnly = variant === "icon" || isIconOnly();
+      if (!iconOnly) return;
+      const named =
+        (ariaLabel != null && String(ariaLabel).trim() !== "") ||
+        (ariaLabelledBy != null && String(ariaLabelledBy).trim() !== "");
+      if (!named) {
+        console.warn(
+          "[@scorp-ds/components] Button: icon-only buttons should include aria-label or aria-labelledby for screen readers."
+        );
+      }
+    }, [variant, size, children, iconLeft, iconRight, ariaLabel, ariaLabelledBy]);
+
     // SIZE STYLES - All values from tokens.json
-    // Small: 32px height, 16px horizontal padding, 6px corner radius
-    // Medium: 40px height, 20px horizontal padding, 8px corner radius
-    // Large: 48px height, 24px horizontal padding, 12px corner radius (rounded-button)
+    // Small: 32px height, 16px horizontal padding
+    // Medium: 40px height, 20px horizontal padding
+    // Large: 48px height, 24px horizontal padding
+    // Corners: plate silhouette (--plate-round) is the shape language; radius tokens are retired
     // Icon-only buttons: Square buttons matching size dimensions (no padding, uses flex centering)
     // Function to get size styles based on variant and whether button is icon-only
     const getSizeStyles = () => {
       const iconOnly = isIconOnly();
       
       // For icon-only buttons (any variant), use square dimensions matching the size
-      // TUI: all corners sharp (rounded-none)
+      // TUI: all corners sharp (plate-round)
       if (iconOnly || variant === "icon") {
         switch (size) {
           case "small":
-            return "h-8 w-8 rounded-none";
+            return "h-8 w-8 plate-round";
           case "large":
-            return "h-12 w-12 rounded-none";
+            return "h-12 w-12 plate-round";
           case "icon":
-            return "h-10 w-10 rounded-none";
+            return "h-10 w-10 plate-round";
           default: // medium
-            return "h-10 w-10 rounded-none";
+            return "h-10 w-10 plate-round";
         }
       }
       
       // For regular buttons with labels, use standard size styles
-      // TUI: all corners sharp (rounded-none)
+      // TUI: all corners sharp (plate-round)
       switch (size) {
         case "small":
-          return "h-8 px-4 py-1.5 rounded-none";
+          return "h-8 px-4 py-1.5 plate-round";
         case "large":
-          return "h-12 px-6 py-3.5 rounded-none";
+          return "h-12 px-6 py-3.5 plate-round";
         case "icon":
-          return "h-10 w-10 rounded-none";
+          return "h-10 w-10 plate-round";
         default: // medium
-          return "h-10 px-5 py-2.5 rounded-none";
+          return "h-10 px-5 py-2.5 plate-round";
       }
     };
 
-    // VARIANT STYLES - Color combinations for each variant using SEMANTIC TOKENS
-    // ✓ = Has tokens in tokens.json
-    // ⚠️ = Assumption made, needs token definition
+    // VARIANT STYLES — semantic CSS variables from @scorp-ds/tokens (theme = :root / .dark)
     const variantStyles = {
-      // ✓ PRIMARY - Uses semantic primary tokens (resolves to amber)
-      // Light: primary-400 bg → primary-500 hover | black text (same as dark)
-      // Dark: primary-400 bg → primary-500 hover | black text
-      // Focus: 2px ring with 2px offset (matches page background: sepia-50 light / sepia-1000 dark)
-      // Ring color set via inline style to ensure consistency
       primary: `
-        bg-primary-400 hover:bg-primary-500 active:bg-primary-600 text-black
-        dark:bg-primary-400 dark:hover:bg-primary-500 dark:active:bg-primary-600 dark:text-black
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-[var(--button-primary-background)] hover:bg-[var(--button-primary-background-hover)] active:brightness-95
+        text-[var(--button-primary-text)]
       `,
 
-      // ✓ SECONDARY - Uses semantic secondary tokens (resolves to sepia)
-      // Light: secondary-700 bg → secondary-600 hover | secondary-50 text (same as dark)
-      // Dark: secondary-700 bg → secondary-600 hover | secondary-50 text
-      // Focus: 2px ring with 2px offset (matches page background: sepia-50 light / sepia-1000 dark)
-      // Ring color set via inline style to match button background color
       secondary: `
-        bg-secondary-700 hover:bg-secondary-600 active:bg-secondary-500 text-secondary-50
-        dark:bg-secondary-700 dark:hover:bg-secondary-600 dark:active:bg-secondary-500 dark:text-secondary-50
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-[var(--button-secondary-background)] hover:bg-[var(--button-secondary-background-hover)] active:brightness-95
+        text-[var(--button-secondary-text)] hover:text-[var(--button-secondary-text-hover)]
       `,
 
-      // ⚠️ GHOST - Uses neutral secondary tokens for subtle UI
-      // Uses secondary (sepia) colors for hover states - no strong semantic meaning
-      // Focus: 2px ring with 2px offset (matches page background: sepia-50 light / sepia-1000 dark)
-      // Ring color set via inline style to ensure consistency
       ghost: `
-        bg-transparent hover:bg-secondary-200 active:bg-secondary-300 text-secondary-900
-        dark:hover:bg-secondary-700 dark:active:bg-secondary-600 dark:text-secondary-50
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-[var(--button-ghost-background)] hover:bg-[var(--button-ghost-background-hover)] active:brightness-95
+        text-[var(--button-ghost-text)]
       `,
 
-      // ⚠️ LINK - Uses semantic primary tokens for link color
-      // Links should use primary brand color
-      // Focus: 2px ring with 2px offset (matches page background: sepia-50 light / sepia-1000 dark)
-      // Ring color set via inline style to ensure consistency
       link: `
-        bg-transparent hover:underline text-primary-600 hover:text-primary-700
-        dark:text-primary-400 dark:hover:text-primary-300
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-transparent hover:underline
+        text-[var(--button-link-text)] hover:text-[var(--button-link-text-hover)]
       `,
 
-      // ⚠️ OUTLINE - Uses neutral secondary tokens for borders
-      // Uses secondary (sepia) colors for border and text - neutral appearance
-      // Focus: 2px ring with 2px offset (matches page background: sepia-50 light / sepia-1000 dark)
-      // Ring color set via inline style to ensure consistency
       outline: `
-        bg-transparent border border-secondary-300 hover:border-secondary-400 hover:bg-secondary-50
-        active:bg-secondary-100 text-secondary-900
-        dark:border-secondary-700 dark:hover:border-secondary-600 dark:hover:bg-secondary-900
-        dark:active:bg-secondary-800 dark:text-secondary-50
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        relative isolate
+        bg-[var(--button-outline-border)]
+        text-[var(--button-outline-text)]
+        before:content-[''] before:absolute before:inset-px before:-z-[1]
+        before:[clip-path:var(--plate-round)]
+        before:bg-[var(--button-outline-background)] hover:before:bg-[var(--button-outline-background-hover)]
+        before:transition-colors before:[transition-duration:var(--duration-fast)]
+        active:brightness-95
+        focus-visible:before:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--btn-ring)]
       `,
 
-      // ⚠️ DESTRUCTIVE - Uses semantic error tokens (resolves to red)
-      // Error tokens for dangerous/destructive actions
-      // Focus: 2px ring with 2px offset (matches page background: sepia-50 light / sepia-1000 dark)
-      // Ring color set via inline style to match button background color (error-600 light, error-500 dark)
       destructive: `
-        bg-error-600 hover:bg-error-700 active:bg-error-800 text-white
-        dark:bg-error-500 dark:hover:bg-error-600 dark:active:bg-error-700
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-[var(--button-destructive-background)] hover:bg-[var(--button-destructive-background-hover)] active:brightness-95
+        text-[var(--button-destructive-text)]
       `,
 
-      // ✓ ICON - Icon-only buttons (square, no text padding)
-      // Uses neutral sepia colors for subtle appearance
-      // Light: sepia-100 bg → sepia-200 hover | sepia-900 text
-      // Dark: sepia-800 bg → sepia-700 hover | sepia-50 text
-      // Disabled has reduced contrast in both themes
-      // Border radius is set in sizeStyles (rounded-md = 6px, matches small buttons)
-      // Ring color set via inline style to ensure consistency
       icon: `
-        bg-sepia-100 hover:bg-sepia-200 active:bg-sepia-300 text-sepia-900
-        dark:bg-sepia-800 dark:hover:bg-sepia-700 dark:active:bg-sepia-600 dark:text-sepia-50
-        disabled:bg-sepia-50 disabled:text-sepia-300 dark:disabled:bg-sepia-900 dark:disabled:text-sepia-700
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-[var(--button-icon-background)] hover:bg-[var(--button-icon-background-hover)] active:brightness-95
+        text-[var(--button-icon-text)]
+        disabled:bg-[var(--button-icon-disabled-background)] disabled:text-[var(--button-icon-disabled-text)]
       `,
     };
 
@@ -287,23 +274,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return children;
     };
 
-    // Focus ring color styles - Set CSS variable directly to ensure correct colors
-    // This overrides any Tailwind class conflicts and prevents browser default outline
-    // Colors match the button background colors for visual consistency
-    // Note: All ring colors are set via inline style to ensure they override any global styles
-    const focusRingStyles: React.CSSProperties = {
-      '--tw-ring-color': 
-        variant === 'primary' ? 'var(--color-primary-400)' :
-        variant === 'secondary' ? 'var(--color-secondary-700)' :
-        variant === 'destructive' ? 'var(--focus-ring-destructive)' : // Theme-aware: error-600 light, error-500 dark
-        variant === 'ghost' ? 'var(--color-secondary-300)' : // Light mode color (dark mode handled by CSS)
-        variant === 'outline' ? 'var(--color-secondary-300)' : // Light mode color (dark mode handled by CSS)
-        variant === 'link' ? 'var(--color-primary-600)' :
-        variant === 'icon' ? 'var(--color-sepia-300)' :
-        undefined,
-      // Ensure no browser default outline appears
+    // Focus ring color — semantic tokens (values swap under .dark in tokens.css)
+    const focusRingStyles = {
+      '--btn-ring':
+        variant === 'primary' || variant === 'link'
+          ? 'var(--focus-ring-primary)'
+          : variant === 'destructive'
+            ? 'var(--focus-ring-destructive)'
+            : variant === 'icon'
+              ? 'var(--focus-ring-icon)'
+              : 'var(--focus-ring-secondary)',
       outline: 'none',
-    } as React.CSSProperties;
+    } as CSSProperties;
 
     return (
       <button
@@ -311,6 +293,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         className={`${baseStyles} ${getSizeStyles()} ${variantStyles[variant]} ${gapStyles[size]} ${className}`}
         style={focusRingStyles}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
         {...props}
       >
         {/* Left icon (if provided) */}

@@ -1,0 +1,20 @@
+---
+description: Terminal / TUI inspiration for Scorp DS — research, options, and owner approval
+alwaysApply: true
+---
+
+# Scorp DS — Terminal (TUI) design direction
+
+Scorp DS is **terminal- and TUI-inspired**, not a literal terminal emulator. The goal is a recognizable “console aesthetic” (monospace, sharp geometry, high information density, deliberate borders, amber/sepia semantic palette) while staying a modern accessible web UI.
+
+## For agents and contributors
+
+1. **Preserve flexibility** — Do not treat any single terminal trope as mandatory (e.g. scanlines, faux CRT, strict 80-column layout, box-drawing characters everywhere). Prefer token- and component-level decisions the owner can accept or reject.
+
+2. **Propose, then confirm** — When introducing **TUI-specific** ideas (ANSI-style accent ramps, box-drawing in UI, status-line / command-bar patterns, keyboard-first chrome, “pane” layouts, blink/cursor metaphors, restricted color sets), briefly note **why** it fits Scorp DS and **what tradeoffs** exist (a11y, responsive layout, brand). Wait for explicit **yes/no** (or “try a stub in Storybook”) before changing tokens, public APIs, or widespread patterns.
+
+3. **Light research is OK** — It is appropriate to skim references (classic TUI apps, ncurses patterns, ANSI color usage, modern “terminal UI” web trends) to ground suggestions. Summarize in plain language; avoid copying proprietary themes wholesale.
+
+4. **Stack alignment** — Existing project rules still apply: semantic tokens (`primary-*`, `secondary-*`), no hardcoded colors in components, sharp corners, monospace typography, motion limits. Terminal flavor should express through **layout, density, iconography (`TuiIcon`), and documented term-tier tokens** (`--color-term-*` in `ds-config.json`), not by breaking token rules.
+
+5. **Documentation** — When adding or changing TUI-oriented tokens or components, add or update a Storybook page so the owner can **see and approve** the direction visually.

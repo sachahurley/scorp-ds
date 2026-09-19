@@ -39,7 +39,8 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * @param label - Optional label text displayed next to radio
  * @param error - Whether radio has a validation error
  * @param disabled - Whether radio is disabled
- * @param checked - Whether radio is checked
+ * @param checked - Controlled checked state; omit it to use the native
+ *                  uncontrolled behavior (`defaultChecked` + radio-group name)
  * @param name - Name attribute for radio group (required for grouping)
  * @param value - Value attribute for this radio option
  * @param onCheckedChange - Callback when radio state changes (alternative to onChange)
@@ -51,7 +52,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       label,
       error = false,
       disabled = false,
-      checked = false,
+      checked,
       onChange,
       onCheckedChange,
       className = "",
@@ -87,27 +88,29 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     // Priority: error > disabled > checked > default
     // Includes hover states for unchecked radios
     // Includes focus states with ring
+    // Focus ring lives on the visual (peer of native input) so only one radio is exposed to assistive tech.
+    // Selection is rendered from the NATIVE input via peer-checked, so both
+    // controlled (`checked`) and uncontrolled (`defaultChecked` + group name)
+    // radios show state — a JS-only visual misses native group deselection.
     const radioStyles = error
       ? `
-        border-error-600 dark:border-error-500
-        ${checked 
-          ? 'bg-error-600 dark:bg-error-500 border-error-600 dark:border-error-500' 
-          : 'bg-white dark:bg-sepia-975 hover:border-error-500 dark:hover:border-error-400 hover:bg-error-50 dark:hover:bg-error-950/20'
-        }
-        focus:ring-2 focus:ring-error-600 dark:focus:ring-error-500
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        transition-all duration-200
+        border-[var(--field-border-error)]
+        bg-[var(--field-background)] hover:bg-[var(--field-background-error)]
+        peer-checked:bg-[var(--field-border-error)]
+        transition-colors [transition-duration:var(--duration-fast)]
       `
       : `
-        border-sepia-300 dark:border-sepia-700
-        ${checked 
-          ? 'bg-primary-400 dark:bg-primary-400 border-primary-400 dark:border-primary-400 hover:bg-primary-500 dark:hover:bg-primary-500' 
-          : 'bg-white dark:bg-sepia-975 hover:border-sepia-400 dark:hover:border-sepia-600 hover:bg-sepia-50 dark:hover:bg-sepia-900'
-        }
-        focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        transition-all duration-200
+        border-[var(--field-border)] hover:border-[var(--field-border-hover)]
+        bg-[var(--field-background)]
+        peer-checked:border-[var(--button-primary-background)]
+        peer-checked:bg-[var(--button-primary-background)]
+        peer-checked:hover:bg-[var(--button-primary-background-hover)]
+        transition-colors [transition-duration:var(--duration-fast)]
       `;
+
+    const focusPeerRing = error
+      ? `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-error)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`
+      : `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-primary)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
@@ -118,84 +121,57 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       }
     };
 
-    const handleClick = () => {
-      if (!disabled) {
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
+    const hasLabel = label != null && label !== false && label !== '';
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if ((e.key === ' ' || e.key === 'Enter') && !disabled) {
-        e.preventDefault();
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
-
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {/* Hidden native radio for form submission and accessibility */}
+    const control = (
+      <>
         <input
           ref={ref}
           type="radio"
-          checked={checked}
+          {...(checked !== undefined ? { checked } : {})}
           disabled={disabled}
           onChange={handleChange}
-          className="sr-only"
-          aria-invalid={error}
+          className="peer sr-only"
+          aria-invalid={error || undefined}
           {...props}
         />
-        
-        {/* Custom styled radio */}
-        <div
+        <span
+          aria-hidden="true"
           className={`
-            relative inline-flex items-center justify-center
+            relative inline-flex shrink-0 items-center justify-center
             ${currentSizeStyles.radio}
-            rounded-none
+            rounded-full
             border-2
-            ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+            ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
             ${radioStyles}
+            ${focusPeerRing}
+            peer-checked:[&>span]:opacity-100
           `}
-          role="radio"
-          aria-checked={checked}
-          aria-disabled={disabled}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          tabIndex={disabled ? -1 : 0}
         >
-          {/* Inner dot - only visible when checked */}
-          {checked && (
-            <div 
-              className={`
-                ${currentSizeStyles.dot}
-                rounded-none
-                ${error 
-                  ? 'bg-white dark:bg-white' 
-                  : 'bg-black dark:bg-black'
-                }
-              `}
-            />
-          )}
-        </div>
-
-        {/* Optional Label */}
-        {label && (
-          <label 
+          {/* Inner dot — revealed by peer-checked on the outer span */}
+          <span
             className={`
-              ${currentSizeStyles.label} 
-              font-mono 
-              text-sepia-900 dark:text-sepia-50 
-              ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+              ${currentSizeStyles.dot}
+              rounded-full opacity-0
+              transition-opacity [transition-duration:var(--duration-fast)]
+              ${error ? 'bg-white' : 'bg-[var(--button-primary-text)]'}
             `}
-            onClick={handleClick}
+          />
+        </span>
+      </>
+    );
+
+    return (
+      <div className={`flex items-center gap-2 ${className}`}>
+        {hasLabel ? (
+          <label
+            className={`inline-flex items-center gap-2 font-mono ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
           >
-            {label}
+            {control}
+            <span className={`${currentSizeStyles.label} text-[var(--text-primary)]`}>{label}</span>
           </label>
+        ) : (
+          <span className="inline-flex items-center gap-2">{control}</span>
         )}
       </div>
     );

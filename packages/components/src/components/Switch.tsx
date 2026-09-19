@@ -9,10 +9,14 @@
  * - medium: 32px height (h-8) - matches small button/input - default
  * - large: 40px height (h-10) - matches medium button/input
  * 
+ * SHAPE: track and knob are both clipped to the small plate (--plate-round).
+ * Focus is an inset ring (the clip swallows outside outlines) and the knob
+ * hops on steps(3) — plate motion, not a glide.
+ *
  * Features:
  * - Accessible (ARIA attributes, keyboard support)
  * - Focus states matching design system
- * - Smooth animations
+ * - Pixel-grid knob motion
  * - Optional label
  * - Optional icon inside knob (for special use cases like theme toggle)
  */
@@ -109,13 +113,13 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           className={`
             relative inline-flex items-center
             ${currentSizeStyles.track}
-            rounded-none
-            transition-colors duration-300
-            focus:outline-none focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+            plate-round
+            transition-colors [transition-duration:var(--duration-slow)]
+            focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            ${checked 
-              ? 'bg-primary-400 dark:bg-primary-400' 
-              : 'bg-sepia-300 dark:bg-sepia-700'
+            ${checked
+              ? 'bg-[var(--button-primary-background)]'
+              : 'bg-secondary-300 dark:bg-secondary-700'
             }
           `}
           {...props}
@@ -125,10 +129,10 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             className={`
               inline-flex items-center justify-center
               ${currentSizeStyles.knob}
-              rounded-none
-              bg-white dark:bg-secondary-900
+              plate-round
+              bg-[var(--field-background)]
               shadow-none
-              transform transition-transform duration-300
+              transform transition-transform [transition-duration:var(--duration-slow)] [transition-timing-function:steps(3)]
             `}
             style={{
               transform: currentSizeStyles.knobTranslate,
@@ -145,7 +149,9 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
         {/* Optional Label */}
         {label && (
-          <span className={`text-sm font-mono text-sepia-900 dark:text-sepia-50 ${disabled ? 'opacity-50' : ''}`}>
+          <span
+            className={`text-sm font-mono ${disabled ? 'text-secondary-700 dark:text-secondary-400' : 'text-[var(--text-primary)]'}`}
+          >
             {label}
           </span>
         )}

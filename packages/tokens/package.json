@@ -6,7 +6,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./tailwind.preset": "./tailwind.preset.js"
+    "./tailwind.preset": "./tailwind.preset.js",
+    "./styles/tokens.css": "./src/styles/tokens.css"
   },
   "files": [
     "src",

@@ -1,0 +1,7 @@
+/* Token variables + generated utilities for consumers who import @scorp-ds/components/styles */
+/* Repo-relative path: Tailwind CLI does not resolve npm "exports" like Vite does */
+@import "../../tokens/src/styles/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

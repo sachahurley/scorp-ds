@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../../lib/utils";
+import { cn } from "../lib/utils";
 
 /**
  * TuiIcon -- Terminal UI Icon component (Tier 2)
@@ -10,50 +10,56 @@ import { cn } from "../../lib/utils";
  * (w-4 h-4, w-5 h-5, w-6 h-6).
  */
 
-/* ─── Unicode icon mapping (all 41 Lucide icons used in this project) ─── */
-const ICON_MAP: Record<string, string> = {
-  AlertCircle: "\u26A0",   // ⚠ warning sign
+/**
+ * Canonical Unicode glyph for each supported icon name (Lucide-compatible keys).
+ * Exported for catalogs, tooling, and tests — keep in sync with {@link TuiIcon}.
+ */
+export const TUI_ICON_GLYPHS = {
+  AlertCircle: "\u26A0", // ⚠ warning sign
   AlertTriangle: "\u26A0", // ⚠ warning sign
-  Archive: "\u2707",       // ✇ tape drive
-  ArrowLeft: "\u2190",     // ← left arrow
-  ArrowRight: "\u2192",    // → right arrow
-  Bell: "\u266A",          // ♪ notification bell
-  Check: "\u2713",         // ✓ check mark
-  CheckCircle: "\u2713",   // ✓ check mark
-  ChevronDown: "\u25BC",   // ▼ down triangle
-  ChevronRight: "\u25B6",  // ▶ right triangle
-  Copy: "\u2398",          // ⎘ copy
-  Download: "\u2913",      // ⤓ downwards arrow to bar
-  Edit: "\u270E",          // ✎ pencil
-  Eye: "\u25C9",           // ◉ fisheye
-  EyeOff: "\u25CC",        // ◌ dotted circle
-  FileText: "\u2637",      // ☷ file
-  Globe: "\u2295",         // ⊕ circled plus
-  HelpCircle: "?",         // ? question mark
-  Info: "i",               // i info letter
-  Lock: "\u2616",          // ☖ lock
-  LogOut: "\u2192",        // → right arrow (exit)
-  Mail: "\u2709",          // ✉ envelope
-  Moon: "\u263E",          // ☾ last quarter moon
-  MoreVertical: "\u22EE",  // ⋮ vertical ellipsis
-  Music2: "\u266B",        // ♫ beamed eighth notes
-  Plus: "+",               // + plus sign
-  Save: "\u2913",          // ⤓ downwards arrow to bar
-  Search: "\u2315",        // ⌕ telephone recorder / search
-  Send: "\u27A4",          // ➤ arrow
-  Settings: "\u2699",      // ⚙ gear
-  Share2: "\u2197",        // ↗ arrow upper right
-  Shield: "\u2616",        // ☖ shield
-  Star: "\u2605",          // ★ black star
-  Sun: "\u2600",           // ☀ sun
-  Tag: "\u2302",           // ⌂ house / label
-  Trash2: "\u2717",        // ✗ ballot X
-  Upload: "\u2912",        // ⤒ upwards arrow to bar
-  User: "@",               // @ at-sign (person)
-  Volume2: "\u266B",       // ♫ music note
-  VolumeX: "\u2716",       // ✖ heavy X
-  X: "\u2717",             // ✗ ballot X
-} as const;
+  Archive: "\u2707", // ✇ tape drive
+  ArrowLeft: "\u2190", // ← left arrow
+  ArrowRight: "\u2192", // → right arrow
+  Bell: "\u266A", // ♪ notification bell
+  Check: "\u2713", // ✓ check mark
+  CheckCircle: "\u2713", // ✓ check mark
+  ChevronDown: "\u25BC", // ▼ down triangle
+  ChevronRight: "\u25B6", // ▶ right triangle
+  Copy: "\u2398", // ⎘ copy
+  Download: "\u2913", // ⤓ downwards arrow to bar
+  Edit: "\u270E", // ✎ pencil
+  Eye: "\u25C9", // ◉ fisheye
+  EyeOff: "\u25CC", // ◌ dotted circle
+  FileText: "\u2637", // ☷ file
+  Globe: "\u2295", // ⊕ circled plus
+  HelpCircle: "?", // ? question mark
+  Info: "i", // i info letter
+  Lock: "\u2616", // ☖ lock
+  LogOut: "\u2192", // → right arrow (exit)
+  Mail: "\u2709", // ✉ envelope
+  Moon: "\u263E", // ☾ last quarter moon
+  MoreVertical: "\u22EE", // ⋮ vertical ellipsis
+  Music2: "\u266B", // ♫ beamed eighth notes
+  Plus: "+", // + plus sign
+  Save: "\u2913", // ⤓ downwards arrow to bar
+  Search: "\u2315", // ⌕ telephone recorder / search
+  Send: "\u27A4", // ➤ arrow
+  Settings: "\u2699", // ⚙ gear
+  Share2: "\u2197", // ↗ arrow upper right
+  Shield: "\u2616", // ☖ shield
+  Star: "\u2605", // ★ black star
+  Sun: "\u2600", // ☀ sun
+  Tag: "\u2302", // ⌂ house / label
+  Trash2: "\u2717", // ✗ ballot X
+  Upload: "\u2912", // ⤒ upwards arrow to bar
+  User: "@", // @ at-sign (person)
+  Volume2: "\u266B", // ♫ music note
+  VolumeX: "\u2716", // ✖ heavy X
+  X: "\u2717", // ✗ ballot X
+} as const satisfies Record<string, string>;
+
+/** Keys of {@link TUI_ICON_GLYPHS} — use for typed catalogs or selects. */
+export type TuiIconName = keyof typeof TUI_ICON_GLYPHS;
 
 /* ─── Size presets matching Lucide conventions ───
  * Font sizes match or exceed the container so Unicode glyphs
@@ -75,7 +81,7 @@ const SIZE_MAP: Record<string, string> = {
 };
 
 export interface TuiIconProps {
-  /** Icon name -- must match a key in ICON_MAP (same as the Lucide component name) */
+  /** Icon name -- must match a key in {@link TUI_ICON_GLYPHS} (same as the Lucide component name). */
   name: string;
   /** Tailwind size number: "3" | "4" | "5" | "6" | "8". Defaults to "4". */
   size?: string;
@@ -88,7 +94,10 @@ export const TuiIcon: React.FC<TuiIconProps> = ({
   size = "4",
   className,
 }) => {
-  const glyph = ICON_MAP[name] ?? "?";
+  const glyph =
+    name in TUI_ICON_GLYPHS
+      ? TUI_ICON_GLYPHS[name as TuiIconName]
+      : "?";
   const sizeClasses = SIZE_MAP[size] ?? SIZE_MAP["4"];
 
   return (

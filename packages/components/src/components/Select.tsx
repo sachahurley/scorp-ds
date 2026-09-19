@@ -24,12 +24,16 @@
  * - Maintains form compatibility with hidden native select
  */
 
-import { useState, useRef, useEffect, forwardRef, useImperativeHandle, type ReactNode, type SelectHTMLAttributes } from "react";
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useId, type ReactNode, type SelectHTMLAttributes } from "react";
 
 // Define the props interface for the Select component
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   size?: "small" | "medium" | "large";
   error?: boolean;
+  /**
+   * Optional visible label; associates with the custom trigger via `htmlFor` / `id` on the button.
+   */
+  label?: ReactNode;
 }
 
 /**
@@ -43,6 +47,7 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
  * @param value - Controlled value
  * @param defaultValue - Uncontrolled default value
  * @param onChange - Change handler
+ * @param label - Optional visible label for the custom trigger (preferred over relying on `aria-label` alone)
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
   size = "medium",
@@ -54,8 +59,13 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   defaultValue,
   onChange,
   name,
+  label,
+  "aria-label": ariaLabel,
+  id: htmlId,
   ...props
 }, ref) {
+  const autoId = useId();
+  const triggerId = htmlId ?? `${autoId}-trigger`;
   // Parse option elements from children
   const parseOptions = (): Array<{ value: string; label: string; disabled?: boolean }> => {
     const options: Array<{ value: string; label: string; disabled?: boolean }> = [];
@@ -260,20 +270,20 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   // Size styles matching Dropdown component exactly
   const sizeStyles = {
     small: {
-      trigger: "h-8 pl-3 pr-7 py-1.5 rounded-none",       // TUI: sharp corners
-      menu: "rounded-none",
+      trigger: "h-8 px-4 py-1.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-4 h-4",
     },
     medium: {
-      trigger: "h-10 pl-4 pr-8 py-2.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      trigger: "h-10 px-4 py-2.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-5 h-5",
     },
     large: {
-      trigger: "h-12 pl-5 pr-9 py-3.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      trigger: "h-12 px-4 py-3.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-6 h-6",
     },
@@ -283,25 +293,17 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
 
   // STATE STYLES - Color combinations for different states using SEMANTIC TOKENS
   const triggerStyles = error
-    ? `
-      border-error-600 dark:border-error-500
-      bg-error-50 dark:bg-error-950/20
-      text-sepia-900 dark:text-sepia-50
-      focus:ring-2 focus:ring-error-600 dark:focus:ring-error-500 
-      focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-      focus:border-error-600 dark:focus:border-error-500
-    `
-    : `
-      border-sepia-300 dark:border-sepia-700
-      hover:border-sepia-400 dark:hover:border-sepia-600
-      bg-white dark:bg-sepia-975
-      text-sepia-900 dark:text-sepia-50
-      focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400
-      focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-    `;
+    ? `bg-[var(--field-background-error)] text-[var(--text-primary)]`
+    : `bg-[var(--field-background)] text-[var(--text-primary)]`;
 
-  return (
-    <div ref={dropdownRef} className={`relative inline-block w-full ${className}`}>
+  // PLATE RING RECIPE — wrapper carries the border color (portfolio ramp:
+  // idle hairline → hover mut → focus accent); the trigger is the inset fill.
+  const triggerRing = error
+    ? "bg-[var(--field-border-error)]"
+    : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
+
+  const triggerBlock = (
+    <div ref={dropdownRef} className="relative inline-block w-full">
       {/* Hidden native select for form submission */}
       <select
         ref={hiddenSelectRef}
@@ -320,25 +322,30 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
         ))}
       </select>
 
-      {/* Custom trigger button */}
+      {/* Custom trigger button — inset fill of the plate ring */}
+      <div className={`plate-round p-px transition-colors [transition-duration:var(--duration-fast)] ${triggerRing} ${disabled ? 'opacity-50' : ''}`}>
       <button
         type="button"
+        id={triggerId}
         onClick={toggleDropdown}
         disabled={disabled}
         className={`
           w-full
           flex items-center justify-between
           font-mono text-sm
-          border
-          transition-all duration-200
+          transition-colors [transition-duration:var(--duration-fast)]
           ${currentSizeStyles.trigger}
           ${triggerStyles}
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+          ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
           focus:outline-none
         `}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        aria-label={props['aria-label'] || 'Select an option'}
+        aria-label={
+          label != null && label !== ""
+            ? undefined
+            : ariaLabel ?? "Select an option"
+        }
       >
         <span className="truncate text-left flex-1">{selectedLabel || 'Select...'}</span>
         {/* TUI Tier 2: Unicode ▼ instead of Lucide ChevronDown */}
@@ -346,8 +353,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           className={`
             ${currentSizeStyles.icon}
             inline-flex items-center justify-center font-mono leading-none
-            text-sepia-600 dark:text-sepia-400
-            transition-transform duration-200
+            text-[var(--text-secondary)]
+            transition-transform [transition-duration:var(--duration-normal)]
             flex-shrink-0 ml-2
             ${isOpen ? 'rotate-180' : ''}
             ${disabled ? 'opacity-50' : ''}
@@ -357,23 +364,24 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           ▼
         </span>
       </button>
+      </div>
 
-      {/* Custom dropdown menu - matching Dropdown component exactly */}
+      {/* Custom dropdown menu — plate ring recipe, matching Dropdown */}
       {isOpen && (
         <div
-          ref={menuRef}
-          role="listbox"
+          style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2 left-0 right-0
             min-w-[200px]
-            bg-white dark:bg-sepia-975
-            border border-sepia-300 dark:border-sepia-700
-            ${currentSizeStyles.menu}
-            shadow-none
+            plate-round p-px bg-[var(--border-default)]
             z-[1051]
-            animate-in fade-in slide-in-from-top-2 duration-200
-            max-h-[300px] overflow-y-auto
+            animate-in fade-in slide-in-from-top-2
           `}
+        >
+        <div
+          ref={menuRef}
+          role="listbox"
+          className={`plate-round bg-[var(--surface-card)] ${currentSizeStyles.menu} max-h-[300px] overflow-y-auto`}
         >
           {options.map((option, index) => {
             const isDisabled = option.disabled;
@@ -394,12 +402,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
                   w-full flex items-center gap-2
                   px-4 py-3
                   font-mono text-sm text-left
-                  transition-colors duration-150
+                  transition-colors [transition-duration:var(--duration-fast)]
                   ${isDisabled
                     ? 'opacity-50 cursor-not-allowed'
-                    : 'text-sepia-900 dark:text-sepia-50 hover:bg-sepia-200 dark:hover:bg-sepia-900 cursor-pointer'
+                    : 'text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] cursor-pointer'
                   }
-                  ${isFocused && !isDisabled ? 'bg-sepia-200 dark:bg-sepia-900' : ''}
+                  ${isFocused && !isDisabled ? 'bg-[var(--surface-subtle)]' : ''}
                   ${currentSizeStyles.menuItem}
                 `}
               >
@@ -408,13 +416,30 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
                 
                 {/* TUI Tier 2: Unicode ✓ instead of Lucide Check */}
                 {isSelected && (
-                  <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono font-bold text-primary-400 dark:text-primary-400 flex-shrink-0`} aria-hidden="true">✓</span>
+                  <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono font-bold text-[var(--border-focus)] flex-shrink-0`} aria-hidden="true">✓</span>
                 )}
               </button>
             );
           })}
         </div>
+        </div>
       )}
+    </div>
+  );
+
+  if (label == null || label === "") {
+    return <div className={`w-full ${className}`.trim()}>{triggerBlock}</div>;
+  }
+
+  return (
+    <div className={`w-full space-y-1 ${className}`.trim()}>
+      <label
+        htmlFor={triggerId}
+        className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+      >
+        {label}
+      </label>
+      {triggerBlock}
     </div>
   );
 });

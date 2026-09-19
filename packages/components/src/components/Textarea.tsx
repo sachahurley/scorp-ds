@@ -9,20 +9,26 @@
  * - medium: 40px min-height (matches medium input - default)
  * - large: 48px min-height (matches large input)
  * 
+ * SHAPE: plate ring recipe, identical to Input — wrapper = border color clipped
+ * to --plate-round, textarea = fill clipped 1px inset. The ring walks the
+ * portfolio ramp: idle hairline → hover mut → focus accent.
+ *
  * STATES:
- * - default: Standard textarea appearance
- * - hover: Subtle border change on mouse over
- * - focused: Primary color focus ring (keyboard accessible)
+ * - default / hover / focused: ring color ramp (see above)
  * - disabled: Reduced opacity, not interactive
- * - error: Red border to indicate validation issues
+ * - error: Red ring + tinted fill
  */
 
-import { forwardRef, type TextareaHTMLAttributes } from "react";
+import { forwardRef, useId, type ReactNode, type TextareaHTMLAttributes } from "react";
 
 // Define the props interface for the Textarea component
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   size?: "small" | "medium" | "large";
   error?: boolean;
+  /**
+   * Optional visible label. When set, renders a `<label>` associated with the textarea via `htmlFor` / `id`.
+   */
+  label?: ReactNode;
 }
 
 /**
@@ -32,6 +38,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  * @param error - Whether textarea has a validation error
  * @param disabled - Whether textarea is disabled
  * @param className - Additional CSS classes to apply
+ * @param label - Optional visible label wired to the control with matching `id`
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
@@ -40,10 +47,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       error = false,
       disabled = false,
       className = "", 
+      label,
+      id: idProp,
       ...props 
     },
     ref
   ) => {
+    const generatedId = useId();
+    const controlId =
+      idProp ?? (label != null && label !== "" ? generatedId : undefined);
     // BASE STYLES - Applied to all textareas
     // Uses tokens: font.size.sm (14px)
     // Border width: 1px for all states
@@ -51,9 +63,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const baseStyles = `
       w-full
       font-mono text-sm
-      border
-      transition-all duration-200
-      placeholder:text-sepia-400 dark:placeholder:text-sepia-600
+      transition-colors [transition-duration:var(--duration-fast)]
+      placeholder:text-[var(--field-placeholder)]
       disabled:cursor-not-allowed disabled:opacity-50
       focus:outline-none
       resize-y
@@ -61,43 +72,53 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     // SIZE STYLES - All values matching input sizes from tokens.json
     // Min-heights match input component exactly: 32px, 40px, 48px
-    // Horizontal padding slightly less than inputs for better text alignment
-    // Corner radius matches input sizes: 6px (small), 8px (medium), 12px (large)
-    // Vertical padding provides comfortable spacing for multi-line text
+    // Corners: plate silhouette, matching Input/Select/Button
     const sizeStyles = {
-      small: "min-h-8 px-3 py-1.5 rounded-none",       // TUI: sharp corners
-      medium: "min-h-10 px-4 py-2.5 rounded-none",      // TUI: sharp corners
-      large: "min-h-12 px-5 py-3.5 rounded-none",       // TUI: sharp corners
+      small: "min-h-8 px-3 py-1.5 plate-round",
+      medium: "min-h-10 px-4 py-2.5 plate-round",
+      large: "min-h-12 px-5 py-3.5 plate-round",
     };
 
-    // STATE STYLES - Color combinations for different states using SEMANTIC TOKENS
-    // Priority: error > disabled > default
-    // Error state overrides all other visual states
+    // STATE STYLES - Priority: error > disabled > default
     const stateStyles = error
-      ? `
-        border-error-600 dark:border-error-500
-        bg-error-50 dark:bg-error-950/20
-        text-sepia-900 dark:text-sepia-50
-        focus:ring-2 focus:ring-error-600 dark:focus:ring-error-500 
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        focus:border-error-600 dark:focus:border-error-500
-      `
-      : `
-        border-sepia-300 dark:border-sepia-700
-        hover:border-sepia-400 dark:hover:border-sepia-600
-        bg-white dark:bg-sepia-975
-        text-sepia-900 dark:text-sepia-50
-        focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-      `;
+      ? `bg-[var(--field-background-error)] text-[var(--text-primary)]`
+      : `bg-[var(--field-background)] text-[var(--text-primary)]`;
+
+    // PLATE RING RECIPE — identical to Input: the wrapper is the border color
+    // clipped to the plate; the textarea is the fill clipped 1px inset. The ring
+    // walks the portfolio ramp: idle hairline → hover mut → focus accent.
+    const ringStyles = error
+      ? "bg-[var(--field-border-error)]"
+      : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
+
+    const areaEl = (
+      <div
+        className={`w-full plate-round p-px transition-colors [transition-duration:var(--duration-fast)] ${ringStyles}`}
+      >
+        <textarea
+          ref={ref}
+          id={controlId}
+          disabled={disabled}
+          className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
+          {...props}
+        />
+      </div>
+    );
+
+    if (label == null || label === "") {
+      return areaEl;
+    }
 
     return (
-      <textarea
-        ref={ref}
-        disabled={disabled}
-        className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
-        {...props}
-      />
+      <div className="w-full space-y-1">
+        <label
+          htmlFor={controlId}
+          className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+        >
+          {label}
+        </label>
+        {areaEl}
+      </div>
     );
   }
 );

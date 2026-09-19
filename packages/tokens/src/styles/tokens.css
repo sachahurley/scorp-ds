@@ -26,7 +26,9 @@
   --color-amber-950: #451A03;
   --color-amber-975: #2D1102;
   --color-amber-1000: #1A0A01;
-  
+  /* Named step: muted warm gold between 400 and 600 — the merged brand accent */
+  --color-amber-gold: #E0A26A;
+
   --color-sepia-50: #FDFCFB;
   --color-sepia-100: #FCFBFA;
   --color-sepia-200: #F7F5F2;
@@ -107,7 +109,8 @@
   --color-primary-950: #451A03;
   --color-primary-975: #2D1102;
   --color-primary-1000: #1A0A01;
-  
+  --color-primary-gold: #E0A26A;
+
   --color-secondary-50: #FDFCFB;
   --color-secondary-100: #FCFBFA;
   --color-secondary-200: #F7F5F2;
@@ -177,6 +180,8 @@
   
   /* Font tokens */
   --font-family-mono: 'Fragment Mono', ui-monospace, monospace;
+  --font-size-3xs: 10px; /* dense game chrome; use sparingly */
+  --font-size-2xs: 11px; /* tooltips, meta captions */
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-base: 16px;
@@ -201,9 +206,13 @@
   --font-weight-medium: 500;
   --font-weight-bold: 700;
   
-  /* Border radius tokens -- TUI: sharp corners, no curves */
-  --radius-button: 0px;
-  --radius-container: 0px;
+  /* Plate silhouettes -- stepped one-bit corners, the system's shape language.
+     Replaces the retired radius tokens. clip-path slices real borders: build
+     rings as element = ring color clipped + ::before = fill clipped 1px inset,
+     and use inset focus rings (outside outlines get swallowed by the clip). */
+  --plate-round: polygon(0 6px, 2px 6px, 2px 2px, 6px 2px, 6px 0, calc(100% - 6px) 0, calc(100% - 6px) 2px, calc(100% - 2px) 2px, calc(100% - 2px) 6px, 100% 6px, 100% calc(100% - 6px), calc(100% - 2px) calc(100% - 6px), calc(100% - 2px) calc(100% - 2px), calc(100% - 6px) calc(100% - 2px), calc(100% - 6px) 100%, 6px 100%, 6px calc(100% - 2px), 2px calc(100% - 2px), 2px calc(100% - 6px), 0 calc(100% - 6px));
+  --plate-round-lg: polygon(0 12px, 4px 12px, 4px 4px, 12px 4px, 12px 0, calc(100% - 12px) 0, calc(100% - 12px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 12px, 100% 12px, 100% calc(100% - 12px), calc(100% - 4px) calc(100% - 12px), calc(100% - 4px) calc(100% - 4px), calc(100% - 12px) calc(100% - 4px), calc(100% - 12px) 100%, 12px 100%, 12px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 12px), 0 calc(100% - 12px));
+  --plate-round-lg-top: polygon(0 12px, 4px 12px, 4px 4px, 12px 4px, 12px 0, calc(100% - 12px) 0, calc(100% - 12px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 12px, 100% 12px, 100% 100%, 0 100%); /* bottom sheets: stepped top, square bottom */
   
   /* Spacing tokens (matches Tailwind's 4px-based scale) */
   --spacing-0: 0;
@@ -224,12 +233,12 @@
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
   
-  /* Animation/Duration tokens -- TUI: snappy, near-instant responses */
+  /* Animation/Duration tokens — aligned with tokens.json global.duration */
   --duration-instant: 0ms;
-  --duration-fast: 50ms;
-  --duration-normal: 75ms;
-  --duration-slow: 100ms;
-  --duration-slower: 150ms;
+  --duration-fast: 120ms; /* plate hovers; was 150ms pre-merge */
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
   
   /* Easing/Timing functions */
   --easing-linear: linear;
@@ -260,39 +269,94 @@
   --opacity-90: 0.9;
   --opacity-100: 1;
   
-  /* ANSI terminal accent colors -- TUI Tier 2 */
-  --color-term-green: #00CC33;
-  --color-term-amber: #CC8800;
-  --color-term-cyan: #00AACC;
-  --color-term-magenta: #CC00CC;
-  --color-term-red: #CC0022;
-  --color-term-blue: #0066CC;
-  --color-term-white: #E0E0E0;
-  --color-term-dim: #666666;
+  /* ANSI terminal accent colors -- TUI Tier 2 (light: higher chroma / less mud than legacy muted ANSI) */
+  --color-term-green: #16D955;
+  --color-term-amber: #F5A200;
+  --color-term-cyan: #00BFE6;
+  --color-term-magenta: #E012E0;
+  --color-term-red: #EF1A3C;
+  --color-term-blue: #1A7FFF;
+  /* On light paper, “ANSI white” reads as ink; “dim” stays sepia-adjacent */
+  --color-term-white: #52525B;
+  --color-term-dim: #78716C;
   
-  /* Light theme surface and text colors */
+  /* Brand accent + fire ramp (fire is theme-invariant: dither-art sepia tones) */
+  --accent: #B45309; /* light steps down to amber-700 (AA for body text on paper); dark uses the gold */
+  --fire-bright: #E0DACE; /* sepia-400 */
+  --fire-mid: #968A75;    /* sepia-600 */
+  --fire-dim: #474030;    /* sepia-800 */
+
+  /* Light theme — semantic surfaces */
   --surface-page: #FDFCFB;
   --surface-container: #FDFCFB;
   --surface-card: #FFFFFF;
   --surface-container-stroke: #BFB4A3;
+  --surface-subtle: #FCFBFA;
+  --surface-muted: #F7F5F2;
+  --surface-overlay: rgba(10, 7, 4, 0.65);
+  --surface-inverse: #2B2718;
+  --surface-raised: #FFFFFF;
+
+  /* Light theme — semantic text */
   --text-primary: #2B2718;
   --text-secondary: #968A75;
-  
-  /* Light theme focus ring colors */
+  --text-tertiary: #BFB4A3;
+  --text-disabled: #E0DACE;
+  --text-link: #B45309;
+  --text-link-hover: #92400E;
+  --text-on-inverse: #FDFCFB;
+
+  /* Light theme — semantic borders */
+  --border-default: #F0EBE4;
+  --border-muted: #F7F5F2;
+  --border-strong: #968A75;
+  --border-hairline: #F0EBE4; /* quiet chrome hairline; near-black in dark */
+  --border-error: #EF4444;
+  --border-focus: #FBBF24;
+
+  /* Light theme — form fields */
+  --field-background: #FFFFFF;
+  --field-border: #F0EBE4;
+  --field-border-hover: #E0DACE;
+  --field-border-focus: #FBBF24;
+  --field-border-error: #DC2626;
+  --field-placeholder: #BFB4A3;
+  --field-background-error: #FEF2F2;
+
+  /* Light theme — focus rings */
   --focus-ring-primary: #FBBF24;
   --focus-ring-secondary: #695F4D;
   --focus-ring-error: #DC2626;
   --focus-ring-destructive: #DC2626;
+  --focus-ring-icon: #FBBF24;
   --focus-offset-color: #FDFCFB;
-  
-  /* Light theme button colors */
+
+  /* Light theme — button fills (pair with button.size.* from tokens.json) */
   --button-primary-background: #FBBF24;
   --button-primary-background-hover: #F59E0B;
   --button-primary-text: #000000;
   --button-secondary-background: #695F4D;
   --button-secondary-background-hover: #968A75;
   --button-secondary-text: #FDFCFB;
-  
+  --button-secondary-text-hover: #FDFCFB;
+  --button-ghost-background: transparent;
+  --button-ghost-background-hover: #F7F5F2;
+  --button-ghost-text: #2B2718;
+  --button-outline-border: #BFB4A3;
+  --button-outline-background: #FDFCFB; /* opaque page fill: ring recipe needs an opaque inner layer */
+  --button-outline-background-hover: #FCFBFA;
+  --button-outline-text: #2B2718;
+  --button-destructive-background: #DC2626;
+  --button-destructive-background-hover: #B91C1C;
+  --button-destructive-text: #FDFCFB;
+  --button-link-text: #B45309;
+  --button-link-text-hover: #92400E;
+  --button-icon-background: #FCFBFA;
+  --button-icon-background-hover: #F7F5F2;
+  --button-icon-text: #2B2718;
+  --button-icon-disabled-background: #FDFCFB;
+  --button-icon-disabled-text: #F0EBE4;
+
   /* Light theme elevation tokens -- TUI: flat, no shadows, borders only */
   --elevation-0-shadow: none;
   --elevation-0-border: transparent;
@@ -315,29 +379,80 @@
   --color-term-white: #F0F0F0;
   --color-term-dim: #888888;
   
-  /* Dark theme overrides -- TUI: amber CRT monitor tint on text */
-  --surface-page: #0A0704;
-  --surface-container: #0A0704;
+  /* Brand accent: the portfolio's warm gold (theme eggs may override inline) */
+  --accent: #E0A26A;
+
+  /* Dark theme — semantic surfaces (page pinned to sepia-950 so baked dither art blends; matches portfolio main) */
+  --surface-page: #1A150F;
+  --surface-container: #1A150F;
   --surface-card: #120D09;
   --surface-container-stroke: #474030;
-  --text-primary: #FFE8B0;
-  --text-secondary: #E0DACE;
-  
-  /* Dark theme focus ring colors */
+  --surface-subtle: #1A150F;
+  --surface-muted: #221E13;
+  --surface-overlay: rgba(0, 0, 0, 0.72);
+  --surface-inverse: #F7F5F2;
+  --surface-raised: #120D09;
+
+  /* Dark theme — semantic text */
+  --text-primary: #FDFCFB;
+  --text-secondary: #BFB4A3; /* sepia-500: one step darker than pre-merge so body sits below accent */
+  --text-tertiary: #968A75;
+  --text-disabled: #695F4D;
+  --text-link: #FBBF24;
+  --text-link-hover: #FCD34D;
+  --text-on-inverse: #2B2718;
+
+  /* Dark theme — semantic borders */
+  --border-default: #695F4D;
+  --border-muted: #474030;
+  --border-strong: #BFB4A3;
+  --border-hairline: #2B2718; /* near-black chrome hairline (sepia-900) */
+  --border-error: #EF4444;
+  --border-focus: #FBBF24;
+
+  /* Dark theme — form fields (portfolio ramp: idle hairline → hover mut → focus accent) */
+  --field-background: #120D09;
+  --field-border: #2B2718;
+  --field-border-hover: #968A75;
+  --field-border-focus: #E0A26A;
+  --field-border-error: #EF4444;
+  --field-placeholder: #BFB4A3;
+  --field-background-error: #450A0A;
+
+  /* Dark theme — focus rings */
   --focus-ring-primary: #FBBF24;
   --focus-ring-secondary: #695F4D;
   --focus-ring-error: #EF4444;
   --focus-ring-destructive: #EF4444;
+  --focus-ring-icon: #FBBF24;
   --focus-offset-color: #0A0704;
-  
-  /* Dark theme button colors */
-  --button-primary-background: #FBBF24;
-  --button-primary-background-hover: #F59E0B;
-  --button-primary-text: #000000;
-  --button-secondary-background: #695F4D;
-  --button-secondary-background-hover: #968A75;
-  --button-secondary-text: #FDFCFB;
-  
+
+  /* Dark theme — button fills (portfolio plate palette: gold CTA, quiet plate default) */
+  --button-primary-background: #E0A26A;
+  --button-primary-background-hover: #FBBF24;
+  --button-primary-text: #1A150F;
+  --button-secondary-background: #221E13;
+  --button-secondary-background-hover: #E0A26A;
+  --button-secondary-text: #E0A26A;
+  --button-secondary-text-hover: #1A150F;
+  --button-ghost-background: transparent;
+  --button-ghost-background-hover: #221E13;
+  --button-ghost-text: #FDFCFB;
+  --button-outline-border: #BFB4A3;
+  --button-outline-background: #1A150F; /* opaque page fill: ring recipe needs an opaque inner layer */
+  --button-outline-background-hover: #221E13;
+  --button-outline-text: #FDFCFB;
+  --button-destructive-background: #DC2626;
+  --button-destructive-background-hover: #B91C1C;
+  --button-destructive-text: #FDFCFB;
+  --button-link-text: #FBBF24;
+  --button-link-text-hover: #FCD34D;
+  --button-icon-background: #221E13;
+  --button-icon-background-hover: #2B2718;
+  --button-icon-text: #E0A26A;
+  --button-icon-disabled-background: #1A150F;
+  --button-icon-disabled-text: #695F4D;
+
   /* Dark theme elevation tokens -- TUI: flat, no shadows, borders only */
   --elevation-0-shadow: none;
   --elevation-0-border: transparent;

@@ -84,7 +84,12 @@ export function Tooltip({
     };
   }, []);
 
-  // POSITION STYLES - Positioning tooltip relative to trigger
+  // POSITION STYLES - Positioning tooltip relative to trigger.
+  // The container needs w-max: an absolutely-positioned box's auto width is
+  // capped by the space from its `left` offset to the containing block edge,
+  // so on a narrow trigger the box collapses and the min-width balloon
+  // overflows it — translate centering then centers the collapsed box, not
+  // the visible balloon.
   const positionStyles = {
     top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
     bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
@@ -92,18 +97,35 @@ export function Tooltip({
     right: "left-full top-1/2 -translate-y-1/2 ml-2",
   };
 
-  // ARROW STYLES - Arrow pointing to trigger element
-  const arrowStyles = {
-    top: "top-full left-1/2 -translate-x-1/2 border-t-[var(--surface-card)] border-l-transparent border-r-transparent border-b-transparent border-4",
-    bottom: "bottom-full left-1/2 -translate-x-1/2 border-b-[var(--surface-card)] border-l-transparent border-r-transparent border-t-transparent border-4",
-    left: "left-full top-1/2 -translate-y-1/2 border-l-[var(--surface-card)] border-t-transparent border-b-transparent border-r-transparent border-4",
-    right: "right-full top-1/2 -translate-y-1/2 border-r-[var(--surface-card)] border-t-transparent border-b-transparent border-l-transparent border-4",
+  // 1-BIT STEPPED CARET — two stacked stepped polygons (ring layer + fill layer,
+  // fill overlapping the tooltip edge 1px so the ring reads continuous). The
+  // assembly is authored pointing DOWN (tooltip above trigger) and rotated per
+  // side. Geometry is structural (shape language), not a themable value —
+  // colors come from the same tokens as the plate ring.
+  // 16×8 outer / 12×6 inner on the 2px step grid: the visible ring is ~2px,
+  // matching the plate's hairline weight instead of reading as a dense wedge.
+  const CARET_OUTER =
+    "polygon(0 0, 16px 0, 16px 2px, 14px 2px, 14px 4px, 12px 4px, 12px 6px, 10px 6px, 10px 8px, 6px 8px, 6px 6px, 4px 6px, 4px 4px, 2px 4px, 2px 2px, 0 2px)";
+  const CARET_INNER =
+    "polygon(0 0, 12px 0, 12px 2px, 10px 2px, 10px 4px, 8px 4px, 8px 6px, 4px 6px, 4px 4px, 2px 4px, 2px 2px, 0 2px)";
+
+  // Placement + rotation per position; the 1px translate keeps the fill layer
+  // overlapping the tooltip body so ring and plate read as one outline.
+  const caretPlacement = {
+    top: "top-full left-1/2 -translate-x-1/2 -translate-y-px",
+    bottom: "bottom-full left-1/2 -translate-x-1/2 translate-y-px rotate-180",
+    left: "left-full top-1/2 -translate-y-1/2 -translate-x-[5px] -rotate-90",
+    right: "right-full top-1/2 -translate-y-1/2 translate-x-[5px] rotate-90",
   };
 
   return (
     <div
       ref={wrapperRef}
-      className={`relative inline-block ${className}`}
+      // w-fit keeps the wrapper hugging the trigger even where the container
+      // blockifies/stretches it (grid or flex items) — otherwise the tooltip
+      // centers on the stretched wrapper, not the trigger. Pass a width class
+      // via `className` if the trigger itself is full-width.
+      className={`relative inline-block w-fit ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -118,42 +140,34 @@ export function Tooltip({
           className={`
             absolute
             ${positionStyles[position]}
+            w-max
             z-[var(--z-index-tooltip)]
             ${showTooltip ? "opacity-100" : "opacity-0"}
-            transition-opacity duration-150
+            transition-opacity [transition-duration:var(--duration-fast)]
             pointer-events-none
           `}
           style={{ maxWidth }}
         >
-          {/* Tooltip Content */}
-          <div
-            className={`
-              bg-[var(--surface-card)]
-              border-[0.5px] border-solid border-sepia-500 dark:border-sepia-800
-              rounded-none
-              px-3 py-2
-              font-mono text-xs
-              text-sepia-900 dark:text-sepia-50
-              shadow-none
-              whitespace-normal
-            `}
-            style={{
-              boxShadow: "var(--elevation-2-shadow)",
-            }}
-          >
-            {content}
+          {/* Tooltip Content — plate ring recipe (stroke layer + fill inset 1px) */}
+          <div className="plate-round p-px bg-[var(--surface-container-stroke)]">
+            <div className="plate-round bg-[var(--surface-card)] min-w-16 px-3 py-2 text-center font-mono text-xs text-[var(--text-primary)] whitespace-normal">
+              {content}
+            </div>
           </div>
 
-          {/* Arrow/Pointer */}
-          <div
-            className={`
-              absolute
-              ${arrowStyles[position]}
-            `}
-            style={{
-              filter: "none",
-            }}
-          />
+          {/* 1-bit stepped caret pointing at the trigger */}
+          <div className={`absolute ${caretPlacement[position]}`} aria-hidden="true">
+            <div className="relative h-[8px] w-[16px]">
+              <div
+                className="absolute inset-0 bg-[var(--surface-container-stroke)]"
+                style={{ clipPath: CARET_OUTER }}
+              />
+              <div
+                className="absolute left-[2px] top-[-1px] h-[6px] w-[12px] bg-[var(--surface-card)]"
+                style={{ clipPath: CARET_INNER }}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

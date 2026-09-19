@@ -1,16 +1,16 @@
-/* Import Scorp DS token CSS variables */
-@import '@scorp-ds/tokens/src/styles/tokens.css';
+/* Design tokens (CSS variables) — must load before Tailwind utilities that reference them */
+@import "@scorp-ds/tokens/styles/tokens.css";
 
-/* Import Fragment Mono from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap');
+/* Fragment Mono — token references this family; @import loads the actual font files */
+@import url("https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap");
 
-/* Storybook canvas reset */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Storybook canvas — uses semantic surface token (no raw hex; values live in tokens.css) */
 .sb-show-main.sb-main-padded {
   padding: 2rem;
-  background-color: var(--surface-page, #FDFCFB);
-  font-family: 'Fragment Mono', monospace;
-}
-
-.dark .sb-show-main.sb-main-padded {
-  background-color: var(--surface-page-dark, #0A0704);
+  background-color: var(--surface-page);
+  font-family: var(--font-family-mono);
 }

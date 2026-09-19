@@ -55,13 +55,49 @@ export type { SwitchProps } from './components/Switch';
 export { Dropdown } from './components/Dropdown';
 export type { DropdownProps, DropdownItem } from './components/Dropdown';
 
+export { CaseStudyBlocks } from './components/CaseStudy';
+export type { CaseStudyBlock } from './components/CaseStudy';
+
+export { ListRow } from './components/ListRow';
+export type { ListRowProps } from './components/ListRow';
+
+export { Toast, Toaster } from './components/Toast';
+export type { ToastItem, ToasterProps } from './components/Toast';
+
+export { BottomSheet } from './components/BottomSheet';
+export type { BottomSheetProps } from './components/BottomSheet';
+
 export { ThemeToggle } from './components/ThemeToggle';
 
-export { TuiIcon } from './components/TuiIcon';
-export type { TuiIconProps } from './components/TuiIcon';
+export { TuiIcon, TUI_ICON_GLYPHS } from './components/TuiIcon';
+export type { TuiIconProps, TuiIconName } from './components/TuiIcon';
 
-// Primitives barrel (empty — add as primitives are built)
-// export * from './primitives';
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs';
+export type { TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps } from './components/Tabs';
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+} from './components/Table';
+export type {
+  TableDensity,
+  TableProps,
+  TableHeaderProps,
+  TableBodyProps,
+  TableFooterProps,
+  TableRowProps,
+  TableHeadProps,
+  TableCellProps,
+} from './components/Table';
+
+// Primitives
+export { Stack } from './primitives/Stack';
+export type { StackProps, StackGap } from './primitives/Stack';
 
 // Lab barrel (empty — add as experimental components are built)
 // export * from './lab';

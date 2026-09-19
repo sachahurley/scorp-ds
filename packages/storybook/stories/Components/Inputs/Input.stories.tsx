@@ -1,0 +1,78 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { Input } from '@scorp-ds/components';
+
+/**
+ * Components / Inputs / Input
+ *
+ * Text field aligned with button heights (small / medium / large).
+ */
+const meta: Meta<typeof Input> = {
+  title: 'Components/Inputs/Input',
+  component: Input,
+  tags: ['autodocs'],
+  argTypes: {
+    label: { control: 'text', description: 'Visible label (recommended for a11y)' },
+    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    error: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    placeholder: { control: 'text' },
+  },
+  parameters: { layout: 'centered' },
+};
+
+export default meta;
+type Story = StoryObj<typeof Input>;
+
+export const Default: Story = {
+  args: {
+    label: 'Email',
+    placeholder: 'you@example.com',
+    size: 'medium',
+  },
+};
+
+export const WithValue: Story = {
+  args: {
+    label: 'Work email',
+    defaultValue: 'hello@example.com',
+    size: 'medium',
+  },
+};
+
+export const Error: Story = {
+  args: {
+    label: 'Required field',
+    placeholder: 'Cannot be empty',
+    error: true,
+    defaultValue: '',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    label: 'Read-only',
+    placeholder: 'Disabled',
+    disabled: true,
+  },
+};
+
+export const AllSizes: Story = {
+  name: 'All sizes',
+  render: () => (
+    <div className="flex w-72 flex-col gap-3">
+      <Input label="Small" size="small" placeholder="Small" />
+      <Input label="Medium" size="medium" placeholder="Medium" />
+      <Input label="Large" size="large" placeholder="Large" />
+    </div>
+  ),
+};
+
+export const Playground: Story = {
+  args: {
+    label: 'Field label',
+    size: 'medium',
+    placeholder: 'Type here',
+    error: false,
+    disabled: false,
+  },
+};

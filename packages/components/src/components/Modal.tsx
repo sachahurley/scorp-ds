@@ -5,7 +5,8 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * FEATURES:
- * - Fixed header with title and close button (always visible)
+ * - Fixed header with title and a secondary-plate close button (always visible)
+ * - Optional fixed footer band for CTAs via `footerContent`
  * - Scrollable content area (max-height: 66vh)
  * - Fade in/out animations (200ms duration)
  * - Backdrop scrim (semi-transparent overlay)
@@ -17,17 +18,21 @@
  * DIMENSIONS:
  * - Width: 740px fixed
  * - Max height: 80% of viewport height
- * - Border radius: 24px (radius.container token)
- * 
+ *
+ * SHAPE: the panel is a large plate (--plate-round-lg, stepped one-bit corners)
+ * built with the ring recipe — outer layer is the stroke color clipped to the
+ * plate, inner layer is the card fill clipped 1px inset (clip-path slices real
+ * borders, so a border property cannot draw the ring).
+ *
  * TOKENS USED:
- * - surface.card: Card background color
- * - sepia.500/800: Border colors (light/dark)
- * - sepia.900/50: Primary text colors (light/dark)
- * - radius.container: 24px border radius
- * - elevation.2: Drop shadow
+ * - surface.card, surface.container-stroke, surface.overlay
+ * - text.primary (title)
+ * - plate.round-lg: panel silhouette
  */
 
 import { useEffect, type ReactNode } from "react";
+import { Button } from "./Button";
+import { TuiIcon } from "./TuiIcon";
 
 // Define the props interface for the Modal component
 export interface ModalProps {
@@ -35,6 +40,11 @@ export interface ModalProps {
   onClose: () => void;                // Function to call when modal should close
   title: string;                      // Title text displayed in fixed header
   children: ReactNode;                // Content to display in scrollable area
+  /**
+   * Optional fixed footer for CTAs. Render DS Buttons here (e.g. a secondary
+   * "Cancel" + primary confirm); actions align to the right on a subtle band.
+   */
+  footerContent?: ReactNode;
 }
 
 /**
@@ -45,7 +55,7 @@ export interface ModalProps {
  * @param title - Header title text
  * @param children - Modal content (will be scrollable if it exceeds max-height)
  */
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, footerContent }: ModalProps) {
   
   // EFFECT: Handle ESC key press to close modal
   // This listens for keyboard events and closes the modal when ESC is pressed
@@ -96,27 +106,24 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
         - Uses z-index token for modal layer (1040) to ensure it covers sidebar
       */}
       <div
-        className="fixed inset-0 bg-black/50 flex items-center justify-center p-5 animate-in fade-in duration-[200ms]"
-        style={{ zIndex: 'var(--z-index-modal)' }}
+        className="fixed inset-0 flex items-center justify-center p-5 animate-in fade-in bg-[var(--surface-overlay)]"
+        style={{ zIndex: "var(--z-index-modal)", animationDuration: "var(--duration-normal)" }}
         onClick={onClose}
       >
-        {/* 
-          MODAL CONTAINER
-          - 740px fixed width
-          - Max height: 80% of viewport (80vh)
-          - Card styling with background, border, and shadow
+        {/*
+          MODAL CONTAINER — plate ring recipe
+          - Outer layer: stroke color clipped to the large plate (the ring)
+          - Inner layer: card fill clipped 1px inset (p-px on the outer)
           - Clicking inside the modal does NOT close it (stopPropagation)
-          - Uses elevation-2 shadow tokens for medium elevation
-          - rounded-[24px] uses radius.container token
         */}
         <div
-          className="w-[740px] max-h-[80vh] bg-[var(--surface-card)] rounded-none flex flex-col overflow-hidden"
-          style={{
-            boxShadow: 'var(--elevation-2-shadow)',
-            border: '0.5px solid var(--elevation-2-border)'
-          }}
+          className="w-[740px] max-h-[80vh] plate-round-lg p-px bg-[var(--surface-container-stroke)] flex"
+          role="dialog"
+          aria-modal="true"
+          aria-label={title}
           onClick={(e) => e.stopPropagation()}
         >
+        <div className="w-full plate-round-lg bg-[var(--surface-card)] flex flex-col overflow-hidden">
           {/* 
             FIXED HEADER
             - Always visible at top (does not scroll)
@@ -125,26 +132,23 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             - 24px padding matches card padding from Colors page
             - Border bottom separates header from content
           */}
-          {/* TUI Tier 2: double-line box-drawing title bar ╔══ Title ══╗ */}
-          <div className="flex items-center justify-between px-8 py-6 border-b-[0.5px] border-solid border-sepia-500 dark:border-sepia-800">
-            {/* Title with double-line box-drawing decoration */}
-            <h2 className="text-base font-mono text-sepia-900 dark:text-sepia-50 font-medium flex items-center gap-0 flex-1 min-w-0">
-              <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true">╔══ </span>
-              <span className="truncate">{title}</span>
-              <span className="text-term-dim dark:text-term-amber ml-1 flex-1 overflow-hidden whitespace-nowrap" aria-hidden="true">
-                {"═".repeat(80)}
-              </span>
-              <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true"> ══╗</span>
+          {/* Header — plain title (box-drawing decoration retired with the TUI tier) */}
+          <div className="flex items-center justify-between px-8 py-6 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]">
+            <h2 className="text-base font-mono text-[var(--text-primary)] font-medium flex-1 min-w-0 truncate">
+              {title}
             </h2>
 
-            {/* TUI close button: [x] text instead of icon */}
-            <button
+            {/* Close control: icon-only secondary plate button (square, gold ✗ glyph) */}
+            <Button
+              variant="secondary"
+              size="small"
+              type="button"
               onClick={onClose}
-              className="ml-4 font-mono text-sm text-term-dim dark:text-term-amber hover:text-term-red dark:hover:text-term-red transition-colors duration-200 leading-none"
               aria-label="Close modal"
+              className="ml-4 shrink-0"
             >
-              [x]
-            </button>
+              <TuiIcon name="X" />
+            </Button>
           </div>
 
           {/* 
@@ -154,9 +158,18 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             - 24px padding matches card padding
             - overflow-y-auto adds scrollbar only when needed
           */}
-          <div className="overflow-y-auto px-8 py-6">
+          {/* tabIndex allows keyboard focus into the scroll region (axe scrollable-region-focusable / Safari). */}
+          <div className="overflow-y-auto px-8 py-6" tabIndex={0}>
             {children}
           </div>
+
+          {/* Optional fixed footer — CTA band, actions right-aligned */}
+          {footerContent && (
+            <div className="flex items-center justify-end gap-3 px-8 py-5 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)]">
+              {footerContent}
+            </div>
+          )}
+        </div>
         </div>
       </div>
     </>

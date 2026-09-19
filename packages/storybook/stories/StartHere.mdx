@@ -1,0 +1,54 @@
+import { Meta } from '@storybook/blocks';
+import { Button } from '@scorp-ds/components';
+
+<Meta title="Start Here" />
+
+# Scorp DS
+
+A warm, one-bit design system: sepia surfaces, a gold accent, Fragment Mono at a single
+weight, and stepped "plate" corners on everything from buttons to bottom sheets. Dark is
+the default theme. It is the shared identity of the portfolio and this component library.
+
+<div style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '20px 0' }}>
+  <Button variant="primary">Claim</Button>
+  <Button variant="secondary">Projects</Button>
+  <Button variant="outline">Reroll</Button>
+</div>
+
+## Setup
+
+One import for the CSS variables, one preset for Tailwind, one provider for theming:
+
+```tsx
+// tailwind.config.js
+module.exports = { presets: [require('@scorp-ds/tokens/tailwind.preset')] };
+
+// app entry
+import '@scorp-ds/tokens/styles/tokens.css';
+import { ThemeProvider, Button } from '@scorp-ds/components';
+
+<ThemeProvider>
+  <Button variant="primary">Hello</Button>
+</ThemeProvider>;
+```
+
+## The five laws
+
+1. **Tokens only.** No raw hex, px sizes, or durations in components — everything routes
+   through the CSS variables (see Foundation and Semantic pages).
+2. **Plates are the shape language.** Stepped corners via `plate-round` /
+   `plate-round-lg`; no border radius. See *Semantic → Shape* for the ring recipe.
+3. **Mono 400 everywhere.** Fragment Mono, single weight; emphasis is carried by color
+   and size, never weight.
+4. **Dark is the default.** Light exists as a secondary theme; every value swaps via the
+   `.dark` class and semantic variables.
+5. **44px touch targets.** Interactive components meet the minimum; color is never the
+   only signal.
+
+## Map
+
+- **Foundation** — raw scales: color, type, spacing, motion, z-index.
+- **Semantic** — purpose-named roles: surfaces, text, borders, accent + fire, elevation, focus, shape.
+- **Components** — the library; props documented on each page via autodocs.
+- **Patterns** — compositions built from components and shared presets.
+- Token source of truth: `packages/tokens/src/tokens.json` · reference: `design-tokens.md`.

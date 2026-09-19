@@ -152,25 +152,24 @@ export function Dropdown({
   }, [focusedIndex]);
 
   // Size styles matching buttons and inputs
-  // Small: 32px height, 6px corner radius (rounded-md)
-  // Medium: 40px height, 8px corner radius (rounded-lg)
-  // Large: 48px height, 12px corner radius (rounded-button)
+  // Small: 32px height / Medium: 40px / Large: 48px
+  // Corners: plate silhouette (--plate-round) is the shape language; radius tokens are retired
   const sizeStyles = {
     small: {
-      button: "h-8 px-4 py-1.5 rounded-none",       // TUI: sharp corners
-      menu: "rounded-none",
+      button: "h-8 px-4 py-1.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-4 h-4",
     },
     medium: {
-      button: "h-10 px-5 py-2.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      button: "h-10 px-5 py-2.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-5 h-5",
     },
     large: {
-      button: "h-12 px-6 py-3.5 rounded-none",      // TUI: sharp corners
-      menu: "rounded-none",
+      button: "h-12 px-6 py-3.5 plate-round",
+      menu: "",
       menuItem: "",
       icon: "w-6 h-6",
     },
@@ -186,18 +185,18 @@ export function Dropdown({
         inline-flex items-center justify-center gap-2
         font-mono text-sm
         ${currentSizeStyles.button}
-        transition-colors duration-200
+        transition-colors [transition-duration:var(--duration-normal)]
         cursor-pointer
-        bg-secondary-700 hover:bg-secondary-600 active:bg-secondary-500 text-secondary-50
-        dark:bg-secondary-700 dark:hover:bg-secondary-600 dark:active:bg-secondary-500 dark:text-secondary-50
-        focus:ring-2 focus:ring-secondary-700 dark:focus:ring-secondary-700 focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
+        bg-[var(--button-secondary-background)] hover:bg-[var(--button-secondary-background-hover)] active:brightness-95
+        text-[var(--button-secondary-text)] hover:text-[var(--button-secondary-text-hover)]
+        focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-secondary)]
       `}
       aria-haspopup="true"
       aria-expanded={isOpen}
     >
       {label}
       {/* TUI Tier 2: Unicode ▼ instead of Lucide ChevronDown */}
-      <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono leading-none transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true">▼</span>
+      <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono leading-none transition-transform [transition-duration:var(--duration-normal)] ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true">▼</span>
     </button>
   );
 
@@ -218,23 +217,25 @@ export function Dropdown({
       {/* Trigger */}
       {triggerElement}
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu — plate ring recipe (border color clipped + fill inset 1px;
+          clip-path slices real borders, so the ring is a wrapper layer) */}
       {isOpen && (
         <div
-          ref={menuRef}
-          role="menu"
-          aria-orientation="vertical"
+          style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2
             ${align === "right" ? "right-0" : "left-0"}
             min-w-[200px]
-            bg-white dark:bg-sepia-975
-            border border-sepia-300 dark:border-sepia-700
-            ${currentSizeStyles.menu}
-            shadow-none
+            plate-round p-px bg-[var(--border-default)]
             z-[1051]
-            animate-in fade-in slide-in-from-top-2 duration-200
+            animate-in fade-in slide-in-from-top-2
           `}
+        >
+        <div
+          ref={menuRef}
+          role="menu"
+          aria-orientation="vertical"
+          className={`plate-round bg-[var(--surface-card)] ${currentSizeStyles.menu}`}
         >
           {items.map((item, index) => {
             const isDestructive = item.variant === "destructive";
@@ -251,14 +252,14 @@ export function Dropdown({
                   w-full flex items-center gap-2
                   px-4 py-3
                   font-mono text-sm text-left
-                  transition-colors duration-150
+                  transition-colors [transition-duration:var(--duration-fast)]
                   ${isDisabled
                     ? 'opacity-50 cursor-not-allowed'
                     : isDestructive
-                      ? 'text-error-600 dark:text-error-500 hover:bg-error-50 dark:hover:bg-error-950/20'
-                      : 'text-sepia-900 dark:text-sepia-50 hover:bg-sepia-200 dark:hover:bg-sepia-900'
+                      ? 'text-error-600 hover:bg-[var(--field-background-error)]'
+                      : 'text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]'
                   }
-                  ${isFocused && !isDisabled ? 'bg-sepia-200 dark:bg-sepia-900' : ''}
+                  ${isFocused && !isDisabled ? 'bg-[var(--surface-subtle)]' : ''}
                   ${currentSizeStyles.menuItem}
                 `}
               >
@@ -282,6 +283,7 @@ export function Dropdown({
               </button>
             );
           })}
+        </div>
         </div>
       )}
     </div>

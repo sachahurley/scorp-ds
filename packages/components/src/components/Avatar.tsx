@@ -110,9 +110,9 @@ export function Avatar({
 
   // STATUS INDICATOR COLORS
   const statusColors = {
-    online: "bg-success-500",
-    offline: "bg-secondary-400 dark:bg-secondary-600",
-    away: "bg-warning-500",
+    online: "bg-success-600 dark:bg-success-500",
+    offline: "bg-secondary-500 dark:bg-secondary-600",
+    away: "bg-warning-600 dark:bg-warning-500",
   };
 
   return (
@@ -121,7 +121,7 @@ export function Avatar({
       <div
         className={`
           ${currentSize.container}
-          rounded-none
+          plate-round
           overflow-hidden
           flex items-center justify-center
           bg-secondary-200 dark:bg-secondary-800
@@ -145,29 +145,31 @@ export function Avatar({
           <span className="select-none">{initials}</span>
         )}
 
-        {/* Custom Icon */}
+        {/* Custom Icon — centered in its box like the default glyph (a bare
+            sized div leaves glyph icons sitting off-position) */}
         {showIcon && (
-          <div className={`${currentSize.icon} text-secondary-700 dark:text-secondary-300`}>
+          <div className={`${currentSize.icon} inline-flex items-center justify-center leading-none text-secondary-700 dark:text-secondary-300`}>
             {icon}
           </div>
         )}
 
         {/* TUI Tier 2: @ character instead of Lucide User icon */}
         {showDefaultIcon && (
-          <span className={`${currentSize.icon} inline-flex items-center justify-center font-mono font-bold text-secondary-600 dark:text-secondary-400`} aria-hidden="true">@</span>
+          <span className={`${currentSize.icon} inline-flex items-center justify-center font-mono font-bold text-secondary-900 dark:text-secondary-100`} aria-hidden="true">@</span>
         )}
       </div>
 
       {/* Status Indicator */}
       {status && (
-        <div
+        <span
+          role="img"
           className={`
-            absolute
+            absolute block
             ${currentSize.statusOffset}
             ${currentSize.status}
             ${statusColors[status]}
             rounded-none
-            border-2 border-white dark:border-sepia-950
+            border-2 border-[var(--field-background)]
           `}
           aria-label={`Status: ${status}`}
         />

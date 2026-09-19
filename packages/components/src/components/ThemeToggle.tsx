@@ -8,7 +8,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Switch } from "@/components/ui/Switch";
+import { Switch } from "./Switch";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -22,8 +22,8 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <div className="flex items-center gap-3">
-        <div className="w-11 h-6 rounded-none bg-sepia-300 dark:bg-sepia-700" />
-        <span className="text-sm font-mono text-sepia-600 dark:text-sepia-400">Theme</span>
+        <div className="w-11 h-6 rounded-none bg-[var(--field-border)]" />
+        <span className="text-sm font-mono text-[var(--text-secondary)]">Theme</span>
       </div>
     );
   }
@@ -40,12 +40,12 @@ export function ThemeToggle() {
         checked={isDark}
         onCheckedChange={toggleTheme}
         size="small"
-        icon={isDark ? <span className="w-3 h-3 inline-flex items-center justify-center font-mono text-[10px] text-primary-500" aria-hidden="true">☾</span> : <span className="w-3 h-3 inline-flex items-center justify-center font-mono text-[10px] text-secondary-700" aria-hidden="true">☀</span>}
+        icon={isDark ? <span className="w-3 h-3 inline-flex items-center justify-center font-mono text-[10px] text-[var(--border-focus)]" aria-hidden="true">☾</span> : <span className="w-3 h-3 inline-flex items-center justify-center font-mono text-[10px] text-[var(--text-secondary)]" aria-hidden="true">☀</span>}
         aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
       />
 
       {/* Label Text */}
-      <span className="text-sm font-mono text-sepia-900 dark:text-sepia-50">
+      <span className="text-sm font-mono text-[var(--text-primary)]">
         {isDark ? 'Dark' : 'Light'}
       </span>
     </div>

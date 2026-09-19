@@ -81,16 +81,21 @@ if [ "$MODE" != "tokens" ]; then
       warn "flutter not found in PATH"
     fi
   elif [ "$STACK" = "react-ts" ]; then
+    TSC_OUTPUT=""
     if command -v pnpm &>/dev/null; then
-      TSC_OUTPUT=$(pnpm type-check 2>&1)
+      TSC_OUTPUT=$(cd "$PROJECT_ROOT" && pnpm type-check 2>&1)
+    elif command -v npm &>/dev/null; then
+      TSC_OUTPUT=$(cd "$PROJECT_ROOT" && npm run type-check 2>&1)
+    else
+      warn "Neither pnpm nor npm found in PATH"
+    fi
+    if [ -n "$TSC_OUTPUT" ]; then
       if echo "$TSC_OUTPUT" | grep -q "error TS"; then
         fail "TypeScript errors found"
         echo "$TSC_OUTPUT" | grep "error TS" | head -5
       else
         pass "TypeScript: no errors"
       fi
-    else
-      warn "pnpm not found in PATH"
     fi
   fi
   echo ""
@@ -116,9 +121,20 @@ if [ "$MODE" != "tokens" ]; then
     fi
   elif [ "$STACK" = "react-ts" ]; then
     if command -v pnpm &>/dev/null; then
-      pnpm test 2>&1 | tail -3
+      TEST_OUT=$(cd "$PROJECT_ROOT" && pnpm test 2>&1)
+    elif command -v npm &>/dev/null; then
+      TEST_OUT=$(cd "$PROJECT_ROOT" && npm test 2>&1)
     else
-      warn "pnpm not found in PATH"
+      warn "Neither pnpm nor npm found in PATH"
+      TEST_OUT=""
+    fi
+    if [ -n "$TEST_OUT" ]; then
+      echo "$TEST_OUT" | tail -8
+      if echo "$TEST_OUT" | grep -qE "FAIL |failed|Test Files.*failed"; then
+        fail "Tests reported failure(s)"
+      else
+        pass "Tests finished (see summary above)"
+      fi
     fi
   fi
   echo ""

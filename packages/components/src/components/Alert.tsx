@@ -53,92 +53,85 @@ export function Alert({
     default: "[i]",
     success: "[ok]",
     warning: "[!!]",
-    error: "[ERR]",
+    error: "[er]",
     info: "[i]",
   };
 
   // Use custom icon if provided, otherwise use the TUI text prefix
   const icon = iconLeft || (
-    <span className="font-mono text-sm font-bold whitespace-nowrap">
+    <span className="font-mono text-sm font-bold leading-none whitespace-nowrap">
       {severityPrefixes[variant]}
     </span>
   );
 
   // VARIANT STYLES - Color combinations using semantic tokens
-  // All variants support light and dark themes
+  // All variants support light and dark themes.
+  // PLATE RING RECIPE: `ring` is the border color painted on the outer layer
+  // (clipped to the plate), `fill` is the surface painted on the inner layer
+  // 1px inset — clip-path slices real borders, so the ring is a layer.
   const variantStyles = {
-    // Default: Neutral secondary (sepia) colors
+    // Default: neutral semantic surfaces (surface + border roles)
     default: {
-      container: `
-        bg-secondary-50 dark:bg-secondary-950
-        border-secondary-300 dark:border-secondary-700
-      `,
-      icon: "text-secondary-700 dark:text-secondary-300",
-      title: "text-secondary-900 dark:text-secondary-50",
-      description: "text-secondary-600 dark:text-secondary-400",
+      ring: "bg-[var(--border-default)]",
+      fill: "bg-[var(--surface-subtle)]",
+      icon: "text-secondary-800 dark:text-secondary-300",
+      title: "text-[var(--text-primary)]",
+      description: "text-secondary-800 dark:text-secondary-300",
     },
     
     // Success: Green for positive states
     success: {
-      container: `
-        bg-success-50 dark:bg-success-950
-        border-success-300 dark:border-success-700
-      `,
-      icon: "text-success-600 dark:text-success-400",
+      ring: "bg-success-300 dark:bg-success-700",
+      fill: "bg-success-50 dark:bg-success-950",
+      icon: "text-success-800 dark:text-success-400",
       title: "text-success-900 dark:text-success-50",
-      description: "text-success-700 dark:text-success-300",
+      description: "text-success-900 dark:text-success-300",
     },
     
     // Warning: Purple for warnings
     warning: {
-      container: `
-        bg-warning-50 dark:bg-warning-950
-        border-warning-300 dark:border-warning-700
-      `,
-      icon: "text-warning-600 dark:text-warning-400",
+      ring: "bg-warning-300 dark:bg-warning-700",
+      fill: "bg-warning-50 dark:bg-warning-950",
+      icon: "text-warning-800 dark:text-warning-400",
       title: "text-warning-900 dark:text-warning-50",
-      description: "text-warning-700 dark:text-warning-300",
+      description: "text-warning-900 dark:text-warning-300",
     },
     
     // Error: Red for errors
     error: {
-      container: `
-        bg-error-50 dark:bg-error-950
-        border-error-300 dark:border-error-700
-      `,
-      icon: "text-error-600 dark:text-error-500",
+      ring: "bg-error-300 dark:bg-error-700",
+      fill: "bg-error-50 dark:bg-error-950",
+      icon: "text-error-700 dark:text-error-400",
       title: "text-error-900 dark:text-error-50",
-      description: "text-error-700 dark:text-error-400",
+      description: "text-error-900 dark:text-error-300",
     },
     
     // Info: Blue for informational messages
     info: {
-      container: `
-        bg-info-50 dark:bg-info-950
-        border-info-300 dark:border-info-700
-      `,
-      icon: "text-info-600 dark:text-info-400",
+      ring: "bg-info-300 dark:bg-info-700",
+      fill: "bg-info-50 dark:bg-info-950",
+      icon: "text-info-800 dark:text-info-400",
       title: "text-info-900 dark:text-info-50",
-      description: "text-info-700 dark:text-info-300",
+      description: "text-info-900 dark:text-info-300",
     },
   };
 
   const styles = variantStyles[variant];
 
   return (
+    <div role="alert" className={`plate-round p-px ${styles.ring} ${className}`}>
     <div
-      role="alert"
       className={`
+        plate-round
         flex items-start gap-3
         p-4
-        border border-solid rounded-none
-        ${styles.container}
-        ${className}
+        ${styles.fill}
       `}
     >
-      {/* Icon */}
+      {/* Icon — boxed to the title's first-line height (text-sm = 20px) and
+          centered in it, so the prefix sits optically level with the title */}
       {icon && (
-        <div className={`flex-shrink-0 ${styles.icon}`}>
+        <div className={`flex h-5 flex-shrink-0 items-center ${styles.icon}`}>
           {icon}
         </div>
       )}
@@ -165,8 +158,8 @@ export function Alert({
             flex-shrink-0
             font-mono text-xs font-bold
             ${styles.description}
-            hover:text-term-red
-            transition-colors duration-150
+            hover:text-error-800 dark:hover:text-error-300
+            transition-colors [transition-duration:var(--duration-fast)]
             focus:outline-none focus:ring-1 focus:ring-offset-1
           `}
           aria-label="Close alert"
@@ -174,6 +167,7 @@ export function Alert({
           [x]
         </button>
       )}
+    </div>
     </div>
   );
 }

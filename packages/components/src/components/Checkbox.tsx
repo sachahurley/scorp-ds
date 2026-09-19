@@ -38,7 +38,8 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
  * @param label - Optional label text displayed next to checkbox
  * @param error - Whether checkbox has a validation error
  * @param disabled - Whether checkbox is disabled
- * @param checked - Whether checkbox is checked
+ * @param checked - Controlled checked state; omit it to use the native
+ *                  uncontrolled behavior (`defaultChecked`)
  * @param onCheckedChange - Callback when checkbox state changes (alternative to onChange)
  */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
@@ -48,7 +49,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       label,
       error = false,
       disabled = false,
-      checked = false,
+      checked,
       onChange,
       onCheckedChange,
       className = "",
@@ -60,21 +61,23 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // Small: 16px × 16px
     // Medium: 20px × 20px (matches medium icon size)
     // Large: 24px × 24px (matches large icon size)
+    // Box wears the plate silhouette; glyph gets an explicit token size so it
+    // renders predictably inside the box (no inherited-size overflow).
     const sizeStyles = {
       small: {
-        checkbox: "w-4 h-4 rounded-none",          // TUI: sharp corners
-        icon: "w-2.5 h-2.5",
+        checkbox: "w-4 h-4",
+        glyph: "text-3xs",
         label: "text-sm",
       },
       medium: {
-        checkbox: "w-5 h-5 rounded-none",          // TUI: sharp corners
-        icon: "w-3 h-3",
+        checkbox: "w-5 h-5",
+        glyph: "text-xs",
         label: "text-sm",
       },
       large: {
-        checkbox: "w-6 h-6 rounded-none",          // TUI: sharp corners
-        icon: "w-3.5 h-3.5",                      // 14px icon (smaller for better fit)
-        label: "text-sm",                         // 14px text
+        checkbox: "w-6 h-6",
+        glyph: "text-sm",
+        label: "text-sm",
       },
     };
 
@@ -84,27 +87,21 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // Priority: error > disabled > checked > default
     // Includes hover states for unchecked checkboxes
     // Includes focus states with ring
-    const checkboxStyles = error
-      ? `
-        border-error-600 dark:border-error-500
-        ${checked 
-          ? 'bg-error-600 dark:bg-error-500 border-error-600 dark:border-error-500' 
-          : 'bg-white dark:bg-sepia-975 hover:border-error-500 dark:hover:border-error-400 hover:bg-error-50 dark:hover:bg-error-950/20'
-        }
-        focus:ring-2 focus:ring-error-600 dark:focus:ring-error-500
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        transition-all duration-200
-      `
-      : `
-        border-sepia-300 dark:border-sepia-700
-        ${checked 
-          ? 'bg-primary-400 dark:bg-primary-400 border-primary-400 dark:border-primary-400 hover:bg-primary-500 dark:hover:bg-primary-500' 
-          : 'bg-white dark:bg-sepia-975 hover:border-sepia-400 dark:hover:border-sepia-600 hover:bg-sepia-50 dark:hover:bg-sepia-900'
-        }
-        focus:ring-2 focus:ring-primary-400 dark:focus:ring-primary-400
-        focus:ring-offset-2 focus:ring-offset-sepia-50 dark:focus:ring-offset-sepia-1000
-        transition-all duration-200
-      `;
+    // PLATE RING RECIPE — outer layer is the border color clipped to the plate,
+    // inner layer is the fill clipped 1px inset. Checked floods both layers
+    // with the primary (gold) fill, matching the primary button. State renders
+    // from the NATIVE input via peer-checked so controlled and uncontrolled
+    // (`defaultChecked`) checkboxes both show the checkmark.
+    const ringStyles = error
+      ? 'bg-[var(--field-border-error)]'
+      : `bg-[var(--field-border)] hover:bg-[var(--field-border-hover)]
+         peer-checked:bg-[var(--button-primary-background)]
+         peer-checked:hover:bg-[var(--button-primary-background-hover)]`;
+
+    // Focus: inset ring on the plate (the clip swallows outside rings)
+    const focusPeerRing = error
+      ? 'peer-focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-error)]'
+      : 'peer-focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]';
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
@@ -115,86 +112,65 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
     };
 
-    const handleClick = () => {
-      if (!disabled) {
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
+    const hasLabel = label != null && label !== false && label !== '';
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if ((e.key === ' ' || e.key === 'Enter') && !disabled) {
-        e.preventDefault();
-        const syntheticEvent = {
-          target: { checked: !checked },
-        } as React.ChangeEvent<HTMLInputElement>;
-        handleChange(syntheticEvent);
-      }
-    };
-
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {/* Hidden native checkbox for form submission and accessibility */}
+    const control = (
+      <>
         <input
           ref={ref}
           type="checkbox"
-          checked={checked}
+          {...(checked !== undefined ? { checked } : {})}
           disabled={disabled}
           onChange={handleChange}
-          className="sr-only"
-          aria-invalid={error}
+          className="peer sr-only"
+          aria-invalid={error || undefined}
           {...props}
         />
-        
-        {/* Custom styled checkbox */}
-        <div
+        <span
+          aria-hidden="true"
           className={`
-            relative inline-flex items-center justify-center
+            plate-round p-px inline-flex shrink-0
             ${currentSizeStyles.checkbox}
-            border-2
-            ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            ${checkboxStyles}
+            transition-colors [transition-duration:var(--duration-fast)]
+            ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
+            ${ringStyles}
+            ${error ? 'peer-checked:[&>span]:bg-[var(--field-border-error)]' : 'peer-checked:[&>span]:bg-[var(--button-primary-background)]'}
+            peer-checked:[&>span>span]:opacity-100
+            ${focusPeerRing}
           `}
-          role="checkbox"
-          aria-checked={checked}
-          aria-disabled={disabled}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          tabIndex={disabled ? -1 : 0}
         >
-          {/* TUI Tier 2: Unicode checkmark ✓ instead of Lucide Check icon */}
-          {checked && (
+          <span
+            className={`
+              plate-round inline-flex h-full w-full items-center justify-center
+              bg-[var(--field-background)]
+              transition-colors [transition-duration:var(--duration-fast)]
+            `}
+          >
+            {/* Checkmark — revealed by peer-checked on the outer span */}
             <span
-              className={`
-                ${currentSizeStyles.icon}
-                inline-flex items-center justify-center font-mono font-bold leading-none
-                ${error 
-                  ? 'text-white dark:text-white' 
-                  : 'text-black dark:text-black'
-                }
-              `}
+              className={`${currentSizeStyles.glyph} font-mono leading-none opacity-0 transition-opacity [transition-duration:var(--duration-fast)] ${
+                error ? 'text-white' : 'text-[var(--button-primary-text)]'
+              }`}
               aria-hidden="true"
             >
               ✓
             </span>
-          )}
-        </div>
+          </span>
+        </span>
+      </>
+    );
 
-        {/* Optional Label */}
-        {label && (
-          <label 
-            className={`
-              ${currentSizeStyles.label} 
-              font-mono 
-              text-sepia-900 dark:text-sepia-50 
-              ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            `}
-            onClick={handleClick}
+    return (
+      <div className={`flex items-center gap-2 ${className}`}>
+        {hasLabel ? (
+          <label
+            className={`inline-flex items-center gap-2 font-mono ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
           >
-            {label}
+            {control}
+            <span className={`${currentSizeStyles.label} text-[var(--text-primary)]`}>{label}</span>
           </label>
+        ) : (
+          <span className="inline-flex items-center gap-2">{control}</span>
         )}
       </div>
     );

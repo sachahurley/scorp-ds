@@ -29,6 +29,7 @@ module.exports = {
           950: 'var(--color-amber-950)',
           975: 'var(--color-amber-975)',
           1000: 'var(--color-amber-1000)',
+          gold: 'var(--color-amber-gold)',
         },
         sepia: {
           50: 'var(--color-sepia-50)',
@@ -124,6 +125,7 @@ module.exports = {
           950: 'var(--color-primary-950)',
           975: 'var(--color-primary-975)',
           1000: 'var(--color-primary-1000)',
+          gold: 'var(--color-primary-gold)',
         },
         secondary: {
           50: 'var(--color-secondary-50)',
@@ -193,28 +195,86 @@ module.exports = {
           900: 'var(--color-error-900)',
           950: 'var(--color-error-950)',
         },
-      },
-      // Border radius from tokens
-      borderRadius: {
-        button: 'var(--radius-button)',
-        container: 'var(--radius-container)',
+        // Semantic roles (light / dark via CSS variables — use in components instead of raw scales)
+        surface: {
+          page: 'var(--surface-page)',
+          container: 'var(--surface-container)',
+          card: 'var(--surface-card)',
+          'container-stroke': 'var(--surface-container-stroke)',
+          subtle: 'var(--surface-subtle)',
+          muted: 'var(--surface-muted)',
+          overlay: 'var(--surface-overlay)',
+          inverse: 'var(--surface-inverse)',
+          raised: 'var(--surface-raised)',
+        },
+        foreground: {
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          tertiary: 'var(--text-tertiary)',
+          disabled: 'var(--text-disabled)',
+          link: 'var(--text-link)',
+          'link-hover': 'var(--text-link-hover)',
+          'on-inverse': 'var(--text-on-inverse)',
+        },
+        line: {
+          default: 'var(--border-default)',
+          muted: 'var(--border-muted)',
+          strong: 'var(--border-strong)',
+          hairline: 'var(--border-hairline)',
+          error: 'var(--border-error)',
+          focus: 'var(--border-focus)',
+        },
+        // Brand accent (single role; theme eggs may override --accent at runtime)
+        accent: 'var(--accent)',
+        // Fire ramp (theme-invariant dither-art sepia tones)
+        fire: {
+          bright: 'var(--fire-bright)',
+          mid: 'var(--fire-mid)',
+          dim: 'var(--fire-dim)',
+        },
+        field: {
+          bg: 'var(--field-background)',
+          'bg-error': 'var(--field-background-error)',
+          border: 'var(--field-border)',
+          'border-hover': 'var(--field-border-hover)',
+          'border-focus': 'var(--field-border-focus)',
+          'border-error': 'var(--field-border-error)',
+          placeholder: 'var(--field-placeholder)',
+        },
       },
       // Font families from tokens
       fontFamily: {
         mono: 'var(--font-family-mono)',
       },
-      // Font sizes from tokens
+      // Font sizes from tokens (matches tokens.css / tokens.json global.font.size)
       fontSize: {
+        '3xs': 'var(--font-size-3xs)',
+        '2xs': 'var(--font-size-2xs)',
         xs: 'var(--font-size-xs)',
         sm: 'var(--font-size-sm)',
         base: 'var(--font-size-base)',
         lg: 'var(--font-size-lg)',
         xl: 'var(--font-size-xl)',
         '2xl': 'var(--font-size-2xl)',
+        '3xl': 'var(--font-size-3xl)',
+        '4xl': 'var(--font-size-4xl)',
+        '5xl': 'var(--font-size-5xl)',
+        '6xl': 'var(--font-size-6xl)',
       },
     },
   },
   plugins: [
     require("tailwindcss-animate"),
+    // Plate silhouettes: the system's shape language (replaces the retired
+    // radius tokens). clip-path slices real borders, so build rings as
+    // element = ring color clipped + ::before = fill clipped 1px inset,
+    // and use inset focus rings.
+    function scorpPlates({ addUtilities }) {
+      addUtilities({
+        '.plate-round': { 'clip-path': 'var(--plate-round)' },
+        '.plate-round-lg': { 'clip-path': 'var(--plate-round-lg)' },
+        '.plate-round-lg-top': { 'clip-path': 'var(--plate-round-lg-top)' },
+      });
+    },
   ],
 };

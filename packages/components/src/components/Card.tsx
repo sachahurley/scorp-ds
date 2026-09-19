@@ -50,38 +50,37 @@ export function Card({
   // Check if className includes flex classes to enable flex layout
   const isFlexLayout = className.includes('flex');
   
+  // PLATE RING RECIPE — outer layer is the stroke clipped to the large plate,
+  // inner layer is the card fill clipped 1px inset. Note: the clip bounds any
+  // overflowing children (menus should render outside the card or via portals).
   return (
     <div
       className={`
-        bg-[var(--surface-card)]
-        border-[0.5px] border-solid border-sepia-500 dark:border-sepia-800
-        rounded-none
-        overflow-visible
+        plate-round-lg p-px bg-[var(--surface-container-stroke)]
         ${isFlexLayout ? 'flex flex-col' : ''}
         ${className}
       `}
     >
-      {/* Header Section -- TUI Tier 2: box-drawing title bar ┌── Title ──┐ */}
+    <div
+      className={`
+        plate-round-lg bg-[var(--surface-card)] h-full w-full
+        ${isFlexLayout ? 'flex flex-col flex-1 min-h-0' : ''}
+      `}
+    >
+      {/* Header Section — plain title + subtitle (box-drawing decoration retired with the TUI tier) */}
       {(title || subtitle || headerContent) && (
-        <div className="p-4 lg:p-6 border-b-[0.5px] border-solid border-sepia-500 dark:border-sepia-800 overflow-hidden rounded-none">
+        <div className="p-4 lg:p-6 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)] overflow-hidden rounded-none">
           {headerContent ? (
             headerContent
           ) : (
             <div>
               {title && (
-                <h3 className="text-base font-mono font-bold text-sepia-900 dark:text-sepia-50 mb-1 flex items-center gap-0">
-                  {/* Box-drawing prefix */}
-                  <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true">┌── </span>
+                <h3 className="text-base font-mono font-bold text-[var(--text-primary)] mb-1">
                   {title}
-                  {/* Box-drawing suffix -- flexible line fills remaining width */}
-                  <span className="text-term-dim dark:text-term-amber ml-1 flex-1 overflow-hidden whitespace-nowrap" aria-hidden="true">
-                    {"─".repeat(80)}
-                  </span>
-                  <span className="text-term-dim dark:text-term-amber whitespace-pre" aria-hidden="true"> ──┐</span>
                 </h3>
               )}
               {subtitle && (
-                <p className="text-sm font-mono text-sepia-600 dark:text-sepia-400 pl-[3ch]">
+                <p className="font-mono text-sm text-secondary-800 dark:text-secondary-300">
                   {subtitle}
                 </p>
               )}
@@ -97,10 +96,11 @@ export function Card({
 
       {/* Footer Section */}
       {footerContent && (
-        <div className="p-4 lg:p-6 border-t-[0.5px] border-solid border-sepia-500 dark:border-sepia-800 bg-sepia-50 dark:bg-sepia-975 overflow-hidden rounded-none">
+        <div className="p-4 lg:p-6 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)] overflow-hidden">
           {footerContent}
         </div>
       )}
+    </div>
     </div>
   );
 }
