@@ -16,7 +16,7 @@
  * - duration.fast (hover), focus inset ring (clip swallows outside outlines)
  */
 
-import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ElementType, type ReactNode } from "react";
 
 type CommonProps = {
   /** Small line above the title (date, category). Rendered in text.tertiary. */
@@ -27,14 +27,27 @@ type CommonProps = {
   description?: ReactNode;
   /** Trailing affordance next to the title (e.g. an external-link glyph). */
   titleSuffix?: ReactNode;
+  /**
+   * Thumbnail slot beside the text (a sized <img> or framed node; the row
+   * reserves the slot with flex-shrink: 0 and never scales it).
+   */
+  thumb?: ReactNode;
+  /** Which side the thumbnail sits on (default "start"). */
+  thumbPosition?: "start" | "end";
   className?: string;
 };
 
 export type ListRowProps = CommonProps &
   (
-    | ({ href: string; onClick?: never } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "className" | "title">)
-    | ({ href?: never; onClick: () => void } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "className" | "title">)
-    | { href?: never; onClick?: never }
+    | ({ href: string; onClick?: never; as?: never } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "className" | "title">)
+    | ({ href?: never; onClick: () => void; as?: never } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "className" | "title">)
+    /**
+     * Custom link component (e.g. a router <Link>): the row renders it with
+     * interactive styling and spreads `asProps` onto it (`to`, `state`,
+     * ...), so client-side navigation works without a full page load.
+     */
+    | { as: ElementType; asProps?: Record<string, unknown>; href?: never; onClick?: never }
+    | { href?: never; onClick?: never; as?: never }
   );
 
 /**
@@ -49,10 +62,12 @@ export type ListRowProps = CommonProps &
  * @param titleSuffix - Trailing glyph beside the title (external-link arrows etc.)
  */
 export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
-  { meta, title, description, titleSuffix, className = "", ...rest },
+  { meta, title, description, titleSuffix, thumb, thumbPosition = "start", className = "", ...rest },
   ref
 ) {
-  const interactive = "href" in rest && rest.href != null ? "a" : "onClick" in rest && rest.onClick != null ? "button" : "div";
+  const asComponent = "as" in rest && rest.as ? (rest.as as ElementType) : null;
+  const interactive =
+    asComponent ? "as" : "href" in rest && rest.href != null ? "a" : "onClick" in rest && rest.onClick != null ? "button" : "div";
 
   const rowClasses = `
     block w-full text-left p-3 plate-round
@@ -62,7 +77,7 @@ export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
     ${className}
   `;
 
-  const body = (
+  const text = (
     <>
       {meta && <span className="block text-sm text-secondary-700 dark:text-secondary-600">{meta}</span>}
       <span
@@ -79,6 +94,26 @@ export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
     </>
   );
 
+  // With a thumbnail the row becomes a flex pair: fixed slot + shrinking
+  // text column, so long titles ellipsize instead of pushing the image.
+  const body = thumb ? (
+    <span className={`flex items-start gap-4 ${thumbPosition === "end" ? "flex-row-reverse" : ""}`}>
+      <span className="flex-shrink-0">{thumb}</span>
+      <span className="block min-w-0 flex-1">{text}</span>
+    </span>
+  ) : (
+    text
+  );
+
+  if (asComponent) {
+    const { asProps } = rest as { as: ElementType; asProps?: Record<string, unknown> };
+    const As = asComponent;
+    return (
+      <As ref={ref} className={rowClasses} {...asProps}>
+        {body}
+      </As>
+    );
+  }
   if (interactive === "a") {
     const { href, ...anchorRest } = rest as AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
     return (
