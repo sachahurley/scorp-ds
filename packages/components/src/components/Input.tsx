@@ -23,6 +23,13 @@ import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "rea
 // Omit the native HTML 'size' attribute to avoid conflict with our custom size prop
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: "small" | "medium" | "large";
+  /**
+   * Visual variant. "box" (default) is the plate field; "quiet" is the
+   * underline recipe — transparent, bottom hairline only, the site's voice
+   * for inline fields (passwords, rename-in-place). Same border ramp:
+   * idle hairline → hover mut → focus accent.
+   */
+  variant?: "box" | "quiet";
   error?: boolean;
   /**
    * Optional visible label. When set, renders a `<label>` associated with the input via `htmlFor` / `id`.
@@ -44,6 +51,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     { 
       size = "medium", 
+      variant = "box",
       error = false,
       disabled = false,
       className = "", 
@@ -93,7 +101,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       ? "bg-[var(--field-border-error)]"
       : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
 
-    const inputEl = (
+    // QUIET VARIANT — the underline recipe: no plate, no ring wrapper; the
+    // bottom border itself walks the ramp. Focus is the accent underline.
+    const quietStyles = error
+      ? "border-b border-[var(--field-border-error)] focus:border-[var(--field-border-error)]"
+      : "border-b border-[var(--field-border)] hover:border-[var(--field-border-hover)] focus:!border-[var(--field-border-focus)]";
+
+    const inputEl =
+      variant === "quiet" ? (
+        <input
+          ref={ref}
+          id={controlId}
+          disabled={disabled}
+          className={`${baseStyles} ${sizeStyles[size].replace("plate-round", "rounded-none")} !px-0 bg-transparent text-[var(--text-primary)] ${quietStyles} ${className}`}
+          {...props}
+        />
+      ) : (
       <div
         className={`w-full plate-round p-px transition-colors [transition-duration:var(--duration-fast)] ${ringStyles}`}
       >

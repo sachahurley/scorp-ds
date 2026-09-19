@@ -23,3 +23,14 @@ describe("Input", () => {
     expect(screen.getByLabelText(/username/i)).toBeVisible();
   });
 });
+
+it("quiet variant renders the underline recipe without the plate wrapper", async () => {
+  const { render, screen } = await import("@testing-library/react");
+  const { Input } = await import("../components/Input");
+  render(<Input variant="quiet" aria-label="Passphrase" />);
+  const el = screen.getByRole("textbox", { name: /passphrase/i });
+  expect(el.className).toContain("border-b");
+  expect(el.className).toContain("bg-transparent");
+  expect(el.className).not.toContain("plate-round");
+  expect(el.parentElement?.className ?? "").not.toContain("plate-round");
+});
