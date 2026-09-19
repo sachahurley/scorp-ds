@@ -46,3 +46,29 @@ describe("Modal", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 });
+
+it("honors the width prop and restores focus on close", async () => {
+  const { render, screen, fireEvent, waitFor } = await import("@testing-library/react");
+  const { Modal } = await import("../components/Modal");
+  const { useState } = await import("react");
+  function Demo() {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <button onClick={() => setOpen(true)}>launch</button>
+        <Modal isOpen={open} onClose={() => setOpen(false)} title="Small" width={320}>
+          hi
+        </Modal>
+      </>
+    );
+  }
+  render(<Demo />);
+  const launch = screen.getByRole("button", { name: "launch" });
+  launch.focus();
+  fireEvent.click(launch);
+  const dialog = await screen.findByRole("dialog", { name: "Small" });
+  expect(dialog).toHaveStyle({ width: "320px" });
+  expect(dialog).toHaveFocus();
+  fireEvent.click(screen.getByRole("button", { name: "Close modal" }));
+  await waitFor(() => expect(launch).toHaveFocus());
+});
