@@ -76,3 +76,14 @@ export const Playground: Story = {
     disabled: false,
   },
 };
+
+/** Quiet variant: the underline recipe for inline fields (passwords, rename-in-place). */
+export const Quiet: Story = {
+  render: () => (
+    <div className="flex max-w-sm flex-col gap-6">
+      <Input variant="quiet" aria-label="Vault passphrase" placeholder="passphrase" />
+      <Input variant="quiet" label="Character name" defaultValue="Sacha" />
+      <Input variant="quiet" error aria-label="Wrong passphrase" defaultValue="hunter2" />
+    </div>
+  ),
+};
