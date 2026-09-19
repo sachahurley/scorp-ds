@@ -172,7 +172,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       link: `
         bg-transparent hover:underline
         text-[var(--button-link-text)] hover:text-[var(--button-link-text-hover)]
-        focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--focus-offset-color)]
+        focus-visible:underline
       `,
 
       outline: `

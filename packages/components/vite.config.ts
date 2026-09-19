@@ -8,6 +8,8 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   build: {
+    // Keep styles.css (built separately via build:css) from being wiped on JS rebuilds
+    emptyOutDir: false,
     lib: {
       entry: path.resolve(dirname, "src/index.ts"),
       name: "ScorpDSComponents",

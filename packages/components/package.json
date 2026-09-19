@@ -2,6 +2,20 @@
   "name": "@scorp-ds/components",
   "version": "0.1.0",
   "description": "Scorp DS React component library — TUI-inspired, token-based UI components",
+  "license": "MIT",
+  "author": "Sacha Hurley",
+  "homepage": "https://github.com/sachahurley/scorp-ds#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sachahurley/scorp-ds.git",
+    "directory": "packages/components"
+  },
+  "bugs": {
+    "url": "https://github.com/sachahurley/scorp-ds/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
@@ -29,7 +43,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@scorp-ds/tokens": "*",
+    "@scorp-ds/tokens": "^0.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next-themes": "^0.4.6",
