@@ -30,7 +30,7 @@
  * - plate.round-lg: panel silhouette
  */
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Button } from "./Button";
 import { TuiIcon } from "./TuiIcon";
 
@@ -45,6 +45,11 @@ export interface ModalProps {
    * "Cancel" + primary confirm); actions align to the right on a subtle band.
    */
   footerContent?: ReactNode;
+  /**
+   * Panel width (default 740). Numbers are px; strings pass through
+   * (e.g. "min(320px, 90vw)"). Small celebratory dialogs want ~320.
+   */
+  width?: number | string;
 }
 
 /**
@@ -55,7 +60,24 @@ export interface ModalProps {
  * @param title - Header title text
  * @param children - Modal content (will be scrollable if it exceeds max-height)
  */
-export function Modal({ isOpen, onClose, title, children, footerContent }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, footerContent, width = 740 }: ModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const prevFocusRef = useRef<HTMLElement | null>(null);
+
+  // FOCUS MANAGEMENT: on open, remember the invoker and move focus into the
+  // dialog (the panel itself, so screen readers announce the dialog name);
+  // on close, hand focus back to wherever the user was.
+  useEffect(() => {
+    if (isOpen) {
+      prevFocusRef.current = document.activeElement as HTMLElement | null;
+      panelRef.current?.focus();
+      return () => {
+        prevFocusRef.current?.focus();
+        prevFocusRef.current = null;
+      };
+    }
+  }, [isOpen]);
+
   
   // EFFECT: Handle ESC key press to close modal
   // This listens for keyboard events and closes the modal when ESC is pressed
@@ -117,7 +139,10 @@ export function Modal({ isOpen, onClose, title, children, footerContent }: Modal
           - Clicking inside the modal does NOT close it (stopPropagation)
         */}
         <div
-          className="w-[740px] max-h-[80vh] plate-round-lg p-px bg-[var(--surface-container-stroke)] flex"
+          ref={panelRef}
+          tabIndex={-1}
+          className="max-w-full max-h-[80vh] plate-round-lg p-px bg-[var(--surface-container-stroke)] flex focus:outline-none"
+          style={{ width: typeof width === "number" ? `${width}px` : width }}
           role="dialog"
           aria-modal="true"
           aria-label={title}
