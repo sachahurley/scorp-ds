@@ -215,9 +215,13 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
   // drop-shadow follows the stepped silhouette (values track
   // elevation.high's dark blur).
   if (isDocked) {
+    // Centered with flex, not a translate: the enter animation overrides
+    // transforms, so a -translate-x-1/2 center made the panel appear half
+    // a width to the right and snap into place. Flex centering keeps the
+    // entrance a pure fade, like the standard modal.
     return (
       <div
-        className="fixed left-1/2 -translate-x-1/2 animate-in fade-in"
+        className="fixed inset-x-0 flex justify-center pointer-events-none animate-in fade-in"
         style={{
           zIndex: "var(--z-index-modal)",
           bottom: "48px",
@@ -225,7 +229,7 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
           filter: "drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))",
         }}
       >
-        {panel}
+        <div className="pointer-events-auto flex max-w-full">{panel}</div>
       </div>
     );
   }
