@@ -8,7 +8,8 @@
  * - Fixed header with title and a secondary-plate close button (always visible)
  * - Optional fixed footer band for CTAs via `footerContent`
  * - Scrollable content area (max-height: 66vh)
- * - Fade in/out animations (200ms duration)
+ * - Fades in on open and out on close (duration.normal); stays mounted
+ *   through the exit animation and unmounts on animationend
  * - Backdrop scrim (semi-transparent overlay)
  * - `docked` variant: on wide viewports (>=960px) the panel skips the scrim
  *   and pins bottom-center as a NON-modal dialog (no aria-modal, no scroll
@@ -77,6 +78,14 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
   const panelRef = useRef<HTMLDivElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
 
+  // Stay mounted while the exit fade plays; unmount on animationend so the
+  // timing always matches the CSS duration token (same pattern as BottomSheet).
+  const [visible, setVisible] = useState(isOpen);
+  useEffect(() => {
+    if (isOpen) setVisible(true);
+  }, [isOpen]);
+  const closing = visible && !isOpen;
+
   // Docked applies on wide viewports only; below the breakpoint the docked
   // request degrades to the standard centered modal.
   const [wideViewport, setWideViewport] = useState(
@@ -140,8 +149,8 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
     };
   }, [isOpen, isDocked]);
 
-  // Don't render anything if modal is closed
-  if (!isOpen) return null;
+  // Fully unmounted only after the exit fade has finished
+  if (!visible) return null;
 
   // MODAL CONTAINER — plate ring recipe
   // - Outer layer: stroke color clipped to the large plate (the ring)
@@ -164,11 +173,11 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
             - Always visible at top (does not scroll)
             - Contains title on left, close button on right
             - Flexbox layout for positioning
-            - 24px padding matches card padding from Colors page
+            - Padding: 24px horizontal (px-6), 20px vertical (py-5)
             - Border bottom separates header from content
           */}
           {/* Header — plain title (box-drawing decoration retired with the TUI tier) */}
-          <div className="flex items-center justify-between px-8 py-6 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]">
+          <div className="flex items-center justify-between px-6 py-5 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]">
             <h2 className="text-base font-mono text-[var(--text-primary)] font-medium flex-1 min-w-0 truncate">
               {title}
             </h2>
@@ -190,18 +199,18 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
             SCROLLABLE CONTENT AREA
             - Takes remaining height after header
             - Scrolls vertically when content exceeds available space
-            - 24px padding matches card padding
+            - Padding: 24px horizontal (px-6), 20px vertical (py-5), matching the header
             - overflow-y-auto adds scrollbar only when needed
           */}
           {/* tabIndex allows keyboard focus into the scroll region (axe scrollable-region-focusable / Safari). */}
-          <div className="overflow-y-auto px-8 py-6" tabIndex={0}>
+          <div className="overflow-y-auto px-6 py-5" tabIndex={0}>
             {children}
           </div>
 
           {/* Optional fixed footer — CTA band, actions right-aligned. Same
               card fill as the header (no tint), separated by the hairline. */}
           {footerContent && (
-            <div className="flex items-center justify-end gap-3 px-8 py-5 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)]">
+            <div className="flex items-center justify-end gap-3 px-6 py-5 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)]">
               {footerContent}
             </div>
           )}
@@ -214,15 +223,23 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
   // the boxShadow tokens: the plate clip-path slices box shadows off, and
   // drop-shadow follows the stepped silhouette (values track
   // elevation.high's dark blur).
+  // Centered with inset-x-0 + mx-auto (NOT a translate): the enter/exit
+  // animations interpolate the transform, so a -translate-x-1/2 centering
+  // would make the panel slide in from the side instead of fading in place.
   if (isDocked) {
     return (
       <div
-        className="fixed left-1/2 -translate-x-1/2 animate-in fade-in"
+        className={`fixed inset-x-0 mx-auto w-fit max-w-full ${
+          closing ? "animate-out fade-out fill-mode-forwards" : "animate-in fade-in"
+        }`}
         style={{
           zIndex: "var(--z-index-modal)",
           bottom: "48px",
           animationDuration: "var(--duration-normal)",
           filter: "drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))",
+        }}
+        onAnimationEnd={() => {
+          if (closing) setVisible(false);
         }}
       >
         {panel}
@@ -241,9 +258,14 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
         - Uses z-index token for modal layer (1040) to ensure it covers sidebar
       */}
       <div
-        className="fixed inset-0 flex items-center justify-center p-5 animate-in fade-in bg-[var(--surface-overlay)]"
+        className={`fixed inset-0 flex items-center justify-center p-5 bg-[var(--surface-overlay)] ${
+          closing ? "animate-out fade-out fill-mode-forwards" : "animate-in fade-in"
+        }`}
         style={{ zIndex: "var(--z-index-modal)", animationDuration: "var(--duration-normal)" }}
         onClick={onClose}
+        onAnimationEnd={() => {
+          if (closing) setVisible(false);
+        }}
       >
         {panel}
       </div>
