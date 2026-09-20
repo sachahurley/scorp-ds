@@ -25,6 +25,7 @@ export const TUI_ICON_GLYPHS = {
   CheckCircle: "\u2713", // ✓ check mark
   ChevronDown: "\u25BC", // ▼ down triangle
   ChevronRight: "\u25B6", // ▶ right triangle
+  ChevronUp: "\u25B2", // ▲ up triangle
   Copy: "\u2398", // ⎘ copy
   Download: "\u2913", // ⤓ downwards arrow to bar
   Edit: "\u270E", // ✎ pencil
@@ -40,13 +41,19 @@ export const TUI_ICON_GLYPHS = {
   Moon: "\u263E", // ☾ last quarter moon
   MoreVertical: "\u22EE", // ⋮ vertical ellipsis
   Music2: "\u266B", // ♫ beamed eighth notes
+  Pause: "\u23F8", // pause bars (media pause)
+  Play: "\u25B6", // right triangle (media play)
   Plus: "+", // + plus sign
+  Repeat: "\u21BB", // clockwise open circle arrow (repeat)
   Save: "\u2913", // ⤓ downwards arrow to bar
   Search: "\u2315", // ⌕ telephone recorder / search
   Send: "\u27A4", // ➤ arrow
   Settings: "\u2699", // ⚙ gear
   Share2: "\u2197", // ↗ arrow upper right
   Shield: "\u2616", // ☖ shield
+  Shuffle: "\u21C4", // rightwards over leftwards arrows (shuffle)
+  SkipBack: "\u23EE", // previous track (bar + left triangle)
+  SkipForward: "\u23ED", // next track (right triangle + bar)
   Star: "\u2605", // ★ black star
   Sun: "\u2600", // ☀ sun
   Tag: "\u2302", // ⌂ house / label
