@@ -112,7 +112,8 @@ function AccountSettingsDemo() {
               checked={publicProfile}
               onCheckedChange={setPublicProfile}
               size="medium"
-              label="Toggle public profile"
+              label="Public profile"
+              hideLabel
             />
           </div>
 
