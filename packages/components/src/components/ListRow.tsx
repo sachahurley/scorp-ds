@@ -10,7 +10,7 @@
  * (use Table). Rows are for scannable lists and navigation.
  *
  * TOKENS USED:
- * - plate.round (silhouette), surface.muted (hover fill)
+ * - plate.round (silhouette), surface.muted (hover fill; `selected` holds it)
  * - accent (interactive title), text.primary; meta/description use the
  *   secondary scale in AA-passing theme pairs (700/600 and 800/500)
  * - duration.fast (hover), focus inset ring (clip swallows outside outlines)
@@ -34,6 +34,14 @@ type CommonProps = {
   thumb?: ReactNode;
   /** Which side the thumbnail sits on (default "start"). */
   thumbPosition?: "start" | "end";
+  /**
+   * Marks the row as the current selection (the active nav route, the
+   * chosen item): the row holds the hover state — surface.muted fill,
+   * accent title — per the SideNavigation pattern (fill + color, never
+   * color alone, never weight). Nav consumers should also pass
+   * `aria-current="page"` so the state is announced.
+   */
+  selected?: boolean;
   className?: string;
 };
 
@@ -62,7 +70,7 @@ export type ListRowProps = CommonProps &
  * @param titleSuffix - Trailing glyph beside the title (external-link arrows etc.)
  */
 export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
-  { meta, title, description, titleSuffix, thumb, thumbPosition = "start", className = "", ...rest },
+  { meta, title, description, titleSuffix, thumb, thumbPosition = "start", selected = false, className = "", ...rest },
   ref
 ) {
   const asComponent = "as" in rest && rest.as ? (rest.as as ElementType) : null;
@@ -74,6 +82,7 @@ export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
     transition-colors [transition-duration:var(--duration-fast)]
     font-mono
     ${interactive !== "div" ? "cursor-pointer hover:bg-[var(--surface-muted)] focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]" : ""}
+    ${selected ? "bg-[var(--surface-muted)]" : ""}
     ${className}
   `;
 
