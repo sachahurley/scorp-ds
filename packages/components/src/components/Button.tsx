@@ -214,6 +214,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         bg-[var(--button-icon-background)] hover:bg-[var(--button-icon-background-hover)] active:brightness-95
         text-[var(--button-icon-text)]
         disabled:bg-[var(--button-icon-disabled-background)] disabled:text-[var(--button-icon-disabled-text)]
+        disabled:opacity-100
       `,
     };
 

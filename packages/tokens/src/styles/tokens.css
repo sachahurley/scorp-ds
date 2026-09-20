@@ -355,7 +355,7 @@
   --button-icon-background-hover: #F7F5F2;
   --button-icon-text: #2B2718;
   --button-icon-disabled-background: #FDFCFB;
-  --button-icon-disabled-text: #F0EBE4;
+  --button-icon-disabled-text: #968A75;
 
   /* Light theme elevation tokens -- TUI: flat, no shadows, borders only */
   --elevation-0-shadow: none;
@@ -429,7 +429,7 @@
 
   /* Dark theme — button fills (portfolio plate palette: gold CTA, quiet plate default) */
   --button-primary-background: #E0A26A;
-  --button-primary-background-hover: #FBBF24;
+  --button-primary-background-hover: #D97706;
   --button-primary-text: #1A150F;
   --button-secondary-background: #221E13;
   --button-secondary-background-hover: #E0A26A;
@@ -451,7 +451,7 @@
   --button-icon-background-hover: #2B2718;
   --button-icon-text: #E0A26A;
   --button-icon-disabled-background: #1A150F;
-  --button-icon-disabled-text: #695F4D;
+  --button-icon-disabled-text: #968A75;
 
   /* Dark theme elevation tokens -- TUI: flat, no shadows, borders only */
   --elevation-0-shadow: none;

@@ -111,10 +111,13 @@ export const AllVariants: Story = {
 export const DisabledState: Story = {
   name: 'Disabled',
   render: () => (
-    <div className="flex gap-3">
+    <div className="flex items-center gap-3">
       <Button variant="primary" disabled>Primary</Button>
       <Button variant="secondary" disabled>Secondary</Button>
       <Button variant="outline" disabled>Outline</Button>
+      <Button variant="icon" size="medium" disabled aria-label="Disabled icon button">
+        <TuiIcon name="Bell" />
+      </Button>
     </div>
   ),
 };
@@ -142,7 +145,10 @@ export const Playground: Story = {
 /**
  * Icon buttons: every Button variant works icon-only. A lone icon element as
  * children makes the button a square plate at the matching size; always pass
- * `aria-label` so the control has an accessible name.
+ * `aria-label` so the control has an accessible name. The last column shows
+ * the disabled state (the icon variant renders its dedicated
+ * `--button-icon-disabled-*` tokens at full opacity; other variants dim to
+ * 50% opacity).
  */
 export const IconButtons: Story = {
   name: 'Icon buttons (all variants)',
@@ -165,6 +171,14 @@ export const IconButtons: Story = {
                 <TuiIcon name={(glyphs[variant] ?? 'Bell') as TuiIconName} />
               </Button>
             ))}
+            <Button
+              variant={variant}
+              size="medium"
+              disabled
+              aria-label={`${glyphs[variant] ?? 'Action'} (${variant}, disabled)`}
+            >
+              <TuiIcon name={(glyphs[variant] ?? 'Bell') as TuiIconName} />
+            </Button>
           </div>
         ))}
       </div>

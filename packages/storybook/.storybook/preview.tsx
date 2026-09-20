@@ -15,7 +15,8 @@ declare global {
 function resolveTheme(globalsTheme: unknown): 'light' | 'dark' {
   const w = typeof window !== 'undefined' ? window.__STORYBOOK_TEST_THEME__ : undefined;
   if (w === 'dark' || w === 'light') return w;
-  return globalsTheme === 'dark' ? 'dark' : 'light';
+  // Dark is the default theme (DS five laws); light is the explicit opt-in.
+  return globalsTheme === 'light' ? 'light' : 'dark';
 }
 
 /**
@@ -24,7 +25,7 @@ function resolveTheme(globalsTheme: unknown): 'light' | 'dark' {
  */
 const withThemeToolbarAndLandmark: Decorator = (Story, context) => {
   const globalTheme = context.globals.theme;
-  const toolbarTheme = globalTheme === 'dark' ? 'dark' : 'light';
+  const toolbarTheme = globalTheme === 'light' ? 'light' : 'dark';
   const fromWindow =
     typeof window !== 'undefined' &&
     (window.__STORYBOOK_TEST_THEME__ === 'dark' || window.__STORYBOOK_TEST_THEME__ === 'light')
@@ -131,7 +132,7 @@ export const globalTypes = {
   theme: {
     name: 'Theme',
     description: 'Light or dark preview (semantic tokens + Tailwind dark:)',
-    defaultValue: 'light',
+    defaultValue: 'dark',
     toolbar: {
       icon: 'mirror',
       items: [
