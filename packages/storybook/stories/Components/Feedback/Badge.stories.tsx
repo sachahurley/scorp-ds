@@ -65,3 +65,11 @@ export const AllVariants: Story = {
 export const Bone: Story = {
   args: { variant: 'bone', size: 'small', children: 'equipped' },
 };
+
+/**
+ * Caps: the uppercase eyebrow voice (uppercase + .08em tracking) for
+ * state chips, baked in so consumers stop pasting className overrides.
+ */
+export const Caps: Story = {
+  args: { variant: 'primary', size: 'small', caps: true, children: '▴ level up' },
+};
