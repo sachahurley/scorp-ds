@@ -43,6 +43,21 @@ export const Default: Story = {
 };
 
 /**
+ * Selected: the row holds the hover state (surface.muted fill + accent
+ * title) — the SideNavigation pattern's "fill + color, never color alone,
+ * never weight". Nav consumers pair it with aria-current="page".
+ */
+export const Selected: Story = {
+  render: () => (
+    <nav aria-label="Demo" className="flex max-w-xl flex-col gap-1">
+      <ListRow href="#" title="Home" />
+      <ListRow href="#" title="Notes" selected aria-current="page" />
+      <ListRow href="#" title="About" />
+    </nav>
+  ),
+};
+
+/**
  * Thumbnail slot: a fixed image beside the shrinking text column (long
  * titles ellipsize instead of pushing the image). thumbPosition="end"
  * mirrors it for the mobile right-thumb layout.
