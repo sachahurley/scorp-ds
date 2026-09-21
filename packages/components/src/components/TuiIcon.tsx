@@ -29,6 +29,7 @@ export const TUI_ICON_GLYPHS = {
   Copy: "\u2398", // ⎘ copy
   Download: "\u2913", // ⤓ downwards arrow to bar
   Edit: "\u270E", // ✎ pencil
+  ExternalLink: "\u2197", // ↗ arrow upper right (leaves this context)
   Eye: "\u25C9", // ◉ fisheye
   EyeOff: "\u25CC", // ◌ dotted circle
   FileText: "\u2637", // ☷ file
