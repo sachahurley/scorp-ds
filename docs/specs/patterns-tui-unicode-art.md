@@ -15,7 +15,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last synced | 2026-04-05 |
-| Notion Page | `` |
+| Notion Page | https://www.notion.so/3e29a6335da1815197bfd74cde6df7a8 |
 
 ---
 
