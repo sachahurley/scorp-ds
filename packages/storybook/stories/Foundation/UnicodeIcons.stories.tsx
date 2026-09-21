@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TUI_ICON_GLYPHS } from '@scorp-ds/components';
+import { TUI_ICON_GLYPHS, TuiIcon } from '@scorp-ds/components';
 
 /** Human-readable Unicode scalar values for catalog tables (handles supplementary planes). */
 function formatCodePoints(glyph: string): string {
@@ -62,13 +62,13 @@ function UnicodeIconsPage() {
         </p>
 
         <div className="mb-6 flex flex-wrap gap-3 border border-secondary-300 p-4 dark:border-secondary-700">
-          {ICON_ROWS.map(({ name, glyph }) => (
+          {ICON_ROWS.map(({ name }) => (
             <span
               key={name}
               className="inline-flex min-w-[3rem] flex-col items-center gap-1 border border-secondary-200 px-2 py-2 dark:border-secondary-800"
               title={name}
             >
-              <span className="text-2xl leading-none text-primary-700 dark:text-primary-400">{glyph}</span>
+              <TuiIcon name={name} size="6" className="text-primary-700 dark:text-primary-400" />
               <span className="max-w-[6rem] truncate text-[10px] text-secondary-800 dark:text-secondary-400">{name}</span>
             </span>
           ))}
@@ -85,13 +85,13 @@ function UnicodeIconsPage() {
               </tr>
             </thead>
             <tbody>
-              {ICON_ROWS.map(({ name, glyph, codePoints }) => (
+              {ICON_ROWS.map(({ name, codePoints }) => (
                 <tr
                   key={name}
                   className="border-b border-secondary-200 odd:bg-[var(--surface-default)] even:bg-secondary-50 dark:border-secondary-800 dark:even:bg-secondary-950"
                 >
                   <td className="p-2 align-middle">
-                    <span className="inline-flex text-xl leading-none text-primary-700 dark:text-primary-400">{glyph}</span>
+                    <TuiIcon name={name} size="5" className="text-primary-700 dark:text-primary-400" />
                   </td>
                   <td className="p-2 align-middle font-mono text-secondary-900 dark:text-secondary-100">{name}</td>
                   <td className="p-2 align-middle font-mono text-secondary-800 dark:text-secondary-300">{codePoints}</td>

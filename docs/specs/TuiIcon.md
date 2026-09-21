@@ -160,6 +160,8 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | `X` glyph (U+2717 ✗) is not in Fragment Mono; it fell back to a per-OS system font and rendered as a slanted hand-drawn tick in close buttons. | `X` is now drawn as inline SVG (square-cap strokes, currentColor) via `DRAWN_ICONS`; `TUI_ICON_GLYPHS.X` keeps the in-font `×` as a text-only fallback. | Resolved |
+| 2026-09-21 | 45 of 49 glyphs are not in Fragment Mono and render in fallback system fonts (Menlo, Apple Symbols, STIX Two Math on macOS; different fonts elsewhere), so icon appearance varies by OS. | Open: awaiting direction (redraw as SVG, self-host a symbol font, or accept). | Open |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -171,6 +173,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| v1.1 | 2026-09-21 | fix | `X` renders as a drawn SVG close mark instead of the fallback-font ✗ glyph. |
 
 <!-- AUTO-END:changelog -->
 

@@ -182,7 +182,7 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
               {title}
             </h2>
 
-            {/* Close control: icon-only secondary plate button (square, gold ✗ glyph) */}
+            {/* Close control: icon-only secondary plate button (square, gold drawn X) */}
             <Button
               variant="secondary"
               size="small"
