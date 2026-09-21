@@ -11,12 +11,13 @@
  * 
  * SHAPE: track and knob are both clipped to the small plate (--plate-round).
  * Focus is an inset ring (the clip swallows outside outlines) and the knob
- * hops on steps(3) — plate motion, not a glide.
+ * glides on the standard ease at duration-normal (200ms) — smooth, inside
+ * the 150-200ms interactive-motion ceiling.
  *
  * Features:
  * - Accessible (ARIA attributes, keyboard support)
  * - Focus states matching design system
- * - Pixel-grid knob motion
+ * - Smooth knob glide (duration-normal)
  * - Optional label
  * - Optional icon inside knob (for special use cases like theme toggle)
  */
@@ -123,7 +124,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             shrink-0
             ${currentSizeStyles.track}
             plate-round
-            transition-colors [transition-duration:var(--duration-slow)]
+            transition-colors [transition-duration:var(--duration-normal)]
             focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             ${checked
@@ -141,7 +142,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
               plate-round
               bg-[var(--field-background)]
               shadow-none
-              transform transition-transform [transition-duration:var(--duration-slow)] [transition-timing-function:steps(3)]
+              transform transition-transform [transition-duration:var(--duration-normal)]
             `}
             style={{
               transform: currentSizeStyles.knobTranslate,
