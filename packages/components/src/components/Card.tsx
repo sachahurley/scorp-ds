@@ -96,7 +96,7 @@ export function Card({
 
       {/* Footer Section */}
       {footerContent && (
-        <div className="p-4 lg:p-6 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)] overflow-hidden">
+        <div className="p-4 lg:p-6 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] overflow-hidden">
           {footerContent}
         </div>
       )}
