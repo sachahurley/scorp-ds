@@ -1,7 +1,7 @@
 # Pattern: TUI Unicode & ASCII art
 
 > Pattern spec — string utilities and conventions, not a single React component.  
-> Package: `@scorp-ds/tui-art` · Story: `Lab/Tui art playground` · Icons: `Foundation/Unicode icons` + `TuiIcon`.
+> Package: `@scorp-ds/tui-art` · Story: `Lab/Tui art playground` · Icons: `Foundation/1-bit icons` + `TuiIcon`.
 
 ## Status
 
@@ -73,7 +73,7 @@ Optional: `npm run tui-art -- frame @path/to/file.txt` reads lines from a file (
 
 ## Storybook
 
-- **Foundation / Unicode icons** — full `TuiIcon` registry + static frame sample.
+- **Foundation / 1-bit icons** — full `TuiIcon` registry + static frame sample.
 - **Lab / Tui art playground** — live `frameBox` + `formatTableRow` preview.
 
 ---
@@ -90,5 +90,5 @@ Optional: `npm run tui-art -- frame @path/to/file.txt` reads lines from a file (
 
 - `packages/tui-art/src/index.ts`
 - `packages/components/src/components/TuiIcon.tsx`
-- `packages/storybook/stories/Foundation/UnicodeIcons.stories.tsx`
+- `packages/storybook/stories/Foundation/OneBitIcons.stories.tsx`
 - `packages/storybook/stories/Lab/TuiArtPlayground.stories.tsx`

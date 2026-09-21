@@ -62,7 +62,7 @@ function TuiArtPlaygroundPage() {
         This page calls <code className="text-primary-700 dark:text-primary-400">@scorp-ds/tui-art</code> in the
         browser. Output is plain text in a <code className="text-primary-700 dark:text-primary-400">pre</code> — use
         the same strings in logs, CLI tools, or decorative panels. Related:{' '}
-        <strong>Foundation / Unicode icons</strong> for <code className="text-primary-700 dark:text-primary-400">TuiIcon</code> names.
+        <strong>Foundation / 1-bit icons</strong> for <code className="text-primary-700 dark:text-primary-400">TuiIcon</code> names.
       </p>
 
       <div className="mb-10 grid max-w-4xl gap-6 lg:grid-cols-2">
