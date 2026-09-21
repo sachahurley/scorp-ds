@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Card } from '@scorp-ds/components';
+import { Avatar, Button, Card } from '@scorp-ds/components';
 
 const meta: Meta<typeof Card> = {
   title: 'Components/Display/Card',
@@ -44,4 +44,70 @@ export const WithFooter: Story = {
       </div>
     ),
   },
+};
+
+/**
+ * `headerContent` replaces the title/subtitle block with arbitrary content.
+ * The canonical use is an identity header: Avatar beside a name and a quiet
+ * detail line. Upstreamed from the showcase's profile card (2026-09-20).
+ */
+export const WithHeaderContent: Story = {
+  args: {
+    className: 'w-96',
+    headerContent: (
+      <div className="flex items-center gap-4">
+        <Avatar initials="AJ" size="medium" />
+        <div>
+          <h3 className="font-mono text-base font-bold text-[var(--text-primary)]">
+            Alex Johnson
+          </h3>
+          <p className="font-mono text-sm text-secondary-800 dark:text-secondary-300">
+            alex.johnson@example.com
+          </p>
+        </div>
+      </div>
+    ),
+    children: (
+      <p className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
+        Body copy sits under the identity header; fields or activity go here.
+      </p>
+    ),
+    footerContent: (
+      <div className="flex gap-2">
+        <Button variant="outline" size="small">
+          Reset
+        </Button>
+        <Button variant="primary" size="small" className="flex-1">
+          Save changes
+        </Button>
+      </div>
+    ),
+  },
+};
+
+/**
+ * A bare Card (no header, no footer) as a flex column: the quote fills the
+ * available height and the attribution locks to the bottom behind a hairline.
+ * Upstreamed from the showcase's testimonial cards (2026-09-20).
+ */
+export const Testimonial: Story = {
+  render: () => (
+    <Card className="flex h-72 w-96 flex-col">
+      <figure className="flex min-h-0 flex-1 flex-col">
+        <blockquote className="flex-1 font-mono text-base leading-relaxed text-[var(--text-primary)]">
+          The token-based approach means we can iterate quickly while keeping
+          every surface consistent. Exactly what we needed.
+        </blockquote>
+        <figcaption className="mt-6 flex items-center gap-4 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] pt-4">
+          <Avatar initials="MC" size="medium" />
+          <div className="min-w-0">
+            <p className="font-mono text-sm font-bold text-[var(--text-primary)]">Michael Chen</p>
+            <p className="font-mono text-xs text-secondary-700 dark:text-secondary-400">
+              Frontend Lead · Tech Startup Inc.
+            </p>
+          </div>
+        </figcaption>
+      </figure>
+    </Card>
+  ),
 };
