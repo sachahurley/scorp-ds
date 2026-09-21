@@ -8,6 +8,11 @@ import { cn } from "../lib/utils";
  * terminal aesthetic. Each icon name maps to a single Unicode glyph
  * rendered in a monospace font at the same sizes Lucide used
  * (w-4 h-4, w-5 h-5, w-6 h-6).
+ *
+ * Exception: `X` (close/dismiss) is drawn, not typed. Fragment Mono has no
+ * ballot or dingbat X, so the glyph fell back to a per-OS system font and
+ * rendered as a slanted hand-drawn tick; the in-font `×` is too small to
+ * read as a control. See {@link DRAWN_ICONS}.
  */
 
 /**
@@ -63,11 +68,24 @@ export const TUI_ICON_GLYPHS = {
   User: "@", // @ at-sign (person)
   Volume2: "\u266B", // ♫ music note
   VolumeX: "\u2716", // ✖ heavy X
-  X: "\u2717", // ✗ ballot X
+  X: "\u00D7", // × multiplication sign: text fallback only; TuiIcon draws X (see DRAWN_ICONS)
 } as const satisfies Record<string, string>;
 
 /** Keys of {@link TUI_ICON_GLYPHS} — use for typed catalogs or selects. */
 export type TuiIconName = keyof typeof TUI_ICON_GLYPHS;
+
+/**
+ * Icons TuiIcon renders as inline SVG instead of their glyph. Strokes use
+ * currentColor and square caps (the plate language: no round ends), inset
+ * so the drawn mark matches the optical size of neighboring glyphs.
+ */
+const DRAWN_ICONS: Partial<Record<TuiIconName, React.ReactNode>> = {
+  X: (
+    <svg viewBox="0 0 16 16" className="h-full w-full" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square">
+      <path d="M3 3L13 13M13 3L3 13" />
+    </svg>
+  ),
+};
 
 /* ─── Size presets matching Lucide conventions ───
  * Font sizes match or exceed the container so Unicode glyphs
@@ -102,6 +120,7 @@ export const TuiIcon: React.FC<TuiIconProps> = ({
   size = "4",
   className,
 }) => {
+  const drawn = DRAWN_ICONS[name as TuiIconName];
   const glyph =
     name in TUI_ICON_GLYPHS
       ? TUI_ICON_GLYPHS[name as TuiIconName]
@@ -117,7 +136,7 @@ export const TuiIcon: React.FC<TuiIconProps> = ({
       )}
       aria-hidden="true"
     >
-      {glyph}
+      {drawn ?? glyph}
     </span>
   );
 };
