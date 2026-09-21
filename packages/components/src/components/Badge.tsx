@@ -25,6 +25,9 @@
  * - Icon support (iconLeft prop)
  * - caps: uppercase eyebrow voice (uppercase + .08em tracking) for state
  *   chips ("EQUIPPED", "LEVEL UP") without per-site className overrides
+ * - dashed: the not-yet-real voice — transparent fill with a dashed
+ *   hairline for placeholders, empty slots, and free tiers ("FREE").
+ *   Composes with any variant; the dash rides the variant's text color.
  * - Full light/dark theme support
  */
 
@@ -35,6 +38,13 @@ export interface BadgeProps {
   size?: "small" | "medium" | "large";
   /** Uppercase eyebrow voice: uppercase text with .08em tracking. */
   caps?: boolean;
+  /**
+   * Not-yet-real voice: transparent fill with a 1px dashed border in the
+   * variant's text color, for placeholders, empty slots, and free tiers.
+   * Dashed chips drop the plate clip for sharp corners (the notched clip
+   * would slice the dashes).
+   */
+  dashed?: boolean;
   children: ReactNode;
   iconLeft?: ReactNode;
   onClose?: () => void;
@@ -55,6 +65,7 @@ export function Badge({
   variant = "default",
   size = "medium",
   caps = false,
+  dashed = false,
   children,
   iconLeft,
   onClose,
@@ -106,6 +117,21 @@ export function Badge({
     `,
   };
 
+  // DASHED VARIANTS — no fill, so only the text scales remain (they meet AA
+  // on page surfaces just as they do on the tinted fills). The border rides
+  // border-current so each variant's dash matches its text. Bone swaps to the
+  // sepia-500 tint itself: the theme-stable "empty slot" counterpart to the
+  // filled bone chip.
+  const dashedVariantStyles = {
+    default: "text-secondary-800 dark:text-secondary-200",
+    primary: "text-primary-800 dark:text-primary-300",
+    success: "text-success-800 dark:text-success-300",
+    warning: "text-warning-800 dark:text-warning-300",
+    error: "text-error-800 dark:text-error-300",
+    info: "text-info-800 dark:text-info-300",
+    bone: "text-secondary-500",
+  };
+
   // ICON SIZES - Icons scale with badge size
   const iconSizes = {
     small: "w-3 h-3",    // 12px
@@ -118,9 +144,12 @@ export function Badge({
       className={`
         inline-flex items-center gap-1.5
         font-mono font-medium
-        plate-round
+        ${
+          dashed
+            ? `rounded-none border border-dashed border-current bg-transparent ${dashedVariantStyles[variant]}`
+            : `plate-round ${variantStyles[variant]}`
+        }
         ${sizeStyles[size]}
-        ${variantStyles[variant]}
         ${caps ? "uppercase [letter-spacing:.08em]" : ""}
         ${className}
       `}
