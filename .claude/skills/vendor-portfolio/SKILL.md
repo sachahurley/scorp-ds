@@ -1,6 +1,6 @@
 ---
 name: vendor-portfolio
-description: Run after ANY scorp-ds merge to main — pulls the local checkout, re-vendors the DS into BOTH consumers (the portfolio and the Scorpion UI v2 showcase), and ships their vendor PRs so the live sites pick up the change. Both sites only read committed vendored copies, so skipping this leaves them on the old DS.
+description: Run after ANY scorp-ds merge to main — pulls the local checkout, re-vendors the DS into BOTH consumers (the portfolio and the Scorpion Design System showcase), and ships their vendor PRs so the live sites pick up the change. Both sites only read committed vendored copies, so skipping this leaves them on the old DS.
 ---
 
 # Vendor consumers — ship a merged DS change to the live sites
@@ -9,18 +9,19 @@ description: Run after ANY scorp-ds merge to main — pulls the local checkout, 
 > immediately, unless the user explicitly says the change should not ship yet.
 > Sacha will not remember to ask; the agent owns this follow-through.
 > BOTH consumers get re-vendored in the same pass (decided 2026-09-20 after
-> the showcase silently drifted): the portfolio (Part A) and the Scorpion UI
-> v2 showcase (Part B).
+> the showcase silently drifted): the portfolio (Part A) and the Scorpion
+> Design System showcase (Part B).
 
 The portfolio (`~/Projects/portfolio`, deployed to Vercel from its `main`)
 carries a committed copy of scorp-ds under `vendor/`. The showcase
-(`~/Desktop/scorpion-ui-v2`, deployed to GitHub Pages at
-`sachahurley.github.io/scorpion-ui-v2`) vendors component sources +
+(repo `scorpion-design-system`, local checkout `~/Desktop/scorpion-ui-v2`,
+deployed to GitHub Pages at
+`sachahurley.github.io/scorpion-design-system`) vendors component sources +
 tokens via its own `vendor:ds` script. Changes flow one way:
 
 ```
 scorp-ds main (GitHub) → ~/Projects/scorp-ds (local main) ─┬→ portfolio vendor/ → portfolio main → Vercel
-                                                           └→ scorpion-ui-v2 src/components/ui + vendor/ → main → gh-pages
+                                                           └→ scorpion-design-system src/components/ui + vendor/ → main → gh-pages
 ```
 
 ## Part A — Portfolio
@@ -58,7 +59,7 @@ scorp-ds main (GitHub) → ~/Projects/scorp-ds (local main) ─┬→ portfolio 
 
 5. **Report** the deployed DS version (scorp-ds commit hash) back to Sacha.
 
-## Part B — Scorpion UI v2 showcase
+## Part B — Scorpion Design System showcase
 
 1. **Branch off main** (repo lives at `~/Desktop/scorpion-ui-v2`; its
    `vendor:ds` reads scorp-ds `origin/main` via git from `$SCORP_DS_DIR`,
