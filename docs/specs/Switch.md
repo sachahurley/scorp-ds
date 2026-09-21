@@ -34,12 +34,14 @@ SIZES: Proportional to button/input height system
 
 SHAPE: track and knob are both clipped to the small plate (--plate-round).
 Focus is an inset ring (the clip swallows outside outlines) and the knob
-hops on steps(3) — plate motion, not a glide.
+glides on the standard ease at duration-normal (200ms): smooth, inside the
+150-200ms interactive-motion ceiling. (Supersedes the steps(3) pixel-hop,
+Sacha's call 2026-09-21: the hop read as jitter on click.)
 
 Features:
 - Accessible (ARIA attributes, keyboard support)
 - Focus states matching design system
-- Pixel-grid knob motion
+- Smooth knob glide (duration-normal)
 - Optional label
 - Optional icon inside knob (for special use cases like theme toggle)
 
