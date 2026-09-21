@@ -211,7 +211,7 @@ Global stacking scale (`global.zIndex`). Theme-independent — same numbers in l
 
 | Token | CSS variable | Value | Use For |
 |-------|--------------|-------|---------|
-| `font.family.mono` | `--font-family-mono` | Fragment Mono (stack) | All text — Scorp DS is monospace everywhere |
+| `font.family.mono` | `--font-family-mono` | `'Fragment Mono', 'Scorp Symbols', ui-monospace, monospace` | All text — Scorp DS is monospace everywhere. Scorp Symbols (inlined in tokens.css) paints only glyphs Fragment Mono lacks, width-matched to its cell; see `packages/tokens/src/fonts/README.md` |
 | `font.size.3xs` | `--font-size-3xs` | 10px | Dense game chrome; use sparingly |
 | `font.size.2xs` | `--font-size-2xs` | 11px | Tooltips, meta captions |
 | `font.size.xs` | `--font-size-xs` | 12px | Labels, captions |

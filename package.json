@@ -2,7 +2,7 @@
   "name": "scorp-ds",
   "private": true,
   "version": "0.0.1",
-  "description": "Scorp Design System — TUI-inspired React/TypeScript component library",
+  "description": "Scorp Design System \u2014 TUI-inspired React/TypeScript component library",
   "workspaces": [
     "packages/*"
   ],
@@ -23,7 +23,8 @@
     "type-check": "npm run type-check --workspaces --if-present",
     "tui-art": "tsx packages/tui-art/src/cli.ts",
     "lint": "eslint packages/*/src packages/site/src packages/storybook/stories packages/storybook/presets packages/storybook/.storybook",
-    "test": "vitest run --config vitest.config.mts"
+    "test": "vitest run --config vitest.config.mts",
+    "audit:glyphs": "node scripts/audit-glyphs.mjs"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",

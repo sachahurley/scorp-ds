@@ -11,9 +11,9 @@
 | Category | `Display` |
 | File | `packages/components/src/components/TuiIcon.tsx` |
 | Story | `Components/Display/TuiIcon` |
-| Version | `v1` |
+| Version | `v2` |
 | Status | `draft` |
-| Last synced | 2026-09-19 |
+| Last synced | 2026-09-21 |
 | Notion Page | https://www.notion.so/3e29a6335da1819c8006f82421bc0acc |
 
 ---
@@ -22,7 +22,11 @@
 
 <!-- HUMAN-SECTION:intent -- This section is preserved across auto-updates -->
 
-[TODO: describe intent — preserved on /update-spec runs]
+Every icon renders identically on every OS. Three layers, decided by Sacha on 2026-09-21:
+
+1. **Drawn icons.** `TuiIcon` renders each name from `TUI_ICON_DRAWINGS` as inline SVG on a 16px grid: 2px strokes, square caps, miter joins, filled only where filled is the convention (media controls, star). The map is typed `Record<TuiIconName, …>`, so a name without a drawing is a compile error.
+2. **Scorp Symbols.** `TUI_ICON_GLYPHS` keeps each icon's Unicode text form for plain-text contexts (tui-art frames, terminal strings). Those glyphs render through the Scorp Symbols face, second in `--font-family-mono`: a 5.6 KB subset inlined in `tokens.css`, rescaled onto Fragment Mono's 0.618em cell so box drawing joins and columns align. Built by `packages/tokens/scripts/build-scorp-symbols.py`.
+3. **Glyph audit.** `npm run audit:glyphs` (CI, Storybook a11y workflow) asks Chrome which font paints every character the DS renders and fails on any system fallback.
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -161,7 +165,7 @@ None.
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | `X` glyph (U+2717 ✗) is not in Fragment Mono; it fell back to a per-OS system font and rendered as a slanted hand-drawn tick in close buttons. | `X` is now drawn as inline SVG (square-cap strokes, currentColor) via `DRAWN_ICONS`; `TUI_ICON_GLYPHS.X` keeps the in-font `×` as a text-only fallback. | Resolved |
-| 2026-09-21 | 45 of 49 glyphs are not in Fragment Mono and render in fallback system fonts (Menlo, Apple Symbols, STIX Two Math on macOS; different fonts elsewhere), so icon appearance varies by OS. | Open: awaiting direction (redraw as SVG, self-host a symbol font, or accept). | Open |
+| 2026-09-21 | 45 of 49 glyphs are not in Fragment Mono and render in fallback system fonts (Menlo, Apple Symbols, STIX Two Math on macOS; different fonts elsewhere), so icon appearance varies by OS. | All three: icons drawn as SVG; Scorp Symbols face for text glyphs; `audit:glyphs` in CI. Root cause also included Google Fonts' subsets dropping glyphs Fragment Mono has (→ ↗ ▼ ▲ ▶ ✓). | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -173,6 +177,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| v2 | 2026-09-21 | feat | All 49 icons drawn as SVG (`TUI_ICON_DRAWINGS`); text forms render via the Scorp Symbols face; glyph audit in CI. |
 | v1.1 | 2026-09-21 | fix | `X` renders as a drawn SVG close mark instead of the fallback-font ✗ glyph. |
 
 <!-- AUTO-END:changelog -->
