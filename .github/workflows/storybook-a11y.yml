@@ -24,5 +24,8 @@ jobs:
       - name: Install Playwright (Chromium) for test-runner
         run: npx playwright install chromium --with-deps
 
+      - name: Glyph audit (no character may fall back to a system font)
+        run: npm run audit:glyphs
+
       - name: Build static Storybook + run test-runner
         run: npm run test-storybook:ci

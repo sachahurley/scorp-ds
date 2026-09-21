@@ -34,9 +34,10 @@ function UnicodeIconsPage() {
         [Stable] · Last updated Apr 2026
       </p>
       <p className="mb-4 text-secondary-800 dark:text-secondary-300">
-        Scorp DS uses Unicode glyphs in monospace instead of SVG icons for a terminal-native look. Use{' '}
-        <code className="text-primary-700 dark:text-primary-400">&lt;TuiIcon name=&quot;…&quot; /&gt;</code> in
-        product UI; this page is the full registry.
+        <code className="text-primary-700 dark:text-primary-400">&lt;TuiIcon name=&quot;…&quot; /&gt;</code> draws
+        every icon as SVG on a 16px grid (2px square-cap strokes), so icons look identical on every OS. Each name also has a
+        Unicode text form for plain-text contexts such as tui-art frames; those glyphs render through the Scorp Symbols face in
+        the mono font stack, width-matched to Fragment Mono. This page is the full registry.
       </p>
 
       <nav className="mb-8 border border-secondary-300 p-3 text-xs text-secondary-800 dark:border-secondary-700 dark:text-secondary-300">
@@ -78,14 +79,15 @@ function UnicodeIconsPage() {
           <table className="w-full min-w-[36rem] border-collapse text-left text-xs">
             <thead>
               <tr className="border-b border-secondary-300 bg-secondary-100 dark:border-secondary-700 dark:bg-secondary-900">
-                <th className="p-2 font-bold">Glyph</th>
+                <th className="p-2 font-bold">Icon</th>
+                <th className="p-2 font-bold">Text form</th>
                 <th className="p-2 font-bold">Name</th>
                 <th className="p-2 font-bold">Unicode</th>
                 <th className="p-2 font-bold">Usage</th>
               </tr>
             </thead>
             <tbody>
-              {ICON_ROWS.map(({ name, codePoints }) => (
+              {ICON_ROWS.map(({ name, glyph, codePoints }) => (
                 <tr
                   key={name}
                   className="border-b border-secondary-200 odd:bg-[var(--surface-default)] even:bg-secondary-50 dark:border-secondary-800 dark:even:bg-secondary-950"
@@ -93,6 +95,7 @@ function UnicodeIconsPage() {
                   <td className="p-2 align-middle">
                     <TuiIcon name={name} size="5" className="text-primary-700 dark:text-primary-400" />
                   </td>
+                  <td className="p-2 align-middle font-mono text-xl leading-none text-primary-700 dark:text-primary-400">{glyph}</td>
                   <td className="p-2 align-middle font-mono text-secondary-900 dark:text-secondary-100">{name}</td>
                   <td className="p-2 align-middle font-mono text-secondary-800 dark:text-secondary-300">{codePoints}</td>
                   <td className="p-2 align-middle text-secondary-800 dark:text-secondary-300">
