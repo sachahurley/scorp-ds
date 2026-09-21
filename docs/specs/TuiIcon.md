@@ -11,7 +11,7 @@
 | Category | `Display` |
 | File | `packages/components/src/components/TuiIcon.tsx` |
 | Story | `Components/Display/TuiIcon` |
-| Version | `v2` |
+| Version | `v3` |
 | Status | `draft` |
 | Last synced | 2026-09-21 |
 | Notion Page | https://www.notion.so/3e29a6335da1819c8006f82421bc0acc |
@@ -24,7 +24,7 @@
 
 Every icon renders identically on every OS. Three layers, decided by Sacha on 2026-09-21:
 
-1. **Drawn icons.** `TuiIcon` renders each name from `TUI_ICON_DRAWINGS` as inline SVG on a 16px grid: 2px strokes, square caps, miter joins, filled only where filled is the convention (media controls, star). The map is typed `Record<TuiIconName, …>`, so a name without a drawing is a compile error.
+1. **1-bit icons.** `TuiIcon` renders each name from `TUI_ICON_BITMAPS`: 7x7 pixel art (`#`/`.` rows) drawn as crisp SVG squares. One art pixel is 2px at the default 16px size, matching the plates' 2px step and the portfolio's Urizen 1-bit tiles at scale 2; sizes step in whole pixels (1.5/2/2/3/4px for sizes 3/4/5/6/8). The odd grid gives a true center column. Typed `Record<TuiIconName, …>`, so a name without a bitmap is a compile error. (Supersedes a same-day 16px line-drawn set Sacha rejected.)
 2. **Scorp Symbols.** `TUI_ICON_GLYPHS` keeps each icon's Unicode text form for plain-text contexts (tui-art frames, terminal strings). Those glyphs render through the Scorp Symbols face, second in `--font-family-mono`: a 5.6 KB subset inlined in `tokens.css`, rescaled onto Fragment Mono's 0.618em cell so box drawing joins and columns align. Built by `packages/tokens/scripts/build-scorp-symbols.py`.
 3. **Glyph audit.** `npm run audit:glyphs` (CI, Storybook a11y workflow) asks Chrome which font paints every character the DS renders and fails on any system fallback.
 
@@ -177,6 +177,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| v3 | 2026-09-21 | feat | Icons redrawn as 1-bit 7x7 pixel art (`TUI_ICON_BITMAPS`), replacing the line-drawn set. |
 | v2 | 2026-09-21 | feat | All 49 icons drawn as SVG (`TUI_ICON_DRAWINGS`); text forms render via the Scorp Symbols face; glyph audit in CI. |
 | v1.1 | 2026-09-21 | fix | `X` renders as a drawn SVG close mark instead of the fallback-font ✗ glyph. |
 
