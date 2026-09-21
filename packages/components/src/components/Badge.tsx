@@ -27,7 +27,8 @@
  *   chips ("EQUIPPED", "LEVEL UP") without per-site className overrides
  * - dashed: the not-yet-real voice — transparent fill with a dashed
  *   hairline for placeholders, empty slots, and free tiers ("FREE").
- *   Composes with any variant; the dash rides the variant's text color.
+ *   Composes with any variant; the dash rides the variant's text color,
+ *   except bone whose dash stays theme-stable sepia-500.
  * - Full light/dark theme support
  */
 
@@ -119,17 +120,18 @@ export function Badge({
 
   // DASHED VARIANTS — no fill, so only the text scales remain (they meet AA
   // on page surfaces just as they do on the tinted fills). The border rides
-  // border-current so each variant's dash matches its text. Bone swaps to the
-  // sepia-500 tint itself: the theme-stable "empty slot" counterpart to the
-  // filled bone chip.
+  // border-current so each variant's dash matches its text. Bone is the
+  // exception: the DASH stays theme-stable sepia-500 (the empty-slot
+  // counterpart to the filled bone chip) but the text keeps the per-theme
+  // scales — sepia-500 text fails AA on the light page.
   const dashedVariantStyles = {
-    default: "text-secondary-800 dark:text-secondary-200",
-    primary: "text-primary-800 dark:text-primary-300",
-    success: "text-success-800 dark:text-success-300",
-    warning: "text-warning-800 dark:text-warning-300",
-    error: "text-error-800 dark:text-error-300",
-    info: "text-info-800 dark:text-info-300",
-    bone: "text-secondary-500",
+    default: "border-current text-secondary-800 dark:text-secondary-200",
+    primary: "border-current text-primary-800 dark:text-primary-300",
+    success: "border-current text-success-800 dark:text-success-300",
+    warning: "border-current text-warning-800 dark:text-warning-300",
+    error: "border-current text-error-800 dark:text-error-300",
+    info: "border-current text-info-800 dark:text-info-300",
+    bone: "border-secondary-500 text-secondary-800 dark:text-secondary-200",
   };
 
   // ICON SIZES - Icons scale with badge size
@@ -146,7 +148,7 @@ export function Badge({
         font-mono font-medium
         ${
           dashed
-            ? `rounded-none border border-dashed border-current bg-transparent ${dashedVariantStyles[variant]}`
+            ? `rounded-none border border-dashed bg-transparent ${dashedVariantStyles[variant]}`
             : `plate-round ${variantStyles[variant]}`
         }
         ${sizeStyles[size]}

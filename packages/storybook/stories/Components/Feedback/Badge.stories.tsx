@@ -78,7 +78,8 @@ export const Caps: Story = {
  * Dashed: the not-yet-real voice — transparent fill, 1px dashed hairline in
  * the variant's text color, sharp corners (no plate clip). For placeholders,
  * empty slots, and free tiers. Composes with caps and any variant; dashed
- * bone is the empty-slot counterpart to the filled bone chip.
+ * bone keeps the theme-stable sepia-500 dash (the empty-slot counterpart to
+ * the filled bone chip) with per-theme text so it stays AA on light.
  */
 export const Dashed: Story = {
   args: { size: 'small', caps: true, dashed: true, children: 'free' },
