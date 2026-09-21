@@ -1,0 +1,39 @@
+# Publishes Storybook to Chromatic on every push to main, giving the DS a
+# permanent hosted URL that the showcase and portfolio can link out to.
+# Requires the CHROMATIC_PROJECT_TOKEN repo secret (create the project at
+# chromatic.com, link this repo, and copy the token into Settings > Secrets).
+name: Chromatic
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Chromatic needs full history to compute baselines between builds
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish Storybook to Chromatic
+        uses: chromaui/action@v11
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: packages/storybook
+          buildScriptName: build-storybook
+          # Hosting is the goal, not visual review: keep main's baseline
+          # auto-accepted and finish the job once the build is uploaded.
+          autoAcceptChanges: main
+          exitOnceUploaded: true
