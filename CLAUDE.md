@@ -169,7 +169,7 @@ run the `/vendor-portfolio` skill, which covers BOTH:
 
 - **Portfolio** (`~/Projects/portfolio`, Vercel): `npm run vendor:ds` +
   `npm run ds:check` in a feature branch, PR → merge.
-- **Scorpion UI v2 showcase** (`~/Desktop/scorpion-ui-v2`, GitHub Pages):
+- **Scorpion Design System showcase** (repo `scorpion-design-system`, checkout `~/Desktop/scorpion-ui-v2`, GitHub Pages):
   `npm run vendor:ds` + `npm run ds:check`, PR → merge, then
   `npm run deploy` from its main.
 

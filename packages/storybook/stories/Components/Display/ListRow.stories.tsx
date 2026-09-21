@@ -27,7 +27,7 @@ export const Default: Story = {
       <ListRow
         href="#"
         meta="2026 · case study"
-        title="Scorpion UI"
+        title="Scorpion Design System"
         titleSuffix={<span aria-hidden="true">↗</span>}
         description="A design system with a sting"
       />

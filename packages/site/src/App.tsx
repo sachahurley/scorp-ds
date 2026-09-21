@@ -34,8 +34,8 @@ const EXPLORE_ROWS: { title: string; description: string; href: string; external
   },
   {
     title: 'Showcase',
-    description: 'Scorpion UI v2, the predecessor showcase, restyled onto the merged system.',
-    href: 'https://sachahurley.github.io/scorpion-ui-v2/',
+    description: 'Scorpion Design System, the showcase site, restyled onto the merged system.',
+    href: 'https://sachahurley.github.io/scorpion-design-system/',
     external: true,
   },
 ];
