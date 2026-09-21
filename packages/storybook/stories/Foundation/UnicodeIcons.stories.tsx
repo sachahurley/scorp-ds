@@ -35,7 +35,8 @@ function UnicodeIconsPage() {
       </p>
       <p className="mb-4 text-secondary-800 dark:text-secondary-300">
         <code className="text-primary-700 dark:text-primary-400">&lt;TuiIcon name=&quot;…&quot; /&gt;</code> draws
-        every icon as SVG on a 16px grid (2px square-cap strokes), so icons look identical on every OS. Each name also has a
+        every icon as 1-bit pixel art on a 7x7 grid (one art pixel = 2px at the default size, the plates&apos; step), so icons
+        look identical on every OS. Each name also has a
         Unicode text form for plain-text contexts such as tui-art frames; those glyphs render through the Scorp Symbols face in
         the mono font stack, width-matched to Fragment Mono. This page is the full registry.
       </p>
