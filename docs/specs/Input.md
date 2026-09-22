@@ -187,6 +187,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Error message leads with the 1-bit AlertCircle icon (was `[er]`), centered on the first line |
 | Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 
 <!-- AUTO-END:changelog -->

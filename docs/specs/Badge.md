@@ -192,6 +192,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Remove button text `x` replaced by the 1-bit X icon (12px) |
 
 <!-- AUTO-END:changelog -->
 

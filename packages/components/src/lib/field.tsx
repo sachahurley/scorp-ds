@@ -7,13 +7,14 @@
  *
  * An error message replaces the helper text while it is present (the Carbon /
  * Polaris convention), so the field never shows two lines of small print.
- * The error line carries a `[er]` prefix, the same severity glyph as Alert,
- * so meaning never rides on color alone.
+ * The error line leads with the 1-bit AlertCircle icon, the same severity
+ * icon as Alert's error variant, so meaning never rides on color alone.
  *
  * Not exported from the package barrel: this is plumbing, not a component.
  */
 
 import { useId, type ReactNode } from "react";
+import { TuiIcon } from "../components/TuiIcon";
 
 const hasContent = (node: ReactNode) => node != null && node !== false && node !== "";
 
@@ -68,12 +69,18 @@ export function FieldMessage({
   return (
     <p
       id={id}
-      className={`font-mono text-xs ${
+      className={`flex items-start gap-1.5 font-mono text-xs ${
         tone === "error" ? "text-error-700 dark:text-error-400" : "text-[var(--text-secondary)]"
       } ${className}`}
     >
-      {tone === "error" && <span aria-hidden="true">[er] </span>}
-      {children}
+      {/* Icon box is exactly one line tall (1lh) and centers the glyph in
+          it, so it sits level with the first line even when the text wraps */}
+      {tone === "error" && (
+        <span className="flex h-[1lh] shrink-0 items-center">
+          <TuiIcon name="AlertCircle" size="3" />
+        </span>
+      )}
+      <span>{children}</span>
     </p>
   );
 }

@@ -182,6 +182,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Trigger arrow uses the 1-bit ChevronDown icon |
 
 <!-- AUTO-END:changelog -->
 

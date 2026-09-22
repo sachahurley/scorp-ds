@@ -14,6 +14,7 @@
  */
 
 import { useState, useRef, useEffect, type ReactNode } from "react";
+import { TuiIcon } from "./TuiIcon";
 
 // Menu item interface
 export interface DropdownItem {
@@ -196,7 +197,7 @@ export function Dropdown({
     >
       {label}
       {/* TUI Tier 2: Unicode ▼ instead of Lucide ChevronDown */}
-      <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono leading-none transition-transform [transition-duration:var(--duration-normal)] ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true">▼</span>
+      <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono leading-none transition-transform [transition-duration:var(--duration-normal)] ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true"><TuiIcon name="ChevronDown" /></span>
     </button>
   );
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ListRow } from '@scorp-ds/components';
+import { ListRow, TuiIcon } from '@scorp-ds/components';
 
 /**
  * Components / Display / ListRow
@@ -28,7 +28,7 @@ export const Default: Story = {
         href="#"
         meta="2026 · case study"
         title="Scorpion Design System"
-        titleSuffix={<span aria-hidden="true">↗</span>}
+        titleSuffix={<TuiIcon name="ExternalLink" size="3" />}
         description="A design system with a sting"
       />
       <ListRow

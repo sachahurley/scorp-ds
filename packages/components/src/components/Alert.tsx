@@ -12,14 +12,17 @@
  * - info: Blue for informational messages
  * 
  * FEATURES:
- * - Optional icon (iconLeft prop)
- * - Optional close button (onClose prop)
+ * - Severity icon per variant from the 1-bit set: default Bell, info Info,
+ *   success CheckCircle, warning AlertTriangle, error AlertCircle
+ *   (override with iconLeft)
+ * - Optional close button (onClose prop), a 1-bit X
  * - Optional title and description
  * - Full light/dark theme support
  * - Accessible (ARIA attributes)
  */
 
 import { type ReactNode } from "react";
+import { TuiIcon, type TuiIconName } from "./TuiIcon";
 
 export interface AlertProps {
   variant?: "default" | "success" | "warning" | "error" | "info";
@@ -48,21 +51,18 @@ export function Alert({
   onClose,
   className = "",
 }: AlertProps) {
-  // TUI Tier 2: text severity prefixes instead of Lucide SVG icons
-  const severityPrefixes: Record<string, string> = {
-    default: "[i]",
-    success: "[ok]",
-    warning: "[!!]",
-    error: "[er]",
-    info: "[i]",
+  // 1-bit severity icons, one per variant (default and info differ, so the
+  // icon, not just the color, tells them apart)
+  const severityIcons: Record<NonNullable<AlertProps["variant"]>, TuiIconName> = {
+    default: "Bell",
+    success: "CheckCircle",
+    warning: "AlertTriangle",
+    error: "AlertCircle",
+    info: "Info",
   };
 
-  // Use custom icon if provided, otherwise use the TUI text prefix
-  const icon = iconLeft || (
-    <span className="font-mono text-sm font-bold leading-none whitespace-nowrap">
-      {severityPrefixes[variant]}
-    </span>
-  );
+  // Use custom icon if provided, otherwise the variant's 1-bit icon
+  const icon = iconLeft || <TuiIcon name={severityIcons[variant]} size="4" />;
 
   // VARIANT STYLES - Color combinations using semantic tokens
   // All variants support light and dark themes.
@@ -164,7 +164,7 @@ export function Alert({
           `}
           aria-label="Close alert"
         >
-          [x]
+          <TuiIcon name="X" size="3" />
         </button>
       )}
     </div>

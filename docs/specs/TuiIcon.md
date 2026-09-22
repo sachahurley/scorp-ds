@@ -178,6 +178,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Added Menu (three bars, U+2630); Scorp Symbols face rebuilt so the glyph audit passes. 50 icons |
 | Unreleased | 2026-09-21 | fix | `size` typed as `TuiIconSize` |
 | v3 | 2026-09-21 | feat | Icons redrawn as 1-bit 7x7 pixel art (`TUI_ICON_BITMAPS`), replacing the line-drawn set. |
 | v2 | 2026-09-21 | feat | All 49 icons drawn as SVG (`TUI_ICON_DRAWINGS`); text forms render via the Scorp Symbols face; glyph audit in CI. |

@@ -188,6 +188,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Severity prefixes `[i]` `[ok]` `[!!]` `[er]` and close `[x]` replaced by 1-bit icons: default Bell, info Info (default and info now differ), success CheckCircle, warning AlertTriangle, error AlertCircle; close is a 12px X |
 
 <!-- AUTO-END:changelog -->
 
