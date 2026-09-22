@@ -141,7 +141,7 @@ export function TabsList({
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       className={cn(
-        "flex flex-wrap gap-0 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]",
+        "flex flex-wrap gap-0 border-b-[length:var(--border-width-hairline)] border-solid border-[var(--surface-container-stroke)]",
         className
       )}
     >
