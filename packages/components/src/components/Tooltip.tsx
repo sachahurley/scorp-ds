@@ -12,7 +12,10 @@
  * 
  * FEATURES:
  * - Arrow/pointer indicator
- * - Auto-positioning (adjusts if near viewport edge)
+ * - Viewport-aware: measured after it opens; if the chosen side would
+ *   overflow the viewport it flips to the opposite side (when that side has
+ *   room), and top/bottom tooltips slide horizontally to stay on screen
+ *   while the caret keeps pointing at the trigger
  * - Delay for show/hide (prevents accidental triggers)
  * - Max width constraint
  * - Full light/dark theme support
@@ -35,6 +38,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type FocusEvent,
@@ -42,12 +46,53 @@ import {
   type ReactNode,
 } from "react";
 
+type Side = "top" | "bottom" | "left" | "right";
+
+const OPPOSITE: Record<Side, Side> = { top: "bottom", bottom: "top", left: "right", right: "left" };
+
+/** Trigger-to-balloon gap (the mb-2 / mt-2 / mr-2 / ml-2 offsets, 8px). */
+const GAP = 8;
+/** Breathing room kept between the balloon and the viewport edge. */
+const EDGE = 8;
+
+type Rect = Pick<DOMRect, "top" | "bottom" | "left" | "right" | "width" | "height">;
+
+/**
+ * The side to render on: the preferred one if the balloon fits there,
+ * otherwise the opposite side if IT fits, otherwise the preferred side
+ * (clipping on both sides is no better, so respect the author's choice).
+ */
+function fitSide(preferred: Side, trigger: Rect, tip: Rect, vw: number, vh: number): Side {
+  const room: Record<Side, number> = {
+    top: trigger.top,
+    bottom: vh - trigger.bottom,
+    left: trigger.left,
+    right: vw - trigger.right,
+  };
+  const need = (side: Side) => (side === "top" || side === "bottom" ? tip.height : tip.width) + GAP + EDGE;
+  if (room[preferred] >= need(preferred)) return preferred;
+  const opposite = OPPOSITE[preferred];
+  return room[opposite] >= need(opposite) ? opposite : preferred;
+}
+
+/** Horizontal px nudge that keeps a centered top/bottom balloon on screen. */
+function clampShift(trigger: Rect, tipWidth: number, vw: number): number {
+  const left = trigger.left + trigger.width / 2 - tipWidth / 2;
+  const right = left + tipWidth;
+  if (left < EDGE) return EDGE - left;
+  if (right > vw - EDGE) return Math.max(EDGE - left, vw - EDGE - right);
+  return 0;
+}
+
 export interface TooltipProps {
   /** Short supplementary hint. Plain text; no links or buttons. */
   content: ReactNode;
   /** The trigger. Pass one focusable element so keyboard users can open the tooltip and hear it. */
   children: ReactNode;
-  /** Side of the trigger the tooltip sits on (default: "top"). */
+  /**
+   * Preferred side of the trigger (default: "top"). It flips to the opposite
+   * side when this one would overflow the viewport.
+   */
   position?: "top" | "bottom" | "left" | "right";
   /** Milliseconds before showing on hover or focus (default: 200). */
   delay?: number;
@@ -82,6 +127,12 @@ export function Tooltip({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const tooltipId = useId();
+  // Resolved side (after flipping) and the horizontal nudge, in px, that
+  // keeps a top/bottom balloon inside the viewport.
+  const [placement, setPlacement] = useState<Side>(position);
+  const [shift, setShift] = useState(0);
+  // Counter-nudge for the caret so it still points at the trigger's center.
+  const [caretShift, setCaretShift] = useState(0);
 
   const clearTimers = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -122,6 +173,25 @@ export function Tooltip({
 
   // Cleanup timeouts on unmount
   useEffect(() => clearTimers, []);
+
+  // VIEWPORT FIT: measured before paint, while the balloon is still at
+  // opacity 0. Uses the trigger's rect plus the balloon's size (independent
+  // of side, thanks to w-max), so one measurement decides the side.
+  useLayoutEffect(() => {
+    if (!isVisible) return;
+    const trigger = wrapperRef.current?.getBoundingClientRect();
+    const tip = tooltipRef.current?.getBoundingClientRect();
+    if (!trigger || !tip) return;
+    const vw = window.innerWidth || document.documentElement.clientWidth;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const next = fitSide(position, trigger, tip, vw, vh);
+    const nudge = next === "top" || next === "bottom" ? clampShift(trigger, tip.width, vw) : 0;
+    // Keep the 16px caret on the balloon body (inside its stepped corners)
+    const caretLimit = Math.max(0, tip.width / 2 - 12);
+    setPlacement(next);
+    setShift(nudge);
+    setCaretShift(Math.min(caretLimit, Math.max(-caretLimit, -nudge)));
+  }, [isVisible, position, content, maxWidth]);
 
   // Describe the trigger while the tooltip is open. Only possible when the
   // child is a single element we can clone.
@@ -205,15 +275,18 @@ export function Tooltip({
           role="tooltip"
           className={`
             absolute
-            ${positionStyles[position]}
+            ${positionStyles[placement]}
             w-max
             z-[var(--z-index-tooltip)]
             ${showTooltip ? "opacity-100" : "opacity-0"}
             transition-opacity [transition-duration:var(--duration-fast)]
           `}
-          style={{ maxWidth }}
+          data-placement={placement}
+          // The nudge is a margin, not a transform, so it composes with the
+          // translate-centering classes instead of replacing them.
+          style={{ maxWidth, marginLeft: shift || undefined }}
         >
-          <span className={`absolute ${bridgePlacement[position]}`} aria-hidden="true" />
+          <span className={`absolute ${bridgePlacement[placement]}`} aria-hidden="true" />
 
           {/* Tooltip Content — plate ring recipe (stroke layer + fill inset 1px) */}
           <div className="plate-round p-px bg-[var(--surface-container-stroke)]">
@@ -223,7 +296,11 @@ export function Tooltip({
           </div>
 
           {/* 1-bit stepped caret pointing at the trigger */}
-          <div className={`absolute ${caretPlacement[position]}`} aria-hidden="true">
+          <div
+            className={`absolute ${caretPlacement[placement]}`}
+            style={{ marginLeft: caretShift || undefined }}
+            aria-hidden="true"
+          >
             <div className="relative h-[8px] w-[16px]">
               <div
                 className="absolute inset-0 bg-[var(--surface-container-stroke)]"

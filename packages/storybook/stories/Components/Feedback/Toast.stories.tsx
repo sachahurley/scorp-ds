@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useRef, useState } from 'react';
-import { Button, Toaster, type ToastItem } from '@scorp-ds/components';
+import { Button, Toast, Toaster, toast, type ToastItem } from '@scorp-ds/components';
 
 /**
  * Components / Feedback / Toast
@@ -9,8 +9,16 @@ import { Button, Toaster, type ToastItem } from '@scorp-ds/components';
  * transition. Don't use for errors that require action (use Alert) or
  * anything the user must read before continuing (use Modal).
  *
- * Accessibility: the region is `aria-live="polite"`; each toast is
- * `role="status"`. Click a plate to dismiss when `onDismiss` is wired.
+ * Imperative API (recommended): mount `<Toaster />` once, then call
+ * `toast("Saved")`, `toast.success(...)`, `toast.error(...)`, etc. from
+ * anywhere. Options: `action` ({ label, onClick }), `duration` (default
+ * 5000ms, paused on hover/focus, `Infinity` persists), `id` (replace in place).
+ * `toast.dismiss(id?)` removes one or all. The controlled
+ * `<Toaster toasts onDismiss />` API still works.
+ *
+ * Accessibility: the region is `aria-live="polite"`; error toasts are
+ * `role="alert"`, the rest `role="status"`. Persistent toasts get a dismiss
+ * button; any plate can be clicked to dismiss.
  */
 const meta: Meta<typeof Toaster> = {
   title: 'Components/Feedback/Toast',
@@ -47,4 +55,67 @@ export const Default: Story = {
       </div>
     );
   },
+};
+
+/** Imperative: one `<Toaster />`, then `toast()` from any handler. */
+export const Imperative: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-3">
+      <Button type="button" variant="secondary" onClick={() => toast('Link copied')}>
+        Default
+      </Button>
+      <Button type="button" variant="secondary" onClick={() => toast.success('Profile saved')}>
+        Success
+      </Button>
+      <Button type="button" variant="secondary" onClick={() => toast.info('New version available')}>
+        Info
+      </Button>
+      <Button type="button" variant="secondary" onClick={() => toast.warning('Storage almost full')}>
+        Warning
+      </Button>
+      <Button type="button" variant="secondary" onClick={() => toast.error('Upload failed')}>
+        Error
+      </Button>
+      <Button
+        type="button"
+        variant="secondary"
+        onClick={() => toast('Item deleted', { action: { label: 'Undo', onClick: () => toast.success('Restored') } })}
+      >
+        With Undo
+      </Button>
+      <Button type="button" variant="secondary" onClick={() => toast.info('Syncing library', { duration: Infinity })}>
+        Persistent
+      </Button>
+      <Toaster />
+    </div>
+  ),
+};
+
+/** Every variant, rendered in place (no timers) so they can be compared. */
+export const Variants: Story = {
+  render: () => (
+    <div className="flex flex-col items-center gap-2">
+      <Toast>Link copied</Toast>
+      <Toast variant="success">Profile saved</Toast>
+      <Toast variant="info">New version available</Toast>
+      <Toast variant="warning">Storage almost full</Toast>
+      <Toast variant="error">Upload failed</Toast>
+    </div>
+  ),
+};
+
+/** Inline action (Undo) and the persistent dismiss button. */
+export const WithAction: Story = {
+  name: 'With action',
+  render: () => (
+    <div className="flex flex-col items-center gap-2">
+      <Toast action={{ label: 'Undo', onClick: () => {} }}>Item deleted</Toast>
+      <Toast variant="error" action={{ label: 'Retry', onClick: () => {} }}>
+        Upload failed
+      </Toast>
+      <Toast variant="info" duration={Infinity} onDismiss={() => {}}>
+        Syncing library
+      </Toast>
+    </div>
+  ),
 };

@@ -2,6 +2,12 @@
 
 | Date | Name | Version | Type | Summary |
 |------|------|---------|------|---------|
+| 2026-09-21 | Spinner | v1 | spec-created | New component spec `docs/specs/Spinner.md` (`Components/Feedback/Spinner`). |
+| 2026-09-21 | Toast | v1 | feat | Variants, action, duration with pause, imperative `toast()` / `useToast()`. |
+| 2026-09-21 | Button | v1 | feat | `loading` prop. |
+| 2026-09-21 | Checkbox | v1 | feat | `indeterminate` prop. |
+| 2026-09-21 | Tooltip | v1 | feat | Viewport flip and horizontal clamp. |
+| 2026-09-21 | TuiIcon | v3 | feat | `Minus` icon; Scorp Symbols rebuilt. |
 | 2026-04-03 | Tabs | v1 | spec-created | Component spec `docs/specs/Tabs.md` (`Components/Navigation/Tabs`). |
 | 2026-04-03 | Table | v1 | spec-created | Component spec `docs/specs/Table.md` (`Components/Display/Table`). |
 | 2026-04-03 | Patterns | v1 | spec-created | Pattern specs: `patterns-settings-panel.md`, `patterns-dense-list-row.md`, `patterns-workbench-split.md`. |

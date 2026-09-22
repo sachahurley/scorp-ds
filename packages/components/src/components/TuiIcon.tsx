@@ -45,6 +45,7 @@ export const TUI_ICON_GLYPHS = {
   LogOut: "\u2192", // → right arrow (exit)
   Mail: "\u2709", // ✉ envelope
   Menu: "\u2630", // ☰ trigram for heaven (hamburger menu)
+  Minus: "\u2212", // − minus sign (indeterminate, remove)
   Moon: "\u263E", // ☾ last quarter moon
   MoreVertical: "\u22EE", // ⋮ vertical ellipsis
   Music2: "\u266B", // ♫ beamed eighth notes
@@ -305,6 +306,15 @@ export const TUI_ICON_BITMAPS: Record<TuiIconName, readonly string[]> = {
     "#######",
     ".......",
     "#######",
+    ".......",
+  ],
+  Minus: [
+    ".......",
+    ".......",
+    ".......",
+    "#######",
+    ".......",
+    ".......",
     ".......",
   ],
   Moon: [

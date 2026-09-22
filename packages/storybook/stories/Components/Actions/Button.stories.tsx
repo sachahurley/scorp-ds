@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Button, TuiIcon, type TuiIconName } from '@scorp-ds/components';
 
 /**
@@ -28,6 +29,10 @@ const meta: Meta<typeof Button> = {
     disabled: {
       control: 'boolean',
       description: 'Disable the button',
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Busy: Spinner over the label, aria-busy, clicks ignored, stays focusable',
     },
     children: {
       control: 'text',
@@ -199,4 +204,46 @@ export const AsLink: Story = {
       </Button>
     </div>
   ),
+};
+
+/**
+ * Loading: a Spinner replaces the label in place (the width never changes),
+ * `aria-busy` is set, and clicks are ignored while the button stays
+ * focusable. Works on icon-only buttons too. Click "Save" to try it.
+ */
+export const Loading: Story = {
+  name: 'Loading',
+  render: function LoadingDemo() {
+    const [saving, setSaving] = useState(false);
+    const save = () => {
+      setSaving(true);
+      setTimeout(() => setSaving(false), 2000);
+    };
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-3">
+          <Button loading={saving} onClick={save}>
+            Save changes
+          </Button>
+          <Button variant="secondary" loading={saving} onClick={save}>
+            Save
+          </Button>
+          <Button variant="icon" aria-label="Refresh" loading={saving} onClick={save}>
+            <TuiIcon name="Repeat" />
+          </Button>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button size="sm" loading>
+            Small
+          </Button>
+          <Button size="md" variant="outline" loading>
+            Medium
+          </Button>
+          <Button size="lg" variant="destructive" loading>
+            Large
+          </Button>
+        </div>
+      </div>
+    );
+  },
 };
