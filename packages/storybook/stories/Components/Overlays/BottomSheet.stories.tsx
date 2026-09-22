@@ -10,7 +10,9 @@ import { BottomSheet, Button } from '@scorp-ds/components';
  * persistent navigation — sheets are for menus and quick actions.
  *
  * Accessibility: `role="dialog"` + `aria-modal` with an `ariaLabel` name;
- * ESC and scrim click dismiss; the content region is keyboard-scrollable.
+ * Tab and Shift+Tab are trapped inside the sheet; the close button, ESC and a
+ * scrim click all dismiss; the content region is keyboard-scrollable. The
+ * grabber is a static seam marker, not a drag handle.
  */
 const meta: Meta<typeof BottomSheet> = {
   title: 'Components/Overlays/BottomSheet',

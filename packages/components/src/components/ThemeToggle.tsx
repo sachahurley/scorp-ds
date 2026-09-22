@@ -4,6 +4,12 @@
  * A sliding toggle switch to switch between light and dark themes
  * Uses the Switch component with small size for consistency with the design system
  * Includes Moon/Sun icons inside the knob to indicate current theme
+ *
+ * It reads `resolvedTheme`, not `theme`: ThemeProvider runs with
+ * `enableSystem`, so `theme` can be "system" while the page actually renders
+ * dark. The knob, the visible label and the aria-label all derive from the
+ * same resolved value, so what the toggle says is always what is on screen,
+ * and pressing it pins the opposite concrete theme.
  */
 
 import { useTheme } from "next-themes";
@@ -12,7 +18,7 @@ import { Switch } from "./Switch";
 import { TuiIcon } from "./TuiIcon";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Only render after mounting to avoid hydration mismatch
@@ -29,9 +35,14 @@ export function ThemeToggle() {
     );
   }
 
-  const isDark = theme === "dark";
+  // resolvedTheme is the theme actually applied to <html>, so "system" on a
+  // dark OS resolves to "dark" here and the toggle agrees with the page.
+  const isDark = resolvedTheme === "dark";
+  // One source of truth for the knob, the label and the aria-label.
+  const currentLabel = isDark ? "Dark" : "Light";
+  const nextLabel = isDark ? "light" : "dark";
   const toggleTheme = () => {
-    setTheme(isDark ? "light" : "dark");
+    setTheme(nextLabel);
   };
 
   return (
@@ -42,12 +53,12 @@ export function ThemeToggle() {
         onCheckedChange={toggleTheme}
         size="sm"
         icon={isDark ? <TuiIcon name="Moon" size="3" className="text-[var(--border-focus)]" /> : <TuiIcon name="Sun" size="3" className="text-[var(--text-secondary)]" />}
-        aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
+        aria-label={`Switch to ${nextLabel} theme`}
       />
 
-      {/* Label Text */}
+      {/* Label Text: names the current theme, matching the knob glyph */}
       <span className="text-sm font-mono text-[var(--text-primary)]">
-        {isDark ? 'Dark' : 'Light'}
+        {currentLabel}
       </span>
     </div>
   );

@@ -21,7 +21,7 @@ export const Default: Story = {
           Open modal
         </Button>
         <Modal isOpen={open} onClose={() => setOpen(false)} title="Example dialog">
-          <div className="p-6 font-mono text-sm text-secondary-800 dark:text-secondary-200">
+          <div className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
             <p className="mb-4">
               Modal content scrolls when it exceeds the max height. Press Esc or click the backdrop to
               close.
@@ -46,7 +46,7 @@ export const LongContent: Story = {
           Re-open
         </Button>
         <Modal isOpen={open} onClose={() => setOpen(false)} title="Scrollable region">
-          <div className="space-y-3 p-6 font-mono text-sm text-secondary-800 dark:text-secondary-200">
+          <div className="space-y-3 font-mono text-sm text-secondary-800 dark:text-secondary-200">
             {Array.from({ length: 24 }, (_, i) => (
               <p key={i}>Line {i + 1} — demonstrates scroll inside the modal body.</p>
             ))}
@@ -117,7 +117,7 @@ export const Docked: Story = {
             </Button>
           }
         >
-          <div className="p-2 font-mono text-sm text-secondary-800 dark:text-secondary-200">
+          <div className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
             The page behind stays visible and interactive; Esc or the close plate dismisses.
           </div>
         </Modal>

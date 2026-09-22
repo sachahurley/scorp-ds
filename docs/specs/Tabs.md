@@ -81,7 +81,7 @@ Tabs switch between related views that share one context, such as the sections o
 |----------|------|---------|----------|-------------|
 | `value` | `string` | none | Yes | Matches a `TabsContent` `value`. |
 | `children` | `ReactNode` | none | Yes | Label. Icon-only triggers need `aria-label`. |
-| `disabled` | `boolean` | `false` | No | Disables the trigger (`opacity-50`, `cursor-not-allowed`). |
+| `disabled` | `boolean` | `false` | No | Disables the trigger (`opacity-50`, `cursor-not-allowed`). Arrow keys and Home/End skip it, so it can never be selected. |
 | `type` | `string` | `"button"` | No | Native button type. |
 | `onClick` / `onKeyDown` | handlers | none | No | Called first; call `preventDefault()` to cancel selection or key handling. |
 | `ref` | `Ref<HTMLButtonElement>` | none | No | Forwarded to the button. |
@@ -110,7 +110,9 @@ Tabs switch between related views that share one context, such as the sections o
 | `--button-primary-background` | Color | light `#FBBF24`, dark `#E0A26A` | Selected underline (2px) |
 | `--text-primary` | Color | light `#2B2718`, dark `#FDFCFB` | Selected label, hover label |
 | `secondary-700` / `secondary-300` | Color | `#695F4D` light / `#F0EBE4` dark | Unselected label |
-| `--focus-ring-primary` | Color | `#FBBF24` | Panel focus ring (`ring-2`) |
+| `--focus-ring-primary` | Color | `#FBBF24` | Trigger inset focus ring and panel focus ring (`ring-2`) |
+| `--focus-ring-width` | Size | 2px | Trigger inset focus ring |
+| `--touch-target` (`before:h-touch`) | Spacing | 44px | Trigger tap target (pseudo-element, layout unchanged) |
 | `--focus-offset-color` | Color | light `#FDFCFB`, dark `#0A0704` | Panel ring offset fill (`ring-offset-2`) |
 | `--duration-normal` | Motion | `200ms` | Trigger color transition |
 | `text-sm` | Typography | `14px` | Trigger labels |
@@ -128,8 +130,8 @@ Tabs switch between related views that share one context, such as the sections o
 | Selected | `value` match | 2px border `--button-primary-background`, label `--text-primary`, `tabIndex=0`, `aria-selected="true"` |
 | Unselected | no match | Transparent border, label `secondary-700` / `secondary-300`, `tabIndex=-1` |
 | Hover | `:hover` (unselected) | Label `--text-primary` |
-| Disabled | `disabled` | `opacity-50`, `cursor-not-allowed`; click and keys ignored on that trigger |
-| Trigger focus | `:focus-visible` | No trigger-specific ring is defined (browser default outline) |
+| Disabled | `disabled` | `opacity-50`, `cursor-not-allowed`; click and keys ignored on that trigger, and arrow / Home / End navigation steps over it |
+| Trigger focus | `:focus-visible` | Inset `--focus-ring-width` ring in `--focus-ring-primary` (`focus:outline-none` plus an inset `box-shadow`) |
 | Panel focus | `:focus-visible` on the active panel | `ring-2 --focus-ring-primary`, offset `--focus-offset-color` |
 | Hidden panel | inactive + `forceMount` | Rendered with `hidden`, no `tabIndex` |
 
@@ -146,12 +148,12 @@ Tabs switch between related views that share one context, such as the sections o
 | Uncontrolled (`defaultValue`) | Yes | Yes | `Default` |
 | `forceMount` panels | Yes | Yes | `With inputs (forceMount)` |
 | Controlled (`value` + `onValueChange`) | Yes | No | |
-| Disabled trigger | Yes | No | |
-| Keyboard (arrows, Home, End) | Yes | Interactive only | |
+| Disabled trigger | Yes | Yes | `With a disabled trigger` |
+| Keyboard (arrows, Home, End) | Yes | Interactive only | Unit-tested in `packages/components/src/__tests__/Tabs.test.tsx` |
 
 Interactive controls: none (stories use `render`; no `component` or `argTypes`).
 
-**Coverage:** 50% (2/4)
+**Coverage:** 75% (3/4)
 
 <!-- AUTO-END:storybook -->
 
@@ -193,8 +195,9 @@ None.
 - Semantic role: `tablist` > `tab` (native `<button>`) > `tabpanel`, linked with `aria-controls` / `aria-labelledby`; `aria-selected` on each tab.
 - Required labels: `aria-label` or `aria-labelledby` on `TabsList`; `aria-label` on icon-only triggers.
 - Focus order (roving tabindex): only the selected tab is in the tab order (`tabIndex=0`, others `-1`). Tab moves from the strip to the active panel, which is focusable (`tabIndex=0`).
-- Keyboard: ArrowRight / ArrowDown select the next tab and ArrowLeft / ArrowUp the previous, wrapping at the ends; Home and End jump to the first and last. Selection follows focus (automatic activation); focus moves on the next animation frame.
-- Touch target minimum: not met. Triggers are about 37px tall (`py-2` plus a 21px `text-sm` line), below 44px.
+- Keyboard: ArrowRight / ArrowDown select the next tab and ArrowLeft / ArrowUp the previous, wrapping at the ends; Home and End jump to the first and last. All four skip disabled triggers (selection follows focus here, so landing on one would also select it), and when no other trigger is enabled focus stays put. Focus moves on the next animation frame.
+- Focus ring: triggers use the system's inset `box-shadow` ring (`--focus-ring-width` / `--focus-ring-primary`) rather than the browser outline.
+- Touch target minimum: met. The trigger box stays about 37px tall so the selected underline keeps the strip's baseline; a 44px-tall pseudo-element centered on the trigger raises the tap target without moving a pixel.
 - Color independence: the selected tab is marked by the 2px underline plus the label color change, and `aria-selected` for screen readers.
 
 <!-- AUTO-END:accessibility -->
@@ -211,7 +214,7 @@ None.
 - Do use controlled mode (`value` + `onValueChange`) when the active tab is in the URL or app state.
 - Don't wrap `TabsTrigger` in other elements inside `TabsList`; keyboard order only sees direct `TabsTrigger` children.
 - Don't use Tabs for page navigation or for sequential steps (wizard); tabs are peers.
-- Don't disable a tab that users can reach with arrow keys (see Known Gaps); hide it instead.
+- Don't leave a tab disabled forever; a tab nobody can ever open is better hidden than dimmed (the keyboard skips it either way).
 
 <!-- /HUMAN-SECTION:do-dont -->
 
@@ -235,9 +238,9 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | Arrow, Home and End navigation does not skip disabled triggers, so the keyboard can select a disabled tab | None yet | open |
-| 2026-09-22 | Triggers have no token focus ring (they rely on the browser outline) and are about 37px tall, below the 44px target | None yet | open |
-| 2026-09-22 | No unit tests (keyboard and roving tabindex are untested) | None yet | open |
+| 2026-09-22 | Arrow, Home and End navigation does not skip disabled triggers, so the keyboard can select a disabled tab | Navigation scans for the next enabled trigger (reading `disabled` off the rendered button) and stays put when there is none | Resolved |
+| 2026-09-22 | Triggers have no token focus ring (they rely on the browser outline) and are about 37px tall, below the 44px target | Inset `--focus-ring-primary` ring on `focus-visible`; a 44px-tall pseudo-element raises the tap target without moving the underline | Resolved |
+| 2026-09-22 | No unit tests (keyboard and roving tabindex are untested) | `packages/components/src/__tests__/Tabs.test.tsx` covers arrows, Home, End, disabled skipping, the focus ring, the tap target and the roving tabindex | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -250,6 +253,7 @@ None.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | Arrows and Home/End skip disabled triggers; inset token focus ring; 44px tap target; unit tests and a disabled-trigger story added |
 
 <!-- AUTO-END:changelog -->
 

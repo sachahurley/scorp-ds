@@ -44,6 +44,38 @@ export const Default: Story = {
   ),
 };
 
+/**
+ * A disabled trigger stays visible but is skipped by the keyboard: arrow keys
+ * step over "Billing" and Home/End land on the nearest enabled tab.
+ */
+export const WithDisabledTrigger: Story = {
+  name: 'With a disabled trigger',
+  render: () => (
+    <div className="w-full max-w-md plate-round-lg p-px bg-[var(--surface-container-stroke)]">
+      <div className="plate-round-lg bg-[var(--surface-card)]">
+      <Tabs defaultValue="general">
+        <TabsList aria-label="Account sections with a disabled tab">
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="billing" disabled>
+            Billing
+          </TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+        </TabsList>
+        <TabsContent value="general">
+          <p className="text-sm text-secondary-800 dark:text-secondary-200">Profile and workspace defaults.</p>
+        </TabsContent>
+        <TabsContent value="billing">
+          <p className="text-sm text-secondary-800 dark:text-secondary-200">Plans and invoices.</p>
+        </TabsContent>
+        <TabsContent value="security">
+          <p className="text-sm text-secondary-800 dark:text-secondary-200">Sessions, 2FA, and API tokens.</p>
+        </TabsContent>
+      </Tabs>
+      </div>
+    </div>
+  ),
+};
+
 export const WithFormFields: Story = {
   name: 'With inputs (forceMount)',
   render: () => (

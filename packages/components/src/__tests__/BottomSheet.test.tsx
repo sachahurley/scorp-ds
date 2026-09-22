@@ -1,4 +1,4 @@
-import { afterEach, expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useState } from "react";
 import { BottomSheet } from "../components/BottomSheet";
@@ -16,6 +16,50 @@ function Demo() {
     </>
   );
 }
+
+it("renders a labelled close button that dismisses the sheet", () => {
+  const onClose = vi.fn();
+  render(
+    <BottomSheet isOpen onClose={onClose} ariaLabel="Queue">
+      <p>tracks</p>
+    </BottomSheet>
+  );
+  const close = screen.getByRole("button", { name: "Close" });
+  // 44px target comes from the button box itself (w-touch / h-touch).
+  expect(close.className).toContain("w-touch");
+  expect(close.className).toContain("h-touch");
+  fireEvent.click(close);
+  expect(onClose).toHaveBeenCalledTimes(1);
+});
+
+it("accepts a custom close button label", () => {
+  render(
+    <BottomSheet isOpen onClose={() => {}} ariaLabel="Queue" closeLabel="Close queue">
+      <p>tracks</p>
+    </BottomSheet>
+  );
+  expect(screen.getByRole("button", { name: "Close queue" })).toBeVisible();
+});
+
+it("traps Tab and Shift+Tab inside the sheet", () => {
+  render(
+    <>
+      <button type="button">outside</button>
+      <BottomSheet isOpen onClose={() => {}} ariaLabel="Queue">
+        <button type="button">inside last</button>
+      </BottomSheet>
+    </>
+  );
+  const close = screen.getByRole("button", { name: "Close" });
+  const last = screen.getByRole("button", { name: "inside last" });
+
+  last.focus();
+  fireEvent.keyDown(last, { key: "Tab" });
+  expect(close).toHaveFocus();
+
+  fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
+  expect(last).toHaveFocus();
+});
 
 it("moves focus onto the sheet on open and back to the invoker on close", async () => {
   render(<Demo />);
