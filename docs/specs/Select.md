@@ -194,6 +194,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Trigger arrow and selected-option check use 1-bit ChevronDown and Check icons |
 | Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 
 <!-- AUTO-END:changelog -->

@@ -175,6 +175,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Knob glyphs use the 1-bit Moon and Sun icons |
 
 <!-- AUTO-END:changelog -->
 

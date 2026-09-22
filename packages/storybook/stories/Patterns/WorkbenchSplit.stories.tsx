@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Card, Input, Stack } from '@scorp-ds/components';
+import { Button, Card, Input, Stack, TuiIcon } from '@scorp-ds/components';
 
 /**
  * Pattern: two-pane workbench — narrow index / nav column + main inspector card.
@@ -60,7 +60,10 @@ export const InspectorLayout: Story = {
                     : 'text-secondary-900 hover:bg-[var(--surface-card)] dark:text-secondary-200',
                 ].join(' ')}
               >
-                {item.active ? '▸ ' : '  '}
+                {/* Fixed-width marker slot keeps labels aligned whether or not the row is active */}
+                <span className="inline-flex w-5 shrink-0 align-middle" aria-hidden="true">
+                  {item.active && <TuiIcon name="ChevronRight" size="4" />}
+                </span>
                 {item.label}
               </button>
             ))}

@@ -127,7 +127,7 @@ export const IconWithAriaLabel: Story = {
   name: 'Icon (aria-label)',
   render: () => (
     <Button variant="icon" size="medium" aria-label="Open menu">
-      ☰
+      <TuiIcon name="Menu" />
     </Button>
   ),
 };
@@ -192,7 +192,7 @@ export const AsLink: Story = {
   render: () => (
     <div className="flex items-center gap-4">
       <Button variant="secondary" size="small" href="https://example.com" target="_blank" rel="noopener noreferrer">
-        view project <span aria-hidden="true">↗</span>
+        view project <TuiIcon name="ExternalLink" size="3" />
       </Button>
       <Button variant="primary" href="https://example.com">
         Open docs

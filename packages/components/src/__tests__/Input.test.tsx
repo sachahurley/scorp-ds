@@ -64,3 +64,14 @@ describe("Input field messages", () => {
     expect(el.parentElement?.className).toContain("--field-border-error");
   });
 });
+
+it("error message leads with the 1-bit AlertCircle icon instead of a text prefix", async () => {
+  const { render, screen } = await import("@testing-library/react");
+  const { Input } = await import("../components/Input");
+  render(<Input aria-label="Code" errorMessage="Too short" />);
+  const el = screen.getByRole("textbox", { name: /code/i });
+  const message = document.getElementById(el.getAttribute("aria-describedby")!)!;
+  expect(message.querySelector("svg")).not.toBeNull();
+  expect(message.textContent).toBe("Too short");
+  expect(el).toHaveAccessibleDescription("Too short");
+});

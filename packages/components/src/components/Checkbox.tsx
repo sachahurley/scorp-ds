@@ -26,6 +26,7 @@
 
 import { forwardRef, type InputHTMLAttributes, type ReactNode } from "react";
 import { FieldMessage, useFieldMessage } from "../lib/field";
+import { TuiIcon } from "./TuiIcon";
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Box size. The tap target is 44×44px at every size. */
@@ -85,19 +86,19 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const sizeStyles = {
       small: {
         checkbox: "w-4 h-4",
-        glyph: "text-3xs",
+        glyph: "3" as const,
         label: "text-sm",
         messageIndent: "pl-6", // box 16 + gap 8
       },
       medium: {
         checkbox: "w-5 h-5",
-        glyph: "text-xs",
+        glyph: "4" as const,
         label: "text-sm",
         messageIndent: "pl-7", // box 20 + gap 8
       },
       large: {
         checkbox: "w-6 h-6",
-        glyph: "text-sm",
+        glyph: "5" as const,
         label: "text-sm",
         messageIndent: "pl-8", // box 24 + gap 8
       },
@@ -174,12 +175,12 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           >
             {/* Checkmark — revealed by peer-checked on the outer span */}
             <span
-              className={`${currentSizeStyles.glyph} font-mono leading-none opacity-0 transition-opacity [transition-duration:var(--duration-fast)] ${
+              className={`inline-flex opacity-0 transition-opacity [transition-duration:var(--duration-fast)] ${
                 error ? 'text-white' : 'text-[var(--button-primary-text)]'
               }`}
               aria-hidden="true"
             >
-              ✓
+              <TuiIcon name="Check" size={currentSizeStyles.glyph} />
             </span>
           </span>
         </span>

@@ -33,6 +33,7 @@
  */
 
 import { type ReactNode } from "react";
+import { TuiIcon } from "./TuiIcon";
 
 export interface BadgeProps {
   variant?: "default" | "primary" | "success" | "warning" | "error" | "info" | "bone";
@@ -186,7 +187,7 @@ export function Badge({
           `}
           aria-label="Remove badge"
         >
-          x
+          <TuiIcon name="X" size="3" />
         </button>
       )}
     </span>

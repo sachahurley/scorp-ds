@@ -71,7 +71,7 @@ export const Bone: Story = {
  * state chips, baked in so consumers stop pasting className overrides.
  */
 export const Caps: Story = {
-  args: { variant: 'primary', size: 'small', caps: true, children: '▴ level up' },
+  args: { variant: 'primary', size: 'small', caps: true, iconLeft: <TuiIcon name="ChevronUp" size="3" />, children: 'level up' },
 };
 
 /**

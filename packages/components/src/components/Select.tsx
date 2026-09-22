@@ -26,6 +26,7 @@
 
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useId, type ReactNode, type SelectHTMLAttributes } from "react";
 import { FieldMessage, useFieldMessage } from "../lib/field";
+import { TuiIcon } from "./TuiIcon";
 
 // Define the props interface for the Select component
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
@@ -379,7 +380,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           `}
           aria-hidden="true"
         >
-          ▼
+          <TuiIcon name="ChevronDown" />
         </span>
       </button>
       </div>
@@ -434,7 +435,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
                 
                 {/* TUI Tier 2: Unicode ✓ instead of Lucide Check */}
                 {isSelected && (
-                  <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono font-bold text-[var(--border-focus)] flex-shrink-0`} aria-hidden="true">✓</span>
+                  <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono font-bold text-[var(--border-focus)] flex-shrink-0`} aria-hidden="true"><TuiIcon name="Check" /></span>
                 )}
               </button>
             );

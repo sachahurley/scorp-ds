@@ -1,4 +1,4 @@
-import { Button, ListRow, ThemeToggle } from '@scorp-ds/components';
+import { Button, ListRow, ThemeToggle, TuiIcon } from '@scorp-ds/components';
 
 /**
  * Light front door: narrative + links. The component catalog stays in Storybook.
@@ -81,7 +81,7 @@ export default function App() {
                 title={row.title}
                 description={row.description}
                 href={row.href}
-                titleSuffix={row.external ? <span aria-hidden="true">↗</span> : undefined}
+                titleSuffix={row.external ? <TuiIcon name="ExternalLink" size="3" /> : undefined}
                 {...(row.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               />
             ))}
