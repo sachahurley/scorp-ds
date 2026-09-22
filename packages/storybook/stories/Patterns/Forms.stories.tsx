@@ -50,22 +50,16 @@ function AccountSettingsDemo() {
         </p>
 
         <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-          {/* Error state: message renders directly under the field it belongs to */}
-          <div>
-            <Input
-              label="Display name"
-              placeholder="How you appear to others"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              error={displayName === ''}
-              size="medium"
-            />
-            {displayName === '' && (
-              <p className="mt-1 font-mono text-xs text-error-600 dark:text-error-500">
-                Display name is required
-              </p>
-            )}
-          </div>
+          {/* Error state: errorMessage renders under the field and links it
+              via aria-describedby, so screen readers hear why it's invalid */}
+          <Input
+            label="Display name"
+            placeholder="How you appear to others"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            errorMessage={displayName === '' ? 'Display name is required' : undefined}
+            size="medium"
+          />
 
           <Input label="Email" type="email" placeholder="you@example.com" size="medium" />
 

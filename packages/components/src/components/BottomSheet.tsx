@@ -11,6 +11,7 @@
  *
  * FEATURES:
  * - Scrim backdrop (surface.overlay), click or ESC to close
+ * - Focus moves onto the sheet on open and returns to the invoker on close
  * - Grabber affordance at the top seam
  * - Slides up with the slow duration token
  * - Body scroll is locked while open
@@ -21,7 +22,7 @@
  * - duration.slow (enter/exit)
  */
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export interface BottomSheetProps {
   /** Controls whether the sheet is visible. */
@@ -50,6 +51,23 @@ export function BottomSheet({ isOpen, onClose, ariaLabel, children }: BottomShee
     if (isOpen) setVisible(true);
   }, [isOpen]);
   const closing = visible && !isOpen;
+
+  // FOCUS MANAGEMENT (matches Modal): once the sheet is in the DOM, move
+  // focus onto it so screen readers announce the dialog and keyboard users
+  // start inside it; on close, hand focus back to the invoker. Keyed on the
+  // panel being mounted: `visible` flips true one render after `isOpen`.
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const prevFocusRef = useRef<HTMLElement | null>(null);
+  const sheetMounted = isOpen && visible;
+  useEffect(() => {
+    if (!sheetMounted) return;
+    prevFocusRef.current = document.activeElement as HTMLElement | null;
+    sheetRef.current?.focus();
+    return () => {
+      prevFocusRef.current?.focus();
+      prevFocusRef.current = null;
+    };
+  }, [sheetMounted]);
 
   // ESC closes the sheet, matching Modal behavior
   useEffect(() => {
@@ -90,10 +108,12 @@ export function BottomSheet({ isOpen, onClose, ariaLabel, children }: BottomShee
           animation interpolates the transform, so a -translate-x-1/2 centering
           would make the sheet travel diagonally instead of straight up. */}
       <div
+        ref={sheetRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel}
-        className={`fixed bottom-0 inset-x-0 mx-auto w-[min(540px,100%)] plate-round-lg-top bg-[var(--surface-container-stroke)] pt-px px-px ${
+        className={`focus:outline-none fixed bottom-0 inset-x-0 mx-auto w-[min(540px,100%)] plate-round-lg-top bg-[var(--surface-container-stroke)] pt-px px-px ${
           closing ? "animate-out slide-out-to-bottom fill-mode-forwards" : "animate-in slide-in-from-bottom"
         }`}
         style={{ zIndex: "var(--z-index-modal)", animationDuration: "var(--duration-slow)" }}

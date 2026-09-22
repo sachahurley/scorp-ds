@@ -24,7 +24,7 @@ const SURFACE: Row[] = [
 const TEXT: Row[] = [
   { label: 'text.primary', varName: '--text-primary', usage: 'Body, headings' },
   { label: 'text.secondary', varName: '--text-secondary', usage: 'Supporting copy' },
-  { label: 'text.tertiary', varName: '--text-tertiary', usage: 'Meta, timestamps, hints' },
+  { label: 'text.tertiary', varName: '--text-tertiary', usage: 'Large meta text, decorative labels (3:1; use text.secondary for small copy)' },
   { label: 'text.disabled', varName: '--text-disabled', usage: 'Disabled labels (pair with opacity if needed)' },
   { label: 'text.link', varName: '--text-link', usage: 'Default link color' },
   { label: 'text.link-hover', varName: '--text-link-hover', usage: 'Link hover' },

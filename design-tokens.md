@@ -83,8 +83,8 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 | Token | Light (via) | Dark (via) | Use For |
 |-------|------------|------------|---------|
 | `text.primary` | secondary.900 | secondary.50 | Body, headings |
-| `text.secondary` | secondary.600 | secondary.500 | Supporting copy (dark stepped down one so body sits below accent) |
-| `text.tertiary` | secondary.500 | secondary.600 | Meta, timestamps |
+| `text.secondary` | secondary.700 | secondary.500 | Supporting copy (dark stepped down one so body sits below accent). Light was 600 until 2026-09-21: 3.3:1 on the page, below AA; 700 is 6.1:1 |
+| `text.tertiary` | secondary.600 | secondary.600 | Meta, timestamps at large size, decorative labels. 3:1 class, not for small body text; use `text.secondary` there. Light was 500 (2:1) until 2026-09-21 |
 | `text.disabled` | secondary.400 | secondary.700 | Disabled labels |
 | `text.link` | primary.700 | primary.400 | Links |
 | `text.link-hover` | primary.800 | primary.300 | Link hover |
@@ -110,8 +110,8 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 | Token | Use For |
 |-------|---------|
 | `field.background` | Input fill |
-| `field.border` | Default border (dark: hairline sepia-900 — the portfolio ramp) |
-| `field.border-hover` | Hovered (dark: sepia-600) |
+| `field.border` | Default border. Light: sepia-600 (3.3:1 on white, meets the 3:1 control-boundary rule; was sepia-300 at 1.2:1). Dark: hairline sepia-800, the portfolio ramp (was sepia-900 at 1.2:1). 800 is 1.76:1 on the page: a deliberate exception to the 3:1 control-boundary rule to keep the hairline look |
+| `field.border-hover` | Hovered (light: sepia-700; dark: sepia-600) |
 | `field.border-focus` | Focused (dark: accent gold) |
 | `field.border-error` | Invalid |
 | `field.placeholder` | Placeholder text color |

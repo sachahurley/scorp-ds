@@ -179,6 +179,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | Focus stayed behind the sheet on open and was not restored on close | Focus moves onto the sheet once mounted and returns to the invoker on close (same pattern as Modal) | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -190,6 +191,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | Focus management on open and close |
 
 <!-- AUTO-END:changelog -->
 

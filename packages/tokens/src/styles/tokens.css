@@ -312,8 +312,8 @@
 
   /* Light theme — semantic text */
   --text-primary: #2B2718;
-  --text-secondary: #968A75;
-  --text-tertiary: #BFB4A3;
+  --text-secondary: #695F4D; /* sepia-700: 6.1:1 on the page (600 was 3.3:1, below AA) */
+  --text-tertiary: #968A75; /* sepia-600: 3.3:1, large or decorative text only (500 was 2:1) */
   --text-disabled: #E0DACE;
   --text-link: #B45309;
   --text-link-hover: #92400E;
@@ -329,8 +329,8 @@
 
   /* Light theme — form fields */
   --field-background: #FFFFFF;
-  --field-border: #F0EBE4;
-  --field-border-hover: #E0DACE;
+  --field-border: #968A75; /* sepia-600: 3.3:1 on white, meets the 3:1 control-boundary rule */
+  --field-border-hover: #695F4D;
   --field-border-focus: #FBBF24;
   --field-border-error: #DC2626;
   --field-placeholder: #BFB4A3;
@@ -425,7 +425,7 @@
 
   /* Dark theme — form fields (portfolio ramp: idle hairline → hover mut → focus accent) */
   --field-background: #120D09;
-  --field-border: #2B2718;
+  --field-border: #474030; /* sepia-800: visible hairline, 1.76:1 on the page (below 3:1 by design choice; was sepia-900 at 1.2:1) */
   --field-border-hover: #968A75;
   --field-border-focus: #E0A26A;
   --field-border-error: #EF4444;
