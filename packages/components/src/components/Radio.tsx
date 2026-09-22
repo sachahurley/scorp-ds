@@ -5,9 +5,9 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * SIZES: Proportional to button/input height system
- * - small: 16px × 16px
- * - medium: 20px × 20px (default)
- * - large: 24px × 24px
+ * - sm: 16px × 16px
+ * - md: 20px × 20px (default)
+ * - lg: 24px × 24px
  * SHAPE: the stepped plate silhouette (--plate-round), same as Checkbox;
  * checked shows a square dot where Checkbox shows a check.
  * Every size gets an invisible 44×44px hit area centered on the box (a
@@ -28,9 +28,11 @@
  */
 
 import { forwardRef, type InputHTMLAttributes, type ReactNode } from "react";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  size?: "small" | "medium" | "large";
+  /** Box size: sm 16px, md 20px (default), lg 24px. The tap target is 44×44px at every size. */
+  size?: ControlSizeProp;
   label?: string | ReactNode;
   error?: boolean;
   onCheckedChange?: (checked: boolean) => void;
@@ -39,7 +41,7 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 /**
  * Radio Component
  * 
- * @param size - Radio size (default: "medium")
+ * @param size - Radio size (default: "md")
  * @param label - Optional label text displayed next to radio
  * @param error - Whether radio has a validation error
  * @param disabled - Whether radio is disabled
@@ -52,7 +54,7 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   (
     {
-      size = "medium",
+      size: sizeProp = "md",
       label,
       error = false,
       disabled = false,
@@ -64,22 +66,23 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     },
     ref
   ) => {
+    const size = resolveSize(sizeProp, "Radio");
     // Size styles proportional to button/input system
     // Small: 16px × 16px
     // Medium: 20px × 20px (matches medium icon size)
     // Large: 24px × 24px (matches large icon size)
     const sizeStyles = {
-      small: {
+      sm: {
         radio: "w-4 h-4",                          // 16px × 16px
         dot: "w-1.5 h-1.5",                       // 6px square dot
         label: "text-sm",                         // 14px text
       },
-      medium: {
+      md: {
         radio: "w-5 h-5",                         // 20px × 20px
         dot: "w-2 h-2",                           // 8px square dot
         label: "text-sm",                         // 14px text
       },
-      large: {
+      lg: {
         radio: "w-6 h-6",                         // 24px × 24px
         dot: "w-2.5 h-2.5",                       // 10px square dot
         label: "text-sm",                         // 14px text
@@ -122,7 +125,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     // HIT AREA: the wrapper carries a 44×44px pseudo-element centered on the
     // box. It sits inside the <label>, so a tap anywhere in it selects.
     const control = (
-      <span className="relative inline-flex shrink-0 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-11 before:h-11">
+      <span className="relative inline-flex shrink-0 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-touch before:h-touch">
         <input
           ref={ref}
           type="radio"

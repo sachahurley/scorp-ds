@@ -194,6 +194,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | feat | Trigger arrow and selected-option check use 1-bit ChevronDown and Check icons |
 | Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 

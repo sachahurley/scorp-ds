@@ -11,7 +11,7 @@ const meta: Meta<typeof Badge> = {
       control: 'select',
       options: ['default', 'primary', 'success', 'warning', 'error', 'info'],
     },
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
   },
   parameters: { layout: 'centered' },
 };
@@ -63,7 +63,7 @@ export const AllVariants: Story = {
  * gear, loot tiers).
  */
 export const Bone: Story = {
-  args: { variant: 'bone', size: 'small', children: 'equipped' },
+  args: { variant: 'bone', size: 'sm', children: 'equipped' },
 };
 
 /**
@@ -71,7 +71,7 @@ export const Bone: Story = {
  * state chips, baked in so consumers stop pasting className overrides.
  */
 export const Caps: Story = {
-  args: { variant: 'primary', size: 'small', caps: true, iconLeft: <TuiIcon name="ChevronUp" size="3" />, children: 'level up' },
+  args: { variant: 'primary', size: 'sm', caps: true, iconLeft: <TuiIcon name="ChevronUp" size="3" />, children: 'level up' },
 };
 
 /**
@@ -82,20 +82,20 @@ export const Caps: Story = {
  * the filled bone chip) with per-theme text so it stays AA on light.
  */
 export const Dashed: Story = {
-  args: { size: 'small', caps: true, dashed: true, children: 'free' },
+  args: { size: 'sm', caps: true, dashed: true, children: 'free' },
 };
 
 /** Dashed composes with every variant; the dash follows the text color. */
 export const DashedVariants: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
-      <Badge dashed size="small" caps>
+      <Badge dashed size="sm" caps>
         free
       </Badge>
-      <Badge dashed variant="primary" size="small" caps>
+      <Badge dashed variant="primary" size="sm" caps>
         slot open
       </Badge>
-      <Badge dashed variant="bone" size="small" caps>
+      <Badge dashed variant="bone" size="sm" caps>
         empty slot
       </Badge>
     </div>

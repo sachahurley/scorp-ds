@@ -82,12 +82,12 @@ export const InspectorLayout: Story = {
                   className="min-w-[12rem] flex-1"
                   placeholder="Filter…"
                   aria-label="Filter log lines"
-                  size="small"
+                  size="sm"
                 />
-                <Button variant="secondary" size="small" type="button">
+                <Button variant="secondary" size="sm" type="button">
                   Pause
                 </Button>
-                <Button variant="primary" size="small" type="button">
+                <Button variant="primary" size="sm" type="button">
                   Export
                 </Button>
               </div>

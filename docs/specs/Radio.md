@@ -194,6 +194,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | fix | Radio uses the plate silhouette and a square dot |
 | Unreleased | 2026-09-21 | fix | 44px hit area, unlabeled click fix |
 

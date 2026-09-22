@@ -29,22 +29,22 @@ export const Positions: Story = {
   render: () => (
     <div className="grid grid-cols-2 gap-8 p-8">
       <Tooltip content="Top" position="top">
-        <Button variant="ghost" size="small">
+        <Button variant="ghost" size="sm">
           Top
         </Button>
       </Tooltip>
       <Tooltip content="Bottom" position="bottom">
-        <Button variant="ghost" size="small">
+        <Button variant="ghost" size="sm">
           Bottom
         </Button>
       </Tooltip>
       <Tooltip content="Left" position="left">
-        <Button variant="ghost" size="small">
+        <Button variant="ghost" size="sm">
           Left
         </Button>
       </Tooltip>
       <Tooltip content="Right" position="right">
-        <Button variant="ghost" size="small">
+        <Button variant="ghost" size="sm">
           Right
         </Button>
       </Tooltip>

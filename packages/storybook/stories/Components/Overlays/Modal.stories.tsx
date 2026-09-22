@@ -26,7 +26,7 @@ export const Default: Story = {
               Modal content scrolls when it exceeds the max height. Press Esc or click the backdrop to
               close.
             </p>
-            <Button variant="primary" size="small" type="button" onClick={() => setOpen(false)}>
+            <Button variant="primary" size="sm" type="button" onClick={() => setOpen(false)}>
               Close
             </Button>
           </div>
@@ -42,7 +42,7 @@ export const LongContent: Story = {
     const [open, setOpen] = useState(true);
     return (
       <div>
-        <Button type="button" variant="secondary" size="small" onClick={() => setOpen(true)}>
+        <Button type="button" variant="secondary" size="sm" onClick={() => setOpen(true)}>
           Re-open
         </Button>
         <Modal isOpen={open} onClose={() => setOpen(false)} title="Scrollable region">
@@ -73,10 +73,10 @@ export const WithFooter: Story = {
           title="Claim reward"
           footerContent={
             <>
-              <Button variant="secondary" size="small" type="button" onClick={() => setOpen(false)}>
+              <Button variant="secondary" size="sm" type="button" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="primary" size="small" type="button" onClick={() => setOpen(false)}>
+              <Button variant="primary" size="sm" type="button" onClick={() => setOpen(false)}>
                 Claim
               </Button>
             </>
@@ -112,7 +112,7 @@ export const Docked: Story = {
           docked
           width={640}
           footerContent={
-            <Button variant="primary" size="small" type="button" onClick={() => setOpen(false)}>
+            <Button variant="primary" size="sm" type="button" onClick={() => setOpen(false)}>
               Equip
             </Button>
           }

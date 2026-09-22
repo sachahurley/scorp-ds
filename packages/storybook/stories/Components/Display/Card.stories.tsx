@@ -35,10 +35,10 @@ export const WithFooter: Story = {
     ),
     footerContent: (
       <div className="flex gap-2">
-        <Button variant="secondary" size="small">
+        <Button variant="secondary" size="sm">
           Cancel
         </Button>
-        <Button variant="primary" size="small">
+        <Button variant="primary" size="sm">
           Deploy
         </Button>
       </div>
@@ -56,7 +56,7 @@ export const WithHeaderContent: Story = {
     className: 'w-96',
     headerContent: (
       <div className="flex items-center gap-4">
-        <Avatar initials="AJ" size="medium" />
+        <Avatar initials="AJ" size="md" />
         <div>
           <h3 className="font-mono text-base font-bold text-[var(--text-primary)]">
             Alex Johnson
@@ -74,10 +74,10 @@ export const WithHeaderContent: Story = {
     ),
     footerContent: (
       <div className="flex gap-2">
-        <Button variant="outline" size="small">
+        <Button variant="outline" size="sm">
           Reset
         </Button>
-        <Button variant="primary" size="small" className="flex-1">
+        <Button variant="primary" size="sm" className="flex-1">
           Save changes
         </Button>
       </div>
@@ -99,7 +99,7 @@ export const Testimonial: Story = {
           every surface consistent. Exactly what we needed.
         </blockquote>
         <figcaption className="mt-6 flex items-center gap-4 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] pt-4">
-          <Avatar initials="MC" size="medium" />
+          <Avatar initials="MC" size="md" />
           <div className="min-w-0">
             <p className="font-mono text-sm font-bold text-[var(--text-primary)]">Michael Chen</p>
             <p className="font-mono text-xs text-secondary-700 dark:text-secondary-400">

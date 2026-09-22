@@ -7,7 +7,7 @@ const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
     error: { control: 'boolean' },
     helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
     errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
@@ -62,9 +62,9 @@ export const AllSizes: Story = {
   name: 'All sizes',
   render: () => (
     <div className="flex flex-col gap-3">
-      <Checkbox size="small" label="Small" defaultChecked />
-      <Checkbox size="medium" label="Medium" defaultChecked />
-      <Checkbox size="large" label="Large" defaultChecked />
+      <Checkbox size="sm" label="Small" defaultChecked />
+      <Checkbox size="md" label="Medium" defaultChecked />
+      <Checkbox size="lg" label="Large" defaultChecked />
     </div>
   ),
 };

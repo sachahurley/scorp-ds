@@ -13,10 +13,10 @@ export function MarketingHeroScreen() {
         className="flex flex-col"
         footerContent={
           <Stack axis="horizontal" gap="3">
-            <Button variant="secondary" size="small" type="button">
+            <Button variant="secondary" size="sm" type="button">
               Docs
             </Button>
-            <Button variant="primary" size="small" type="button">
+            <Button variant="primary" size="sm" type="button">
               Get started
             </Button>
           </Stack>

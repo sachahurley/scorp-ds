@@ -8,7 +8,7 @@ const meta: Meta<typeof Switch> = {
   component: Switch,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
   },
   parameters: { layout: 'centered' },
@@ -49,9 +49,9 @@ export const AllSizes: Story = {
     const [c, setC] = useState(true);
     return (
       <div className="flex flex-col gap-4">
-        <Switch size="small" label="Small" checked={a} onCheckedChange={setA} />
-        <Switch size="medium" label="Medium" checked={b} onCheckedChange={setB} />
-        <Switch size="large" label="Large" checked={c} onCheckedChange={setC} />
+        <Switch size="sm" label="Small" checked={a} onCheckedChange={setA} />
+        <Switch size="md" label="Medium" checked={b} onCheckedChange={setB} />
+        <Switch size="lg" label="Large" checked={c} onCheckedChange={setC} />
       </div>
     );
   },

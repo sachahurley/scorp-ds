@@ -7,7 +7,7 @@ const meta: Meta<typeof Radio> = {
   component: Radio,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
     error: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },

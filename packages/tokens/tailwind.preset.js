@@ -242,6 +242,15 @@ module.exports = {
           placeholder: 'var(--field-placeholder)',
         },
       },
+      // Control sizes from tokens: h-control-md, min-h-control-sm, size-control-lg,
+      // w-touch / h-touch for 44px hit areas (Tailwind 3.4 feeds spacing to
+      // width, height, min/max sizes and size-*)
+      spacing: {
+        'control-sm': 'var(--control-height-sm)',
+        'control-md': 'var(--control-height-md)',
+        'control-lg': 'var(--control-height-lg)',
+        touch: 'var(--touch-target)',
+      },
       // Font families from tokens
       fontFamily: {
         mono: 'var(--font-family-mono)',

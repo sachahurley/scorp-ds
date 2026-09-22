@@ -40,7 +40,7 @@ export function ThemeToggle() {
       <Switch
         checked={isDark}
         onCheckedChange={toggleTheme}
-        size="small"
+        size="sm"
         icon={isDark ? <TuiIcon name="Moon" size="3" className="text-[var(--border-focus)]" /> : <TuiIcon name="Sun" size="3" className="text-[var(--text-secondary)]" />}
         aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
       />

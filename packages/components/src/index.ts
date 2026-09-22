@@ -113,3 +113,4 @@ export { ThemeProvider } from './theme/ThemeProvider';
 
 // Utilities
 export { cn } from './lib/utils';
+export type { ControlSize, ControlSizeProp } from './lib/size';

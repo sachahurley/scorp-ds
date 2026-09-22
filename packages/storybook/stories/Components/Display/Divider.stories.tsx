@@ -7,7 +7,7 @@ const meta: Meta<typeof Divider> = {
   tags: ['autodocs'],
   argTypes: {
     variant: { control: 'select', options: ['horizontal', 'vertical', 'withText'] },
-    spacing: { control: 'select', options: ['none', 'small', 'medium', 'large'] },
+    spacing: { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
   },
   parameters: { layout: 'centered' },
 };

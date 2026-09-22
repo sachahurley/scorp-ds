@@ -17,11 +17,11 @@
  * bordered plate; its fill is the page surface, not transparent.
  * 
  * SIZES: All defined in tokens.json
- * - small: 32px height
- * - medium: 40px height (default)
- * - large: 48px height
+ * - sm: 32px height
+ * - md: 40px height (default)
+ * - lg: 48px height
  * - icon: DEPRECATED alias for a 40px square. Icon-only buttons are detected
- *   automatically and squared at every size, so use `size="medium"` instead.
+ *   automatically and squared at every size, so use `size="md"` instead.
  *
  * ICON-ONLY BUTTONS: `variant` picks the look, `size` picks the dimension.
  * `variant="icon"` is the dedicated icon plate (`--button-icon-*`); any other
@@ -33,6 +33,7 @@
  */
 
 import { forwardRef, useEffect, type ButtonHTMLAttributes, type CSSProperties } from "react";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 // Define the props interface for the Button component
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -43,10 +44,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    */
   variant?: "primary" | "secondary" | "ghost" | "link" | "outline" | "destructive" | "icon";
   /**
-   * Height: small 32px, medium 40px (default), large 48px. Icon-only buttons
-   * are squared automatically. `"icon"` is deprecated: use "medium".
+   * Height: sm 32px, md 40px (default), lg 48px, from the control-height
+   * tokens. Legacy small/medium/large still work (deprecated). Icon-only buttons
+   * are squared automatically. `"icon"` is deprecated: use "md".
    */
-  size?: "small" | "medium" | "large" | "icon";
+  size?: ControlSizeProp | "icon";
   /** Disables the button (anchors drop `href` and set `aria-disabled`). */
   disabled?: boolean;
   // Icon support - can be any React element (TUI: typically TuiIcon or Unicode characters)
@@ -68,7 +70,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * Button Component
  * 
  * @param variant - Button style variant (default: "primary")
- * @param size - Button size (default: "medium")
+ * @param size - Button size (default: "md")
  * @param disabled - Whether button is disabled
  * @param className - Additional CSS classes to apply
  * @param children - Button content (text, icons, etc.)
@@ -81,7 +83,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     { 
       variant = "primary", 
-      size = "medium", 
+      size: sizeProp = "md", 
       disabled = false, 
       className = "", 
       children,
@@ -96,6 +98,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const size = resolveSize(sizeProp, "Button", "md" as "sm" | "md" | "lg" | "icon");
     // BASE STYLES - Applied to all buttons
     // Uses tokens: font.size.sm (14px)
     // Border radius is size-specific (see sizeStyles)
@@ -155,7 +158,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     useEffect(() => {
       if (process.env.NODE_ENV === "production" || size !== "icon") return;
       console.warn(
-        '[@scorp-ds/components] Button: size="icon" is deprecated. Icon-only buttons are squared automatically; use size="medium".'
+        '[@scorp-ds/components] Button: size="icon" is deprecated. Icon-only buttons are squared automatically; use size="md".'
       );
     }, [size]);
 
@@ -173,28 +176,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       // TUI: all corners sharp (plate-round)
       if (iconOnly || variant === "icon") {
         switch (size) {
-          case "small":
-            return "h-8 w-8 plate-round";
-          case "large":
-            return "h-12 w-12 plate-round";
+          case "sm":
+            return "size-control-sm plate-round";
+          case "lg":
+            return "size-control-lg plate-round";
           case "icon":
-            return "h-10 w-10 plate-round";
+            return "size-control-md plate-round";
           default: // medium
-            return "h-10 w-10 plate-round";
+            return "size-control-md plate-round";
         }
       }
       
       // For regular buttons with labels, use standard size styles
       // TUI: all corners sharp (plate-round)
       switch (size) {
-        case "small":
-          return "h-8 px-4 py-1.5 plate-round";
-        case "large":
-          return "h-12 px-6 py-3.5 plate-round";
+        case "sm":
+          return "h-control-sm px-4 py-1.5 plate-round";
+        case "lg":
+          return "h-control-lg px-6 py-3.5 plate-round";
         case "icon":
-          return "h-10 w-10 plate-round";
+          return "size-control-md plate-round";
         default: // medium
-          return "h-10 px-5 py-2.5 plate-round";
+          return "h-control-md px-5 py-2.5 plate-round";
       }
     };
 
@@ -248,9 +251,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     // ICON SIZING - Icons scale with button size
     // Small: 16px, Medium: 20px, Large: 24px, Icon: 20px
     const iconSizeStyles = {
-      small: "w-4 h-4",    // 16px
-      medium: "w-5 h-5",   // 20px
-      large: "w-6 h-6",    // 24px
+      sm: "w-4 h-4",    // 16px
+      md: "w-5 h-5",   // 20px
+      lg: "w-6 h-6",    // 24px
       icon: "w-5 h-5",     // 20px
     };
 
@@ -260,9 +263,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     // Medium: 8px (gap-2) - standard spacing for most use cases
     // Large: 10px (gap-2.5) - slightly more breathing room for larger buttons
     const gapStyles = {
-      small: "gap-1.5",    // 6px - tighter for visual balance in compact buttons
-      medium: "gap-2",     // 8px - standard spacing
-      large: "gap-2.5",    // 10px - more breathing room for larger buttons
+      sm: "gap-1.5",    // 6px - tighter for visual balance in compact buttons
+      md: "gap-2",     // 8px - standard spacing
+      lg: "gap-2.5",    // 10px - more breathing room for larger buttons
       icon: "gap-0",       // No gap for icon-only
     };
 
@@ -292,8 +295,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       
       // If this is an icon-only button (any variant), wrap children with icon size classes
       if (iconOnly && children) {
-        // Determine the effective size (handle legacy "icon" size as "medium")
-        const effectiveSize = size === "icon" ? "medium" : size;
+        // Determine the effective size (handle legacy "icon" size as "md")
+        const effectiveSize = size === "icon" ? "md" : size;
         
         // Check if children is a single React element (icon)
         if (typeof children === 'object' && children !== null && 'type' in children) {

@@ -56,13 +56,13 @@ export const WithFormFields: Story = {
         </TabsList>
         <TabsContent value="a" forceMount>
           <Stack gap="3">
-            <Input label="Field A1" defaultValue="kept in DOM" size="medium" />
-            <Input label="Field A2" size="medium" />
+            <Input label="Field A1" defaultValue="kept in DOM" size="md" />
+            <Input label="Field A2" size="md" />
           </Stack>
         </TabsContent>
         <TabsContent value="b" forceMount>
           <Stack gap="3">
-            <Input label="Field B1" size="medium" />
+            <Input label="Field B1" size="md" />
           </Stack>
         </TabsContent>
       </Tabs>

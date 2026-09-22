@@ -15,6 +15,7 @@
 
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import { TuiIcon } from "./TuiIcon";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 // Menu item interface
 export interface DropdownItem {
@@ -32,7 +33,8 @@ export interface DropdownProps {
   items: DropdownItem[];
   align?: "left" | "right";
   label?: string; // Label for the default trigger button
-  size?: "small" | "medium" | "large"; // Size variant matching buttons/inputs
+  /** Trigger height, matching Button/Input: sm, md (default), lg. Legacy names are deprecated aliases. */
+  size?: ControlSizeProp;
 }
 
 /**
@@ -48,8 +50,9 @@ export function Dropdown({
   items, 
   align = "left",
   label = "Actions",
-  size = "medium"
+  size: sizeProp = "md"
 }: DropdownProps) {
+    const size = resolveSize(sizeProp, "Dropdown");
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -156,20 +159,20 @@ export function Dropdown({
   // Small: 32px height / Medium: 40px / Large: 48px
   // Corners: plate silhouette (--plate-round) is the shape language; radius tokens are retired
   const sizeStyles = {
-    small: {
-      button: "h-8 px-4 py-1.5 plate-round",
+    sm: {
+      button: "h-control-sm px-4 py-1.5 plate-round",
       menu: "",
       menuItem: "",
       icon: "w-4 h-4",
     },
-    medium: {
-      button: "h-10 px-5 py-2.5 plate-round",
+    md: {
+      button: "h-control-md px-5 py-2.5 plate-round",
       menu: "",
       menuItem: "",
       icon: "w-5 h-5",
     },
-    large: {
-      button: "h-12 px-6 py-3.5 plate-round",
+    lg: {
+      button: "h-control-lg px-6 py-3.5 plate-round",
       menu: "",
       menuItem: "",
       icon: "w-6 h-6",

@@ -58,12 +58,12 @@ function AccountSettingsDemo() {
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             errorMessage={displayName === '' ? 'Display name is required' : undefined}
-            size="medium"
+            size="md"
           />
 
-          <Input label="Email" type="email" placeholder="you@example.com" size="medium" />
+          <Input label="Email" type="email" placeholder="you@example.com" size="md" />
 
-          <Select label="Timezone" size="medium" defaultValue="pt">
+          <Select label="Timezone" size="md" defaultValue="pt">
             <option value="pt">Pacific Time (UTC-8)</option>
             <option value="mt">Mountain Time (UTC-7)</option>
             <option value="ct">Central Time (UTC-6)</option>
@@ -105,20 +105,20 @@ function AccountSettingsDemo() {
             <Switch
               checked={publicProfile}
               onCheckedChange={setPublicProfile}
-              size="medium"
+              size="md"
               label="Public profile"
               hideLabel
             />
           </div>
 
-          <Textarea label="Bio" placeholder="A short introduction..." rows={4} size="medium" />
+          <Textarea label="Bio" placeholder="A short introduction..." rows={4} size="md" />
 
           {/* Button row: primary at the end, quiet action beside it */}
           <div className="flex justify-end gap-3 pt-2">
-            <Button variant="ghost" size="medium" type="button">
+            <Button variant="ghost" size="md" type="button">
               Cancel
             </Button>
-            <Button variant="primary" size="medium" type="submit">
+            <Button variant="primary" size="md" type="submit">
               Save changes
             </Button>
           </div>

@@ -294,7 +294,7 @@ function MusicPlayerCard({
             {onCollapse && (
               <Button
                 variant="icon"
-                size="small"
+                size="sm"
                 type="button"
                 aria-label="Collapse player"
                 aria-expanded={true}
@@ -306,7 +306,7 @@ function MusicPlayerCard({
             {onClose && (
               <Button
                 variant="icon"
-                size="small"
+                size="sm"
                 type="button"
                 aria-label="Close music player"
                 onClick={onClose}
@@ -390,7 +390,7 @@ function MusicPlayerCard({
             <div className="flex items-center justify-center gap-2">
               <Button
                 variant="icon"
-                size="medium"
+                size="md"
                 type="button"
                 aria-pressed={player.isShuffling}
                 aria-label="Shuffle"
@@ -401,7 +401,7 @@ function MusicPlayerCard({
               </Button>
               <Button
                 variant="icon"
-                size="medium"
+                size="md"
                 type="button"
                 aria-label="Previous track"
                 disabled={player.previousDisabled}
@@ -411,7 +411,7 @@ function MusicPlayerCard({
               </Button>
               <Button
                 variant="primary"
-                size="medium"
+                size="md"
                 type="button"
                 aria-label={player.isPlaying ? 'Pause' : 'Play'}
                 onClick={player.togglePlay}
@@ -420,7 +420,7 @@ function MusicPlayerCard({
               </Button>
               <Button
                 variant="icon"
-                size="medium"
+                size="md"
                 type="button"
                 aria-label="Next track"
                 disabled={player.nextDisabled}
@@ -430,7 +430,7 @@ function MusicPlayerCard({
               </Button>
               <Button
                 variant="icon"
-                size="medium"
+                size="md"
                 type="button"
                 aria-pressed={player.isRepeating}
                 aria-label="Repeat"
@@ -511,7 +511,7 @@ function MusicPlayerBar({
           <div className="flex items-center gap-2">
             <Button
               variant="icon"
-              size="small"
+              size="sm"
               type="button"
               aria-label="Previous track"
               disabled={player.previousDisabled}
@@ -521,7 +521,7 @@ function MusicPlayerBar({
             </Button>
             <Button
               variant="primary"
-              size="small"
+              size="sm"
               type="button"
               aria-label={player.isPlaying ? 'Pause' : 'Play'}
               onClick={player.togglePlay}
@@ -530,7 +530,7 @@ function MusicPlayerBar({
             </Button>
             <Button
               variant="icon"
-              size="small"
+              size="sm"
               type="button"
               aria-label="Next track"
               disabled={player.nextDisabled}
@@ -542,7 +542,7 @@ function MusicPlayerBar({
           {/* Expand matches the transport cluster at small (32px). */}
           <Button
             variant="icon"
-            size="small"
+            size="sm"
             type="button"
             aria-label="Expand player"
             aria-expanded={false}
@@ -658,7 +658,7 @@ function NowPlayingDemo({ initialCollapsed = false }: { initialCollapsed?: boole
           )}
         </div>
       ) : (
-        <Button variant="outline" size="small" type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="outline" size="sm" type="button" onClick={() => setIsOpen(true)}>
           Reopen player
         </Button>
       )}

@@ -44,17 +44,17 @@ function SignInDemo() {
           subtitle="Enter your credentials to continue"
           footerContent={
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <Button variant="link" size="small" type="button">
+              <Button variant="link" size="sm" type="button">
                 Forgot password?
               </Button>
-              <Button variant="primary" size="medium" type="button">
+              <Button variant="primary" size="md" type="button">
                 Sign in
               </Button>
             </div>
           }
         >
           <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <Input label="Email" type="email" placeholder="you@example.com" size="medium" />
+            <Input label="Email" type="email" placeholder="you@example.com" size="md" />
 
             {/* Password toggle recipe: the button rides inside the field wrapper,
                 cleared by pr-10 on the input, and names its action for AT. */}
@@ -63,7 +63,7 @@ function SignInDemo() {
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
-                size="medium"
+                size="md"
                 className="pr-10"
               />
               <button

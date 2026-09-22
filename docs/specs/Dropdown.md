@@ -182,6 +182,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | feat | Trigger arrow uses the 1-bit ChevronDown icon |
 
 <!-- AUTO-END:changelog -->

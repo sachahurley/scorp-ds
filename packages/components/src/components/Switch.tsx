@@ -5,9 +5,9 @@
  * Built using design tokens for consistent styling
  * 
  * SIZES: Proportional to button/input height system
- * - small: 24px height (h-6)
- * - medium: 32px height (h-8) - matches small button/input - default
- * - large: 40px height (h-10) - matches medium button/input
+ * - sm: 24px height (h-6)
+ * - md: 32px height (h-8) - matches small button/input - default
+ * - lg: 40px height (h-10) - matches medium button/input
  * Every size's tap target is at least 44px tall: the (unclipped) button
  * carries a pseudo-element hit area, so the visual track keeps its size.
  * 
@@ -26,12 +26,13 @@
  */
 
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 export interface SwitchProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   /** Track size. The tap target is at least 44px tall at every size. */
-  size?: "small" | "medium" | "large";
+  size?: ControlSizeProp;
   /** Visible label and accessible name. Use `hideLabel` to keep it aria-only. */
   label?: string;
   /**
@@ -49,7 +50,7 @@ export interface SwitchProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
  * 
  * @param checked - Whether switch is checked/on (default: false)
  * @param onCheckedChange - Callback when switch state changes
- * @param size - Switch size (default: "medium")
+ * @param size - Switch size (default: "md")
  * @param label - Optional label text displayed next to switch (and the accessible name)
  * @param hideLabel - Use label as the accessible name only; render no visible text
  * @param disabled - Whether switch is disabled
@@ -60,7 +61,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     {
       checked = false,
       onCheckedChange,
-      size = "medium",
+      size: sizeProp = "md",
       label,
       hideLabel = false,
       disabled = false,
@@ -70,24 +71,25 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     },
     ref
   ) => {
+    const size = resolveSize(sizeProp, "Switch");
     // Size styles proportional to button/input system
     // Small: 24px height, 44px width
     // Medium: 32px height, 56px width (matches small button/input height)
     // Large: 40px height, 72px width (matches medium button/input height)
     const sizeStyles = {
-      small: {
+      sm: {
         track: "h-6 w-11",           // 24px × 44px
         knob: "h-5 w-5",            // 20px × 20px knob
         knobTranslate: checked ? 'translateX(22px)' : 'translateX(2px)', // Unchecked: 2px from left (perfect), Checked: 22px (2px gap from right edge)
         iconSize: "w-3 h-3",         // 12px icon for small knob
       },
-      medium: {
+      md: {
         track: "h-8 w-14",          // 32px × 56px (matches small button height)
         knob: "h-6 w-6",            // 24px × 24px knob
         knobTranslate: checked ? 'translateX(29px)' : 'translateX(3px)', // Unchecked: 3px from left (1px right), Checked: 29px (1px left from previous)
         iconSize: "w-3 h-3",         // 12px icon for medium knob (matches ThemeToggle)
       },
-      large: {
+      lg: {
         track: "h-10 w-[72px]",     // 40px × 72px (matches medium button height)
         knob: "h-8 w-8",            // 32px × 32px knob
         knobTranslate: checked ? 'translateX(37px)' : 'translateX(3px)', // Unchecked: 3px from left (1px right), Checked: 37px (3px left from previous)
@@ -126,7 +128,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           onKeyDown={handleKeyDown}
           className={`
             group relative inline-flex shrink-0
-            before:content-[''] before:absolute before:inset-x-0 before:top-1/2 before:-translate-y-1/2 before:h-11
+            before:content-[''] before:absolute before:inset-x-0 before:top-1/2 before:-translate-y-1/2 before:h-touch
             focus:outline-none
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           `}

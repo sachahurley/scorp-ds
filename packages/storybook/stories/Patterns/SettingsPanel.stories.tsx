@@ -45,10 +45,10 @@ export const AccountPreferences: Story = {
           subtitle="Profile, locale, and alert defaults"
           footerContent={
             <div className="flex flex-wrap items-center justify-end gap-2">
-              <Button variant="outline" size="small" type="button">
+              <Button variant="outline" size="sm" type="button">
                 Reset
               </Button>
-              <Button variant="primary" size="small" type="button">
+              <Button variant="primary" size="sm" type="button">
                 Save changes
               </Button>
             </div>
@@ -56,9 +56,9 @@ export const AccountPreferences: Story = {
         >
           <Stack gap="6">
             <Stack gap="3">
-              <Input label="Display name" defaultValue="sacha" size="medium" />
-              <Input label="Workspace slug" defaultValue="scorp-ds" size="medium" />
-              <Select label="Locale" defaultValue="en" size="medium">
+              <Input label="Display name" defaultValue="sacha" size="md" />
+              <Input label="Workspace slug" defaultValue="scorp-ds" size="md" />
+              <Select label="Locale" defaultValue="en" size="md">
                 <option value="en">English</option>
                 <option value="fr">Français</option>
               </Select>

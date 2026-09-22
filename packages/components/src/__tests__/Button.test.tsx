@@ -13,7 +13,7 @@ it("renders an anchor with the same plate styling when href is set", async () =>
   const { render, screen } = await import("@testing-library/react");
   const { Button } = await import("../components/Button");
   render(
-    <Button variant="secondary" size="small" href="https://example.com" target="_blank" rel="noopener noreferrer">
+    <Button variant="secondary" size="sm" href="https://example.com" target="_blank" rel="noopener noreferrer">
       view project
     </Button>
   );

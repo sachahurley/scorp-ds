@@ -47,7 +47,7 @@ export const JobRunRow: Story = {
         </p>
         <Stack gap="2">
           <RowShell>
-            <Avatar initials="BR" size="small" status="online" />
+            <Avatar initials="BR" size="sm" status="online" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-2">
                 <span className="truncate font-medium">build · main</span>
@@ -58,15 +58,15 @@ export const JobRunRow: Story = {
               </p>
             </div>
             <Badge variant="success">passed</Badge>
-            <Button variant="outline" size="small" type="button">
+            <Button variant="outline" size="sm" type="button">
               Logs
             </Button>
-            <Button variant="icon" size="small" type="button" aria-label="Open menu">
+            <Button variant="icon" size="sm" type="button" aria-label="Open menu">
               <TuiIcon name="MoreVertical" />
             </Button>
           </RowShell>
           <RowShell>
-            <Avatar initials="QA" size="small" />
+            <Avatar initials="QA" size="sm" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-2">
                 <span className="truncate font-medium">e2e · nightly</span>
@@ -77,10 +77,10 @@ export const JobRunRow: Story = {
               </p>
             </div>
             <Badge variant="default">queued</Badge>
-            <Button variant="outline" size="small" type="button" disabled>
+            <Button variant="outline" size="sm" type="button" disabled>
               Logs
             </Button>
-            <Button variant="icon" size="small" type="button" aria-label="Open menu">
+            <Button variant="icon" size="sm" type="button" aria-label="Open menu">
               <TuiIcon name="MoreVertical" />
             </Button>
           </RowShell>

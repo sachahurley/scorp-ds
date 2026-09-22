@@ -241,6 +241,12 @@
   --spacing-16: 64px;
   --spacing-20: 80px;
   --spacing-24: 96px;
+
+  /* Control sizes (global.control / global.touch) */
+  --control-height-sm: 32px;
+  --control-height-md: 40px;
+  --control-height-lg: 48px;
+  --touch-target: 44px;
   
   /* Focus state tokens (global - same for both themes) */
   --focus-ring-width: 2px;
