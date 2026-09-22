@@ -27,7 +27,7 @@ Read `.claude/ds-config.json: paths.foundation` to locate all foundation token f
 
 For each foundation file, extract every public token declaration that is NOT:
 - A base token (color scale like `red50`, spacing scale like `space16`)
-- A `@Deprecated` token (Flutter) or deprecated export
+- A token marked deprecated in its `$description`, or a deprecated export
 - A private member
 
 ### 3. Extract all tokens from design-tokens.md

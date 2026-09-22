@@ -14,9 +14,9 @@ Build a new screen template using shared builder functions from the presets dire
 ## Reference Files
 
 Read `.claude/ds-config.json: paths` to get all directory paths. Key references:
-- **Presets barrel** → `{paths.presets}/presets.dart` (or `index.ts` for React/TS)
+- **Presets barrel** -> `{paths.presets}/index.ts`
 - **Guidelines** → `composition-presets-guidelines.md`
-- **Component library** → `{paths.components}/components.dart` (or `index.ts`)
+- **Component library** -> `@scorp-ds/components` (barrel: `packages/components/src/index.ts`)
 - **CLAUDE.md** → project rules (no hardcoding, naming conventions, etc.)
 
 ## Input Modes
@@ -30,14 +30,14 @@ User provides a Figma URL. Use Figma MCP tools to:
 2. Get the file/node data (`figma_get_file_data` or `get_figma_data`)
 3. Walk through every visual element and map it to an existing design system component
 4. Check presets directory for builder functions that match configurations in the design
-5. **Gap analysis**: If the design contains elements with no matching component, flag them as gaps — do NOT approximate with raw widgets
+5. **Gap analysis**: If the design contains elements with no matching component, flag them as gaps. Do NOT approximate with raw HTML elements
 
 ## Rules (MANDATORY)
 
 1. **NEVER inline a component configuration that already has a builder function.**
-   Before writing any widget tree, search the presets directory for an existing function.
+   Before writing any JSX, search the presets directory for an existing function.
 
-2. **NEVER copy-paste widget trees from stories or other samples.**
+2. **NEVER copy-paste JSX trees from stories or other samples.**
    Always create or use a builder function.
 
 3. **Builder functions go in the presets directory, not in the sample file.**
@@ -92,7 +92,7 @@ Add or update the screens story file in `{paths.stories}/`:
 1. **No hardcoded values** — Grep new files for raw color literals, numeric spacing, raw font sizes
 2. **No inlined component configurations** — Check that screen-level components use presets
 3. **Accessibility minimums** — Every interactive component must have a semantic label
-4. Run static analysis (`flutter analyze` or `tsc --noEmit`)
+4. Run `npm run lint` and `npm run type-check`
 
 ## Output
 

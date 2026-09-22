@@ -64,8 +64,8 @@ Display:
 
 | # | Name | Layer | Source | Existing Ref |
 |---|------|-------|--------|-------------|
-| 1 | badge | component | {paths.components}/badge.dart | No |
-| 2 | button | component | {paths.components}/button.dart | No |
+| 1 | Badge | component | {paths.components}/Badge.tsx | No |
+| 2 | Button | component | {paths.components}/Button.tsx | No |
 | ... | ... | ... | ... | ... |
 
 Total: {N} references to generate
@@ -144,10 +144,8 @@ Rules:
 ```markdown
 ## Import
 
-\`\`\`{lang}
-import 'package:{package}/{package}.dart'; // Flutter
-// or
-import '{package}'; // React/TS
+\`\`\`tsx
+import { Button } from '@{package}/components';
 \`\`\`
 
 All components, tokens, and primitives are available from this single barrel import.
@@ -206,7 +204,7 @@ Rules:
 
 ---
 
-**5. Widget/Component Tree**
+**5. Component Tree**
 
 ```markdown
 ## Component Tree
@@ -303,7 +301,7 @@ To use these references in a consumer project:
 
 1. Copy `docs/component-references/` to `.claude/components/` in the consumer project
 2. Add to the consumer project's CLAUDE.md:
-   "Before using any {Prefix} widget, read its reference at .claude/components/{prefix}-{name}.md"
+   "Before using any design-system component, read its reference at .claude/components/{Name}.md"
 ```
 
 ## Important
@@ -312,7 +310,7 @@ To use these references in a consumer project:
 - **No spec automation markers.** These files must NOT contain `AUTO-START`, `AUTO-END`, `HUMAN-SECTION`, version tracking, or coverage matrices.
 - **Skip drafts.** Components in draft status are not stable enough for consumer guidance.
 - **Realistic examples only.** Code examples must use real token names and realistic prop combinations.
-- **One file per widget class.** If a file exports multiple widget classes (rare), generate one reference per class.
+- **One file per component.** If a file exports several components (rare), generate one reference per exported component.
 - **Preserve manual edits.** If a reference file already exists, read it first. Preserve human-written content that adds value beyond auto-generation.
 
 ## Related Skills

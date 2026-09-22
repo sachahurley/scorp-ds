@@ -1,109 +1,78 @@
 # Composition Presets Guidelines
 
-## What is a Composition Preset?
+## What is a composition preset?
 
-A preset is a shared function in your storybook's `presets/` directory that returns a component/widget with a canonical, locked-in configuration.
+A preset is a shared function or constant in `packages/storybook/presets/` that returns
+a canonical, locked-in configuration of design-system components.
 
-Presets are the single source of truth for how components are assembled in storybook examples and screen compositions. Both story playgrounds and screen samples import from the same preset, so editing it once updates every place that uses it.
+Presets are the single source of truth for how components are assembled in Storybook
+examples and screen compositions. Stories import from the preset rather than restating
+the composition, so editing it once updates every place that uses it.
 
-**Flutter:** Presets live in `ds/example/lib/storybook/presets/` and return `Widget`.
-**React/TypeScript:** Presets live in `packages/storybook/presets/` and return `JSX.Element`.
+Presets return `JSX.Element` (or typed content data, such as an array of blocks).
 
-## Two Levels of Editing
+## Two levels of editing
 
-### Level 1: The component itself
-**Where**: `ds/lib/components/` (Flutter) or `packages/components/src/` (React/TS)
-**Controls**: What the component CAN do — its props, variants, layout, tokens.
-**When to edit**: Changing how ALL instances of a component behave.
+### Level 1: the component itself
 
-### Level 2: The preset function
-**Where**: `example/lib/storybook/presets/{category}_presets.dart` or `packages/storybook/presets/{category}.tsx`
-**Controls**: How a component is USED in a specific context.
-**When to edit**: Changing how one screen's version of a component looks.
+**Where:** `packages/components/src/components/` or `packages/components/src/primitives/`
+**Controls:** what the component CAN do: its props, variants, layout, tokens.
+**When to edit:** changing how ALL instances of a component behave.
 
-## When to Create a Preset
+### Level 2: the preset
+
+**Where:** `packages/storybook/presets/{name}.tsx` (or `.ts` for content-only presets)
+**Controls:** how components are USED together in a specific context.
+**When to edit:** changing how one screen's version of a composition looks.
+
+## When to create a preset
 
 Create a preset when:
-- A component configuration appears in more than one file
-- A screen template needs a component that has a playground example
-- A widget tree involves non-trivial assembly (nested components, custom painters, complex state)
+
+- A composition appears in more than one file
+- A screen story needs a composition that also has a playground example
+- The assembly is non-trivial (nested components, meaningful state, ordered content)
+- A consumer project renders the same composition and must not fork it
 
 Do NOT create a preset for:
-- Trivially simple configurations (a single text element)
+
+- Trivially simple configurations (a single element)
 - Configurations unique to one documentation section that will never be reused
 
-## Preset Design Rules
+## Preset design rules
 
-1. **Return the component, not state.** Presets are pure component factories. Stateful logic stays in the screen sample.
+1. **Compose only DS components and primitives.** A preset must not introduce bespoke
+   layout CSS, raw colour values, or hardcoded spacing. If a preset needs something the
+   system cannot express, that is a gap in the system: fix the component or add a token.
+2. **No hardcoded values.** The same "No Hardcoding" rules in `CLAUDE.md` apply here.
+3. **Add a JSDoc comment** naming what the preset is for and who consumes it.
+4. **Keep content and structure separable** when a consumer shares the content. See
+   `caseStudy.ts`, which exports typed block data consumed by both the Screens story
+   and the portfolio, so the demo page never forks.
 
-2. **Lock all design decisions.** Tokens, variants, spacing, and visual configuration are fixed inside the function body.
+## Current presets
 
-3. **Only expose what genuinely varies:**
-   - `onDark` — surface context (required for most presets)
-   - Callback functions — `onPress`, `onTap`, `onItemTapped`
-   - Display data — text strings, numbers, images
+| File | Export | Purpose |
+|---|---|---|
+| `presets/caseStudy.ts` | `caseStudyTemplateBlocks` | Canonical case-study template content, shared with the portfolio |
+| `presets/marketingHero.tsx` | `MarketingHeroScreen` | Canonical marketing hero composition |
 
-4. **Never accept token values as parameters.** No `color: string`, no `spacing: number`, no `variant: string` where the variant should be locked. If someone needs a different variant, that is a different preset.
+## How stories consume presets
 
-5. **Naming**: `{context}{Component}Preset()`
-   - `homeAppBarPreset()` — the Home screen's app bar
-   - `glassAvatarPreset()` — the glass-rimmed avatar used in app bars
-   - `insuranceCardPreset()` — a single insurance offer card
-
-6. **Doc comments** on every preset explaining what it configures and showing a usage example.
-
-## File Organization
-
-| File | Contents |
-|------|----------|
-| `app_bar_presets.*` | App bar layout configurations |
-| `nav_bar_presets.*` | Bottom nav bar configurations |
-| `card_presets.*` | Card compositions |
-| `list_presets.*` | List compositions |
-| `screen_scaffold_presets.*` | Screen archetype presets |
-
-New files follow the pattern: `{category}_presets.*`
-
-## How Stories Consume Presets
-
-**Flutter:**
-```dart
-_LayoutLabel(label: 'Home'),
-homeAppBarPreset(onDark: false),
-```
-
-**React/TypeScript:**
 ```tsx
-<LayoutLabel label="Home" />
-{homeAppBarPreset({ onDark: false })}
+import { caseStudyTemplateBlocks } from '../../presets/caseStudy';
+import { MarketingHeroScreen } from '../../presets/marketingHero';
 ```
 
-## Screen Archetype Presets
+Screen-level composition lives in `presets/` and is documented under `stories/Screens/`.
+Flows (multi-step journeys) stay in specs or product apps: Storybook shows one screen at
+a time.
 
-Every screen falls into one of five archetypes. Each archetype has a corresponding preset function in `screen_scaffold_presets.*` that pre-configures the scaffold with the correct app bar variant, bottom nav settings, and layout.
+## Adding a new preset
 
-### Archetype Reference
-
-| Archetype | Preset | App Bar | Bottom Nav | Notes |
-|-----------|--------|---------|------------|-------|
-| Home hub | `hubScreenScaffold()` | Avatar + center element | Yes | Main entry point screen |
-| Section landing | `sectionScreenScaffold()` | Left title | Yes | Category pages with tab bars |
-| Detail page | `detailScreenScaffold()` | Back + title | No | Content detail screens |
-| Wizard/flow | `wizardScreenScaffold()` | Back + progress | No (CTA footer) | Multi-step flows |
-| Immersive | `immersiveScreenScaffold()` | Back only | No | Full-bleed content screens |
-
-### Rules
-
-1. Every screen sample MUST use a screen archetype preset.
-2. Never place titles or navigation elements in the scrollable body. Use the app bar or pinned content slots.
-3. Sticky footers use the `footer` parameter, not positioned/absolute elements.
-4. Tab bars use the `pinnedContent` parameter.
-5. Always pass `scrollController` to the scrollable widget and use `contentPadding` for correct bottom clearance.
-
-## Adding a New Preset
-
-1. Add the function to the appropriate `*_presets.*` file
-2. Add a doc comment with usage example
-3. If creating a new file, export it from the presets barrel file
-4. Update any stories or samples that should use it
-5. Verify with static analysis (`flutter analyze` or `tsc`)
+1. Add the file to `packages/storybook/presets/`
+2. Add a JSDoc comment with a usage example
+3. Update any stories that should use it
+4. Verify with `npm run lint` and `npm run type-check`
+5. If a consumer project will render it, note that in the JSDoc so the vendoring step
+   is not missed

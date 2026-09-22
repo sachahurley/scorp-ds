@@ -30,14 +30,6 @@
     "sourceFile": "packages/tokens/src/tokens.json",
     "cssFile": "packages/tokens/src/styles/tokens.css",
     "tailwindPreset": "packages/tokens/tailwind.preset.js",
-    "classPrefix": "Scorp",
-    "classes": {
-      "colors": "ScorpColors",
-      "spacing": "ScorpSpacing",
-      "typography": "ScorpTypography",
-      "motion": "ScorpMotion",
-      "opacity": "ScorpOpacity"
-    },
     "cssVariables": {
       "_comment": "React/CSS stack: Tailwind preset maps to these custom properties. Do not use a --scorp-* color prefix.",
       "foundationColorScales": "--color-{scale}-{step} (e.g. --color-amber-400, --color-secondary-900; scales include primary/secondary aliases)",
@@ -47,10 +39,13 @@
     }
   },
   "stack": "react-ts",
-  "forbiddenPackages": ["@sachahurley/scorpion-ui"],
+  "forbiddenPackages": [
+    "@sachahurley/scorpion-ui"
+  ],
   "_notes": {
     "tokenSource": "packages/tokens/src/tokens.json is the single source of truth; tokens.css is the runtime contract for apps.",
-    "componentNaming": "React components are not prefixed (Button not ScorpButton) — the @scorp-ds/components import provides namespace.",
-    "skillTemplates": "tokens.classPrefix + tokens.classes are Flutter-style names used by Claude skills and shared docs templates; this repo implements tokens via CSS variables and Tailwind, not Dart classes."
+    "componentNaming": "React components are not prefixed (Button, not ScorpButton): the @scorp-ds/components import provides the namespace.",
+    "projectPrefix": "project.prefix is used only for generated doc filenames (docs/component-references/). It is NOT a component or CSS-variable prefix: components are unprefixed and custom properties never use --scorp-*.",
+    "unrealisedPaths": "paths.lab, paths.samples and paths.shared are reserved layer locations that do not exist yet. Do not assume they contain anything; create the directory as part of the change that first needs it. Tooling must report a missing layer out loud rather than skipping it silently."
   }
 }

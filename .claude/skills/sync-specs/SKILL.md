@@ -51,7 +51,7 @@ Read `.claude/ds-config.json: paths` to get all layer directories. Build a compl
 
 **Story file triggers:** Also scan `{paths.stories}/*_story.{ext}`. A changed story file triggers the spec for the same-named entry — strip `_story.{ext}` to get the spec name. Story files do not create new spec entries on their own.
 
-**Semantic discovery (Flutter):** For each foundation file, grep for `// SEMANTIC TOKENS`. If found, add a semantic entry:
+**Semantic discovery:** Semantic tokens live under the `light` and `dark` keys of `packages/tokens/src/tokens.json`. If either changed, add a semantic entry:
 - `colors.{ext}` → `semantic-color`
 - `spacing.{ext}` → `semantic-spacing`
 - `typography.{ext}` → `semantic-typography`
