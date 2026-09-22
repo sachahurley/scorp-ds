@@ -2,6 +2,12 @@
 
 > Read `.claude/ds-config.json` to get the prefix, package name, token paths, and all directory paths before doing any work.
 
+> **Before changing a pattern, read the relevant record in `docs/decisions/`. After
+> changing one, write a new record there.** The rules below say what to do;
+> `docs/decisions/` says why, so a rule is not silently undone by someone who only saw
+> the rule. `docs/vision.md` is the one-page overview. `docs/insights/` holds findings
+> from audits and CI runs.
+
 ## Personal knowledge (sacha-agent MCP)
 
 This repo’s rules below are **Scorp DS–specific** (structure, tokens, TUI language). For **Sacha’s cross-project notes** (identity, process, comms style, generic DS patterns, Flutter/product context when indexed), use the **`sacha-agent`** MCP tools before guessing:
@@ -180,6 +186,22 @@ immediately run the `/vendor-portfolio` skill, which covers ALL THREE:
   `npm run vendor:ds` + `npm run ds:check` + `npm run check` in a temp worktree, PR → merge.
 
 Sacha has asked agents to own this follow-through without being reminded.
+
+## Agent Autonomy
+
+What an agent may do on its own, and what needs Sacha's review. When in doubt, take the
+narrower row.
+
+| Action | Agent may |
+|---|---|
+| Regenerate specs, fix lint, add tests, update docs and decision records | Open a PR on its own |
+| Re-vendor the three consumers after a merge (`/vendor-portfolio`) | Do it unprompted, as the rules below require |
+| Change a component API, add a token, change anything rendered | Propose in a PR and wait for approval |
+| Change `global` colour scales, remove a component, change the design language | Suggest only; do not open a PR |
+| Scheduled health or drift runs | Report findings only; never push |
+
+Merges to `main` are always human-approved. A change that alters rendered output needs a
+screenshot in both themes before it is approved.
 
 ## PR Checklist
 
