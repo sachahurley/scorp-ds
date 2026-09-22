@@ -109,6 +109,33 @@ export type { SpinnerProps } from './components/Spinner';
 export { toast, useToast } from './components/Toast';
 export type { ToastProps, ToastVariant, ToastAction, ToastOptions, ToastApi } from './components/Toast';
 
+// --- Popover family (Popover, Combobox, ProgressBar, Skeleton, EmptyState, Accordion) ---
+export { Popover } from './components/Popover';
+export type { PopoverProps, PopoverSide, PopoverAlign } from './components/Popover';
+
+export { Combobox } from './components/Combobox';
+export type { ComboboxProps, ComboboxOption } from './components/Combobox';
+
+export { ProgressBar } from './components/ProgressBar';
+export type { ProgressBarProps } from './components/ProgressBar';
+
+export { Skeleton } from './components/Skeleton';
+export type { SkeletonProps } from './components/Skeleton';
+
+export { EmptyState } from './components/EmptyState';
+export type { EmptyStateProps, EmptyStateAction } from './components/EmptyState';
+
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './components/Accordion';
+export type {
+  AccordionProps,
+  AccordionSingleProps,
+  AccordionMultipleProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+} from './components/Accordion';
+// --- end Popover family ---
+
 // Primitives
 export { Stack } from './primitives/Stack';
 export type { StackProps, StackGap } from './primitives/Stack';
