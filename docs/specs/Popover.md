@@ -47,6 +47,7 @@ Don't use this for: short hints (Tooltip), action lists (Dropdown), blocking tas
 
 | Enum Value | Description |
 |-----------|-------------|
+| `(none)` | No `size` prop. The panel hugs its content, optionally matching the anchor width via `matchAnchorWidth`, and is capped by the measured space the popover has (`--popover-available-height`). |
 
 <!-- AUTO-END:anatomy -->
 
