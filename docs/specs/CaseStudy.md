@@ -21,7 +21,7 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-CaseStudyBlocks is the long-form section library upstreamed from the portfolio's case-study pages: you author a page as a typed `CaseStudyBlock[]` array and one renderer draws every section with consistent rhythm and tokens. It covers nine block types (meta grid, headline, prose, image placeholder, image pair, callouts, numbered insights, pull quote, titled list), with wide and full-bleed breakouts for figures. Use it for editorial, narrative pages such as case studies, write-ups and project pages. Don't use it for app UI or dashboards; compose those from components.
+CaseStudyBlocks is the long-form section library upstreamed from the portfolio's case-study pages: you author a page as a typed `CaseStudyBlock[]` array and one renderer draws every section with consistent rhythm and tokens. It covers eleven block types (meta grid, headline, prose, image, image pair, box-drawing diagram, live slot, callouts, numbered insights, pull quote, titled list), with wide and full-bleed breakouts for figures. Every figure block renders the hatch placeholder until it is given real content, so a page can be laid out before its art exists and swapped one figure at a time. Use it for editorial, narrative pages such as case studies, write-ups and project pages. Don't use it for app UI or dashboards; compose those from components.
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -40,8 +40,10 @@ CaseStudyBlocks is the long-form section library upstreamed from the portfolio's
 | `meta` | `<dl>` auto-fit grid (min 130px columns) of label / value pairs. Labels `text-xs uppercase` tracked; values `text-sm`. `mb-11`. |
 | `headline` | `<header>` with optional `kicker` (`text-xs`, first letter uppercased), `<h2>` `title` (`text-xl`), optional `text` (`text-base`). `mt-16` (`sm:mt-24`), none when first. |
 | `prose` | `<p>` `text-base leading-relaxed`, `my-7`. |
-| `image` | Hatched placeholder `<figure>` on the plate ring, `aspect` (default `"16 / 9"`), optional `caption`, optional `width` breakout. No real image source. |
-| `imagePair` | Two 4:3 placeholders, 1 column then 2 from `sm`, optional `captions` tuple and `width` breakout. |
+| `image` | `<figure>` on the plate ring, `aspect` (default `"16 / 9"`), optional `caption`, optional `width` breakout. Renders `src` as an `<img>` (`object-fit: cover`) when given one, the hatch placeholder otherwise. |
+| `imagePair` | Two 4:3 figures, 1 column then 2 from `sm`, optional `captions` tuple, `srcs` / `alts` tuples and `width` breakout. Either side falls back to the placeholder independently. |
+| `ascii` | `<pre>` box-drawing diagram inside the figure ring, `text-xs`, `overflow-x-auto`. Stays live text rather than an image, so it is selectable and retints with the theme. `role="img"` with `label` (falling back to `caption`) carries the meaning. Generate the string with `@scorp-ds/tui-art`. |
+| `slot` | A live region the page fills via the `slots` prop, keyed by `name`: a component specimen, a chart, an embed. Falls back to the hatch placeholder (at `aspect`) when the name has no entry. |
 | `callouts` | Auto-fit grid (min 160px) of title + blurb; `grid-template-rows: subgrid` keeps every body on one line however titles wrap. |
 | `insights` | `<ol>` of title + blurb with accent two-digit numerals (`01`, `02`, ...). |
 | `quote` | `<figure>` with an accent `“` glyph (`text-3xl`, `aria-hidden`), `<blockquote>` (`text-lg`), optional `<figcaption>` with `Avatar` (`md`), `name` and `role`. |
@@ -77,14 +79,18 @@ Breakouts size against the nearest `container-type: inline-size` ancestor (`100c
 | `meta` | `items: { label: string; value: string }[]` |
 | `headline` | `kicker?: string; title: string; text?: string` |
 | `prose` | `text: string` |
-| `image` | `aspect?: string; caption?: string; width?: "wide" \| "full"` |
-| `imagePair` | `captions?: [string, string]; width?: "wide" \| "full"` |
+| `image` | `aspect?: string; caption?: string; width?: "wide" \| "full"; src?: string; alt?: string` |
+| `imagePair` | `captions?: [string, string]; width?: "wide" \| "full"; srcs?: [string \| undefined, string \| undefined]; alts?: [string \| undefined, string \| undefined]` |
+| `ascii` | `text: string; caption?: string; width?: "wide" \| "full"; label?: string` |
+| `slot` | `name: string; caption?: string; width?: "wide" \| "full"; aspect?: string` |
 | `callouts` | `items: { title: string; text: string }[]` |
 | `insights` | `items: { title: string; text: string }[]` |
 | `quote` | `text: string; name?: string; role?: string; image?: string` |
 | `list` | `items: { title: string; text: string }[]` |
 
 All text fields are plain strings (no inline markup). Item keys use `label` / `title`, so they must be unique within a block.
+
+`CaseStudyBlocks` itself takes `blocks`, an optional `className`, and an optional `slots: CaseStudySlots` (`Record<string, ReactNode>`) supplying content for `slot` blocks. `slots` is the escape hatch for pages that need a live component inside the narrative; this library stays editorial and does not take on app-UI concerns.
 
 <!-- AUTO-END:properties -->
 
@@ -116,7 +122,8 @@ All text fields are plain strings (no inline markup). Item keys use `label` / `t
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
 | Block type | `type` | See Variants |
-| Breakout | `width` on `image` / `imagePair` | Layout only |
+| Breakout | `width` on `image` / `imagePair` / `ascii` / `slot` | Layout only |
+| Figure content | `src` on `image` / `imagePair`, a filled `slots` entry for `slot` | Real content replaces the hatch |
 | First headline | `:first-child` | Top margin removed |
 | Quote attribution | `name` present | Adds `Avatar` + name / role |
 
@@ -132,7 +139,10 @@ All text fields are plain strings (no inline markup). Item keys use `label` / `t
 |----------------|---------|--------------|-------|
 | meta | Yes | Yes | `MetaGrid` |
 | headline + prose | Yes | Yes | `Headline` |
-| image + imagePair | Yes | Yes | `Figures` |
+| image + imagePair (placeholder) | Yes | Yes | `Figures` |
+| image + imagePair (real `src`) | Yes | Yes | `RealArtwork`, using an inline data URI so the test-runner needs no network |
+| ascii | Yes | Yes | `AsciiDiagram` |
+| slot (filled and empty) | Yes | Yes | `Slots` |
 | callouts | Yes | Yes | `Callouts` |
 | insights | Yes | Yes | `Insights` |
 | quote (bare and attributed) | Yes | Yes | `Quote` |
@@ -188,6 +198,8 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 - Focus order: no interactive elements.
 - Touch target minimum: n/a.
 - Color independence: accent numerals are paired with their titles; placeholders are decorative (no alt text, since there is no image).
+- Images: `alt` defaults to `""`, marking the image decorative, because a captioned figure already names itself. Pass `alt` only when the picture carries meaning the caption does not.
+- Diagrams: `ascii` blocks are `role="img"` with an `aria-label`, because box-drawing characters read as noise when announced one by one.
 - Decorative content: the quote glyph is `aria-hidden`; the attribution `Avatar` has `alt=""` because the name is adjacent text.
 
 <!-- AUTO-END:accessibility -->
