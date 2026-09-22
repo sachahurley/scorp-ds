@@ -110,13 +110,13 @@ Never vendor inside a Conductor workspace: use a temp worktree.
 
 2. **Re-vendor, then run the full check:**
    ```bash
-   cd /tmp/pd-vendor && npm run vendor:ds && npm install && npm run check && npm run build
+   cd /tmp/pd-vendor && npm run vendor:ds && npm install && npm run ds:check && npm run check && npm run build
    ```
-   `npm run check` = prototype check + lint + typecheck + tests. If
+   `ds:check` must print IN SYNC. `npm run check` = prototype check + lint + typecheck + tests. If
    `git status vendor/` is empty, protodash already has this DS version —
    stop and clean up.
 
-3. **Commit, PR, merge** once the PR's `check` workflow and Vercel pass
+3. **Commit, PR, merge** once the PR's `check` and `ds-check` workflows and Vercel pass
    (Vercel deploys main). Then remove the worktree:
    ```bash
    git -C ~/conductor/repos/aura-protodash worktree remove /tmp/pd-vendor
@@ -128,7 +128,7 @@ Never vendor inside a Conductor workspace: use a temp worktree.
   (`sacha-hurley` gets 403).
 - A `post-merge` git hook in `~/Projects/scorp-ds` prints this checklist as a
   reminder whenever main is pulled after a merge.
-- Protodash has no daily drift check yet (the portfolio and showcase run a
-  scheduled `ds-check`); compare `vendor/scorp-ds/VERSION` against scorp-ds
-  main by hand if in doubt.
+- All three consumers run a scheduled `ds-check` GitHub Action (daily, on PRs
+  and on pushes to main) that goes red when their vendored copy drifts from
+  scorp-ds main, so a missed vendor pass surfaces within a day.
 - Related: `/release-notes` (scorp-ds changelog) pairs well before vendoring.
