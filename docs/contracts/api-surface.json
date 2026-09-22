@@ -1,0 +1,4308 @@
+{
+  "$schema": "./schema.json",
+  "generatedBy": "scripts/generate-api-surface.mjs",
+  "note": "Generated. Do not edit by hand. Prose lives in docs/specs/.",
+  "components": {
+    "Accordion": {
+      "layer": "component",
+      "file": "packages/components/src/components/Accordion.tsx",
+      "spec": "docs/specs/Accordion.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "AccordionSingleProps",
+          "kind": "interface"
+        },
+        {
+          "name": "AccordionMultipleProps",
+          "kind": "interface"
+        },
+        {
+          "name": "AccordionProps",
+          "kind": "type"
+        },
+        {
+          "name": "Accordion",
+          "kind": "function"
+        },
+        {
+          "name": "AccordionItemProps",
+          "kind": "interface"
+        },
+        {
+          "name": "AccordionItem",
+          "kind": "function"
+        },
+        {
+          "name": "AccordionTriggerProps",
+          "kind": "interface"
+        },
+        {
+          "name": "AccordionTrigger",
+          "kind": "function"
+        },
+        {
+          "name": "AccordionContentProps",
+          "kind": "interface"
+        },
+        {
+          "name": "AccordionContent",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "AccordionSingleProps": [
+          {
+            "name": "type",
+            "type": "\"single\"",
+            "required": false,
+            "description": "One item open at a time (default)."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Controlled open item value (`\"\"` for none). Pair with `onValueChange`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Initially open item when uncontrolled."
+          },
+          {
+            "name": "onValueChange",
+            "type": "(value: string) => void",
+            "required": false,
+            "description": "Called with the open item's value (`\"\"` when all are closed)."
+          },
+          {
+            "name": "collapsible",
+            "type": "boolean",
+            "required": false,
+            "description": "Allow closing the open item so none are open (default false)."
+          }
+        ],
+        "AccordionMultipleProps": [
+          {
+            "name": "type",
+            "type": "\"multiple\"",
+            "required": true,
+            "description": "Any number of items open at once."
+          },
+          {
+            "name": "value",
+            "type": "string[]",
+            "required": false,
+            "description": "Controlled open item values. Pair with `onValueChange`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string[]",
+            "required": false,
+            "description": "Initially open items when uncontrolled."
+          },
+          {
+            "name": "onValueChange",
+            "type": "(value: string[]) => void",
+            "required": false,
+            "description": "Called with the open item values."
+          },
+          {
+            "name": "collapsible",
+            "type": "boolean",
+            "required": false,
+            "description": "Always true for multiple; accepted for API symmetry."
+          }
+        ],
+        "AccordionProps": {
+          "union": [
+            "AccordionSingleProps",
+            "AccordionMultipleProps"
+          ]
+        },
+        "AccordionItemProps": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": "Unique value identifying this item within the Accordion."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Disable just this item."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "AccordionTrigger and AccordionContent."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the item wrapper."
+          }
+        ],
+        "AccordionTriggerProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Section title. Keep it short; it is the heading text."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the button."
+          }
+        ],
+        "AccordionContentProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Section body."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the inner padding box."
+          }
+        ]
+      },
+      "apiHash": "a09d163993266c01"
+    },
+    "Alert": {
+      "layer": "component",
+      "file": "packages/components/src/components/Alert.tsx",
+      "spec": "docs/specs/Alert.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "AlertProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Alert",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "AlertProps": [
+          {
+            "name": "variant",
+            "type": "\"default\" | \"success\" | \"warning\" | \"error\" | \"info\"",
+            "required": false,
+            "values": [
+              "\"default\"",
+              "\"success\"",
+              "\"warning\"",
+              "\"error\"",
+              "\"info\""
+            ],
+            "default": "\"default\"",
+            "description": "Severity: picks the color set and the 1-bit severity icon."
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "Short bold headline, one line. Say what happened, not \"Error\"."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Body copy under the title: what it means and what to do next."
+          },
+          {
+            "name": "iconLeft",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Replaces the variant's severity icon. Use a `TuiIcon`."
+          },
+          {
+            "name": "onClose",
+            "type": "() => void",
+            "required": false,
+            "description": "Adds a dismiss control (44px hit area) and is called when it is pressed."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "default": "\"\"",
+            "description": "Extra classes on the outer ring layer (spacing and width only)."
+          }
+        ]
+      },
+      "apiHash": "7678be0f759120d9"
+    },
+    "AppHeader": {
+      "layer": "component",
+      "file": "packages/components/src/components/AppHeader.tsx",
+      "spec": "docs/specs/AppHeader.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "AppHeaderProps",
+          "kind": "interface"
+        },
+        {
+          "name": "AppHeader",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "AppHeaderProps": [
+          {
+            "name": "brand",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Left slot: logo, product name, or a home link."
+          },
+          {
+            "name": "navigation",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Middle slot: primary navigation links. Folds into the mobile menu below `md`."
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Right slot: actions such as ThemeToggle, search, or an Avatar menu. Always visible."
+          },
+          {
+            "name": "mobileMenu",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content of the mobile menu panel. Defaults to `navigation`, laid out as a vertical list. Pass this when the phone menu needs different content."
+          },
+          {
+            "name": "sticky",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Pin the bar to the top of its scroll container (z-index.sticky)."
+          },
+          {
+            "name": "menuOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Mobile menu open state (controlled)."
+          },
+          {
+            "name": "defaultMenuOpen",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Initial mobile menu state when uncontrolled (default closed)."
+          },
+          {
+            "name": "onMenuOpenChange",
+            "type": "(open: boolean) => void",
+            "required": false,
+            "description": "Fires when the menu toggle opens or closes the mobile panel."
+          },
+          {
+            "name": "menuLabel",
+            "type": "string",
+            "required": false,
+            "default": "\"Menu\"",
+            "description": "Accessible name of the menu toggle (default \"Menu\")."
+          },
+          {
+            "name": "navLabel",
+            "type": "string",
+            "required": false,
+            "default": "\"Main\"",
+            "description": "Accessible name of the navigation landmark (default \"Main\")."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the `<header>`."
+          }
+        ]
+      },
+      "apiHash": "71b5ae886aeae49e"
+    },
+    "Avatar": {
+      "layer": "component",
+      "file": "packages/components/src/components/Avatar.tsx",
+      "spec": "docs/specs/Avatar.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "AvatarProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Avatar",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "AvatarProps": [
+          {
+            "name": "src",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "alt",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "initials",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp | \"xl\"",
+            "required": false,
+            "values": [
+              "ControlSizeProp",
+              "\"xl\""
+            ],
+            "description": "Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. Legacy names are deprecated aliases."
+          },
+          {
+            "name": "status",
+            "type": "\"online\" | \"offline\" | \"away\"",
+            "required": false,
+            "values": [
+              "\"online\"",
+              "\"offline\"",
+              "\"away\""
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "default": "\"\""
+          },
+          {
+            "name": "onError",
+            "type": "() => void",
+            "required": false
+          }
+        ]
+      },
+      "apiHash": "fd8316651ce4a4b0"
+    },
+    "Badge": {
+      "layer": "component",
+      "file": "packages/components/src/components/Badge.tsx",
+      "spec": "docs/specs/Badge.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "BadgeProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Badge",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "BadgeProps": [
+          {
+            "name": "variant",
+            "type": "\"default\" | \"primary\" | \"success\" | \"warning\" | \"error\" | \"info\" | \"bone\"",
+            "required": false,
+            "values": [
+              "\"default\"",
+              "\"primary\"",
+              "\"success\"",
+              "\"warning\"",
+              "\"error\"",
+              "\"info\"",
+              "\"bone\""
+            ],
+            "default": "\"default\""
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Badge height: sm 20px, md 24px (default), lg 28px. Legacy names are deprecated aliases."
+          },
+          {
+            "name": "caps",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Uppercase eyebrow voice: uppercase text with .08em tracking."
+          },
+          {
+            "name": "dashed",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Not-yet-real voice: transparent fill with a 1px dashed border in the variant's text color, for placeholders, empty slots, and free tiers. Dashed chips drop the plate clip for sharp corners (the notched clip would slice the dashes)."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true
+          },
+          {
+            "name": "iconLeft",
+            "type": "ReactNode",
+            "required": false
+          },
+          {
+            "name": "onClose",
+            "type": "() => void",
+            "required": false
+          },
+          {
+            "name": "onCloseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the remove button. Defaults to `Remove {children}` when the badge label is a plain string (so a list of filter chips reads as \"Remove Draft\", \"Remove Archived\"), and to \"Remove badge\" otherwise. Pass it explicitly whenever the label alone does not identify what is removed."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "default": "\"\""
+          }
+        ]
+      },
+      "apiHash": "d1db5d5e7dd76cdc"
+    },
+    "BottomSheet": {
+      "layer": "component",
+      "file": "packages/components/src/components/BottomSheet.tsx",
+      "spec": "docs/specs/BottomSheet.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "BottomSheetProps",
+          "kind": "interface"
+        },
+        {
+          "name": "BottomSheet",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "BottomSheetProps": [
+          {
+            "name": "isOpen",
+            "type": "boolean",
+            "required": true,
+            "description": "Controls whether the sheet is visible."
+          },
+          {
+            "name": "onClose",
+            "type": "() => void",
+            "required": true,
+            "description": "Called when the user dismisses the sheet (close button, scrim click or ESC)."
+          },
+          {
+            "name": "ariaLabel",
+            "type": "string",
+            "required": true,
+            "description": "Accessible name for the sheet dialog."
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "default": "\"Close\"",
+            "description": "Accessible name for the close button. Override it when several sheets can be announced in the same view and \"Close\" alone would be ambiguous."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Sheet content."
+          }
+        ]
+      },
+      "apiHash": "4e0539bd08b05e7f"
+    },
+    "Breadcrumbs": {
+      "layer": "component",
+      "file": "packages/components/src/components/Breadcrumbs.tsx",
+      "spec": "docs/specs/Breadcrumbs.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "BreadcrumbItem",
+          "kind": "interface"
+        },
+        {
+          "name": "BreadcrumbsProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Breadcrumbs",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "BreadcrumbItem": [
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Visible text for this step. Keep it short; long labels truncate."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Destination for ancestor steps. Ignored on the last (current) item."
+          },
+          {
+            "name": "as",
+            "type": "ElementType",
+            "required": false,
+            "description": "Custom link component (e.g. a router `<Link>`) used instead of `<a href>`. Its props go in `asProps` (`to`, `state`, ...)."
+          },
+          {
+            "name": "asProps",
+            "type": "Record<string, unknown>",
+            "required": false,
+            "description": "Props spread onto the `as` component."
+          },
+          {
+            "name": "key",
+            "type": "string",
+            "required": false,
+            "description": "Stable React key. Defaults to the index."
+          }
+        ],
+        "BreadcrumbsProps": [
+          {
+            "name": "items",
+            "type": "BreadcrumbItem[]",
+            "required": true,
+            "description": "Trail from the root to the current page (last item = current page)."
+          },
+          {
+            "name": "maxItems",
+            "type": "number",
+            "required": false,
+            "description": "Collapse the middle of the trail once it has more than this many items. Leave unset to always show every item."
+          },
+          {
+            "name": "itemsBeforeCollapse",
+            "type": "number",
+            "required": false,
+            "default": "1",
+            "description": "Items kept visible before the overflow button when collapsed (default 1)."
+          },
+          {
+            "name": "itemsAfterCollapse",
+            "type": "number",
+            "required": false,
+            "default": "1",
+            "description": "Items kept visible after the overflow button when collapsed (default 1)."
+          },
+          {
+            "name": "expandLabel",
+            "type": "(hiddenCount: number) => string",
+            "required": false,
+            "default": "(n) => `Show ${n} more breadcrumb${n === 1 ? \"\" : \"s\"}`",
+            "description": "Accessible name for the overflow button; receives the hidden count. Default: \"Show 3 more breadcrumbs\"."
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the nav landmark (default \"Breadcrumb\")."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the `<nav>`."
+          }
+        ]
+      },
+      "apiHash": "0b88e94071062cca"
+    },
+    "Button": {
+      "layer": "component",
+      "file": "packages/components/src/components/Button.tsx",
+      "spec": "docs/specs/Button.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ButtonProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Button",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "ButtonProps": [
+          {
+            "name": "variant",
+            "type": "\"primary\" | \"secondary\" | \"ghost\" | \"link\" | \"outline\" | \"destructive\" | \"icon\"",
+            "required": false,
+            "values": [
+              "\"primary\"",
+              "\"secondary\"",
+              "\"ghost\"",
+              "\"link\"",
+              "\"outline\"",
+              "\"destructive\"",
+              "\"icon\""
+            ],
+            "default": "\"primary\"",
+            "description": "Visual style (default: \"primary\"). One primary per view; \"link\" is an action styled as text (navigate with `Link` instead); \"icon\" is the square icon plate, pair it with `aria-label`."
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp | \"icon\"",
+            "required": false,
+            "values": [
+              "ControlSizeProp",
+              "\"icon\""
+            ],
+            "description": "Height: sm 32px, md 40px (default), lg 48px, from the control-height tokens. Legacy small/medium/large still work (deprecated). Icon-only buttons are squared automatically. `\"icon\"` is deprecated: use \"md\"."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Disables the button (anchors drop `href` and set `aria-disabled`)."
+          },
+          {
+            "name": "iconLeft",
+            "type": "React.ReactNode",
+            "required": false
+          },
+          {
+            "name": "iconRight",
+            "type": "React.ReactNode",
+            "required": false
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Render as an `<a>` with this destination instead of a `<button>` — same plate styling for link CTAs (\"view project ↗\"). Disabled anchors drop the href and set `aria-disabled`."
+          },
+          {
+            "name": "target",
+            "type": "string",
+            "required": false,
+            "description": "Anchor target (only with `href`), e.g. \"_blank\"."
+          },
+          {
+            "name": "rel",
+            "type": "string",
+            "required": false,
+            "description": "Anchor rel (only with `href`); pair `target=\"_blank\"` with \"noopener noreferrer\"."
+          },
+          {
+            "name": "loading",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Busy state for async actions (submitting, saving). Shows a Spinner over the label, sets `aria-busy` and `aria-disabled`, and ignores clicks. The button stays focusable (no native `disabled`, so focus isn't dropped mid-submit) and keeps its width: the label is hidden in place, not removed. Works for icon-only buttons too. `disabled` wins over `loading`."
+          }
+        ]
+      },
+      "apiHash": "9006cfe595bfc2da"
+    },
+    "Card": {
+      "layer": "component",
+      "file": "packages/components/src/components/Card.tsx",
+      "spec": "docs/specs/Card.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "CardLayout",
+          "kind": "type"
+        },
+        {
+          "name": "CardProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Card",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "CardLayout": {
+          "union": [
+            "\"block\"",
+            "\"flex\""
+          ]
+        },
+        "CardProps": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "Card title, rendered as the header heading."
+          },
+          {
+            "name": "subtitle",
+            "type": "string",
+            "required": false,
+            "description": "Supporting line under the title."
+          },
+          {
+            "name": "headerContent",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Custom header node; replaces `title` / `subtitle` when set."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Main card content."
+          },
+          {
+            "name": "footerContent",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Footer node (buttons, links) behind a hairline rule."
+          },
+          {
+            "name": "layout",
+            "type": "CardLayout",
+            "required": false,
+            "description": "Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. Prefer this over the legacy `className` sniff below."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "default": "\"\"",
+            "description": "Additional CSS classes (width, height, margin)."
+          }
+        ]
+      },
+      "apiHash": "d9bde652b064aa38"
+    },
+    "CaseStudy": {
+      "layer": "component",
+      "file": "packages/components/src/components/CaseStudy.tsx",
+      "spec": "docs/specs/CaseStudy.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "CaseStudyBlock",
+          "kind": "type"
+        },
+        {
+          "name": "CaseStudySlots",
+          "kind": "type"
+        },
+        {
+          "name": "CaseStudyBlocks",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "CaseStudyBlock": {
+          "union": [
+            "{ type: \"meta\"; items: { label: string; value: string }[] }",
+            "{ type: \"headline\"; kicker?: string; title: string; text?: string }",
+            "{ type: \"prose\"; text: string }",
+            "{ type: \"image\"; aspect?: string; caption?: string; width?: \"wide\" | \"full\"; /** Real artwork. Omit for the hatch placeholder. */ src?: string; /** Alt text. Empty string marks the image decorative (the default when * a caption already describes it). */ alt?: string; }",
+            "{ type: \"imagePair\"; captions?: [string, string]; width?: \"wide\" | \"full\"; /** Real artwork per side; either entry may be omitted for the placeholder. */ srcs?: [string | undefined, string | undefined]; alts?: [string | undefined, string | undefined]; }",
+            "{ /** A box-drawing / monospace diagram, rendered as preformatted text * rather than an image so it stays selectable and retints with the * theme. Pair with @scorp-ds/tui-art to generate the string. */ type: \"ascii\"; text: string; caption?: string; width?: \"wide\" | \"full\"; /** What the diagram says, for screen readers, which cannot read box * characters. Falls back to the caption. */ label?: string; }",
+            "{ /** A live region the page fills via the `slots` prop — a component * specimen, a chart, an embed. Renders the hatch placeholder when the * named slot is empty. */ type: \"slot\"; name: string; caption?: string; width?: \"wide\" | \"full\"; /** Reserve space at the placeholder stage; omit once the slot is filled * and should size to its content. */ aspect?: string; }",
+            "{ type: \"callouts\"; items: { title: string; text: string }[] }",
+            "{ type: \"insights\"; items: { title: string; text: string }[] }",
+            "{ type: \"quote\"; text: string; name?: string; role?: string; image?: string }",
+            "{ type: \"list\"; items: { title: string; text: string }[] }"
+          ]
+        }
+      },
+      "apiHash": "06b48a68c0922402"
+    },
+    "Checkbox": {
+      "layer": "component",
+      "file": "packages/components/src/components/Checkbox.tsx",
+      "spec": "docs/specs/Checkbox.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "CheckboxProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Checkbox",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "CheckboxProps": [
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Box size. The tap target is 44×44px at every size."
+          },
+          {
+            "name": "label",
+            "type": "string | ReactNode",
+            "required": false,
+            "values": [
+              "string",
+              "ReactNode"
+            ],
+            "description": "Visible label; clicking it toggles the box. Without one, pass `aria-label`."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
+          },
+          {
+            "name": "helperText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Secondary line under the label (explains the consequence of checking)."
+          },
+          {
+            "name": "errorMessage",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Validation message under the label. Sets the error state and replaces `helperText`."
+          },
+          {
+            "name": "onCheckedChange",
+            "type": "(checked: boolean) => void",
+            "required": false,
+            "description": "Called with the new checked state (alternative to `onChange`)."
+          },
+          {
+            "name": "indeterminate",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Mixed state, for a parent box whose children are partly checked (\"select all\" over a half-selected list). Sets the native `indeterminate` property, so assistive tech announces \"mixed\", and draws a 1-bit bar instead of the check. The prop is the source of truth: a click still fires `onChange` / `onCheckedChange`, and the box stays mixed until you pass `false` (typically after checking or clearing every child)."
+          }
+        ]
+      },
+      "apiHash": "867c97c4918d2a29"
+    },
+    "Combobox": {
+      "layer": "component",
+      "file": "packages/components/src/components/Combobox.tsx",
+      "spec": "docs/specs/Combobox.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ComboboxOption",
+          "kind": "interface"
+        },
+        {
+          "name": "ComboboxProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Combobox",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "ComboboxOption": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": "Value reported through `onValueChange` and the hidden form input."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "Text shown in the list and in the field once picked."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Shown but not selectable; skipped by keyboard navigation."
+          }
+        ],
+        "ComboboxProps": [
+          {
+            "name": "options",
+            "type": "ComboboxOption[]",
+            "required": true,
+            "description": "Options to filter and choose from."
+          },
+          {
+            "name": "value",
+            "type": "string | null",
+            "required": false,
+            "values": [
+              "string",
+              "null"
+            ],
+            "description": "Controlled selected value (`null` for nothing picked). Pair with `onValueChange`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string | null",
+            "required": false,
+            "values": [
+              "string",
+              "null"
+            ],
+            "default": "null",
+            "description": "Initial selected value when uncontrolled."
+          },
+          {
+            "name": "onValueChange",
+            "type": "(value: string | null, option: ComboboxOption | null) => void",
+            "required": false,
+            "description": "Called with the picked value and option (or `null` when the field is cleared)."
+          },
+          {
+            "name": "onInputChange",
+            "type": "(query: string) => void",
+            "required": false,
+            "description": "Called on every keystroke with the raw query text."
+          },
+          {
+            "name": "filter",
+            "type": "(option: ComboboxOption, query: string) => boolean",
+            "required": false,
+            "default": "defaultFilter",
+            "description": "Custom matcher. Defaults to a case-insensitive \"label contains query\". Return true to keep the option in the list."
+          },
+          {
+            "name": "emptyText",
+            "type": "ReactNode",
+            "required": false,
+            "default": "\"No matches\"",
+            "description": "Message shown when nothing matches (default \"No matches\")."
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Field height: sm 32px, md 40px (default), lg 48px."
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Visible label, wired to the input. Without it, pass `aria-label`."
+          },
+          {
+            "name": "helperText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Hint under the field. Linked via `aria-describedby`."
+          },
+          {
+            "name": "errorMessage",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Validation message under the field; sets `aria-invalid` and replaces `helperText`."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error styling without a message. Prefer `errorMessage`."
+          },
+          {
+            "name": "openOnFocus",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Open the list when the field gains focus (default false: opens on typing, click, or arrows)."
+          },
+          {
+            "name": "portal",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Render the list into `document.body`. Needed inside plate-clipped containers (Card, Modal): clip-path clips fixed-position descendants."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the outer wrapper (width)."
+          }
+        ]
+      },
+      "apiHash": "539777ed6cc6f176"
+    },
+    "DescriptionList": {
+      "layer": "component",
+      "file": "packages/components/src/components/DescriptionList.tsx",
+      "spec": "docs/specs/DescriptionList.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "DescriptionListItem",
+          "kind": "interface"
+        },
+        {
+          "name": "DescriptionListProps",
+          "kind": "interface"
+        },
+        {
+          "name": "DescriptionList",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "DescriptionListItem": [
+          {
+            "name": "term",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The key (\"Kernel\", \"Region\")."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The value. Any inline content: text, a Badge, a Link."
+          },
+          {
+            "name": "key",
+            "type": "string",
+            "required": false,
+            "description": "Stable React key. Defaults to the index."
+          }
+        ],
+        "DescriptionListProps": [
+          {
+            "name": "items",
+            "type": "DescriptionListItem[]",
+            "required": true,
+            "description": "Pairs to render, in order."
+          },
+          {
+            "name": "layout",
+            "type": "\"inline\" | \"stacked\"",
+            "required": false,
+            "values": [
+              "\"inline\"",
+              "\"stacked\""
+            ],
+            "default": "\"inline\"",
+            "description": "`inline` puts term and value on one row (default); `stacked` puts the term above."
+          },
+          {
+            "name": "leader",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Dotted leader between term and value (inline layout only)."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the `<dl>`."
+          }
+        ]
+      },
+      "apiHash": "155469d1bd4970d5"
+    },
+    "Divider": {
+      "layer": "component",
+      "file": "packages/components/src/components/Divider.tsx",
+      "spec": "docs/specs/Divider.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "DividerProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Divider",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "DividerProps": [
+          {
+            "name": "variant",
+            "type": "\"horizontal\" | \"vertical\" | \"withText\"",
+            "required": false,
+            "values": [
+              "\"horizontal\"",
+              "\"vertical\"",
+              "\"withText\""
+            ],
+            "default": "\"horizontal\""
+          },
+          {
+            "name": "text",
+            "type": "ReactNode",
+            "required": false
+          },
+          {
+            "name": "spacing",
+            "type": "\"none\" | ControlSizeProp",
+            "required": false,
+            "values": [
+              "\"none\"",
+              "ControlSizeProp"
+            ],
+            "description": "Margin around the rule: none, sm 4px, md 16px (default), lg 32px. Legacy names are deprecated aliases."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "default": "\"\""
+          }
+        ]
+      },
+      "apiHash": "1f3ca9013505cd7d"
+    },
+    "Dropdown": {
+      "layer": "component",
+      "file": "packages/components/src/components/Dropdown.tsx",
+      "spec": "docs/specs/Dropdown.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "DropdownItem",
+          "kind": "interface"
+        },
+        {
+          "name": "DropdownProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Dropdown",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "DropdownItem": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "default": "\"Actions\"",
+            "description": "Item text and accessible name. Write it as a verb (\"Duplicate\")."
+          },
+          {
+            "name": "onClick",
+            "type": "() => void",
+            "required": true,
+            "description": "Called on activation; the menu then closes."
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Left icon grouped with the label (use a `TuiIcon`)."
+          },
+          {
+            "name": "iconRight",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Right-aligned icon, for a shortcut hint or an external-link marker."
+          },
+          {
+            "name": "variant",
+            "type": "\"default\" | \"destructive\"",
+            "required": false,
+            "values": [
+              "\"default\"",
+              "\"destructive\""
+            ],
+            "description": "`destructive` colors the item red for irreversible actions."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Dims the item, blocks activation, and skips it during arrow-key navigation."
+          }
+        ],
+        "DropdownProps": [
+          {
+            "name": "trigger",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Custom trigger, replacing the default button. A valid React element is cloned: the toggle handler, `aria-haspopup` and `aria-expanded` are attached to the element itself, so pass an interactive, focusable control (a `Button`, for example) and not a bare `<span>`. Anything that is not an element (a string, a fragment, an array) falls back to a `div` wrapper with `role=\"button\"` and `tabIndex={0}`."
+          },
+          {
+            "name": "items",
+            "type": "DropdownItem[]",
+            "required": true,
+            "description": "Menu entries, in order."
+          },
+          {
+            "name": "align",
+            "type": "\"left\" | \"right\"",
+            "required": false,
+            "values": [
+              "\"left\"",
+              "\"right\""
+            ],
+            "default": "\"left\"",
+            "description": "Which trigger edge the menu aligns to. Use `right` near the viewport edge."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "default": "\"Actions\"",
+            "description": "Text (and accessible name) of the default trigger button. Ignored with a custom `trigger`."
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Trigger height, matching Button/Input: sm, md (default), lg. Legacy names are deprecated aliases."
+          }
+        ]
+      },
+      "apiHash": "c0df57b86b95ed7c"
+    },
+    "EmptyState": {
+      "layer": "component",
+      "file": "packages/components/src/components/EmptyState.tsx",
+      "spec": "docs/specs/EmptyState.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "EmptyStateAction",
+          "kind": "interface"
+        },
+        {
+          "name": "EmptyStateProps",
+          "kind": "interface"
+        },
+        {
+          "name": "EmptyState",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "EmptyStateAction": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "Button text; start with a verb (\"Create project\")."
+          },
+          {
+            "name": "onClick",
+            "type": "() => void",
+            "required": false,
+            "description": "Click handler."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Renders the button as a link instead."
+          },
+          {
+            "name": "icon",
+            "type": "TuiIconName",
+            "required": false,
+            "default": "\"Archive\"",
+            "description": "Optional 1-bit icon before the label."
+          }
+        ],
+        "EmptyStateProps": [
+          {
+            "name": "icon",
+            "type": "TuiIconName | null",
+            "required": false,
+            "values": [
+              "TuiIconName",
+              "null"
+            ],
+            "default": "\"Archive\"",
+            "description": "1-bit icon shown above the title (default \"Archive\"). Pass `null` for none."
+          },
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Short statement of the situation, e.g. \"No results\"."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "One or two sentences: why it is empty and what to do."
+          },
+          {
+            "name": "primaryAction",
+            "type": "EmptyStateAction",
+            "required": false,
+            "description": "The main next step, rendered as a primary Button."
+          },
+          {
+            "name": "secondaryAction",
+            "type": "EmptyStateAction",
+            "required": false,
+            "description": "An alternative step (e.g. \"Clear filters\"), rendered as a secondary Button."
+          },
+          {
+            "name": "size",
+            "type": "\"sm\" | \"md\"",
+            "required": false,
+            "values": [
+              "\"sm\"",
+              "\"md\""
+            ],
+            "default": "\"md\"",
+            "description": "sm for inline use in cards and tables; md (default) for a whole page or panel."
+          },
+          {
+            "name": "titleAs",
+            "type": "\"h2\" | \"h3\" | \"h4\" | \"p\"",
+            "required": false,
+            "values": [
+              "\"h2\"",
+              "\"h3\"",
+              "\"h4\"",
+              "\"p\""
+            ],
+            "description": "Heading element for the title, to fit the page outline (default \"h2\")."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Extra content under the actions (a help link, a hint)."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the root."
+          }
+        ]
+      },
+      "apiHash": "5188733c3d29c10f"
+    },
+    "Input": {
+      "layer": "component",
+      "file": "packages/components/src/components/Input.tsx",
+      "spec": "docs/specs/Input.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "InputProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Input",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "InputProps": [
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Field height: sm 32px, md 40px (default), lg 48px. Legacy small/medium/large are deprecated aliases."
+          },
+          {
+            "name": "variant",
+            "type": "\"box\" | \"quiet\"",
+            "required": false,
+            "values": [
+              "\"box\"",
+              "\"quiet\""
+            ],
+            "default": "\"box\"",
+            "description": "Visual variant. \"box\" (default) is the plate field; \"quiet\" is the underline recipe — transparent, bottom hairline only, the site's voice for inline fields (passwords, rename-in-place). Same border ramp: idle hairline → hover mut → focus accent."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
+          },
+          {
+            "name": "helperText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Hint shown under the field (format, constraints). Linked via `aria-describedby`."
+          },
+          {
+            "name": "errorMessage",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Validation message shown under the field. Sets the error state and `aria-invalid`, and replaces `helperText` while present."
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional visible label. When set, renders a `<label>` associated with the input via `htmlFor` / `id`. Prefer this or `aria-label` so the field is announced correctly by screen readers."
+          }
+        ]
+      },
+      "apiHash": "637a57a09a4ade14"
+    },
+    "Kbd": {
+      "layer": "component",
+      "file": "packages/components/src/components/Kbd.tsx",
+      "spec": "docs/specs/Kbd.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "KbdProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Kbd",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "KbdProps": [
+          {
+            "name": "keys",
+            "type": "string[]",
+            "required": false,
+            "description": "Keys of a combo, in press order (`[\"Ctrl\", \"Shift\", \"P\"]`). Takes precedence over `children`."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A single key label when `keys` is not used."
+          },
+          {
+            "name": "size",
+            "type": "Extract<ControlSizeProp, \"sm\" | \"md\" | \"small\" | \"medium\">",
+            "required": false,
+            "description": "Key size: sm 20px (default) or md 24px."
+          },
+          {
+            "name": "separator",
+            "type": "ReactNode",
+            "required": false,
+            "default": "\"+\"",
+            "description": "Visible separator between combo keys (default \"+\")."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the outer `<kbd>`."
+          }
+        ]
+      },
+      "apiHash": "62b7d8f913c7ab57"
+    },
+    "Link": {
+      "layer": "component",
+      "file": "packages/components/src/components/Link.tsx",
+      "spec": "docs/specs/Link.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "LinkProps",
+          "kind": "type"
+        },
+        {
+          "name": "Link",
+          "kind": "const"
+        }
+      ],
+      "props": {},
+      "apiHash": "3e8ffa13a32e0ae7"
+    },
+    "ListRow": {
+      "layer": "component",
+      "file": "packages/components/src/components/ListRow.tsx",
+      "spec": "docs/specs/ListRow.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ListRowProps",
+          "kind": "type"
+        },
+        {
+          "name": "ListRow",
+          "kind": "const"
+        }
+      ],
+      "props": {},
+      "apiHash": "4dc7a05b1b2b3978"
+    },
+    "LogView": {
+      "layer": "component",
+      "file": "packages/components/src/components/LogView.tsx",
+      "spec": "docs/specs/LogView.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "LogLevel",
+          "kind": "type"
+        },
+        {
+          "name": "LogLine",
+          "kind": "interface"
+        },
+        {
+          "name": "LogViewProps",
+          "kind": "interface"
+        },
+        {
+          "name": "LogView",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "LogLevel": {
+          "union": [
+            "\"info\"",
+            "\"warn\"",
+            "\"error\"",
+            "\"debug\""
+          ]
+        },
+        "LogLine": [
+          {
+            "name": "id",
+            "type": "string | number",
+            "required": true,
+            "values": [
+              "string",
+              "number"
+            ],
+            "description": "Stable id (used as the React key; keep it unique and stable across appends)."
+          },
+          {
+            "name": "text",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The message. Plain text keeps the monospace grid; nodes are allowed."
+          },
+          {
+            "name": "level",
+            "type": "LogLevel",
+            "required": false,
+            "description": "Severity. Lines without a level render no tag."
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "required": false,
+            "description": "Timestamp text, pre-formatted (\"12:04:01\")."
+          }
+        ],
+        "LogViewProps": [
+          {
+            "name": "lines",
+            "type": "LogLine[]",
+            "required": true,
+            "description": "Lines to show, oldest first. Append to the end to stream."
+          },
+          {
+            "name": "autoScroll",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Follow new lines to the bottom (default true). Pauses while the user is scrolled up."
+          },
+          {
+            "name": "showLineNumbers",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Show a gutter of 1-based line numbers (default false)."
+          },
+          {
+            "name": "wrap",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Wrap long lines instead of scrolling horizontally (default true)."
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the log region (default \"Log\")."
+          },
+          {
+            "name": "emptyState",
+            "type": "ReactNode",
+            "required": false,
+            "default": "\"No output yet.\"",
+            "description": "Rendered when `lines` is empty (default \"No output yet.\")."
+          },
+          {
+            "name": "framed",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Draw the plate ring frame (default true). Set false when the log sits inside another frame, such as a Window body."
+          },
+          {
+            "name": "onFollowChange",
+            "type": "(following: boolean) => void",
+            "required": false,
+            "description": "Fires when following pauses (user scrolled up) or resumes."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the frame. Set the height here (default h-80)."
+          }
+        ]
+      },
+      "apiHash": "b94a2e1b2b6718fa"
+    },
+    "Meter": {
+      "layer": "component",
+      "file": "packages/components/src/components/Meter.tsx",
+      "spec": "docs/specs/Meter.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "MeterTone",
+          "kind": "type"
+        },
+        {
+          "name": "MeterProps",
+          "kind": "interface"
+        },
+        {
+          "name": "getMeterTone",
+          "kind": "function"
+        },
+        {
+          "name": "Meter",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "MeterTone": {
+          "union": [
+            "\"primary\"",
+            "\"success\"",
+            "\"warning\"",
+            "\"error\""
+          ]
+        },
+        "MeterProps": [
+          {
+            "name": "value",
+            "type": "number",
+            "required": true,
+            "description": "Current value. Clamped to `[min, max]`."
+          },
+          {
+            "name": "min",
+            "type": "number",
+            "required": false,
+            "default": "0",
+            "description": "Lower bound (default 0)."
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "required": false,
+            "default": "100",
+            "description": "Upper bound (default 100)."
+          },
+          {
+            "name": "low",
+            "type": "number",
+            "required": false,
+            "description": "Upper edge of the low region. Values below it are \"low\"."
+          },
+          {
+            "name": "high",
+            "type": "number",
+            "required": false,
+            "description": "Lower edge of the high region. Values above it are \"high\"."
+          },
+          {
+            "name": "optimum",
+            "type": "number",
+            "required": false,
+            "description": "The ideal value; decides which region reads as good."
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Visible label (\"Disk\"). Also the meter's accessible name."
+          },
+          {
+            "name": "valueText",
+            "type": "string",
+            "required": false,
+            "description": "Human-readable value, shown next to the label and used as `aria-valuetext` (\"42 GB of 64 GB\"). Defaults to a percentage."
+          },
+          {
+            "name": "tone",
+            "type": "MeterTone",
+            "required": false,
+            "description": "Force a tone instead of deriving it from the thresholds."
+          },
+          {
+            "name": "segments",
+            "type": "number",
+            "required": false,
+            "default": "20",
+            "description": "Number of blocks the range is divided into (default 20)."
+          },
+          {
+            "name": "size",
+            "type": "Extract<ControlSizeProp, \"sm\" | \"md\" | \"small\" | \"medium\">",
+            "required": false,
+            "description": "Block height: sm 8px, md 12px (default)."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the wrapper."
+          }
+        ]
+      },
+      "apiHash": "f5dd50df1de10299"
+    },
+    "Modal": {
+      "layer": "component",
+      "file": "packages/components/src/components/Modal.tsx",
+      "spec": "docs/specs/Modal.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ModalProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Modal",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "ModalProps": [
+          {
+            "name": "isOpen",
+            "type": "boolean",
+            "required": true
+          },
+          {
+            "name": "onClose",
+            "type": "() => void",
+            "required": true
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true
+          },
+          {
+            "name": "footerContent",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional fixed footer for CTAs. Render DS Buttons here (e.g. a secondary \"Cancel\" + primary confirm); actions align to the right on a subtle band."
+          },
+          {
+            "name": "width",
+            "type": "number | string",
+            "required": false,
+            "values": [
+              "number",
+              "string"
+            ],
+            "default": "740",
+            "description": "Panel width (default 740). Numbers are px; strings pass through (e.g. \"min(320px, 90vw)\"). Small celebratory dialogs want ~320."
+          },
+          {
+            "name": "docked",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Dock instead of covering: at or above the `--breakpoint-docked` token (960px) the panel pins bottom-center with no scrim and no scroll lock (a non-modal dialog), keeping the page behind visible and interactive. Below it this is ignored and the standard centered modal renders, so the responsive fallback lives here, not in the consumer."
+          }
+        ]
+      },
+      "apiHash": "d20e4c2180a68d03"
+    },
+    "Pagination": {
+      "layer": "component",
+      "file": "packages/components/src/components/Pagination.tsx",
+      "spec": "docs/specs/Pagination.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "PaginationRangeItem",
+          "kind": "type"
+        },
+        {
+          "name": "getPaginationRange",
+          "kind": "function"
+        },
+        {
+          "name": "PaginationProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Pagination",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "PaginationRangeItem": {
+          "union": [
+            "number",
+            "\"ellipsis-start\"",
+            "\"ellipsis-end\""
+          ]
+        },
+        "PaginationProps": [
+          {
+            "name": "page",
+            "type": "number",
+            "required": false,
+            "description": "Current page, 1-based (controlled). Pair with `onPageChange`."
+          },
+          {
+            "name": "defaultPage",
+            "type": "number",
+            "required": false,
+            "default": "1",
+            "description": "Starting page when uncontrolled (default 1)."
+          },
+          {
+            "name": "pageCount",
+            "type": "number",
+            "required": true,
+            "description": "Total number of pages. Renders nothing when 0."
+          },
+          {
+            "name": "onPageChange",
+            "type": "(page: number) => void",
+            "required": false,
+            "description": "Fires with the requested 1-based page when the user picks a page or steps prev/next."
+          },
+          {
+            "name": "siblingCount",
+            "type": "number",
+            "required": false,
+            "default": "1",
+            "description": "Pages shown on each side of the current page (default 1)."
+          },
+          {
+            "name": "boundaryCount",
+            "type": "number",
+            "required": false,
+            "default": "1",
+            "description": "Pages always shown at the start and end (default 1)."
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Plate height from the Button scale: sm 32px, md 40px (default), lg 48px. Hit areas stay 44px or more."
+          },
+          {
+            "name": "showPrevNext",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Show the previous/next arrow buttons (default true)."
+          },
+          {
+            "name": "getPageLabel",
+            "type": "(page: number) => string",
+            "required": false,
+            "default": "(p) => `Page ${p}`",
+            "description": "Accessible name of each page button (default \"Page 3\")."
+          },
+          {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "default": "\"Previous page\"",
+            "description": "Accessible name of the previous button (default \"Previous page\")."
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "default": "\"Next page\"",
+            "description": "Accessible name of the next button (default \"Next page\")."
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the nav landmark (default \"Pagination\")."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the `<nav>`."
+          }
+        ]
+      },
+      "apiHash": "7ea8f60bc2d19bc7"
+    },
+    "Popover": {
+      "layer": "component",
+      "file": "packages/components/src/components/Popover.tsx",
+      "spec": "docs/specs/Popover.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "PopoverSide",
+          "kind": "type"
+        },
+        {
+          "name": "PopoverAlign",
+          "kind": "type"
+        },
+        {
+          "name": "PopoverProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Popover",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "PopoverProps": [
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled open state. Pair with `onOpenChange`; omit for uncontrolled use."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Initial open state when uncontrolled (default false)."
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "required": false,
+            "description": "Called whenever the popover asks to open or close (trigger, Escape, outside click, blur)."
+          },
+          {
+            "name": "trigger",
+            "type": "ReactElement",
+            "required": false,
+            "description": "The element that toggles the popover, usually a `Button`. It receives `aria-expanded`, `aria-controls` and `aria-haspopup`, and a click handler that toggles the panel (your own `onClick` still runs first)."
+          },
+          {
+            "name": "anchorRef",
+            "type": "RefObject<HTMLElement | null>",
+            "required": false,
+            "description": "Position against an element you render yourself instead of `trigger` (e.g. an input). Clicks inside the anchor never count as outside clicks. You own opening and ARIA wiring in that case."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Panel content."
+          },
+          {
+            "name": "side",
+            "type": "PopoverSide",
+            "required": false,
+            "default": "\"bottom\"",
+            "description": "Preferred side of the anchor (default \"bottom\"). Flips when there is no room."
+          },
+          {
+            "name": "align",
+            "type": "PopoverAlign",
+            "required": false,
+            "default": "\"start\"",
+            "description": "Alignment along the anchor edge (default \"start\")."
+          },
+          {
+            "name": "offset",
+            "type": "number",
+            "required": false,
+            "default": "8",
+            "description": "Gap between anchor and panel in px (default 8, one plate step multiple)."
+          },
+          {
+            "name": "closeOnOutsideClick",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Close when the user presses outside the trigger and panel (default true)."
+          },
+          {
+            "name": "closeOnEscape",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Close on Escape (default true)."
+          },
+          {
+            "name": "autoFocus",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Move focus into the panel on open: the first focusable element, else the panel itself (default true). Set false for panels that must leave focus on the anchor, like a combobox listbox."
+          },
+          {
+            "name": "returnFocus",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Send focus back to the trigger when closed via Escape or the trigger (default true)."
+          },
+          {
+            "name": "matchAnchorWidth",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Make the panel at least as wide as the anchor (default false)."
+          },
+          {
+            "name": "role",
+            "type": "AriaRole | null",
+            "required": false,
+            "values": [
+              "AriaRole",
+              "null"
+            ],
+            "default": "\"dialog\"",
+            "description": "ARIA role of the panel (default \"dialog\", a non-modal dialog). Pass `null` when the content carries its own role (a listbox, a menu)."
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the panel. Required for `role=\"dialog\"` unless `aria-labelledby` is set."
+          },
+          {
+            "name": "aria-labelledby",
+            "type": "string",
+            "required": false,
+            "description": "Id of a visible heading inside the panel that names it."
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "required": false,
+            "description": "Id for the panel; generated when omitted."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the outer ring layer (width, max-width)."
+          },
+          {
+            "name": "contentClassName",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the inner fill (padding, layout). Defaults to `p-4`."
+          },
+          {
+            "name": "portal",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Render the panel into `document.body` (default false). Turn this on inside plate-clipped containers (Card, Modal): clip-path clips even fixed-position descendants. Inline rendering keeps DOM order, so Tab flows from the trigger into the panel; a portaled panel relies on `autoFocus` instead."
+          },
+          {
+            "name": "triggerWrapperClassName",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the span that wraps `trigger`."
+          }
+        ]
+      },
+      "apiHash": "3250ac09b7d9401f"
+    },
+    "ProgressBar": {
+      "layer": "component",
+      "file": "packages/components/src/components/ProgressBar.tsx",
+      "spec": "docs/specs/ProgressBar.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ProgressBarProps",
+          "kind": "interface"
+        },
+        {
+          "name": "ProgressBar",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "ProgressBarProps": [
+          {
+            "name": "value",
+            "type": "number | null",
+            "required": false,
+            "values": [
+              "number",
+              "null"
+            ],
+            "description": "Current progress, 0 to `max`. Omit (or pass `null`) for an indeterminate bar."
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "required": false,
+            "default": "100",
+            "description": "Value that means complete (default 100)."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "Accessible name, e.g. \"Uploading report.pdf\". Shown above the bar unless `showLabel` is false."
+          },
+          {
+            "name": "showLabel",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Show the label visually (default true). When false it is still announced."
+          },
+          {
+            "name": "showValue",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Show the percentage next to the label for determinate bars (default true)."
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Track thickness: sm, md (default), lg."
+          },
+          {
+            "name": "variant",
+            "type": "\"primary\" | \"success\" | \"warning\" | \"error\"",
+            "required": false,
+            "values": [
+              "\"primary\"",
+              "\"success\"",
+              "\"warning\"",
+              "\"error\""
+            ],
+            "default": "\"primary\"",
+            "description": "Fill color by meaning: primary (default accent), success, warning, error."
+          },
+          {
+            "name": "segments",
+            "type": "number",
+            "required": false,
+            "default": "20",
+            "description": "Number of blocks across the track (default 20, so each block is 5%)."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the root (width)."
+          }
+        ]
+      },
+      "apiHash": "c9b23b3b435bff65"
+    },
+    "Radio": {
+      "layer": "component",
+      "file": "packages/components/src/components/Radio.tsx",
+      "spec": "docs/specs/Radio.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "RadioProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Radio",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "RadioProps": [
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Box size: sm 16px, md 20px (default), lg 24px. The tap target is 44×44px at every size."
+          },
+          {
+            "name": "label",
+            "type": "string | ReactNode",
+            "required": false,
+            "values": [
+              "string",
+              "ReactNode"
+            ],
+            "description": "Visible label next to the box; clicking it selects the radio. Without one, pass `aria-label`."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
+          },
+          {
+            "name": "helperText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Secondary line under the label (explains what picking this option means)."
+          },
+          {
+            "name": "errorMessage",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Validation message under the label. Sets the error state and replaces `helperText`."
+          },
+          {
+            "name": "onCheckedChange",
+            "type": "(checked: boolean) => void",
+            "required": false,
+            "description": "Called with this radio's checked state after a change (alternative to `onChange`). A radio only fires when it becomes selected, so the value is `true`; losing selection to a sibling fires nothing, as with a native radio."
+          }
+        ]
+      },
+      "apiHash": "80350e459a156152"
+    },
+    "Select": {
+      "layer": "component",
+      "file": "packages/components/src/components/Select.tsx",
+      "spec": "docs/specs/Select.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "SelectProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Select",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "SelectProps": [
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Trigger height: sm 32px, md 40px (default), lg 48px. Legacy names are deprecated aliases."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
+          },
+          {
+            "name": "helperText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Hint shown under the trigger. Linked via `aria-describedby`."
+          },
+          {
+            "name": "errorMessage",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Validation message shown under the trigger. Sets the error state and `aria-invalid`, and replaces `helperText` while present."
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional visible label; associates with the custom trigger via `htmlFor` / `id` on the button."
+          }
+        ]
+      },
+      "apiHash": "7e7b8030cd2a66d2"
+    },
+    "SideNav": {
+      "layer": "component",
+      "file": "packages/components/src/components/SideNav.tsx",
+      "spec": "docs/specs/SideNav.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "SideNavProps",
+          "kind": "interface"
+        },
+        {
+          "name": "SideNav",
+          "kind": "function"
+        },
+        {
+          "name": "SideNavSectionProps",
+          "kind": "interface"
+        },
+        {
+          "name": "SideNavSection",
+          "kind": "function"
+        },
+        {
+          "name": "SideNavItemProps",
+          "kind": "interface"
+        },
+        {
+          "name": "SideNavItem",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "SideNavProps": [
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the nav landmark, e.g. \"Primary\". Required when the page has more than one `<nav>`."
+          },
+          {
+            "name": "collapsed",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Icon-only rail: labels become accessible names plus tooltips."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "SideNavSection and/or SideNavItem children."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the `<nav>` (width, height, borders)."
+          }
+        ],
+        "SideNavSectionProps": [
+          {
+            "name": "heading",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional section heading. Screen-reader only when the rail is collapsed."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "SideNavItem rows."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the section wrapper."
+          }
+        ],
+        "SideNavItemProps": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "Row text. Also the accessible name and tooltip in collapsed mode."
+          },
+          {
+            "name": "icon",
+            "type": "TuiIconName",
+            "required": false,
+            "description": "1-bit icon shown before the label (strongly recommended; required for a useful collapsed rail)."
+          },
+          {
+            "name": "active",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Marks the current route: holds the hover fill and sets `aria-current=\"page\"`."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Destination; renders an `<a>`."
+          },
+          {
+            "name": "onClick",
+            "type": "(event: MouseEvent<HTMLElement>) => void",
+            "required": false,
+            "description": "Click handler. Without `href`, the row renders as a `<button>`."
+          },
+          {
+            "name": "as",
+            "type": "ElementType",
+            "required": false,
+            "description": "Custom link component (e.g. a router `<Link>`); its props go in `asProps`."
+          },
+          {
+            "name": "asProps",
+            "type": "Record<string, unknown>",
+            "required": false,
+            "description": "Props spread onto the `as` component (`to`, `state`, ...)."
+          },
+          {
+            "name": "trailing",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Trailing content at the row end (a count Badge, a Kbd hint). Hidden when collapsed."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Nested SideNavItem rows. Turns this row into a collapsible group button with `aria-expanded`; `href` / `onClick` are then ignored."
+          },
+          {
+            "name": "expanded",
+            "type": "boolean",
+            "required": false,
+            "description": "Group open state (controlled)."
+          },
+          {
+            "name": "defaultExpanded",
+            "type": "boolean",
+            "required": false,
+            "description": "Initial group open state. Defaults to true when a descendant is `active`."
+          },
+          {
+            "name": "onExpandedChange",
+            "type": "(expanded: boolean) => void",
+            "required": false,
+            "description": "Fires when a group row toggles."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the row element."
+          }
+        ]
+      },
+      "apiHash": "f1a6e02641d4c4e3"
+    },
+    "Skeleton": {
+      "layer": "component",
+      "file": "packages/components/src/components/Skeleton.tsx",
+      "spec": "docs/specs/Skeleton.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "SkeletonProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Skeleton",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "SkeletonProps": [
+          {
+            "name": "variant",
+            "type": "\"text\" | \"rect\" | \"avatar\"",
+            "required": false,
+            "values": [
+              "\"text\"",
+              "\"rect\"",
+              "\"avatar\""
+            ],
+            "default": "\"text\"",
+            "description": "Placeholder shape: text lines (default), a rect block, or an avatar square."
+          },
+          {
+            "name": "lines",
+            "type": "number",
+            "required": false,
+            "default": "1",
+            "description": "Number of text lines for `variant=\"text\"` (default 1). The last of several is shorter."
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Avatar square size: sm 32px, md 40px (default), lg 48px (control heights)."
+          },
+          {
+            "name": "animated",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Turn the pulse off (e.g. many skeletons on one screen). Reduced motion always turns it off."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Sizing classes. Rects need a height (e.g. `h-32 w-full`); text lines take the container width."
+          }
+        ]
+      },
+      "apiHash": "1ccd0312addbe195"
+    },
+    "Slider": {
+      "layer": "component",
+      "file": "packages/components/src/components/Slider.tsx",
+      "spec": "docs/specs/Slider.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "SliderProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Slider",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "SliderProps": [
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional visible label. When set, renders a <label> associated with the input via htmlFor/id. Prefer this or `aria-label` so the control is announced correctly by screen readers."
+          }
+        ]
+      },
+      "apiHash": "b3c2463559ff5c07"
+    },
+    "Spinner": {
+      "layer": "component",
+      "file": "packages/components/src/components/Spinner.tsx",
+      "spec": "docs/specs/Spinner.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "SpinnerProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Spinner",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "SpinnerProps": [
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Box size: sm 12px (inline, 32px controls), md 16px (default), lg 24px (48px controls, empty states)."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "default": "\"Loading\"",
+            "description": "What is loading, read by screen readers and never shown (default \"Loading\"). Be specific when several things load at once: \"Loading invoices\"."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the wrapper, e.g. a text color (`text-[var(--text-secondary)]`)."
+          }
+        ]
+      },
+      "apiHash": "93c6e7fa6b778b42"
+    },
+    "StatusLine": {
+      "layer": "component",
+      "file": "packages/components/src/components/StatusLine.tsx",
+      "spec": "docs/specs/StatusLine.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "StatusLineTone",
+          "kind": "type"
+        },
+        {
+          "name": "StatusLineProps",
+          "kind": "interface"
+        },
+        {
+          "name": "StatusLine",
+          "kind": "function"
+        },
+        {
+          "name": "StatusLineSegmentProps",
+          "kind": "interface"
+        },
+        {
+          "name": "StatusLineSegment",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "StatusLineTone": {
+          "union": [
+            "\"neutral\"",
+            "\"primary\"",
+            "\"success\"",
+            "\"warning\"",
+            "\"error\"",
+            "\"info\""
+          ]
+        },
+        "StatusLineProps": [
+          {
+            "name": "left",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Left zone segments (mode, branch, file)."
+          },
+          {
+            "name": "center",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Center zone segments (message, progress)."
+          },
+          {
+            "name": "right",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Right zone segments (position, encoding, clock)."
+          },
+          {
+            "name": "live",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Announce changes politely (`role=\"status\"`). Off by default to avoid chatter."
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the bar (default \"Status\")."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the bar."
+          }
+        ],
+        "StatusLineSegmentProps": [
+          {
+            "name": "icon",
+            "type": "TuiIconName",
+            "required": false,
+            "description": "1-bit icon before the text. Use one with any non-neutral tone."
+          },
+          {
+            "name": "tone",
+            "type": "StatusLineTone",
+            "required": false,
+            "default": "\"neutral\"",
+            "description": "Semantic tone (default \"neutral\")."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Segment text. Keep it to a few words."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the segment."
+          }
+        ]
+      },
+      "apiHash": "1aadde8c72e57e52"
+    },
+    "Switch": {
+      "layer": "component",
+      "file": "packages/components/src/components/Switch.tsx",
+      "spec": "docs/specs/Switch.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "SwitchProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Switch",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "SwitchProps": [
+          {
+            "name": "checked",
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          {
+            "name": "onCheckedChange",
+            "type": "(checked: boolean) => void",
+            "required": false
+          },
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Track size. The tap target is at least 44px tall at every size."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Visible label and accessible name. Clicking it toggles the switch. Use `hideLabel` to keep it aria-only."
+          },
+          {
+            "name": "hideLabel",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Keep `label` as the accessible name only (no visible text). Use in compositions where the row already carries a visible heading — e.g. a settings row — so the name isn't duplicated next to the track."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false
+          }
+        ]
+      },
+      "apiHash": "cfba133a0c8a70f7"
+    },
+    "Table": {
+      "layer": "component",
+      "file": "packages/components/src/components/Table.tsx",
+      "spec": "docs/specs/Table.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "TableDensity",
+          "kind": "type"
+        },
+        {
+          "name": "TableProps",
+          "kind": "type"
+        },
+        {
+          "name": "Table",
+          "kind": "const"
+        },
+        {
+          "name": "TableHeaderProps",
+          "kind": "type"
+        },
+        {
+          "name": "TableHeader",
+          "kind": "const"
+        },
+        {
+          "name": "TableBodyProps",
+          "kind": "type"
+        },
+        {
+          "name": "TableBody",
+          "kind": "const"
+        },
+        {
+          "name": "TableFooterProps",
+          "kind": "type"
+        },
+        {
+          "name": "TableFooter",
+          "kind": "const"
+        },
+        {
+          "name": "TableRowProps",
+          "kind": "type"
+        },
+        {
+          "name": "TableRow",
+          "kind": "const"
+        },
+        {
+          "name": "TableHeadProps",
+          "kind": "type"
+        },
+        {
+          "name": "TableHead",
+          "kind": "const"
+        },
+        {
+          "name": "TableCellProps",
+          "kind": "type"
+        },
+        {
+          "name": "TableCell",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "TableDensity": {
+          "union": [
+            "\"compact\"",
+            "\"comfortable\"",
+            "\"spacious\""
+          ]
+        }
+      },
+      "apiHash": "cf29bae14e3b9572"
+    },
+    "Tabs": {
+      "layer": "component",
+      "file": "packages/components/src/components/Tabs.tsx",
+      "spec": "docs/specs/Tabs.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "TabsProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Tabs",
+          "kind": "function"
+        },
+        {
+          "name": "TabsListProps",
+          "kind": "interface"
+        },
+        {
+          "name": "TabsList",
+          "kind": "function"
+        },
+        {
+          "name": "TabsTriggerProps",
+          "kind": "type"
+        },
+        {
+          "name": "TabsTrigger",
+          "kind": "const"
+        },
+        {
+          "name": "TabsContentProps",
+          "kind": "interface"
+        },
+        {
+          "name": "TabsContent",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "TabsProps": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Selected panel id (controlled)."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "Initial panel when uncontrolled; use `undefined` to auto-select the first tab."
+          },
+          {
+            "name": "onValueChange",
+            "type": "(value: string) => void",
+            "required": false,
+            "description": "Fires when the active tab changes."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "TabsListProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the tab strip (pass this or `aria-labelledby`)."
+          },
+          {
+            "name": "aria-labelledby",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "TabsContentProps": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "forceMount",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Keep inactive panels mounted (hidden) so form state is preserved."
+          }
+        ]
+      },
+      "apiHash": "1defc7ccae4aa220"
+    },
+    "Textarea": {
+      "layer": "component",
+      "file": "packages/components/src/components/Textarea.tsx",
+      "spec": "docs/specs/Textarea.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "TextareaProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Textarea",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "TextareaProps": [
+          {
+            "name": "size",
+            "type": "ControlSizeProp",
+            "required": false,
+            "description": "Minimum height and padding: sm, md (default), lg, matching Input. Legacy names are deprecated aliases."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
+          },
+          {
+            "name": "helperText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Hint shown under the field (length, format). Linked via `aria-describedby`."
+          },
+          {
+            "name": "errorMessage",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Validation message shown under the field. Sets the error state and `aria-invalid`, and replaces `helperText` while present."
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional visible label. When set, renders a `<label>` associated with the textarea via `htmlFor` / `id`."
+          }
+        ]
+      },
+      "apiHash": "0a46b8f0fb04b0e6"
+    },
+    "ThemeToggle": {
+      "layer": "component",
+      "file": "packages/components/src/components/ThemeToggle.tsx",
+      "spec": "docs/specs/ThemeToggle.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ThemeToggle",
+          "kind": "function"
+        }
+      ],
+      "props": {},
+      "apiHash": "645f2f6387f18625"
+    },
+    "Toast": {
+      "layer": "component",
+      "file": "packages/components/src/components/Toast.tsx",
+      "spec": "docs/specs/Toast.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ToastVariant",
+          "kind": "type"
+        },
+        {
+          "name": "ToastAction",
+          "kind": "interface"
+        },
+        {
+          "name": "ToastItem",
+          "kind": "interface"
+        },
+        {
+          "name": "ToasterProps",
+          "kind": "interface"
+        },
+        {
+          "name": "ToastProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Toast",
+          "kind": "function"
+        },
+        {
+          "name": "ToastOptions",
+          "kind": "interface"
+        },
+        {
+          "name": "ToastApi",
+          "kind": "interface"
+        },
+        {
+          "name": "toast",
+          "kind": "const"
+        },
+        {
+          "name": "useToast",
+          "kind": "function"
+        },
+        {
+          "name": "Toaster",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "ToastVariant": {
+          "union": [
+            "\"default\"",
+            "\"success\"",
+            "\"warning\"",
+            "\"error\"",
+            "\"info\""
+          ]
+        },
+        "ToastAction": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "Short verb shown as the button text (\"Undo\", \"Retry\", \"View\")."
+          },
+          {
+            "name": "onClick",
+            "type": "() => void",
+            "required": true,
+            "description": "Runs when the action is pressed; the toast dismisses itself afterwards."
+          }
+        ],
+        "ToastItem": [
+          {
+            "name": "id",
+            "type": "string | number",
+            "required": true,
+            "values": [
+              "string",
+              "number"
+            ],
+            "description": "Stable key for the toast (also used by dismissal callbacks)."
+          },
+          {
+            "name": "message",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Toast content. Keep it to one short line."
+          },
+          {
+            "name": "variant",
+            "type": "ToastVariant",
+            "required": false,
+            "default": "\"default\"",
+            "description": "Severity (default: \"default\"). \"error\" is announced assertively."
+          },
+          {
+            "name": "action",
+            "type": "ToastAction",
+            "required": false,
+            "description": "Optional inline action, such as Undo."
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "required": false,
+            "description": "Milliseconds before auto-dismiss; `Infinity` persists. Omit on controlled items to keep managing timing yourself."
+          }
+        ],
+        "ToasterProps": [
+          {
+            "name": "toasts",
+            "type": "ToastItem[]",
+            "required": false,
+            "description": "Controlled mode: the toasts to render, oldest first (the newest renders closest to the screen edge). Omit to render the imperative `toast()` queue."
+          },
+          {
+            "name": "onDismiss",
+            "type": "(id: ToastItem[\"id\"]) => void",
+            "required": false,
+            "description": "Controlled mode: called when a toast is clicked, its action runs, or its `duration` elapses. Ignored in imperative mode (the queue dismisses itself)."
+          }
+        ],
+        "ToastProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Toast content. Keep it to one short line."
+          },
+          {
+            "name": "onClick",
+            "type": "() => void",
+            "required": false,
+            "description": "Called when the plate is clicked (pointer shortcut; wire to dismiss)."
+          },
+          {
+            "name": "variant",
+            "type": "ToastVariant",
+            "required": false,
+            "default": "\"default\"",
+            "description": "Severity (default: \"default\"): icon, colors, and `role` (error = alert)."
+          },
+          {
+            "name": "action",
+            "type": "ToastAction",
+            "required": false,
+            "description": "Optional inline action button, such as Undo. Pressing it also dismisses."
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "required": false,
+            "description": "Auto-dismiss after this many ms, paused on hover and focus. `Infinity` persists and shows a dismiss button. Needs `onDismiss`."
+          },
+          {
+            "name": "onDismiss",
+            "type": "() => void",
+            "required": false,
+            "description": "Removes the toast (timer, action, or the dismiss button call it)."
+          }
+        ],
+        "ToastOptions": [
+          {
+            "name": "variant",
+            "type": "ToastVariant",
+            "required": false,
+            "default": "\"default\"",
+            "description": "Severity (default: \"default\"). The `toast.success()` style helpers set it for you."
+          },
+          {
+            "name": "action",
+            "type": "ToastAction",
+            "required": false,
+            "description": "Optional inline action, such as Undo."
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "required": false,
+            "description": "Milliseconds before auto-dismiss (default 5000); `Infinity` persists."
+          },
+          {
+            "name": "id",
+            "type": "ToastItem[\"id\"]",
+            "required": false,
+            "description": "Reuse an id to replace a toast in place (e.g. \"Saving...\" then \"Saved\")."
+          }
+        ],
+        "ToastApi": [
+          {
+            "name": "success",
+            "type": "ShowToast",
+            "required": true,
+            "description": "Queues a success toast (CheckCircle, green)."
+          },
+          {
+            "name": "warning",
+            "type": "ShowToast",
+            "required": true,
+            "description": "Queues a warning toast (AlertTriangle, purple)."
+          },
+          {
+            "name": "error",
+            "type": "ShowToast",
+            "required": true,
+            "description": "Queues an error toast (AlertCircle, red), announced with `role=\"alert\"`."
+          },
+          {
+            "name": "info",
+            "type": "ShowToast",
+            "required": true,
+            "description": "Queues an info toast (Info, blue)."
+          },
+          {
+            "name": "dismiss",
+            "type": "(id?: ToastItem[\"id\"]) => void",
+            "required": true,
+            "description": "Removes one toast by id, or every toast when called without one."
+          }
+        ]
+      },
+      "apiHash": "fc144a865ea0994f"
+    },
+    "Tooltip": {
+      "layer": "component",
+      "file": "packages/components/src/components/Tooltip.tsx",
+      "spec": "docs/specs/Tooltip.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "TooltipProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Tooltip",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "TooltipProps": [
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Short supplementary hint. Plain text; no links or buttons."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The trigger. Pass one focusable element so keyboard users can open the tooltip and hear it."
+          },
+          {
+            "name": "position",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+            "required": false,
+            "values": [
+              "\"top\"",
+              "\"bottom\"",
+              "\"left\"",
+              "\"right\""
+            ],
+            "default": "\"top\"",
+            "description": "Preferred side of the trigger (default: \"top\"). It flips to the opposite side when this one would overflow the viewport."
+          },
+          {
+            "name": "delay",
+            "type": "number",
+            "required": false,
+            "default": "200",
+            "description": "Milliseconds before showing on hover or focus (default: 200)."
+          },
+          {
+            "name": "maxWidth",
+            "type": "string",
+            "required": false,
+            "default": "\"200px\"",
+            "description": "Max width of the balloon, any CSS length (default: \"200px\")."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "default": "\"\"",
+            "description": "Extra classes for the wrapper (e.g. a width class for a full-width trigger)."
+          }
+        ]
+      },
+      "apiHash": "38cd02baecaadcbb"
+    },
+    "TreeView": {
+      "layer": "component",
+      "file": "packages/components/src/components/TreeView.tsx",
+      "spec": "docs/specs/TreeView.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "TreeNode",
+          "kind": "interface"
+        },
+        {
+          "name": "TreeViewProps",
+          "kind": "interface"
+        },
+        {
+          "name": "TreeView",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "TreeNode": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "Unique, stable id across the whole tree."
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Row content."
+          },
+          {
+            "name": "textValue",
+            "type": "string",
+            "required": false,
+            "description": "Plain-text label for type-ahead when `label` is not a string."
+          },
+          {
+            "name": "icon",
+            "type": "TuiIconName",
+            "required": false,
+            "description": "Optional 1-bit icon before the label."
+          },
+          {
+            "name": "children",
+            "type": "TreeNode[]",
+            "required": false,
+            "description": "Child nodes. An empty array still renders a (childless) branch."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Skip this node for selection and activation (it stays focusable)."
+          }
+        ],
+        "TreeViewProps": [
+          {
+            "name": "nodes",
+            "type": "TreeNode[]",
+            "required": true,
+            "description": "Root nodes."
+          },
+          {
+            "name": "aria-label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the tree (pass this or `aria-labelledby`)."
+          },
+          {
+            "name": "aria-labelledby",
+            "type": "string",
+            "required": false,
+            "description": "Id of a visible heading naming the tree."
+          },
+          {
+            "name": "expanded",
+            "type": "string[]",
+            "required": false,
+            "description": "Ids of open branches (controlled)."
+          },
+          {
+            "name": "defaultExpanded",
+            "type": "string[]",
+            "required": false,
+            "default": "[]",
+            "description": "Ids of branches open on first render (uncontrolled)."
+          },
+          {
+            "name": "onExpandedChange",
+            "type": "(expanded: string[]) => void",
+            "required": false,
+            "description": "Fires with the next list of open branch ids."
+          },
+          {
+            "name": "selected",
+            "type": "string | null",
+            "required": false,
+            "values": [
+              "string",
+              "null"
+            ],
+            "description": "Selected node id (controlled). `null` for no selection."
+          },
+          {
+            "name": "defaultSelected",
+            "type": "string | null",
+            "required": false,
+            "values": [
+              "string",
+              "null"
+            ],
+            "default": "null",
+            "description": "Node selected on first render (uncontrolled)."
+          },
+          {
+            "name": "onSelectedChange",
+            "type": "(id: string) => void",
+            "required": false,
+            "description": "Fires when the selection changes."
+          },
+          {
+            "name": "onActivate",
+            "type": "(id: string) => void",
+            "required": false,
+            "description": "Fires when a node is activated with Enter or a click (open the file, go to the route)."
+          },
+          {
+            "name": "typeahead",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Type-ahead on printable keys (default true)."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the tree root."
+          }
+        ]
+      },
+      "apiHash": "56b8f36b2aba3ab1"
+    },
+    "TuiIcon": {
+      "layer": "component",
+      "file": "packages/components/src/components/TuiIcon.tsx",
+      "spec": "docs/specs/TuiIcon.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "TUI_ICON_GLYPHS",
+          "kind": "const"
+        },
+        {
+          "name": "TuiIconName",
+          "kind": "type"
+        },
+        {
+          "name": "TUI_ICON_BITMAPS",
+          "kind": "const"
+        },
+        {
+          "name": "TuiIconSize",
+          "kind": "type"
+        },
+        {
+          "name": "TuiIconProps",
+          "kind": "interface"
+        },
+        {
+          "name": "TuiIcon",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "TuiIconSize": {
+          "union": [
+            "\"3\"",
+            "\"4\"",
+            "\"5\"",
+            "\"6\"",
+            "\"8\""
+          ]
+        },
+        "TuiIconProps": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "Icon name -- must match a key in (same as the Lucide component name)."
+          },
+          {
+            "name": "size",
+            "type": "TuiIconSize",
+            "required": false,
+            "default": "\"4\"",
+            "description": "Box size as a Tailwind size number: \"3\" (12px), \"4\" (16px, default), \"5\" (20px), \"6\" (24px), \"8\" (32px)."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes (color, margin, etc.)"
+          }
+        ]
+      },
+      "apiHash": "06f99e011e97cbbe"
+    },
+    "Window": {
+      "layer": "component",
+      "file": "packages/components/src/components/Window.tsx",
+      "spec": "docs/specs/Window.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "WindowProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Window",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "WindowProps": [
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Pane title shown in the title bar; also names the pane and its scroll region."
+          },
+          {
+            "name": "status",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Short status text at the right of the title bar (\"tail -f\", \"3 errors\", \"12:04\")."
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Title bar actions (icon Buttons, a Badge). Keep them small (`size=\"sm\"`)."
+          },
+          {
+            "name": "variant",
+            "type": "\"default\" | \"active\"",
+            "required": false,
+            "values": [
+              "\"default\"",
+              "\"active\""
+            ],
+            "default": "\"default\"",
+            "description": "`active` marks the focused pane (accent ring + marker); default is `default`."
+          },
+          {
+            "name": "titleAs",
+            "type": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" | \"span\"",
+            "required": false,
+            "values": [
+              "\"h1\"",
+              "\"h2\"",
+              "\"h3\"",
+              "\"h4\"",
+              "\"h5\"",
+              "\"h6\"",
+              "\"span\""
+            ],
+            "description": "Heading element used for the title (default \"h2\"). Match your page outline."
+          },
+          {
+            "name": "scroll",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Scrolling body (default true). Set false to let content size the pane."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Pane content."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the outer frame (set width / height here)."
+          },
+          {
+            "name": "bodyClassName",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes for the body (padding, max-height)."
+          }
+        ]
+      },
+      "apiHash": "fe3196c5e86452cb"
+    },
+    "Box": {
+      "layer": "primitive",
+      "file": "packages/components/src/primitives/Box.tsx",
+      "spec": "docs/specs/Box.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "BoxSpace",
+          "kind": "type"
+        },
+        {
+          "name": "BoxBackground",
+          "kind": "type"
+        },
+        {
+          "name": "BoxBorder",
+          "kind": "type"
+        },
+        {
+          "name": "BoxElement",
+          "kind": "type"
+        },
+        {
+          "name": "BoxProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Box",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "BoxBackground": {
+          "union": [
+            "\"none\"",
+            "\"page\"",
+            "\"container\"",
+            "\"card\"",
+            "\"subtle\"",
+            "\"muted\"",
+            "\"raised\"",
+            "\"inverse\""
+          ]
+        },
+        "BoxBorder": {
+          "union": [
+            "\"none\"",
+            "\"hairline\""
+          ]
+        },
+        "BoxElement": {
+          "union": [
+            "\"div\"",
+            "\"section\"",
+            "\"article\"",
+            "\"aside\"",
+            "\"header\"",
+            "\"footer\"",
+            "\"main\"",
+            "\"nav\"",
+            "\"figure\"",
+            "\"li\"",
+            "\"span\""
+          ]
+        },
+        "BoxProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content to sit inside the padding and on top of the background."
+          },
+          {
+            "name": "padding",
+            "type": "BoxSpace",
+            "required": false,
+            "description": "Padding on all four sides, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px. Omit it for a flush Box."
+          },
+          {
+            "name": "paddingX",
+            "type": "BoxSpace",
+            "required": false,
+            "description": "Left/right inset when it differs from the vertical one; replaces `padding` on that axis."
+          },
+          {
+            "name": "paddingY",
+            "type": "BoxSpace",
+            "required": false,
+            "description": "Top/bottom inset when it differs from the horizontal one; replaces `padding` on that axis."
+          },
+          {
+            "name": "background",
+            "type": "BoxBackground",
+            "required": false,
+            "default": "\"none\"",
+            "description": "Semantic surface to paint behind the content. `card` sits on top of `container`, `container` sits on `page`; `inverse` also flips the text color so content stays readable. Omit it to stay transparent."
+          },
+          {
+            "name": "border",
+            "type": "BoxBorder",
+            "required": false,
+            "default": "\"none\"",
+            "description": "`hairline` wraps the content in the plate ring (outer stroke layer plus a 1px-inset fill layer) because `clip-path` would slice a real CSS border. A ringed Box with no `background` falls back to the `card` surface, so the ring reads as a stroke and not as a solid plate."
+          },
+          {
+            "name": "as",
+            "type": "BoxElement",
+            "required": false,
+            "default": "\"div\"",
+            "description": "Element to render when the Box is a landmark or a list item rather than a generic grouping (`section`, `nav`, `li`, ...). Defaults to `div`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes (width, height, position), merged with `cn()` so they beat the generated ones."
+          }
+        ]
+      },
+      "apiHash": "42673a0c4648b028"
+    },
+    "Center": {
+      "layer": "primitive",
+      "file": "packages/components/src/primitives/Center.tsx",
+      "spec": "docs/specs/Center.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "CenterMaxWidth",
+          "kind": "type"
+        },
+        {
+          "name": "CenterElement",
+          "kind": "type"
+        },
+        {
+          "name": "CenterProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Center",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "CenterMaxWidth": {
+          "union": [
+            "\"xs\"",
+            "\"sm\"",
+            "\"md\"",
+            "\"lg\"",
+            "\"xl\"",
+            "\"2xl\"",
+            "\"none\""
+          ]
+        },
+        "CenterElement": {
+          "union": [
+            "\"div\"",
+            "\"section\"",
+            "\"article\"",
+            "\"main\"",
+            "\"figure\""
+          ]
+        },
+        "CenterProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Content to center; it keeps its own layout inside the column."
+          },
+          {
+            "name": "maxWidth",
+            "type": "CenterMaxWidth",
+            "required": false,
+            "default": "\"md\"",
+            "description": "Width of the centered column: `xs` 320px, `sm` 384px, `md` 448px (default, about the width of a sign-in card), `lg` 512px, `xl` 576px, `2xl` 672px, `none` to center a block that sizes itself."
+          },
+          {
+            "name": "andText",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Whether to center the text as well as the box. On for empty states and splash copy; off (default) when the column holds form fields or prose, where ragged-right text is easier to read."
+          },
+          {
+            "name": "fullHeight",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Whether to also center vertically in the viewport, for a splash, sign-in or error screen that owns the whole page. Off (default) keeps the block at the top of the flow."
+          },
+          {
+            "name": "as",
+            "type": "CenterElement",
+            "required": false,
+            "default": "\"div\"",
+            "description": "Element to render, so a centered block can be a `section` or the page `main` instead of a `div`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes (padding, background), merged with `cn()` so they win."
+          }
+        ]
+      },
+      "apiHash": "4bb4a67710881c79"
+    },
+    "Container": {
+      "layer": "primitive",
+      "file": "packages/components/src/primitives/Container.tsx",
+      "spec": "docs/specs/Container.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ContainerSize",
+          "kind": "type"
+        },
+        {
+          "name": "ContainerElement",
+          "kind": "type"
+        },
+        {
+          "name": "ContainerProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Container",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "ContainerSize": {
+          "union": [
+            "\"sm\"",
+            "\"md\"",
+            "\"lg\"",
+            "\"xl\"",
+            "\"full\""
+          ]
+        },
+        "ContainerElement": {
+          "union": [
+            "\"div\"",
+            "\"main\"",
+            "\"section\"",
+            "\"article\"",
+            "\"header\"",
+            "\"footer\"",
+            "\"nav\"",
+            "\"aside\""
+          ]
+        },
+        "ContainerProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Page content; centered inside the max width and inset by the gutters."
+          },
+          {
+            "name": "size",
+            "type": "ContainerSize",
+            "required": false,
+            "default": "\"lg\"",
+            "description": "Where the content stops growing: `sm` 640px, `md` 768px, `lg` 1024px (default, the reading width for most pages), `xl` 1280px, `full` no limit. The values track the breakpoint scale, so a container never straddles one."
+          },
+          {
+            "name": "gutter",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Whether to inset the content from the viewport edges (20px, 40px from `lg` up). Turn it off only when a child already owns the edge, such as a full-bleed image or a nested Container."
+          },
+          {
+            "name": "as",
+            "type": "ContainerElement",
+            "required": false,
+            "default": "\"div\"",
+            "description": "Element to render, so the page wrapper can be the real landmark (`main`, `header`, `footer`, `nav`) instead of a `div`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes (vertical padding, background), merged with `cn()` so they win."
+          }
+        ]
+      },
+      "apiHash": "b37e91556194a702"
+    },
+    "Grid": {
+      "layer": "primitive",
+      "file": "packages/components/src/primitives/Grid.tsx",
+      "spec": "docs/specs/Grid.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "GridGap",
+          "kind": "type"
+        },
+        {
+          "name": "GridColumnCount",
+          "kind": "type"
+        },
+        {
+          "name": "GridBreakpoint",
+          "kind": "type"
+        },
+        {
+          "name": "GridColumns",
+          "kind": "type"
+        },
+        {
+          "name": "GridAlign",
+          "kind": "type"
+        },
+        {
+          "name": "GridProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Grid",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "GridColumnCount": {
+          "union": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "12"
+          ]
+        },
+        "GridBreakpoint": {
+          "union": [
+            "\"base\"",
+            "\"sm\"",
+            "\"md\"",
+            "\"lg\"",
+            "\"xl\""
+          ]
+        },
+        "GridColumns": {
+          "union": [
+            "GridColumnCount",
+            "Partial<Record<GridBreakpoint, GridColumnCount>>"
+          ]
+        },
+        "GridAlign": {
+          "union": [
+            "\"start\"",
+            "\"center\"",
+            "\"end\"",
+            "\"stretch\""
+          ]
+        },
+        "GridProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Cells to place in the tracks; each child fills one cell in source order."
+          },
+          {
+            "name": "columns",
+            "type": "GridColumns",
+            "required": false,
+            "default": "1",
+            "description": "Track count. Pass a number for a fixed grid, or a map such as `{ base: 1, md: 2, lg: 3 }` to change the count at a breakpoint. A map without `base` starts at one column."
+          },
+          {
+            "name": "gap",
+            "type": "GridGap",
+            "required": false,
+            "default": "\"4\"",
+            "description": "Space between all tracks, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px."
+          },
+          {
+            "name": "rowGap",
+            "type": "GridGap",
+            "required": false,
+            "description": "Space between rows when it differs from `gap`, for example a tight grid with airy rows."
+          },
+          {
+            "name": "columnGap",
+            "type": "GridGap",
+            "required": false,
+            "description": "Space between columns when it differs from `gap`."
+          },
+          {
+            "name": "align",
+            "type": "GridAlign",
+            "required": false,
+            "default": "\"stretch\"",
+            "description": "How cells sit vertically in their row. `stretch` (default) gives every card in a row the height of the tallest one; `start` lets them keep their own height."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes (width, padding, explicit row definitions), merged with `cn()` so they win."
+          }
+        ]
+      },
+      "apiHash": "2e37e513240ea3cd"
+    },
+    "Inline": {
+      "layer": "primitive",
+      "file": "packages/components/src/primitives/Inline.tsx",
+      "spec": "docs/specs/Inline.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "InlineGap",
+          "kind": "type"
+        },
+        {
+          "name": "InlineAlign",
+          "kind": "type"
+        },
+        {
+          "name": "InlineJustify",
+          "kind": "type"
+        },
+        {
+          "name": "InlineProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Inline",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "InlineAlign": {
+          "union": [
+            "\"start\"",
+            "\"center\"",
+            "\"end\"",
+            "\"baseline\""
+          ]
+        },
+        "InlineJustify": {
+          "union": [
+            "\"start\"",
+            "\"center\"",
+            "\"end\"",
+            "\"between\""
+          ]
+        },
+        "InlineProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Items to place side by side; they keep their own width and wrap as a unit."
+          },
+          {
+            "name": "gap",
+            "type": "InlineGap",
+            "required": false,
+            "default": "\"2\"",
+            "description": "Space between items, used for both the row gap and the wrap gap, from the spacing scale: `none` 0, `1` 4px, `2` 8px (default), `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px."
+          },
+          {
+            "name": "align",
+            "type": "InlineAlign",
+            "required": false,
+            "default": "\"center\"",
+            "description": "How items line up across the row. `center` (default) suits controls of mixed height; `baseline` lines up the text in a label plus value meta row."
+          },
+          {
+            "name": "justify",
+            "type": "InlineJustify",
+            "required": false,
+            "default": "\"start\"",
+            "description": "How leftover horizontal space is distributed. `start` (default) keeps the cluster tight; `between` pushes the first and last item to the edges of a full-width row such as a toolbar."
+          },
+          {
+            "name": "wrap",
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Whether items flow onto a new line when the row runs out of width. Leave it on (default) so button rows and tag lists survive narrow viewports; turn it off only when overflow is handled another way."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes (width, padding, self-alignment), merged with `cn()` so they win."
+          }
+        ]
+      },
+      "apiHash": "edf1cd248a8d57b5"
+    },
+    "Stack": {
+      "layer": "primitive",
+      "file": "packages/components/src/primitives/Stack.tsx",
+      "spec": "docs/specs/Stack.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "StackGap",
+          "kind": "type"
+        },
+        {
+          "name": "StackProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Stack",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "StackProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Stack contents; laid out along `axis` with `gap` between them."
+          },
+          {
+            "name": "gap",
+            "type": "StackGap",
+            "required": false,
+            "default": "\"4\"",
+            "description": "Maps to the spacing scale (`gap-*` utilities): `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes (width, padding, alignment overrides)."
+          },
+          {
+            "name": "axis",
+            "type": "\"vertical\" | \"horizontal\"",
+            "required": false,
+            "values": [
+              "\"vertical\"",
+              "\"horizontal\""
+            ],
+            "default": "\"vertical\"",
+            "description": "Default vertical stack; horizontal for toolbars / button groups."
+          }
+        ]
+      },
+      "apiHash": "3be36212c6e752bf"
+    },
+    "VisuallyHidden": {
+      "layer": "primitive",
+      "file": "packages/components/src/primitives/VisuallyHidden.tsx",
+      "spec": "docs/specs/VisuallyHidden.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "VisuallyHiddenElement",
+          "kind": "type"
+        },
+        {
+          "name": "VisuallyHiddenProps",
+          "kind": "interface"
+        },
+        {
+          "name": "VisuallyHidden",
+          "kind": "const"
+        }
+      ],
+      "props": {
+        "VisuallyHiddenElement": {
+          "union": [
+            "\"span\"",
+            "\"div\"",
+            "\"p\"",
+            "\"label\"",
+            "\"legend\"",
+            "\"li\""
+          ]
+        },
+        "VisuallyHiddenProps": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Text or markup to announce. It stays in the accessibility tree, so keep it short and literal."
+          },
+          {
+            "name": "focusable",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Whether the content shows itself once anything inside it takes focus. Turn it on for a skip link, which must be invisible until a keyboard user tabs to it; the revealed element is statically positioned, so give it its own placement classes through `className`."
+          },
+          {
+            "name": "as",
+            "type": "VisuallyHiddenElement",
+            "required": false,
+            "default": "\"span\"",
+            "description": "Element to render, when the hidden text is a `label` for a control or a `li` inside a list rather than a generic `span`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Extra classes (placement for the focusable variant), merged with `cn()` so they win."
+          }
+        ]
+      },
+      "apiHash": "9652c4fdf1980804"
+    }
+  }
+}
