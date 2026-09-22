@@ -24,7 +24,7 @@ Extract the Figma component, map all visual properties to tokens, resolve gaps, 
 
 Read `.claude/ds-config.json: paths.components` to find the generated file path.
 
-Run `/review-component {paths.components}/{component_name}.dart` (or `.tsx` for React/TS)
+Run `/review-component {paths.components}/{ComponentName}.tsx`
 
 Audit the generated file for CLAUDE.md compliance — hardcoding, naming, docs, accessibility, tests, exports.
 
@@ -32,7 +32,7 @@ Audit the generated file for CLAUDE.md compliance — hardcoding, naming, docs, 
 
 Read `.claude/ds-config.json: paths.stories` to find the story file path.
 
-Run `/storybook-check {paths.stories}/{component_name}_story.dart`
+Run `/storybook-check {paths.stories}/{Category}/{ComponentName}.stories.tsx`
 
 Verify the story follows the page structure rules in `design-system-doc-requirements.md`.
 

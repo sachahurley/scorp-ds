@@ -20,14 +20,14 @@ Verify the storybook story at `$ARGUMENTS` follows the page structure requiremen
 ### 1. Read the reference
 - Read `design-system-doc-requirements.md` for the 10 rules
 - Read the story file at `$ARGUMENTS`
-- Read related shared widgets in the storybook shared directory (`{paths.shared}`) if referenced
+- Read related shared components in the storybook shared directory (`{paths.shared}`) if referenced
 
 ### 2. Check each rule
 
 Read `.claude/ds-config.json: tokens.classPrefix` to get the prefix before checking naming rules.
 
 #### RULE 0 — Golden Principle
-Visual examples must come BEFORE token names, raw values, and usage text. Check that in the widget build order, swatch/example widgets appear before token table widgets.
+Visual examples must come BEFORE token names, raw values, and usage text. Check that in the render order, swatch and example elements appear before token tables.
 
 #### RULE 1 — Page Header
 The story must include:
@@ -37,7 +37,7 @@ The story must include:
 - Last updated date
 
 #### RULE 2 — Section Structure
-Each section must follow: Section Title → Visual Example → Token Table → Code Snippet. Check the widget ordering.
+Each section must follow: Section Title -> Visual Example -> Token Table -> Code Snippet. Check the ordering.
 
 #### RULE 3 — Usage Guidelines (Future)
 Note if Do/Don't blocks are present. This rule is deferred — report as "Deferred" not "Failed".

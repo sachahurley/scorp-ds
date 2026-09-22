@@ -189,7 +189,7 @@ Sacha has asked agents to own this follow-through without being reminded.
 - [ ] Interactive components have ARIA labels
 - [ ] New components exported through `packages/components/src/index.ts`
 - [ ] Storybook story added
-- [ ] `pnpm type-check` passes
+- [ ] `npm run lint`, `npm run type-check` and `npm test` pass (CI runs all three)
 - [ ] No imports from `@sachahurley/scorpion-ui` (old package — forbidden)
 
 ## What NOT to Do

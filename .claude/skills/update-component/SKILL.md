@@ -46,7 +46,7 @@ Edit the component source. Follow CLAUDE.md rules:
 - No hardcoded values in components
 - `{prefix}` prefix on class names
 - Doc comments on all public APIs
-- Semantic labels on interactive widgets
+- Accessible labels on interactive components
 
 ### 3. Find all builder functions that use this component
 
@@ -80,12 +80,6 @@ Screen samples should be using builder functions, but check for any direct usage
 Read and update the test file if the change affects testable behavior.
 
 ### 8. Verify
-
-**Flutter:**
-```bash
-cd ds && flutter analyze
-cd ds && flutter test
-```
 
 **React/TS:**
 ```bash

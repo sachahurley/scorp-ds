@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 # ds-health.sh — Design system health check
 #
-# Reads .claude/ds-config.json for stack type and runs the appropriate checks.
+# Scorp DS is a React/TypeScript/Tailwind repo. This script assumes that and
+# nothing else: there is no stack branching and no default stack. If
+# ds-config.json says anything other than react-ts, that is a real problem and
+# the script says so rather than quietly running the wrong checks.
+#
 # Usage:
 #   bash scripts/ds-health.sh          — full check
-#   bash scripts/ds-health.sh quick    — skip storybook audit
-#   bash scripts/ds-health.sh tokens   — token checks only
+#   bash scripts/ds-health.sh quick    — skip tests
+#   bash scripts/ds-health.sh tokens   — token/hardcoding checks only
 
-set -e
+set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -34,15 +38,46 @@ echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━�
 echo -e "${BOLD}  DS Health Check${RESET}  (mode: $MODE)"
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 
-# ─── READ STACK FROM CONFIG ──────────────────────────────────────────────────
+# ─── CONFIG ──────────────────────────────────────────────────────────────────
 
 CONFIG_FILE="$PROJECT_ROOT/.claude/ds-config.json"
-STACK="flutter"  # default
 
-if [ -f "$CONFIG_FILE" ]; then
-  if command -v python3 &>/dev/null; then
-    STACK=$(python3 -c "import json; d=json.load(open('$CONFIG_FILE')); print(d.get('stack','flutter'))" 2>/dev/null || echo "flutter")
-  fi
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo -e "  ${RED}ERROR${RESET}: cannot read $CONFIG_FILE" >&2
+  exit 1
+fi
+
+if ! command -v python3 &>/dev/null; then
+  echo -e "  ${RED}ERROR${RESET}: python3 is required to parse ds-config.json" >&2
+  exit 1
+fi
+
+cfg() {
+  python3 -c "
+import json, sys
+d = json.load(open('$CONFIG_FILE'))
+cur = d
+for k in '$1'.split('.'):
+    cur = cur.get(k) if isinstance(cur, dict) else None
+    if cur is None:
+        sys.stderr.write('ERROR: $1 missing from ds-config.json\n'); sys.exit(1)
+print(cur)
+"
+}
+
+STACK="$(cfg stack)" || exit 1
+if [ "$STACK" != "react-ts" ]; then
+  echo -e "  ${RED}ERROR${RESET}: ds-config.json stack is '$STACK', expected 'react-ts'." >&2
+  echo "  This script only knows how to check a React/TypeScript repo." >&2
+  exit 1
+fi
+
+COMPONENTS_DIR="$PROJECT_ROOT/$(cfg paths.components)" || exit 1
+PRIMITIVES_DIR="$PROJECT_ROOT/$(cfg paths.primitives)" || exit 1
+
+if ! command -v npm &>/dev/null; then
+  echo -e "  ${RED}ERROR${RESET}: npm not found in PATH (this repo uses npm workspaces)." >&2
+  exit 1
 fi
 
 info "Stack: $STACK"
@@ -53,7 +88,7 @@ echo ""
 echo -e "${BOLD}1. Spec Drift${RESET}"
 
 if [ -f "$PROJECT_ROOT/scripts/detect-spec-drift.sh" ]; then
-  bash "$PROJECT_ROOT/scripts/detect-spec-drift.sh" 2>&1 | tail -5
+  bash "$PROJECT_ROOT/scripts/detect-spec-drift.sh" 2>&1 | grep -E "MISSING SPEC|SPEC OUTDATED|SKIPPED|✓|⚠" | head -10
   pass "Spec drift check complete"
 else
   warn "detect-spec-drift.sh not found"
@@ -61,122 +96,84 @@ fi
 
 echo ""
 
-# ─── 2. STATIC ANALYSIS ──────────────────────────────────────────────────────
+# ─── 2. LINT ─────────────────────────────────────────────────────────────────
 
 if [ "$MODE" != "tokens" ]; then
-  echo -e "${BOLD}2. Static Analysis${RESET}"
-
-  if [ "$STACK" = "flutter" ]; then
-    if command -v flutter &>/dev/null; then
-      cd "$PROJECT_ROOT/ds" 2>/dev/null || cd "$PROJECT_ROOT"
-      ANALYZE_OUTPUT=$(flutter analyze --no-pub 2>&1)
-      if echo "$ANALYZE_OUTPUT" | grep -q "No issues found"; then
-        pass "flutter analyze: no issues"
-      else
-        ISSUE_COUNT=$(echo "$ANALYZE_OUTPUT" | grep -c "error\|warning\|info" || echo "?")
-        fail "flutter analyze: $ISSUE_COUNT issue(s) found"
-        echo "$ANALYZE_OUTPUT" | grep "error" | head -5
-      fi
-    else
-      warn "flutter not found in PATH"
-    fi
-  elif [ "$STACK" = "react-ts" ]; then
-    TSC_OUTPUT=""
-    if command -v pnpm &>/dev/null; then
-      TSC_OUTPUT=$(cd "$PROJECT_ROOT" && pnpm type-check 2>&1)
-    elif command -v npm &>/dev/null; then
-      TSC_OUTPUT=$(cd "$PROJECT_ROOT" && npm run type-check 2>&1)
-    else
-      warn "Neither pnpm nor npm found in PATH"
-    fi
-    if [ -n "$TSC_OUTPUT" ]; then
-      if echo "$TSC_OUTPUT" | grep -q "error TS"; then
-        fail "TypeScript errors found"
-        echo "$TSC_OUTPUT" | grep "error TS" | head -5
-      else
-        pass "TypeScript: no errors"
-      fi
-    fi
-  fi
-  echo ""
-fi
-
-# ─── 3. TESTS ────────────────────────────────────────────────────────────────
-
-if [ "$MODE" != "tokens" ]; then
-  echo -e "${BOLD}3. Tests${RESET}"
-
-  if [ "$STACK" = "flutter" ]; then
-    if command -v flutter &>/dev/null; then
-      cd "$PROJECT_ROOT/ds" 2>/dev/null || cd "$PROJECT_ROOT"
-      TEST_OUTPUT=$(flutter test --no-pub 2>&1)
-      if echo "$TEST_OUTPUT" | grep -q "All tests passed"; then
-        pass "flutter test: all passed"
-      else
-        FAIL_COUNT=$(echo "$TEST_OUTPUT" | grep -c "FAILED" || echo "?")
-        fail "flutter test: $FAIL_COUNT failure(s)"
-      fi
-    else
-      warn "flutter not found in PATH"
-    fi
-  elif [ "$STACK" = "react-ts" ]; then
-    if command -v pnpm &>/dev/null; then
-      TEST_OUT=$(cd "$PROJECT_ROOT" && pnpm test 2>&1)
-    elif command -v npm &>/dev/null; then
-      TEST_OUT=$(cd "$PROJECT_ROOT" && npm test 2>&1)
-    else
-      warn "Neither pnpm nor npm found in PATH"
-      TEST_OUT=""
-    fi
-    if [ -n "$TEST_OUT" ]; then
-      echo "$TEST_OUT" | tail -8
-      if echo "$TEST_OUT" | grep -qE "FAIL |failed|Test Files.*failed"; then
-        fail "Tests reported failure(s)"
-      else
-        pass "Tests finished (see summary above)"
-      fi
-    fi
-  fi
-  echo ""
-fi
-
-# ─── 4. HARDCODED VALUE SCAN ─────────────────────────────────────────────────
-
-echo -e "${BOLD}4. Hardcoded Value Scan${RESET}"
-
-if [ "$STACK" = "flutter" ]; then
-  COMPONENTS_DIR="$PROJECT_ROOT/ds/lib/components"
-  PRIMITIVES_DIR="$PROJECT_ROOT/ds/lib/primitives"
-
-  if [ -d "$COMPONENTS_DIR" ]; then
-    COLOR_HITS=$(grep -rn "Color(0x\|Colors\." "$COMPONENTS_DIR" "$PRIMITIVES_DIR" 2>/dev/null | grep -v "Colors.transparent" | wc -l | tr -d ' ')
-    SPACING_HITS=$(grep -rn "EdgeInsets\.[a-z]*([0-9]\|padding: [0-9]\|margin: [0-9]" "$COMPONENTS_DIR" 2>/dev/null | wc -l | tr -d ' ')
-
-    if [ "$COLOR_HITS" -eq 0 ]; then
-      pass "No hardcoded colors found"
-    else
-      fail "$COLOR_HITS hardcoded color(s) found in components/primitives"
-    fi
-
-    if [ "$SPACING_HITS" -eq 0 ]; then
-      pass "No hardcoded spacing found"
-    else
-      warn "$SPACING_HITS potential hardcoded spacing value(s) found"
-    fi
+  echo -e "${BOLD}2. Lint${RESET}"
+  if LINT_OUT=$(cd "$PROJECT_ROOT" && npm run lint 2>&1); then
+    pass "ESLint: no problems"
   else
-    warn "components directory not found"
+    fail "ESLint reported problems"
+    echo "$LINT_OUT" | grep -E "error|warning" | head -5
   fi
-elif [ "$STACK" = "react-ts" ]; then
-  COMPONENTS_DIR="$PROJECT_ROOT/packages/components/src"
-  if [ -d "$COMPONENTS_DIR" ]; then
-    COLOR_HITS=$(grep -rn "#[0-9a-fA-F]\{3,6\}\|rgb(" "$COMPONENTS_DIR" 2>/dev/null | wc -l | tr -d ' ')
-    if [ "$COLOR_HITS" -eq 0 ]; then
-      pass "No hardcoded colors found"
-    else
-      fail "$COLOR_HITS hardcoded color(s) found in components"
-    fi
-  fi
+  echo ""
 fi
+
+# ─── 3. TYPE CHECK ───────────────────────────────────────────────────────────
+
+if [ "$MODE" != "tokens" ]; then
+  echo -e "${BOLD}3. Type Check${RESET}"
+
+  # packages/site resolves @scorp-ds/components to its built dist, so a
+  # type-check on a clean tree fails with "Cannot find module" unless the
+  # components package has been built at least once.
+  if [ ! -d "$PROJECT_ROOT/packages/components/dist" ]; then
+    info "Building components first (packages/site type-checks against its dist)"
+    (cd "$PROJECT_ROOT" && npm run build:components >/dev/null 2>&1) || warn "build:components failed"
+  fi
+
+  TSC_OUTPUT=$(cd "$PROJECT_ROOT" && npm run type-check 2>&1)
+  if echo "$TSC_OUTPUT" | grep -q "error TS"; then
+    fail "TypeScript errors found"
+    echo "$TSC_OUTPUT" | grep "error TS" | head -5
+  else
+    pass "TypeScript: no errors"
+  fi
+  echo ""
+fi
+
+# ─── 4. TESTS ────────────────────────────────────────────────────────────────
+
+if [ "$MODE" = "full" ]; then
+  echo -e "${BOLD}4. Tests${RESET}"
+  TEST_OUT=$(cd "$PROJECT_ROOT" && npm test 2>&1)
+  echo "$TEST_OUT" | grep -E "Test Files|Tests " | head -4
+  if echo "$TEST_OUT" | grep -qE "Test Files.*failed"; then
+    fail "Tests reported failure(s)"
+  else
+    pass "All tests passed"
+  fi
+  echo ""
+fi
+
+# ─── 5. HARDCODED VALUE SCAN ─────────────────────────────────────────────────
+#
+# Mirrors the "No Hardcoding" and "What NOT to Do" rules in CLAUDE.md. These
+# are greps, not a parser: they are a fast signal, and the custom ESLint rules
+# are the enforcing version.
+
+echo -e "${BOLD}5. Hardcoded Value Scan${RESET}"
+
+scan() {
+  local label="$1" pattern="$2"
+  local hits
+  hits=$(grep -rnE "$pattern" "$COMPONENTS_DIR" "$PRIMITIVES_DIR" 2>/dev/null \
+           | grep -v "/__tests__/" | wc -l | tr -d ' ')
+  if [ "$hits" -eq 0 ]; then
+    pass "$label: none"
+  else
+    fail "$label: $hits"
+    grep -rnE "$pattern" "$COMPONENTS_DIR" "$PRIMITIVES_DIR" 2>/dev/null \
+      | grep -v "/__tests__/" | head -3 | sed 's|^|      |'
+  fi
+}
+
+scan "Raw hex colors"        '#[0-9a-fA-F]{3,8}\b'
+scan "rgb()/hsl() colors"    '\b(rgba?|hsla?)\('
+scan "Rounded corners"       'rounded-(sm|md|lg|xl|2xl|3xl|full)'
+scan "Raw color scales"      '\b(bg|text|border|ring|fill|stroke|from|to|via)-(amber|sepia|green|blue|purple|red)-[0-9]{2,3}'
+scan "Sans-serif fonts"      '\bfont-(sans|serif)\b'
+scan "Forbidden package"     '@sachahurley/scorpion-ui'
 
 echo ""
 

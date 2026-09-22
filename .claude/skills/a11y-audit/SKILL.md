@@ -15,7 +15,7 @@ Audit design system components against **WCAG 2.1 Level AA** standards, surfacin
 
 Read `.claude/ds-config.json: stack` to determine the platform context:
 
-- **Flutter (mobile-first):** Screen readers (VoiceOver/TalkBack) are the primary assistive technology. Missing semantic tap actions are Critical. Switch Access is secondary. Touch targets ≥44dp are Critical.
+- **Web (this repo):** Screen readers (VoiceOver/NVDA/JAWS) and keyboard navigation are the primary assistive paths. A missing accessible name on an interactive element is Critical, as is a keyboard trap or an unreachable control. Touch targets below 44x44px are Critical.
 - **React/TypeScript (web):** Keyboard navigation is Critical. Screen readers (NVDA/JAWS/VoiceOver) are primary. Focus management is Critical.
 
 ## Reference Files
@@ -29,7 +29,7 @@ Read `.claude/ds-config.json: stack` to determine the platform context:
 Read `.claude/ds-config.json: paths` to get the correct directory paths.
 
 - **If `$ARGUMENTS` is provided** — audit only that component (file path or component name).
-- **If `$ARGUMENTS` is empty** — audit ALL component and primitive files, plus storybook interactive widgets.
+- **If `$ARGUMENTS` is empty**: audit ALL component and primitive files, plus interactive storybook stories.
 
 ## Steps
 
@@ -61,7 +61,7 @@ Apply WCAG thresholds:
 For every component file, check:
 - Interactive elements have semantic labels
 - Focus order is logical
-- Touch/click targets meet minimums (Flutter: 48dp, Web: 44px)
+- Touch and click targets are at least 44x44px (`--touch-target`)
 - Color is not the sole indicator of meaning
 - Animations respect reduced-motion preferences
 - State changes (toggled/checked/expanded) are communicated to assistive tech
@@ -122,7 +122,7 @@ For every component file, check:
 
 - **Do NOT modify any files.** This is a read-only audit.
 - **Always include line numbers** for any issues found.
-- **Check the widget/component tree context** — a component may receive semantics from a parent wrapper.
+- **Check the component tree context**: a component may receive its accessible name from a parent wrapper.
 - **Be specific in fixes** — show what the accessibility annotation should look like.
 
 ## Related Skills

@@ -30,7 +30,7 @@ Before building, read the appropriate supporting files:
 ### 1. Determine what to build
 
 If the user provides a **component file path**, read it and extract:
-- Widget/component name and all public properties
+- Component name and all public props
 - All variants (enums, named constructors, props)
 - All states (default, hover, pressed, focused, disabled, error, etc.)
 - All token references (colors, typography, spacing, radii)

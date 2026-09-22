@@ -14,7 +14,7 @@ The **code is the single source of truth**. Never validate code values against F
 
 ## Reference Files
 
-- **Widget spec template** → `.claude/shared/spec-template.md`
+- **Component spec template** -> `.claude/shared/spec-template.md`
 - **Foundation spec template** → `.claude/shared/spec-template-foundation.md` (if it exists)
 - **Token taxonomy** → `.claude/shared/token-taxonomy.md` for foundation file paths and token class names
 - **Design tokens guide** → `design-tokens.md` for token-to-context mapping
@@ -58,46 +58,57 @@ Set layer = `semantic`. Only extract tokens within `// SEMANTIC TOKENS - *` sect
 
 #### For foundation layer
 
-Parse ALL `static const` and `static final` declarations (Flutter) or exported constants (React/TS) in the file. For each, extract:
-- Token name
-- Type (Color, double, TextStyle, Duration, etc.)
-- Raw value
-- Doc comment (if present)
+The token source of truth is `packages/tokens/src/tokens.json` (W3C Design Token
+format), not a set of per-domain source files. Parse it and, for each token, extract:
+- Token name and its full JSON path
+- `$type` (color, fontSize, duration, clipPath, borderWidth, etc.)
+- `$value`, resolving any `{group.token}` reference to its final value
+- `$description`
 
-Group tokens by section headers. Exclude tokens within `// SEMANTIC TOKENS - *` sections.
+`global` holds foundation tokens. `light` and `dark` hold semantic tokens with
+identical key sets.
 
-Count total tokens.
+For a foundation-layer TypeScript utility (such as `token-parser.ts`), parse its
+exported functions and types instead.
 
 #### For semantic layer
 
-Same extraction as foundation, but **only** for tokens within `// SEMANTIC TOKENS - *` sections.
+Extract from the `light` and `dark` objects. For each token, resolve the **base
+reference**: the `global` token its `$value` points at. Record both the reference and
+the resolved value per theme, since light and dark differ.
 
-Additionally, for each token resolve the **base reference** — the right-hand side of the assignment that references a base token.
-
-#### For widget layers (primitive, component, lab, screen)
+#### For component layers (primitive, component, screen)
 
 Extract from the source code:
 
-**Enums / Types** — Find all variants, sizes, states. Record each value and its doc comment.
+**Variants, sizes and states** - These are union-typed props in TypeScript, not enums.
+Read the prop type union members and the JSDoc on each. Sizes are `sm | md | lg`
+(legacy `small | medium | large` aliases still resolve with a dev warning).
 
-**Public properties/props** — Parse the constructor (Dart) or prop types (TS). For each parameter record: name, type, default value, whether required, and doc comment.
+**Public props** - Parse the props interface or type. For each prop record: name, type
+(including full union members), default value, whether required, and its JSDoc.
+Remember to cover `className`, `ref`, and any spread of native element attributes.
 
-**Token references** — Grep for:
-- `{prefix}Colors.`
-- `{prefix}TextStyles.`
-- `{prefix}Spacing.`
-- `{prefix}Motion.`
-- `{prefix}Opacity.`
-- `{prefix}Shadows.`
-- `{prefix}Gradients.`
+**Token references** - Grep the component for:
+- Tailwind classes backed by tokens (`bg-primary-400`, `text-secondary-700`,
+  `h-control-md`, `plate-round`)
+- Direct `var(--token-name)` references, including inside `-[var(...)]` arbitrary values
+- Token names used in inline `style={{ }}` objects
 
-For each token found, record: full token name, category, and where it's used.
+For each, record the custom property name, its category, its resolved light and dark
+values, and where it is used.
 
-**Hardcoded values** — Scan for violations per CLAUDE.md rules. Flag each with file path, line number, and the raw value found.
+**Hardcoded values** - Scan for violations per the CLAUDE.md rules: hex/rgb/hsl,
+`rounded-*` other than `rounded-none`, raw colour scales instead of semantic aliases,
+sans-serif fonts, and arbitrary Tailwind values with bare numbers. Also check inline
+`style` objects and JS string constants (clip-path polygons, transforms), which
+class-based scanning misses. Flag each with file path, line number and raw value.
 
-**Child dependencies** — Find any `{prefix}*` widget/component references used inside the build/render method.
+**Child dependencies** - Find any other design-system components rendered inside this
+one.
 
-**Intent extraction** — Find the doc comment preceding the first class/component declaration. Strip comment markers and join with newlines. Store as `extracted_intent`.
+**Intent extraction** - Find the JSDoc block preceding the component declaration.
+Strip comment markers and join with newlines. Store as `extracted_intent`.
 
 ### 3. Check Storybook coverage
 
@@ -116,7 +127,7 @@ If no story file is found, flag "Storybook entry: MISSING".
 
 For **foundation/semantic**, coverage = what percentage of token definitions appear as visual examples in the story.
 
-For **widget layers**, extract which variants/sizes/states are demonstrated and calculate coverage percentage.
+For **component layers**, extract which variants/sizes/states are demonstrated and calculate coverage percentage.
 
 ### 4. Resolve Storybook live preview URL
 
@@ -157,7 +168,7 @@ After collecting all data, evaluate whether the spec qualifies for a status tran
 
 **Criteria for `design-complete` → `production-complete`:**
 - Storybook coverage ≥ 80%
-- Zero hardcoded values (widget) OR zero coverage gaps (foundation/semantic)
+- Zero hardcoded values (component) OR zero coverage gaps (foundation/semantic)
 - Test file exists
 - Static analysis passes for the source file
 
@@ -176,7 +187,7 @@ Skip for brand-new specs (they start at `v1`).
 For existing specs, compare newly generated sections against the previous file to detect breaking or structural changes only:
 
 **Changes that trigger a bump proposal:**
-- Widget: props added/removed/renamed/type changed, tokens added/removed, enum values added/removed
+- Component: props added/removed/renamed/type changed, tokens added/removed, union members added/removed
 - Foundation/semantic: tokens added, removed, or raw values changed
 
 **Changes that do NOT trigger a bump:** storybook coverage changes, gap entries, wording changes, date updates.
@@ -210,13 +221,13 @@ After the version decision, append changelog entries.
 
 ### Token Map / Token Definitions ([count] tokens)
 
-### Properties ([count] props)  ← widget specs only
+### Properties ([count] props)  <- component specs only
 
 ### Storybook Coverage
 - Coverage: [percent]%
 - Gaps: [list, or "None"]
 
-### Hardcoded Values  ← widget specs only
+### Hardcoded Values  <- component specs only
 [List with line numbers, or "None found"]
 
 ### Version
