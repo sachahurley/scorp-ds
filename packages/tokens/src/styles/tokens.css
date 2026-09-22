@@ -425,7 +425,7 @@
 
   /* Dark theme — form fields (portfolio ramp: idle hairline → hover mut → focus accent) */
   --field-background: #120D09;
-  --field-border: #2B2718;
+  --field-border: #474030; /* sepia-800: visible hairline, 1.76:1 on the page (below 3:1 by design choice; was sepia-900 at 1.2:1) */
   --field-border-hover: #968A75;
   --field-border-focus: #E0A26A;
   --field-border-error: #EF4444;

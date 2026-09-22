@@ -110,7 +110,7 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 | Token | Use For |
 |-------|---------|
 | `field.background` | Input fill |
-| `field.border` | Default border. Light: sepia-600 (3.3:1 on white, meets the 3:1 control-boundary rule; was sepia-300 at 1.2:1). Dark: hairline sepia-900, the portfolio ramp |
+| `field.border` | Default border. Light: sepia-600 (3.3:1 on white, meets the 3:1 control-boundary rule; was sepia-300 at 1.2:1). Dark: hairline sepia-800, the portfolio ramp (was sepia-900 at 1.2:1). 800 is 1.76:1 on the page: a deliberate exception to the 3:1 control-boundary rule to keep the hairline look |
 | `field.border-hover` | Hovered (light: sepia-700; dark: sepia-600) |
 | `field.border-focus` | Focused (dark: accent gold) |
 | `field.border-error` | Invalid |
