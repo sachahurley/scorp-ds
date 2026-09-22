@@ -31,7 +31,7 @@ Alert is an inline, persistent message that sits in the page flow next to the co
 
 <!-- AUTO-START:anatomy -->
 
-Outer ring plate (`plate-round`, 1px padding) wraps an inner fill plate holding, left to right: severity icon (boxed to the title's 20px first line), content column (optional title `h4`, optional description), optional close button.
+Outer ring plate (`plate-round`, 1px padding) wraps an inner fill plate holding, left to right: severity icon (boxed to the title's 20px first line), content column (optional title `h4`, optional description), optional close button. The close button is `type="button"`, draws a 12px `X`, and carries an invisible 44x44px hit area from a centered `::before` pseudo-element, so layout is unchanged.
 
 ### Variants
 
@@ -63,7 +63,7 @@ Outer ring plate (`plate-round`, 1px padding) wraps an inner fill plate holding,
 | `title` | `string` | `undefined` | No | Short bold heading rendered as an `h4`. Omit for a single-line message. |
 | `description` | `ReactNode` | `undefined` | No | Body copy. Accepts rich content such as a link or inline code. |
 | `iconLeft` | `ReactNode` | variant icon | No | Replaces the severity icon. Keep a 16px 1-bit icon so the icon still signals meaning. |
-| `onClose` | `() => void` | `undefined` | No | When set, renders a close button (1-bit `X`, `aria-label="Close alert"`) that calls this. The Alert does not hide itself; the parent removes it. |
+| `onClose` | `() => void` | `undefined` | No | When set, renders a close button (`type="button"`, 1-bit `X`, `aria-label="Close alert"`, 44px hit area) that calls this. The Alert does not hide itself; the parent removes it. |
 | `className` | `string` | `""` | No | Extra classes on the outer ring element (width, margin). |
 
 Exported type: `AlertProps`.
@@ -90,6 +90,9 @@ Exported type: `AlertProps`.
 | `{status}-900` / `dark:{status}-50` | Color | status scales | Title for status variants |
 | `{status}-900` / `dark:{status}-300` | Color | status scales | Description and close button for status variants |
 | `hover:error-800` / `dark:hover:error-300` | Color | red-800 `#991B1B` / red-300 `#FCA5A5` | Close button hover, all variants |
+| `--focus-ring-primary` / `--focus-ring-error` | Color | `#FBBF24` / `#DC2626` light, `#EF4444` dark | Close button inset focus ring (error variant uses the error ring) |
+| `--focus-ring-width` | Size | 2px | Close button focus ring thickness |
+| `--touch-target` (`before:w-touch before:h-touch`) | Size | 44px | Close button hit area |
 | `--duration-fast` | Motion | 120ms | Close button color transition |
 | `text-sm` | Typography | 14px | Title and description |
 | `p-4`, `gap-3`, `h-5`, `mb-1` | Spacing | 16px, 12px, 20px, 4px | Padding, icon gap, icon box height, title gap |
@@ -109,7 +112,7 @@ Exported type: `AlertProps`.
 | Custom icon | `iconLeft` | Icon slot content (color still from the variant) |
 | Dismissible | `onClose` | Close button rendered |
 | Close hover | Pointer | Close button text to `error-800` / `error-300` over `--duration-fast` |
-| Close focus | Keyboard | `focus:ring-1 focus:ring-offset-1` (Tailwind default ring color, no token) |
+| Close focus | `:focus-visible` | Inset ring `--focus-ring-primary` (`--focus-ring-error` on the error variant), `--focus-ring-width` thick |
 
 <!-- AUTO-END:states -->
 
@@ -143,7 +146,7 @@ Interactive controls: `variant` (select); other args editable via autodocs.
 
 - `aria-label="Close alert"`: fixed English label, not overridable.
 
-No raw color, size, or spacing values.
+No raw color, size, or spacing values. (The close button's focus ring and hit area are token-driven since 2026-09-22.)
 
 <!-- AUTO-END:hardcoded -->
 
@@ -172,8 +175,9 @@ No raw color, size, or spacing values.
 
 - Semantic role: `role="alert"` on the outer element for every variant (assertive live region)
 - Required labels: none from the consumer; the close button is labelled `Close alert`
-- Focus order: the Alert itself is not focusable; the close button is a native `button` in DOM order
-- Touch target minimum: 44x44 required; the close button is only the 12px icon with no padding, so it falls short
+- Focus order: the Alert itself is not focusable; the close button is a native `type="button"` control in DOM order, so an Alert inside a form never submits it
+- Focus visible: inset box-shadow ring from `--focus-ring-primary` (error variant: `--focus-ring-error`); an outside ring would be sliced by the plate clip
+- Touch target minimum: met. The close button keeps its 12px glyph but has a centered 44x44px `::before` hit area (the Checkbox recipe). The area reaches into the 12px gap beside the content column, so keep the description clear of the close control
 - Color independence: each variant has a distinct icon (default and info differ), plus title text
 
 <!-- AUTO-END:accessibility -->
@@ -215,7 +219,7 @@ No raw color, size, or spacing values.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | Close button has no `type="button"` (submits an enclosing form), no token focus ring color, and a 12px hit area below the 44px minimum | None yet | Open |
+| 2026-09-22 | Close button has no `type="button"` (submits an enclosing form), no token focus ring color, and a 12px hit area below the 44px minimum | Added `type="button"`, the inset `--focus-ring-*` ring, and a 44px `::before` hit area; JSDoc added to every prop | Resolved |
 | 2026-09-22 | `role="alert"` is applied to every variant, so neutral and success messages are announced assertively | None yet | Open |
 
 <!-- AUTO-END:known-gaps -->
@@ -230,6 +234,7 @@ No raw color, size, or spacing values.
 |---------|------|------|---------|
 | Unreleased | 2026-09-21 | feat | Severity prefixes `[i]` `[ok]` `[!!]` `[er]` and close `[x]` replaced by 1-bit icons: default Bell, info Info (default and info now differ), success CheckCircle, warning AlertTriangle, error AlertCircle; close is a 12px X |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | Close button is `type="button"` (no stray form submits), uses the inset token focus ring instead of `focus:ring-1 focus:ring-offset-1`, and gets a 44px pseudo-element hit area; `AlertProps` gained per-prop JSDoc |
 
 <!-- AUTO-END:changelog -->
 

@@ -6,44 +6,83 @@
  * 
  * Features:
  * - Click outside to close
- * - Keyboard navigation (Arrow keys, Escape, Enter)
+ * - Keyboard navigation (Arrow keys, Escape, Enter, Tab closes)
  * - Customizable trigger (any React element)
  * - Icon support for menu items
  * - Destructive action styling
  * - Left or right alignment
+ *
+ * Every button here is `type="button"`, so a Dropdown inside a `<form>`
+ * opens the menu instead of submitting the form.
  */
 
-import { useState, useRef, useEffect, type ReactNode } from "react";
+import { useState, useRef, useEffect, cloneElement, isValidElement, type MouseEvent as ReactMouseEvent, type ReactElement, type ReactNode } from "react";
 import { TuiIcon } from "./TuiIcon";
 import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 // Menu item interface
 export interface DropdownItem {
+  /** Item text and accessible name. Write it as a verb ("Duplicate"). */
   label: string;
+  /** Called on activation; the menu then closes. */
   onClick: () => void;
-  icon?: ReactNode; // Left icon (grouped with label)
-  iconRight?: ReactNode; // Right icon (aligned to right edge)
+  /** Left icon grouped with the label (use a `TuiIcon`). */
+  icon?: ReactNode;
+  /** Right-aligned icon, for a shortcut hint or an external-link marker. */
+  iconRight?: ReactNode;
+  /** `destructive` colors the item red for irreversible actions. */
   variant?: "default" | "destructive";
+  /** Dims the item, blocks activation, and skips it during arrow-key navigation. */
   disabled?: boolean;
 }
 
 // Dropdown component props
 export interface DropdownProps {
-  trigger?: ReactNode; // Custom trigger element (defaults to button with chevron)
+  /**
+   * Custom trigger, replacing the default button. A valid React element is
+   * cloned: the toggle handler, `aria-haspopup` and `aria-expanded` are
+   * attached to the element itself, so pass an interactive, focusable control
+   * (a `Button`, for example) and not a bare `<span>`. Anything that is not an
+   * element (a string, a fragment, an array) falls back to a `div` wrapper
+   * with `role="button"` and `tabIndex={0}`.
+   */
+  trigger?: ReactNode;
+  /** Menu entries, in order. */
   items: DropdownItem[];
+  /** Which trigger edge the menu aligns to. Use `right` near the viewport edge. */
   align?: "left" | "right";
-  label?: string; // Label for the default trigger button
+  /** Text (and accessible name) of the default trigger button. Ignored with a custom `trigger`. */
+  label?: string;
   /** Trigger height, matching Button/Input: sm, md (default), lg. Legacy names are deprecated aliases. */
   size?: ControlSizeProp;
 }
 
 /**
+ * Moves the highlight to the next non-disabled item, wrapping at both ends.
+ * Indices are raw `items` indices (never a filtered list), so the highlighted
+ * row and the row Enter activates are always the same one.
+ */
+function nextEnabledIndex(items: DropdownItem[], from: number, delta: 1 | -1): number {
+  const count = items.length;
+  if (count === 0) return -1;
+  let index = from;
+  for (let step = 0; step < count; step++) {
+    index += delta;
+    if (index >= count) index = 0;
+    if (index < 0) index = count - 1;
+    if (!items[index]?.disabled) return index;
+  }
+  return -1;
+}
+
+/**
  * Dropdown Component
- * 
+ *
  * @param trigger - Custom trigger element (optional, defaults to button)
  * @param items - Array of menu items with labels, onClick handlers, and optional icons
  * @param align - Menu alignment: "left" or "right" (default: "left")
  * @param label - Label text for default trigger button (default: "Actions")
+ * @param size - Default trigger height and item icon size (default: "md")
  */
 export function Dropdown({ 
   trigger, 
@@ -101,7 +140,6 @@ export function Dropdown({
     function handleKeyDown(event: KeyboardEvent) {
       if (!isOpen) return;
 
-      const enabledItems = items.filter(item => !item.disabled);
       const currentIndex = focusedIndex;
 
       switch (event.key) {
@@ -109,28 +147,27 @@ export function Dropdown({
           event.preventDefault();
           closeDropdown();
           break;
-        
+
+        case "Tab":
+          // Let focus move on, but never leave an orphaned menu behind
+          closeDropdown();
+          break;
+
         case "ArrowDown":
           event.preventDefault();
-          setFocusedIndex((prevIndex) => {
-            const nextIndex = prevIndex + 1;
-            return nextIndex >= enabledItems.length ? 0 : nextIndex;
-          });
+          setFocusedIndex((prevIndex) => nextEnabledIndex(items, prevIndex, 1));
           break;
-        
+
         case "ArrowUp":
           event.preventDefault();
-          setFocusedIndex((prevIndex) => {
-            const nextIndex = prevIndex - 1;
-            return nextIndex < 0 ? enabledItems.length - 1 : nextIndex;
-          });
+          setFocusedIndex((prevIndex) => nextEnabledIndex(items, prevIndex, -1));
           break;
-        
+
         case "Enter":
         case " ":
           event.preventDefault();
-          if (currentIndex >= 0 && currentIndex < enabledItems.length) {
-            handleItemClick(enabledItems[currentIndex]);
+          if (currentIndex >= 0 && currentIndex < items.length) {
+            handleItemClick(items[currentIndex]);
           }
           break;
       }
@@ -184,6 +221,7 @@ export function Dropdown({
   // Default trigger button if none provided
   const defaultTrigger = (
     <button
+      type="button"
       onClick={toggleDropdown}
       className={`
         inline-flex items-center justify-center gap-2
@@ -199,22 +237,53 @@ export function Dropdown({
       aria-expanded={isOpen}
     >
       {label}
-      {/* TUI Tier 2: Unicode ▼ instead of Lucide ChevronDown */}
+      {/* 1-bit ChevronDown, rotated while the menu is open */}
       <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono leading-none transition-transform [transition-duration:var(--duration-normal)] ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true"><TuiIcon name="ChevronDown" /></span>
     </button>
   );
 
-  // If custom trigger provided, wrap it with click handler
-  const triggerElement = trigger ? (
-    <div onClick={toggleDropdown} role="button" tabIndex={0} onKeyDown={(e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
+  // CUSTOM TRIGGER: clone it and attach the toggle plus the menu ARIA to the
+  // element itself. Wrapping it in another `role="button"` element (the old
+  // behavior) nested one interactive control inside another and created a
+  // second tab stop. The element must therefore be focusable on its own: a
+  // `Button` is the intended case; a plain `<span>` gets no keyboard.
+  // Non-elements (a string, a fragment, an array) keep the div fallback,
+  // which still carries role, tabIndex, keyboard handling and the ARIA.
+  const triggerProps = {
+    "aria-haspopup": "true" as const,
+    "aria-expanded": isOpen,
+  };
+
+  let triggerElement: ReactNode;
+  if (!trigger) {
+    triggerElement = defaultTrigger;
+  } else if (isValidElement(trigger)) {
+    const element = trigger as ReactElement<{ onClick?: (event: ReactMouseEvent) => void }>;
+    triggerElement = cloneElement(element, {
+      ...triggerProps,
+      onClick: (event: ReactMouseEvent) => {
+        element.props.onClick?.(event);
         toggleDropdown();
-      }
-    }}>
-      {trigger}
-    </div>
-  ) : defaultTrigger;
+      },
+    });
+  } else {
+    triggerElement = (
+      <div
+        {...triggerProps}
+        onClick={toggleDropdown}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleDropdown();
+          }
+        }}
+      >
+        {trigger}
+      </div>
+    );
+  }
 
   return (
     <div ref={dropdownRef} className="relative inline-block">
@@ -222,16 +291,20 @@ export function Dropdown({
       {triggerElement}
 
       {/* Dropdown Menu — plate ring recipe (border color clipped + fill inset 1px;
-          clip-path slices real borders, so the ring is a wrapper layer) */}
+          clip-path slices real borders, so the ring is a wrapper layer).
+          Layer: --z-index-dropdown. The menu is absolutely positioned inside
+          the trigger's stacking context (no portal), so it only competes with
+          siblings there; the popover and modal layers own their own contexts
+          and are unaffected. Width: min-w-52 (208px) from the spacing scale. */}
       {isOpen && (
         <div
           style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2
             ${align === "right" ? "right-0" : "left-0"}
-            min-w-[200px]
+            min-w-52
             plate-round p-px bg-[var(--border-default)]
-            z-[1051]
+            z-[var(--z-index-dropdown)]
             animate-in fade-in slide-in-from-top-2
           `}
         >
@@ -249,6 +322,7 @@ export function Dropdown({
             return (
               <button
                 key={index}
+                type="button"
                 role="menuitem"
                 disabled={isDisabled}
                 onClick={() => handleItemClick(item)}
@@ -261,9 +335,9 @@ export function Dropdown({
                     ? 'opacity-50 cursor-not-allowed'
                     : isDestructive
                       ? 'text-error-600 hover:bg-[var(--field-background-error)]'
-                      : 'text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]'
+                      : 'text-[var(--text-primary)] hover:bg-[var(--surface-muted)]'
                   }
-                  ${isFocused && !isDisabled ? 'bg-[var(--surface-subtle)]' : ''}
+                  ${isFocused && !isDisabled ? (isDestructive ? 'bg-[var(--field-background-error)]' : 'bg-[var(--surface-muted)] text-[var(--accent)]') : ''}
                   ${currentSizeStyles.menuItem}
                 `}
               >
