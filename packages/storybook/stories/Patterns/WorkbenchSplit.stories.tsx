@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Card, Input, Stack, TuiIcon } from '@scorp-ds/components';
+import { Button, Input, LogView, SideNav, SideNavItem, Stack, Window, type LogLine } from '@scorp-ds/components';
 
 /**
  * Pattern: two-pane workbench — narrow index / nav column + main inspector card.
- * Evokes terminal multiplexer layouts (sidebar + buffer) without bespoke layout components.
+ * Evokes terminal multiplexer layouts (sidebar + buffer) with Window panes, SideNav, and LogView.
  */
 const meta: Meta = {
   title: 'Patterns/WorkbenchSplit',
@@ -24,92 +25,77 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const navItems = [
-  { id: 'sessions', label: 'sessions.log', active: true },
-  { id: 'errors', label: 'errors.log', active: false },
-  { id: 'audit', label: 'audit.json', active: false },
+  { id: 'sessions', label: 'sessions.log' },
+  { id: 'errors', label: 'errors.log' },
+  { id: 'audit', label: 'audit.json' },
+];
+
+const logLines: LogLine[] = [
+  { id: 1, level: 'info', timestamp: '12:04:01', text: 'connection accepted 127.0.0.1:44122' },
+  { id: 2, level: 'warn', timestamp: '12:04:02', text: 'slow query 840ms users_by_team' },
+  { id: 3, level: 'info', timestamp: '12:04:03', text: 'job=4821 status=ok duration=42s' },
+  { id: 4, level: 'error', timestamp: '12:04:09', text: 'upstream timed out after 30000ms' },
 ];
 
 export const InspectorLayout: Story = {
   name: 'Log inspector',
-  render: () => (
-    <div className="min-h-screen bg-[var(--surface-page)] p-4 md:p-6">
-      <p className="mb-4 font-mono text-xs uppercase tracking-wider text-[var(--text-primary)]">
-        Pattern · Workbench split
-      </p>
-      <div className="flex min-h-[70vh] flex-col gap-4 md:flex-row md:gap-0">
-        {/* Pane: index / file list */}
-        <aside
-          className="
-            flex w-full shrink-0 flex-col border-[0.5px] border-solid border-[var(--surface-container-stroke)]
-            bg-[var(--surface-subtle)] md:w-56 md:border-r-0 md:border-b-0
-          "
-          aria-label="Open buffers"
-        >
-          <div className="border-b-[0.5px] border-solid border-[var(--surface-container-stroke)] px-3 py-2 font-mono text-xs uppercase tracking-wider text-[var(--text-primary)]">
-            ~/var/log
+  render: () => {
+    const Demo = () => {
+      const [active, setActive] = useState('sessions');
+      return (
+        <div className="min-h-screen bg-[var(--surface-page)] p-4 md:p-6">
+          <p className="mb-4 font-mono text-xs uppercase tracking-wider text-[var(--text-primary)]">
+            Pattern · Workbench split
+          </p>
+          <div className="flex min-h-[70vh] flex-col gap-4 md:flex-row">
+            {/* Pane: index / file list */}
+            <Window title="~/var/log" titleAs="h3" className="w-full shrink-0 md:w-60" bodyClassName="p-2">
+              <SideNav aria-label="Open buffers" className="w-full border-0 bg-transparent p-0">
+                {navItems.map((item) => (
+                  <SideNavItem
+                    key={item.id}
+                    icon="FileText"
+                    label={item.label}
+                    active={active === item.id}
+                    onClick={() => setActive(item.id)}
+                  />
+                ))}
+              </SideNav>
+            </Window>
+            {/* Pane: main inspector (the focused pane) */}
+            <Window
+              title={navItems.find((n) => n.id === active)?.label}
+              titleAs="h3"
+              status="tail · last 200 lines"
+              variant="active"
+              scroll={false}
+              className="min-w-0 flex-1"
+            >
+              <Stack gap="3" className="h-full">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input
+                    className="min-w-[12rem] flex-1"
+                    placeholder="Filter…"
+                    aria-label="Filter log lines"
+                    size="sm"
+                  />
+                  <Button variant="secondary" size="sm" type="button">
+                    Pause
+                  </Button>
+                  <Button variant="primary" size="sm" type="button">
+                    Export
+                  </Button>
+                </div>
+                <LogView lines={logLines} aria-label="Selected log" className="h-[40vh]" />
+                <p className="font-mono text-xs text-secondary-900 dark:text-secondary-200">
+                  Composes Window (panes, active ring on the focused one), SideNav (buffer list), and LogView (tail).
+                </p>
+              </Stack>
+            </Window>
           </div>
-          <nav className="flex flex-col p-2 font-mono text-sm">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={[
-                  'rounded-none px-2 py-2 text-left transition-colors [transition-duration:var(--duration-normal)]',
-                  item.active
-                    ? 'bg-[var(--surface-card)] text-[var(--text-primary)]'
-                    : 'text-secondary-900 hover:bg-[var(--surface-card)] dark:text-secondary-200',
-                ].join(' ')}
-              >
-                {/* Fixed-width marker slot keeps labels aligned whether or not the row is active */}
-                <span className="inline-flex w-5 shrink-0 align-middle" aria-hidden="true">
-                  {item.active && <TuiIcon name="ChevronRight" size="4" />}
-                </span>
-                {item.label}
-              </button>
-            ))}
-          </nav>
-        </aside>
-        {/* Pane: main card */}
-        <div className="min-w-0 flex-1">
-          <Card
-            className="h-full min-h-[50vh] shadow-none"
-            title="sessions.log"
-            subtitle="Tail · last 200 lines"
-          >
-            <Stack gap="3">
-              <div className="flex flex-wrap items-center gap-2">
-                <Input
-                  className="min-w-[12rem] flex-1"
-                  placeholder="Filter…"
-                  aria-label="Filter log lines"
-                  size="sm"
-                />
-                <Button variant="secondary" size="sm" type="button">
-                  Pause
-                </Button>
-                <Button variant="primary" size="sm" type="button">
-                  Export
-                </Button>
-              </div>
-            </Stack>
-            <Stack gap="2" className="mt-4">
-              <pre
-                className="
-                  max-h-[40vh] overflow-auto border-[0.5px] border-solid border-[var(--surface-container-stroke)]
-                  bg-[var(--surface-page)] p-3 font-mono text-xs leading-relaxed text-[var(--text-primary)]
-                "
-              >
-                {`[12:04:01] INFO  connection accepted 127.0.0.1:44122
-[12:04:02] WARN  slow query 840ms — users_by_team
-[12:04:03] INFO  job=4821 status=ok duration=42s`}
-              </pre>
-              <p className="font-mono text-xs text-secondary-900 dark:text-secondary-200">
-                Main pane is a `Card` without extra borders; outer chrome provides the TUI frame.
-              </p>
-            </Stack>
-          </Card>
         </div>
-      </div>
-    </div>
-  ),
+      );
+    };
+    return <Demo />;
+  },
 };

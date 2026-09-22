@@ -1,0 +1,208 @@
+# Kbd
+
+> Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
+
+## Status
+
+| Field | Value |
+|-------|-------|
+| Component | `Kbd` (import from `@scorp-ds/components`) |
+| Layer | `component` |
+| Category | `Terminal` |
+| File | `packages/components/src/components/Kbd.tsx` |
+| Story | `Components/Terminal/Kbd` |
+| Version | `v1` |
+| Status | `draft` |
+| Last updated | 2026-09-22 |
+
+---
+
+## Intent
+
+<!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
+
+KBD COMPONENT
+
+Inline keyboard key for shortcut hints. Renders `<kbd>`; a combo
+(`keys={["Ctrl", "K"]}`) renders the HTML-recommended nested form (outer `<kbd>`
+holding one `<kbd>` per key) with a visible "+" separator that screen readers
+also read. Each key is a small plate with the ring recipe and a 2px bottom lip
+so it reads as a keycap.
+
+<!-- /HUMAN-SECTION:intent -->
+
+---
+
+## Anatomy
+
+<!-- AUTO-START:anatomy -->
+
+### Variants
+
+| Enum Value | Description |
+|------------|-------------|
+| single | `children` or a one-item `keys` |
+| combo | Nested `<kbd>` with separators |
+
+### Sizes
+
+| Enum Value | Description |
+|------------|-------------|
+| `sm` | 20px keys, `text-xs` (default) |
+| `md` | 24px keys, `text-sm` |
+
+<!-- AUTO-END:anatomy -->
+
+---
+
+## Properties
+
+<!-- AUTO-START:properties -->
+
+| Property | Type | Default | Required | Description |
+|----------|------|---------|----------|-------------|
+| `keys` | `string[]` | - | No | Combo keys in press order. |
+| `children` | `ReactNode` | - | No | Single key label. |
+| `size` | `"sm" \| "md"` | `"sm"` | No | Key size. |
+| `separator` | `ReactNode` | `"+"` | No | Visible combo separator. |
+| `className` | `string` | - | No | Outer `<kbd>` classes. |
+
+<!-- AUTO-END:properties -->
+
+---
+
+## Token Map
+
+<!-- AUTO-START:tokens -->
+
+| Token | Category | Resolved Value | Usage |
+|-------|----------|----------------|-------|
+| `surface.container-stroke` | color | theme | Ring and lip |
+| `surface.muted` | color | theme | Key fill |
+| `text.primary` / `text.secondary` | color | theme | Key text / separator |
+| `plate.round` | shape | - | Key silhouette |
+
+<!-- AUTO-END:tokens -->
+
+---
+
+## States & Variants
+
+<!-- AUTO-START:states -->
+
+| State / Variant | Controlled By | Tokens Affected |
+|-----------------|---------------|-----------------|
+| (static) | - | - |
+
+<!-- AUTO-END:states -->
+
+---
+
+## Storybook Coverage
+
+<!-- AUTO-START:storybook -->
+
+| State / Variant | In Code | In Storybook | Notes |
+|-----------------|---------|--------------|-------|
+| Default | Yes | Yes |  |
+| Combo | Yes | Yes |  |
+| Sizes | Yes | Yes |  |
+| In text | Yes | Yes |  |
+| CheatSheet | Yes | Yes |  |
+
+Interactive controls: Yes (autodocs)
+
+**Coverage:** 100% (5/5)
+
+<!-- AUTO-END:storybook -->
+
+---
+
+## Hardcoded Values
+
+<!-- AUTO-START:hardcoded -->
+
+No hardcoded values found.
+
+<!-- AUTO-END:hardcoded -->
+
+---
+
+## Dependencies
+
+<!-- AUTO-START:dependencies -->
+
+### Child Components
+
+- lib/size (resolveSize)
+
+### Foundation Files Referenced
+
+- `packages/tokens/src/styles/tokens.css` (via Tailwind preset classes and CSS variables)
+
+<!-- AUTO-END:dependencies -->
+
+---
+
+## Accessibility
+
+<!-- AUTO-START:accessibility -->
+
+- Semantic role: `kbd` (nested for combos)
+- Required labels: N/A (text content)
+- Focus order: not focusable
+- Touch target minimum: N/A (display only)
+- Color independence: N/A
+
+<!-- AUTO-END:accessibility -->
+
+---
+
+## Do / Don't
+
+<!-- HUMAN-SECTION:do-dont (preserved across auto-updates) -->
+
+- Do use platform key names your users see (Cmd on macOS).
+- Do keep the separator visible.
+- Don't use Kbd as a button.
+
+<!-- /HUMAN-SECTION:do-dont -->
+
+---
+
+## Composition Rules
+
+<!-- HUMAN-SECTION:composition (preserved across auto-updates) -->
+
+[TODO: define how this component behaves with others]
+
+<!-- /HUMAN-SECTION:composition -->
+
+---
+
+## Known Gaps & Amendments
+
+<!-- AUTO-START:known-gaps -->
+
+| Date | Issue | Resolution | Status |
+|------|-------|------------|--------|
+
+<!-- AUTO-END:known-gaps -->
+
+---
+
+## Changelog
+
+<!-- AUTO-START:changelog -->
+
+| Version | Date | Type | Summary |
+|---------|------|------|---------|
+| v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
+
+<!-- AUTO-END:changelog -->
+
+---
+
+## Reference Implementation
+
+`packages/components/src/components/Kbd.tsx`

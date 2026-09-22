@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Divider, TuiIcon, type TuiIconName } from '@scorp-ds/components';
+import { Divider, SideNav, SideNavItem, type TuiIconName } from '@scorp-ds/components';
 
 /**
  * Pattern: the sidebar navigation rail — plate rows on a container surface.
  * Upstreamed from the showcase's Side Navigation pattern page (2026-09-20),
  * which shipped this recipe before the DS documented it. Both live sites
- * (showcase sidebar, portfolio compass) already use it.
+ * (showcase sidebar, portfolio compass) already use it. The recipe now
+ * ships as the SideNav component (Components/Navigation/SideNav).
  */
 const meta: Meta = {
   title: 'Patterns/SideNavigation',
@@ -26,50 +27,40 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-// One recipe for every row; active holds the hover state.
-const ROW =
-  'flex w-full items-center gap-3 px-3 py-2 plate-round font-mono text-sm ' +
-  'transition-colors [transition-duration:var(--duration-fast)] ' +
-  'focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]';
-const ROW_IDLE =
-  'text-secondary-800 dark:text-secondary-500 hover:bg-[var(--surface-muted)] hover:text-[var(--accent)]';
-const ROW_ACTIVE = 'bg-[var(--surface-muted)] text-[var(--accent)]';
-
 interface NavItem {
+  id: string;
   label: string;
   icon: TuiIconName;
 }
 
 const TOP_ITEMS: NavItem[] = [
-  { label: 'Home', icon: 'Star' },
-  { label: 'Search', icon: 'Search' },
+  { id: 'home', label: 'Home', icon: 'Star' },
+  { id: 'search', label: 'Search', icon: 'Search' },
 ];
 
 const SECTION_ITEMS: NavItem[] = [
-  { label: 'Documents', icon: 'FileText' },
-  { label: 'Shared', icon: 'Share2' },
-  { label: 'Archive', icon: 'Archive' },
+  { id: 'documents', label: 'Documents', icon: 'FileText' },
+  { id: 'shared', label: 'Shared', icon: 'Share2' },
+  { id: 'archive', label: 'Archive', icon: 'Archive' },
 ];
 
 function NavRailDemo() {
-  const [active, setActive] = useState('Home');
-  const [sectionOpen, setSectionOpen] = useState(true);
+  const [active, setActive] = useState('home');
 
-  const row = (item: NavItem, indent = false) => (
-    <li key={item.label}>
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          setActive(item.label);
-        }}
-        aria-current={active === item.label ? 'page' : undefined}
-        className={`${ROW} ${active === item.label ? ROW_ACTIVE : ROW_IDLE} ${indent ? 'ml-6' : ''}`}
-      >
-        <TuiIcon name={item.icon} />
-        <span>{item.label}</span>
-      </a>
-    </li>
+  // SideNavItem owns the row recipe (plate, idle/hover/active, inset focus,
+  // aria-current); the pattern only wires routing state.
+  const row = (item: NavItem) => (
+    <SideNavItem
+      key={item.id}
+      icon={item.icon}
+      label={item.label}
+      href={`#${item.id}`}
+      active={active === item.id}
+      onClick={(e) => {
+        e.preventDefault();
+        setActive(item.id);
+      }}
+    />
   );
 
   return (
@@ -79,41 +70,20 @@ function NavRailDemo() {
           Pattern · Side navigation
         </p>
 
-        <nav
-          aria-label="Primary"
-          className="w-64 border border-[var(--border-hairline)] bg-[var(--surface-container)] p-4"
-        >
-          <ul className="space-y-2">
-            {TOP_ITEMS.map((item) => row(item))}
-
-            {/* Collapsible section: the header is a row too, with a chevron */}
-            <li>
-              <button
-                type="button"
-                onClick={() => setSectionOpen((v) => !v)}
-                aria-expanded={sectionOpen}
-                className={`${ROW} ${ROW_IDLE}`}
-              >
-                <TuiIcon name="Settings" />
-                <span>Workspace</span>
-                <span className="ml-auto">
-                  <TuiIcon name={sectionOpen ? 'ChevronUp' : 'ChevronDown'} />
-                </span>
-              </button>
-              {sectionOpen && (
-                <ul className="mt-2 space-y-2">
-                  {SECTION_ITEMS.map((item) => row(item, true))}
-                </ul>
-              )}
-            </li>
-          </ul>
-        </nav>
+        <SideNav aria-label="Primary">
+          {TOP_ITEMS.map(row)}
+          {/* Collapsible section: a SideNavItem with children becomes a group
+              button with aria-expanded (starts open when it holds the active route) */}
+          <SideNavItem icon="Settings" label="Workspace" defaultExpanded>
+            {SECTION_ITEMS.map(row)}
+          </SideNavItem>
+        </SideNav>
 
         <Divider />
         <p className="font-mono text-xs text-secondary-900 dark:text-secondary-200">
-          Composes: plate-round rows, TuiIcon, surface.container / surface.muted / accent tokens.
-          The active route carries aria-current="page" and holds the hover state; section headers
-          are buttons with aria-expanded; focus is the inset ring recipe.
+          Composes: SideNav / SideNavItem (plate-round rows, TuiIcon, surface.container /
+          surface.muted / accent tokens). The active route carries aria-current="page" and holds
+          the hover state; group rows are buttons with aria-expanded; focus is the inset ring recipe.
         </p>
       </div>
     </div>

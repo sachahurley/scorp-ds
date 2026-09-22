@@ -1,0 +1,212 @@
+# StatusLine
+
+> Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
+
+## Status
+
+| Field | Value |
+|-------|-------|
+| Component | `StatusLine` (import from `@scorp-ds/components`) |
+| Layer | `component` |
+| Category | `Terminal` |
+| File | `packages/components/src/components/StatusLine.tsx` |
+| Story | `Components/Terminal/StatusLine` |
+| Version | `v1` |
+| Status | `draft` |
+| Last updated | 2026-09-22 |
+
+---
+
+## Intent
+
+<!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
+
+STATUS LINE COMPONENT (status bar)
+
+The bottom bar of a terminal app (vim, tmux): `left`, `center`, and `right`
+zones of `StatusLineSegment`s. Segments take a 1-bit `icon` and a semantic
+`tone`: `neutral`, `primary` (mode segment, primary button fill), and
+`success` / `warning` / `error` / `info` tinted plates using the Badge AA pairs.
+
+The bar is a named group by default; `live` makes it `role="status"` for polite
+announcements when it reflects results the user is waiting on.
+
+<!-- /HUMAN-SECTION:intent -->
+
+---
+
+## Anatomy
+
+<!-- AUTO-START:anatomy -->
+
+### Variants
+
+| Enum Value | Description |
+|------------|-------------|
+| `neutral` | Plain text |
+| `primary` | Primary button fill, bold |
+| `success` / `warning` / `error` / `info` | 50 / 950 fill, 800 / 300 text |
+
+### Sizes
+
+| Enum Value | Description |
+|------------|-------------|
+| (single) | At least `control.height.sm` (32px), `text-xs` |
+
+<!-- AUTO-END:anatomy -->
+
+---
+
+## Properties
+
+<!-- AUTO-START:properties -->
+
+| Property | Type | Default | Required | Description |
+|----------|------|---------|----------|-------------|
+| `left` / `center` / `right` | `ReactNode` | - | No | Zone segments. |
+| `live` | `boolean` | `false` | No | `role="status"` + polite live region. |
+| `aria-label` | `string` | `"Status"` | No | Bar name. |
+| `StatusLineSegment.icon` | `TuiIconName` | - | No | 1-bit icon. |
+| `StatusLineSegment.tone` | `StatusLineTone` | `"neutral"` | No | Semantic tone. |
+| `StatusLineSegment.children` | `ReactNode` | - | Yes | Segment text. |
+
+<!-- AUTO-END:properties -->
+
+---
+
+## Token Map
+
+<!-- AUTO-START:tokens -->
+
+| Token | Category | Resolved Value | Usage |
+|-------|----------|----------------|-------|
+| `surface.muted` | color | theme | Bar fill |
+| `border.hairline` | color | theme | Top edge |
+| `button.primary.background` / `text` | color | theme | Primary segment |
+| `success|warning|error|info` 50 / 950 + 800 / 300 | color | semantic scales | Toned segments |
+| `control.height.sm` | size | 32px | Bar height |
+
+<!-- AUTO-END:tokens -->
+
+---
+
+## States & Variants
+
+<!-- AUTO-START:states -->
+
+| State / Variant | Controlled By | Tokens Affected |
+|-----------------|---------------|-----------------|
+| Static | default | `role="group"` |
+| Live | `live` | `role="status"`, `aria-live="polite"` |
+
+<!-- AUTO-END:states -->
+
+---
+
+## Storybook Coverage
+
+<!-- AUTO-START:storybook -->
+
+| State / Variant | In Code | In Storybook | Notes |
+|-----------------|---------|--------------|-------|
+| Default | Yes | Yes |  |
+| Tones | Yes | Yes |  |
+| RightOnly | Yes | Yes |  |
+| In a pane (live) | Yes | Yes |  |
+
+Interactive controls: Yes (autodocs)
+
+**Coverage:** 100% (4/4)
+
+<!-- AUTO-END:storybook -->
+
+---
+
+## Hardcoded Values
+
+<!-- AUTO-START:hardcoded -->
+
+No hardcoded values found.
+
+<!-- AUTO-END:hardcoded -->
+
+---
+
+## Dependencies
+
+<!-- AUTO-START:dependencies -->
+
+### Child Components
+
+- TuiIcon
+
+### Foundation Files Referenced
+
+- `packages/tokens/src/styles/tokens.css` (via Tailwind preset classes and CSS variables)
+
+<!-- AUTO-END:dependencies -->
+
+---
+
+## Accessibility
+
+<!-- AUTO-START:accessibility -->
+
+- Semantic role: `group` (or `status` when `live`)
+- Required labels: `aria-label`
+- Focus order: not focusable
+- Touch target minimum: N/A (display only)
+- Color independence: tones pair with an icon and words
+
+<!-- AUTO-END:accessibility -->
+
+---
+
+## Do / Don't
+
+<!-- HUMAN-SECTION:do-dont (preserved across auto-updates) -->
+
+- Do keep segments to a few words.
+- Do use `live` only for results the user waits on.
+- Don't put interactive controls in segments.
+
+<!-- /HUMAN-SECTION:do-dont -->
+
+---
+
+## Composition Rules
+
+<!-- HUMAN-SECTION:composition (preserved across auto-updates) -->
+
+[TODO: define how this component behaves with others]
+
+<!-- /HUMAN-SECTION:composition -->
+
+---
+
+## Known Gaps & Amendments
+
+<!-- AUTO-START:known-gaps -->
+
+| Date | Issue | Resolution | Status |
+|------|-------|------------|--------|
+
+<!-- AUTO-END:known-gaps -->
+
+---
+
+## Changelog
+
+<!-- AUTO-START:changelog -->
+
+| Version | Date | Type | Summary |
+|---------|------|------|---------|
+| v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
+
+<!-- AUTO-END:changelog -->
+
+---
+
+## Reference Implementation
+
+`packages/components/src/components/StatusLine.tsx`
