@@ -6,7 +6,7 @@ const meta: Meta<typeof Select> = {
   component: Select,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
     error: { control: 'boolean' },
     helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
     errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
@@ -29,7 +29,7 @@ export const Default: Story = {
     </div>
   ),
   args: {
-    size: 'medium',
+    size: 'md',
   },
 };
 
@@ -44,7 +44,7 @@ export const Error: Story = {
   ),
   args: {
     errorMessage: 'Pick an option to continue.',
-    size: 'medium',
+    size: 'md',
   },
 };
 
@@ -69,5 +69,5 @@ export const WithAriaLabelOnly: Story = {
       </Select>
     </div>
   ),
-  args: { size: 'medium' },
+  args: { size: 'md' },
 };

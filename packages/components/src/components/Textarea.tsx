@@ -5,9 +5,9 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * SIZES: Matching input heights
- * - small: 32px min-height (matches small input)
- * - medium: 40px min-height (matches medium input - default)
- * - large: 48px min-height (matches large input)
+ * - sm: 32px min-height (matches small input)
+ * - md: 40px min-height (matches medium input - default)
+ * - lg: 48px min-height (matches large input)
  * 
  * SHAPE: plate ring recipe, identical to Input — wrapper = border color clipped
  * to --plate-round, textarea = fill clipped 1px inset. The ring walks the
@@ -21,10 +21,12 @@
 
 import { forwardRef, useId, type ReactNode, type TextareaHTMLAttributes } from "react";
 import { FieldMessage, useFieldMessage } from "../lib/field";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 // Define the props interface for the Textarea component
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  size?: "small" | "medium" | "large";
+  /** Minimum height and padding: sm, md (default), lg, matching Input. Legacy names are deprecated aliases. */
+  size?: ControlSizeProp;
   /** Error styling without a message. Prefer `errorMessage` so users learn what to fix. */
   error?: boolean;
   /** Hint shown under the field (length, format). Linked via `aria-describedby`. */
@@ -43,7 +45,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 /**
  * Textarea Component
  * 
- * @param size - Textarea size matching input heights (default: "medium")
+ * @param size - Textarea size matching input heights (default: "md")
  * @param error - Whether textarea has a validation error
  * @param disabled - Whether textarea is disabled
  * @param className - Additional CSS classes to apply
@@ -54,7 +56,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     { 
-      size = "medium", 
+      size: sizeProp = "md", 
       error: errorProp = false,
       helperText,
       errorMessage,
@@ -67,6 +69,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ) => {
+    const size = resolveSize(sizeProp, "Textarea");
     const field = useFieldMessage({ error: errorProp, helperText, errorMessage, describedBy: ariaDescribedBy });
     const error = field.invalid;
     const generatedId = useId();
@@ -90,9 +93,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     // Min-heights match input component exactly: 32px, 40px, 48px
     // Corners: plate silhouette, matching Input/Select/Button
     const sizeStyles = {
-      small: "min-h-8 px-3 py-1.5 plate-round",
-      medium: "min-h-10 px-4 py-2.5 plate-round",
-      large: "min-h-12 px-5 py-3.5 plate-round",
+      sm: "min-h-control-sm px-3 py-1.5 plate-round",
+      md: "min-h-control-md px-4 py-2.5 plate-round",
+      lg: "min-h-control-lg px-5 py-3.5 plate-round",
     };
 
     // STATE STYLES - Priority: error > disabled > default

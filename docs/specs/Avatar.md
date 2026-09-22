@@ -191,6 +191,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` | xl backed by control-size tokens; small/medium/large are deprecated aliases |
 
 <!-- AUTO-END:changelog -->
 

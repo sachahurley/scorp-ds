@@ -5,9 +5,9 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * SIZES: Matching button heights
- * - small: 32px height
- * - medium: 40px height (default)
- * - large: 48px height
+ * - sm: 32px height
+ * - md: 40px height (default)
+ * - lg: 48px height
  * 
  * STATES:
  * - default: Standard input appearance
@@ -19,11 +19,13 @@
 
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { FieldMessage, useFieldMessage } from "../lib/field";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 // Define the props interface for the Input component
 // Omit the native HTML 'size' attribute to avoid conflict with our custom size prop
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  size?: "small" | "medium" | "large";
+  /** Field height: sm 32px, md 40px (default), lg 48px. Legacy small/medium/large are deprecated aliases. */
+  size?: ControlSizeProp;
   /**
    * Visual variant. "box" (default) is the plate field; "quiet" is the
    * underline recipe — transparent, bottom hairline only, the site's voice
@@ -50,7 +52,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 /**
  * Input Component
  * 
- * @param size - Input size matching button heights (default: "medium")
+ * @param size - Input size matching button heights (default: "md")
  * @param error - Whether input has a validation error
  * @param disabled - Whether input is disabled
  * @param className - Additional CSS classes to apply
@@ -61,7 +63,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     { 
-      size = "medium", 
+      size: sizeProp = "md", 
       variant = "box",
       error: errorProp = false,
       helperText,
@@ -75,6 +77,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const size = resolveSize(sizeProp, "Input");
     const field = useFieldMessage({ error: errorProp, helperText, errorMessage, describedBy: ariaDescribedBy });
     const error = field.invalid;
     const generatedId = useId();
@@ -98,9 +101,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     // Horizontal padding slightly less than buttons for better text alignment
     // Corner radius matches button sizes: 6px (small), 8px (medium), 12px (large)
     const sizeStyles = {
-      small: "h-8 px-3 py-1.5 plate-round",
-      medium: "h-10 px-4 py-2.5 plate-round",
-      large: "h-12 px-5 py-3.5 plate-round",
+      sm: "h-control-sm px-3 py-1.5 plate-round",
+      md: "h-control-md px-4 py-2.5 plate-round",
+      lg: "h-control-lg px-5 py-3.5 plate-round",
     };
 
     // STATE STYLES - Color combinations for different states using SEMANTIC TOKENS

@@ -192,6 +192,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | feat | Remove button text `x` replaced by the 1-bit X icon (12px) |
 
 <!-- AUTO-END:changelog -->

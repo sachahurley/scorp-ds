@@ -22,7 +22,7 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Button size (32/40/48px height)',
     },
     disabled: {
@@ -46,7 +46,7 @@ type Story = StoryObj<typeof Button>;
 export const Primary: Story = {
   args: {
     variant: 'primary',
-    size: 'medium',
+    size: 'md',
     children: 'Get started',
   },
 };
@@ -54,7 +54,7 @@ export const Primary: Story = {
 export const Secondary: Story = {
   args: {
     variant: 'secondary',
-    size: 'medium',
+    size: 'md',
     children: 'Learn more',
   },
 };
@@ -62,7 +62,7 @@ export const Secondary: Story = {
 export const Ghost: Story = {
   args: {
     variant: 'ghost',
-    size: 'medium',
+    size: 'md',
     children: 'Cancel',
   },
 };
@@ -70,7 +70,7 @@ export const Ghost: Story = {
 export const Outline: Story = {
   args: {
     variant: 'outline',
-    size: 'medium',
+    size: 'md',
     children: 'View details',
   },
 };
@@ -78,7 +78,7 @@ export const Outline: Story = {
 export const Destructive: Story = {
   args: {
     variant: 'destructive',
-    size: 'medium',
+    size: 'md',
     children: 'Delete account',
   },
 };
@@ -87,9 +87,9 @@ export const AllSizes: Story = {
   name: 'All Sizes',
   render: () => (
     <div className="flex items-center gap-4">
-      <Button variant="primary" size="small">Small</Button>
-      <Button variant="primary" size="medium">Medium</Button>
-      <Button variant="primary" size="large">Large</Button>
+      <Button variant="primary" size="sm">Small</Button>
+      <Button variant="primary" size="md">Medium</Button>
+      <Button variant="primary" size="lg">Large</Button>
     </div>
   ),
 };
@@ -115,7 +115,7 @@ export const DisabledState: Story = {
       <Button variant="primary" disabled>Primary</Button>
       <Button variant="secondary" disabled>Secondary</Button>
       <Button variant="outline" disabled>Outline</Button>
-      <Button variant="icon" size="medium" disabled aria-label="Disabled icon button">
+      <Button variant="icon" size="md" disabled aria-label="Disabled icon button">
         <TuiIcon name="Bell" />
       </Button>
     </div>
@@ -126,7 +126,7 @@ export const DisabledState: Story = {
 export const IconWithAriaLabel: Story = {
   name: 'Icon (aria-label)',
   render: () => (
-    <Button variant="icon" size="medium" aria-label="Open menu">
+    <Button variant="icon" size="md" aria-label="Open menu">
       <TuiIcon name="Menu" />
     </Button>
   ),
@@ -136,7 +136,7 @@ export const IconWithAriaLabel: Story = {
 export const Playground: Story = {
   args: {
     variant: 'primary',
-    size: 'medium',
+    size: 'md',
     disabled: false,
     children: 'Button label',
   },
@@ -154,7 +154,7 @@ export const IconButtons: Story = {
   name: 'Icon buttons (all variants)',
   render: () => {
     const variants = ['primary', 'secondary', 'ghost', 'outline', 'destructive', 'icon'] as const;
-    const sizes = ['small', 'medium', 'large'] as const;
+    const sizes = ['sm', 'md', 'lg'] as const;
     const glyphs = { primary: 'Check', secondary: 'Edit', ghost: 'Copy', outline: 'Download', destructive: 'X', icon: 'Bell' } as const;
     return (
       <div className="flex flex-col gap-4">
@@ -173,7 +173,7 @@ export const IconButtons: Story = {
             ))}
             <Button
               variant={variant}
-              size="medium"
+              size="md"
               disabled
               aria-label={`${glyphs[variant] ?? 'Action'} (${variant}, disabled)`}
             >
@@ -191,7 +191,7 @@ export const AsLink: Story = {
   name: 'As link (href)',
   render: () => (
     <div className="flex items-center gap-4">
-      <Button variant="secondary" size="small" href="https://example.com" target="_blank" rel="noopener noreferrer">
+      <Button variant="secondary" size="sm" href="https://example.com" target="_blank" rel="noopener noreferrer">
         view project <TuiIcon name="ExternalLink" size="3" />
       </Button>
       <Button variant="primary" href="https://example.com">

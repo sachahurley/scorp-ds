@@ -270,6 +270,17 @@ Base unit: **4px** per step (see `global.spacing` in `tokens.json`). Tailwind sp
 
 **Storybook:** **Foundation / Spacing** — visual spacing scale.
 
+## Control Size Tokens
+
+One size scale for every sized component: `sm | md | lg` (Avatar adds `xl`). The old `small | medium | large` names are deprecated aliases that still resolve (one dev warning per component).
+
+| Token | CSS variable | Value | Tailwind | Used by |
+|-------|--------------|-------|----------|---------|
+| `control.height.sm` | `--control-height-sm` | 32px | `h-control-sm`, `min-h-control-sm`, `size-control-sm` | Button, Input, Select, Dropdown trigger, Textarea min-height |
+| `control.height.md` | `--control-height-md` | 40px | `h-control-md` … | Default for the same set |
+| `control.height.lg` | `--control-height-lg` | 48px | `h-control-lg` … | Large variants |
+| `touch.target` | `--touch-target` | 44px | `w-touch`, `h-touch` | Hit areas on small controls (Checkbox, Radio, Switch) |
+
 ## Motion Tokens
 
 **Source of truth in `tokens.json`** (`global.duration`):

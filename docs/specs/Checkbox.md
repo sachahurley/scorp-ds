@@ -192,6 +192,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | feat | Checkmark text glyph replaced by the 1-bit Check icon (sizes 3/4/5) |
 | Unreleased | 2026-09-21 | fix | 44px hit area, unlabeled click fix, `helperText`, `errorMessage` |
 

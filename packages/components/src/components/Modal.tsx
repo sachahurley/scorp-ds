@@ -191,7 +191,7 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
             {/* Close control: icon-only secondary plate button (square, gold drawn X) */}
             <Button
               variant="secondary"
-              size="small"
+              size="sm"
               type="button"
               onClick={onClose}
               aria-label="Close modal"

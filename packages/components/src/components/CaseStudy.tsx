@@ -162,7 +162,7 @@ function Block({ b }: { b: CaseStudyBlock }) {
           <blockquote className="m-0 p-0">{b.text}</blockquote>
           {b.name && (
             <figcaption className="mt-4 flex items-center gap-3 text-sm">
-              <Avatar size="medium" src={b.image} alt="" />
+              <Avatar size="md" src={b.image} alt="" />
               <span>
                 <span className="block text-[var(--text-primary)]">{b.name}</span>
                 {b.role && <span className={`block text-xs ${LABEL_TEXT}`}>{b.role}</span>}

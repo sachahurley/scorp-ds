@@ -5,9 +5,9 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * SIZES: Proportional to button/input height system
- * - small: 16px × 16px
- * - medium: 20px × 20px (default)
- * - large: 24px × 24px
+ * - sm: 16px × 16px
+ * - md: 20px × 20px (default)
+ * - lg: 24px × 24px
  * Every size gets an invisible 44×44px hit area centered on the box (a
  * pseudo-element, so layout is unchanged) to meet the touch-target rule.
  * 
@@ -27,10 +27,11 @@
 import { forwardRef, type InputHTMLAttributes, type ReactNode } from "react";
 import { FieldMessage, useFieldMessage } from "../lib/field";
 import { TuiIcon } from "./TuiIcon";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Box size. The tap target is 44×44px at every size. */
-  size?: "small" | "medium" | "large";
+  size?: ControlSizeProp;
   /** Visible label; clicking it toggles the box. Without one, pass `aria-label`. */
   label?: string | ReactNode;
   /** Error styling without a message. Prefer `errorMessage` so users learn what to fix. */
@@ -46,7 +47,7 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 /**
  * Checkbox Component
  * 
- * @param size - Checkbox size (default: "medium")
+ * @param size - Checkbox size (default: "md")
  * @param label - Optional label text displayed next to checkbox
  * @param error - Whether checkbox has a validation error
  * @param helperText - Secondary line under the label
@@ -59,7 +60,7 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
-      size = "medium",
+      size: sizeProp = "md",
       label,
       error: errorProp = false,
       helperText,
@@ -74,6 +75,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     },
     ref
   ) => {
+    const size = resolveSize(sizeProp, "Checkbox");
     const field = useFieldMessage({ error: errorProp, helperText, errorMessage, describedBy: ariaDescribedBy });
     const error = field.invalid;
 
@@ -84,19 +86,19 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // Box wears the plate silhouette; glyph gets an explicit token size so it
     // renders predictably inside the box (no inherited-size overflow).
     const sizeStyles = {
-      small: {
+      sm: {
         checkbox: "w-4 h-4",
         glyph: "3" as const,
         label: "text-sm",
         messageIndent: "pl-6", // box 16 + gap 8
       },
-      medium: {
+      md: {
         checkbox: "w-5 h-5",
         glyph: "4" as const,
         label: "text-sm",
         messageIndent: "pl-7", // box 20 + gap 8
       },
-      large: {
+      lg: {
         checkbox: "w-6 h-6",
         glyph: "5" as const,
         label: "text-sm",
@@ -141,7 +143,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // pseudo-element centered on the box. It sits inside the <label>, so a
     // tap anywhere in it toggles the input.
     const control = (
-      <span className="relative inline-flex shrink-0 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-11 before:h-11">
+      <span className="relative inline-flex shrink-0 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-touch before:h-touch">
         <input
           ref={ref}
           type="checkbox"

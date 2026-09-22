@@ -8,7 +8,7 @@ const meta: Meta<typeof Dropdown> = {
   tags: ['autodocs'],
   argTypes: {
     align: { control: 'select', options: ['left', 'right'] },
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
   },
   parameters: { layout: 'centered' },
 };
@@ -44,7 +44,7 @@ export const AlignRight: Story = {
 export const Small: Story = {
   args: {
     label: 'More',
-    size: 'small',
+    size: 'sm',
     items: [item('One'), item('Two')],
   },
 };

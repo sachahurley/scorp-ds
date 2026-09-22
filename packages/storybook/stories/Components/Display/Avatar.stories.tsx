@@ -6,7 +6,7 @@ const meta: Meta<typeof Avatar> = {
   component: Avatar,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large', 'xl'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg', 'xl'] },
     status: { control: 'select', options: ['online', 'offline', 'away'] },
   },
   parameters: { layout: 'centered' },
@@ -18,7 +18,7 @@ type Story = StoryObj<typeof Avatar>;
 export const Initials: Story = {
   args: {
     initials: 'SH',
-    size: 'medium',
+    size: 'md',
     status: 'online',
   },
 };
@@ -26,7 +26,7 @@ export const Initials: Story = {
 export const Icon: Story = {
   args: {
     icon: <TuiIcon name="User" size="6" className="text-secondary-600" />,
-    size: 'large',
+    size: 'lg',
   },
 };
 
@@ -34,7 +34,7 @@ export const Image: Story = {
   args: {
     src: 'https://api.dicebear.com/7.x/shapes/svg?seed=scorp',
     alt: 'Avatar illustration',
-    size: 'large',
+    size: 'lg',
     status: 'away',
   },
 };
@@ -43,9 +43,9 @@ export const AllSizes: Story = {
   name: 'All sizes',
   render: () => (
     <div className="flex items-end gap-4">
-      <Avatar initials="S" size="small" />
-      <Avatar initials="S" size="medium" />
-      <Avatar initials="S" size="large" />
+      <Avatar initials="S" size="sm" />
+      <Avatar initials="S" size="md" />
+      <Avatar initials="S" size="lg" />
       <Avatar initials="S" size="xl" />
     </div>
   ),

@@ -6,9 +6,9 @@
  * Built entirely from design tokens defined in tokens.json
  * 
  * SIZES: Matching input heights
- * - small: 32px height
- * - medium: 40px height (default)
- * - large: 48px height
+ * - sm: 32px height
+ * - md: 40px height (default)
+ * - lg: 48px height
  * 
  * STATES:
  * - default: Standard select appearance
@@ -27,10 +27,12 @@
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useId, type ReactNode, type SelectHTMLAttributes } from "react";
 import { FieldMessage, useFieldMessage } from "../lib/field";
 import { TuiIcon } from "./TuiIcon";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 // Define the props interface for the Select component
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
-  size?: "small" | "medium" | "large";
+  /** Trigger height: sm 32px, md 40px (default), lg 48px. Legacy names are deprecated aliases. */
+  size?: ControlSizeProp;
   /** Error styling without a message. Prefer `errorMessage` so users learn what to fix. */
   error?: boolean;
   /** Hint shown under the trigger. Linked via `aria-describedby`. */
@@ -49,7 +51,7 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 /**
  * Select Component
  * 
- * @param size - Select size matching input heights (default: "medium")
+ * @param size - Select size matching input heights (default: "md")
  * @param error - Whether select has a validation error
  * @param disabled - Whether select is disabled
  * @param className - Additional CSS classes to apply
@@ -62,7 +64,7 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
  * @param errorMessage - Validation message under the trigger (implies `error`)
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
-  size = "medium",
+  size: sizeProp = "md",
   error: errorProp = false,
   helperText,
   errorMessage,
@@ -79,6 +81,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   id: htmlId,
   ...props
 }, ref) {
+    const size = resolveSize(sizeProp, "Select");
   const field = useFieldMessage({ error: errorProp, helperText, errorMessage, describedBy: ariaDescribedBy });
   const error = field.invalid;
   const autoId = useId();
@@ -286,20 +289,20 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
 
   // Size styles matching Dropdown component exactly
   const sizeStyles = {
-    small: {
-      trigger: "h-8 px-4 py-1.5 plate-round",
+    sm: {
+      trigger: "h-control-sm px-4 py-1.5 plate-round",
       menu: "",
       menuItem: "",
       icon: "w-4 h-4",
     },
-    medium: {
-      trigger: "h-10 px-4 py-2.5 plate-round",
+    md: {
+      trigger: "h-control-md px-4 py-2.5 plate-round",
       menu: "",
       menuItem: "",
       icon: "w-5 h-5",
     },
-    large: {
-      trigger: "h-12 px-4 py-3.5 plate-round",
+    lg: {
+      trigger: "h-control-lg px-4 py-3.5 plate-round",
       menu: "",
       menuItem: "",
       icon: "w-6 h-6",

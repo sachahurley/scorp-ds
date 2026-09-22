@@ -12,7 +12,7 @@ const meta: Meta<typeof Input> = {
   tags: ['autodocs'],
   argTypes: {
     label: { control: 'text', description: 'Visible label (recommended for a11y)' },
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
     error: { control: 'boolean' },
     helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
     errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
@@ -29,7 +29,7 @@ export const Default: Story = {
   args: {
     label: 'Email',
     placeholder: 'you@example.com',
-    size: 'medium',
+    size: 'md',
   },
 };
 
@@ -37,7 +37,7 @@ export const WithValue: Story = {
   args: {
     label: 'Work email',
     defaultValue: 'hello@example.com',
-    size: 'medium',
+    size: 'md',
   },
 };
 
@@ -70,9 +70,9 @@ export const AllSizes: Story = {
   name: 'All sizes',
   render: () => (
     <div className="flex w-72 flex-col gap-3">
-      <Input label="Small" size="small" placeholder="Small" />
-      <Input label="Medium" size="medium" placeholder="Medium" />
-      <Input label="Large" size="large" placeholder="Large" />
+      <Input label="Small" size="sm" placeholder="Small" />
+      <Input label="Medium" size="md" placeholder="Medium" />
+      <Input label="Large" size="lg" placeholder="Large" />
     </div>
   ),
 };
@@ -80,7 +80,7 @@ export const AllSizes: Story = {
 export const Playground: Story = {
   args: {
     label: 'Field label',
-    size: 'medium',
+    size: 'md',
     placeholder: 'Type here',
     error: false,
     disabled: false,

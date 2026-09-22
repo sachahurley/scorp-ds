@@ -51,7 +51,7 @@ export const Default: Story = {
               <TableCell>{r.branch}</TableCell>
               <TableCell className="text-secondary-700 dark:text-secondary-300">{r.sha}</TableCell>
               <TableCell>
-                <Badge variant={statusVariant(r.status)} size="small">
+                <Badge variant={statusVariant(r.status)} size="sm">
                   {r.status}
                 </Badge>
               </TableCell>

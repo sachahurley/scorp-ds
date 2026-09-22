@@ -16,11 +16,13 @@
  */
 
 import { type ReactNode } from "react";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 export interface DividerProps {
   variant?: "horizontal" | "vertical" | "withText";
   text?: ReactNode;
-  spacing?: "none" | "small" | "medium" | "large";
+  /** Margin around the rule: none, sm 4px, md 16px (default), lg 32px. Legacy names are deprecated aliases. */
+  spacing?: "none" | ControlSizeProp;
   className?: string;
 }
 
@@ -29,22 +31,23 @@ export interface DividerProps {
  * 
  * @param variant - Divider orientation/style (default: "horizontal")
  * @param text - Optional text label (only used with "withText" variant)
- * @param spacing - Vertical/horizontal spacing around divider (default: "medium")
+ * @param spacing - Vertical/horizontal spacing around divider (default: "md")
  * @param className - Additional CSS classes
  */
 export function Divider({
   variant = "horizontal",
   text,
-  spacing = "medium",
+  spacing: spacingProp = "md",
   className = "",
 }: DividerProps) {
+    const spacing = resolveSize(spacingProp, "Divider", "md" as "none" | "sm" | "md" | "lg");
   // SPACING STYLES - Margin around divider
   // Uses spacing tokens: 0, 1 (4px), 2 (8px), 3 (12px), 4 (16px)
   const spacingStyles = {
     none: "",
-    small: variant === "horizontal" ? "my-1" : "mx-1",      // 4px margin
-    medium: variant === "horizontal" ? "my-4" : "mx-4",      // 16px margin
-    large: variant === "horizontal" ? "my-8" : "mx-8",      // 32px margin
+    sm: variant === "horizontal" ? "my-1" : "mx-1",      // 4px margin
+    md: variant === "horizontal" ? "my-4" : "mx-4",      // 16px margin
+    lg: variant === "horizontal" ? "my-8" : "mx-8",      // 32px margin
   };
 
   // TUI Tier 2: terminal accent color for divider borders

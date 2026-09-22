@@ -66,7 +66,7 @@ export default function App() {
           token source. This page is the front door; Storybook is the full interactive reference.
         </p>
 
-        <Button href={storybookHref} size="large">
+        <Button href={storybookHref} size="lg">
           Open the component library
         </Button>
 

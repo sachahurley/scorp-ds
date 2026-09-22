@@ -16,9 +16,9 @@
  *   or re-theme (the portfolio's equipped/loot chips)
  * 
  * SIZES:
- * - small: Compact badge (20px height)
- * - medium: Standard badge (24px height, default)
- * - large: Larger badge (28px height)
+ * - sm: Compact badge (20px height)
+ * - md: Standard badge (24px height, default)
+ * - lg: Larger badge (28px height)
  * 
  * FEATURES:
  * - Optional close button (onClose prop)
@@ -34,10 +34,12 @@
 
 import { type ReactNode } from "react";
 import { TuiIcon } from "./TuiIcon";
+import { resolveSize, type ControlSizeProp } from "../lib/size";
 
 export interface BadgeProps {
   variant?: "default" | "primary" | "success" | "warning" | "error" | "info" | "bone";
-  size?: "small" | "medium" | "large";
+  /** Badge height: sm 20px, md 24px (default), lg 28px. Legacy names are deprecated aliases. */
+  size?: ControlSizeProp;
   /** Uppercase eyebrow voice: uppercase text with .08em tracking. */
   caps?: boolean;
   /**
@@ -57,7 +59,7 @@ export interface BadgeProps {
  * Badge Component
  * 
  * @param variant - Badge color variant (default: "default")
- * @param size - Badge size (default: "medium")
+ * @param size - Badge size (default: "md")
  * @param children - Badge content (text, numbers, etc.)
  * @param iconLeft - Optional icon to display on the left
  * @param onClose - Optional callback when close button is clicked
@@ -65,7 +67,7 @@ export interface BadgeProps {
  */
 export function Badge({
   variant = "default",
-  size = "medium",
+  size: sizeProp = "md",
   caps = false,
   dashed = false,
   children,
@@ -73,14 +75,15 @@ export function Badge({
   onClose,
   className = "",
 }: BadgeProps) {
+    const size = resolveSize(sizeProp, "Badge");
   // SIZE STYLES - Heights and padding matching design system
   // Small: 20px height, 8px horizontal padding, 4px vertical padding
   // Medium: 24px height, 10px horizontal padding, 4px vertical padding
   // Large: 28px height, 12px horizontal padding, 6px vertical padding
   const sizeStyles = {
-    small: "h-5 px-2 py-1 text-xs",      // h-5 = 20px, px-2 = 8px, text-xs = 12px
-    medium: "h-6 px-2.5 py-1 text-xs",   // h-6 = 24px, px-2.5 = 10px, text-xs = 12px
-    large: "h-7 px-3 py-1.5 text-sm",    // h-7 = 28px, px-3 = 12px, text-sm = 14px
+    sm: "h-5 px-2 py-1 text-xs",      // h-5 = 20px, px-2 = 8px, text-xs = 12px
+    md: "h-6 px-2.5 py-1 text-xs",   // h-6 = 24px, px-2.5 = 10px, text-xs = 12px
+    lg: "h-7 px-3 py-1.5 text-sm",    // h-7 = 28px, px-3 = 12px, text-sm = 14px
   };
 
   // Plate badges — compact filled plates sharing the button silhouette.
@@ -137,9 +140,9 @@ export function Badge({
 
   // ICON SIZES - Icons scale with badge size
   const iconSizes = {
-    small: "w-3 h-3",    // 12px
-    medium: "w-3.5 h-3.5", // 14px
-    large: "w-4 h-4",    // 16px
+    sm: "w-3 h-3",    // 12px
+    md: "w-3.5 h-3.5", // 14px
+    lg: "w-4 h-4",    // 16px
   };
 
   return (

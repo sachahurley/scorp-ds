@@ -6,7 +6,7 @@ const meta: Meta<typeof Textarea> = {
   component: Textarea,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
     error: { control: 'boolean' },
     helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
     errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
@@ -52,9 +52,9 @@ export const AllSizes: Story = {
   name: 'All sizes',
   render: () => (
     <div className="flex w-96 flex-col gap-3">
-      <Textarea label="Small" size="small" placeholder="Small" rows={2} />
-      <Textarea label="Medium" size="medium" placeholder="Medium" rows={3} />
-      <Textarea label="Large" size="large" placeholder="Large" rows={3} />
+      <Textarea label="Small" size="sm" placeholder="Small" rows={2} />
+      <Textarea label="Medium" size="md" placeholder="Medium" rows={3} />
+      <Textarea label="Large" size="lg" placeholder="Large" rows={3} />
     </div>
   ),
 };
