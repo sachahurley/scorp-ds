@@ -313,7 +313,7 @@
   /* Light theme — semantic text */
   --text-primary: #2B2718;
   --text-secondary: #695F4D; /* sepia-700: 6.1:1 on the page (600 was 3.3:1, below AA) */
-  --text-tertiary: #BFB4A3;
+  --text-tertiary: #968A75; /* sepia-600: 3.3:1, large or decorative text only (500 was 2:1) */
   --text-disabled: #E0DACE;
   --text-link: #B45309;
   --text-link-hover: #92400E;

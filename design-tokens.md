@@ -84,7 +84,7 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 |-------|------------|------------|---------|
 | `text.primary` | secondary.900 | secondary.50 | Body, headings |
 | `text.secondary` | secondary.700 | secondary.500 | Supporting copy (dark stepped down one so body sits below accent). Light was 600 until 2026-09-21: 3.3:1 on the page, below AA; 700 is 6.1:1 |
-| `text.tertiary` | secondary.500 | secondary.600 | Meta, timestamps |
+| `text.tertiary` | secondary.600 | secondary.600 | Meta, timestamps at large size, decorative labels. 3:1 class, not for small body text; use `text.secondary` there. Light was 500 (2:1) until 2026-09-21 |
 | `text.disabled` | secondary.400 | secondary.700 | Disabled labels |
 | `text.link` | primary.700 | primary.400 | Links |
 | `text.link-hover` | primary.800 | primary.300 | Link hover |
