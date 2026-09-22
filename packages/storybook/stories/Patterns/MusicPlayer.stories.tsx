@@ -108,7 +108,8 @@ function useSimulatedPlayback(tracks: Track[]) {
     } else {
       setIsPlaying(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Deps are deliberately narrow: selectTrack and the shuffle/repeat flags are read
+    // fresh on each tick, and adding them would re-run the effect on every toggle.
   }, [elapsed, isPlaying, track.duration]);
 
   const togglePlay = () => {
