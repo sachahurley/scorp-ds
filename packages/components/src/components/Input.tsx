@@ -12,9 +12,18 @@
  * STATES:
  * - default: Standard input appearance
  * - hover: Subtle border change on mouse over
- * - focused: Primary color focus ring (keyboard accessible)
- * - disabled: Reduced opacity, not interactive
- * - error: Red border to indicate validation issues
+ * - focused: the system's 2px inset ring (`--focus-ring-width`) drawn inside
+ *   the plate, on top of the ring wrapper's accent colour. The error state
+ *   keeps its red ring wrapper and draws the inset ring in
+ *   `--focus-ring-error`, so focus is visible in every state.
+ * - disabled: the whole field (ring wrapper included) drops to 50% opacity;
+ *   dimming only the inner fill used to leave a full-strength border.
+ * - error: Red ring to indicate validation issues
+ *
+ * PLACEHOLDERS: `--field-placeholder` is sepia-700 in light (6.28:1 on the
+ * white field) and sepia-500 in dark (9.45:1). Placeholders still must never
+ * carry essential information (they vanish on input), so put format hints in
+ * `helperText` and the name in `label`.
  */
 
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
@@ -92,9 +101,17 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       font-mono text-sm
       transition-colors [transition-duration:var(--duration-fast)]
       placeholder:text-[var(--field-placeholder)]
-      disabled:cursor-not-allowed disabled:opacity-50
+      disabled:cursor-not-allowed
       focus:outline-none
     `;
+
+    // FOCUS: the same 2px inset ring Button, Checkbox and ListRow use. It is
+    // drawn on the input (the plate clip swallows outside outlines, and an
+    // inset ring on the 1px wrapper would be painted over by the input).
+    // The error state gets the ring too, in the error colour.
+    const focusRing = error
+      ? "focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-error)]"
+      : "focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]";
 
     // SIZE STYLES - All values matching button sizes from tokens.json
     // Heights match button component exactly: 32px, 40px, 48px
@@ -121,10 +138,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
 
     // QUIET VARIANT — the underline recipe: no plate, no ring wrapper; the
-    // bottom border itself walks the ramp. Focus is the accent underline.
+    // bottom border itself walks the ramp. Focus thickens the underline to the
+    // focus-ring width with an inset bottom ring (no layout shift), matching
+    // the 2px weight the box variant uses.
     const quietStyles = error
-      ? "border-b border-[var(--field-border-error)] focus:border-[var(--field-border-error)]"
-      : "border-b border-[var(--field-border)] hover:border-[var(--field-border-hover)] focus:!border-[var(--field-border-focus)]";
+      ? "border-b border-[var(--field-border-error)] focus-visible:[box-shadow:inset_0_calc(-1*var(--focus-ring-width))_0_0_var(--focus-ring-error)]"
+      : "border-b border-[var(--field-border)] hover:border-[var(--field-border-hover)] focus:!border-[var(--field-border-focus)] focus-visible:[box-shadow:inset_0_calc(-1*var(--focus-ring-width))_0_0_var(--focus-ring-primary)]";
 
     const inputEl =
       variant === "quiet" ? (
@@ -134,12 +153,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           disabled={disabled}
           aria-invalid={error || undefined}
           aria-describedby={field.describedBy}
-          className={`${baseStyles} ${sizeStyles[size].replace("plate-round", "rounded-none")} !px-0 bg-transparent text-[var(--text-primary)] ${quietStyles} ${className}`}
+          className={`${baseStyles} ${sizeStyles[size].replace("plate-round", "rounded-none")} !px-0 bg-transparent text-[var(--text-primary)] disabled:opacity-50 ${quietStyles} ${className}`}
           {...props}
         />
       ) : (
+      // DISABLED: the opacity lives on the ring wrapper so the border dims
+      // with the fill; applying it to the input alone left a full-strength ring.
       <div
-        className={`w-full plate-round p-px transition-colors [transition-duration:var(--duration-fast)] ${ringStyles}`}
+        className={`w-full plate-round p-px transition-colors [transition-duration:var(--duration-fast)] ${ringStyles} ${disabled ? "opacity-50" : ""}`}
       >
         <input
           ref={ref}
@@ -147,7 +168,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           disabled={disabled}
           aria-invalid={error || undefined}
           aria-describedby={field.describedBy}
-          className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
+          className={`${baseStyles} ${focusRing} ${sizeStyles[size]} ${stateStyles} ${className}`}
           {...props}
         />
       </div>

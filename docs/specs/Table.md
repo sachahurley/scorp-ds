@@ -35,7 +35,7 @@ Table is a set of thin, semantic wrappers over native table elements (`Table`, `
 
 - `Table` provides the density through React context; `TableHead` and `TableCell` read it for their padding.
 - `bordered` wraps the table in two divs: `plate-round-lg p-px bg-[--surface-container-stroke]` (the ring) around `plate-round-lg bg-[--surface-card]` (the fill).
-- Header and footer sections get a `surface-subtle` fill and a 0.5px `surface-container-stroke` rule; every row gets a 0.5px bottom rule.
+- Header and footer sections get a `surface-subtle` fill and a hairline `surface-container-stroke` rule (`--border-width-hairline`, 1px); every row gets the same bottom rule.
 
 ### Variants
 
@@ -75,11 +75,11 @@ Table is a set of thin, semantic wrappers over native table elements (`Table`, `
 
 | Component | Element | Defaults | Notes |
 |-----------|---------|----------|-------|
-| `TableHeader` | `<thead>` | `surface-subtle` fill, 0.5px bottom rule | Sticky headers are product-side (`className`). |
+| `TableHeader` | `<thead>` | `surface-subtle` fill, hairline bottom rule | Sticky headers are product-side (`className`). |
 | `TableBody` | `<tbody>` | none | Target of `striped`. |
-| `TableFooter` | `<tfoot>` | `surface-subtle` fill, 0.5px top rule | For summary rows. |
-| `TableRow` | `<tr>` | 0.5px bottom rule, color transition | No built-in hover or selected state. |
-| `TableHead` | `<th>` | `scope="col"`, density padding, `font-semibold`, left aligned | Pass `scope="row"` for row headers. |
+| `TableFooter` | `<tfoot>` | `surface-subtle` fill, hairline top rule | For summary rows. |
+| `TableRow` | `<tr>` | hairline bottom rule, color transition | No built-in hover or selected state. |
+| `TableHead` | `<th>` | `scope="col"`, density padding, `font-bold`, left aligned | Pass `scope="row"` for row headers. |
 | `TableCell` | `<td>` | density padding, `align-middle`, secondary text | |
 
 All sub-components accept their native HTML attributes, `className` (merged with `cn()`) and a forwarded `ref`.
@@ -100,6 +100,8 @@ All sub-components accept their native HTML attributes, `className` (merged with
 | `--surface-container-stroke` | Color | light `#BFB4A3`, dark `#474030` | Row and section rules, bordered ring |
 | `--surface-card` | Color | light `#FFFFFF`, dark `#120D09` | Bordered inner fill |
 | `--plate-round-lg` (`plate-round-lg`) | Shape | stepped 12px corner polygon | Bordered frame silhouette |
+| `--border-width-hairline` | Size | `1px` | Row and section rules (the system's single rule weight) |
+| `--font-weight-bold` (`font-bold`) | Typography | `700` | Column headers |
 | `--duration-normal` | Motion | `200ms` | Row color transition |
 | `text-sm` | Typography | `14px` | All table text |
 | `--spacing-2` to `--spacing-5` | Spacing | `8px` to `20px` | Density padding |
@@ -118,6 +120,7 @@ All sub-components accept their native HTML attributes, `className` (merged with
 | Striped | `striped` | Even `tbody` rows `--surface-subtle` |
 | Bordered | `bordered` | Ring `--surface-container-stroke`, fill `--surface-card`, `plate-round-lg` |
 | Row hover / selected | Not built in | Product adds via `TableRow` `className` |
+| Rules | always | `--border-width-hairline` on `thead`, `tfoot` and every `tr` |
 
 <!-- AUTO-END:states -->
 
@@ -148,9 +151,9 @@ Interactive controls: none (the meta has no `component` or `argTypes`; stories u
 
 <!-- AUTO-START:hardcoded -->
 
-- `border-b-[0.5px]` / `border-t-[0.5px]`: arbitrary hairline width, no border-width token exists.
-- `font-semibold` on `TableHead`: weight 600 is not in the font-weight tokens (400 / 500 / 700).
 - `TableCell` uses `secondary-800` / `secondary-200` scale steps rather than a semantic text token.
+
+Rules and the header weight were tokenized on 2026-09-22: `border-*-[length:var(--border-width-hairline)]` replaces the 0.5px rules, and `font-bold` (700) replaces `font-semibold` (600, not in the weight scale). The arbitrary-value form is used instead of the preset's `border-hairline` class because tailwind-merge reads a named border suffix as a colour and drops it next to `border-[var(--surface-container-stroke)]`.
 
 <!-- AUTO-END:hardcoded -->
 
@@ -224,8 +227,8 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | `font-semibold` (600) and `0.5px` rules are off-token values | None yet | open |
-| 2026-09-22 | No unit tests; no `Playground` story or `component` in the story meta, so autodocs has no props table | None yet | open |
+| 2026-09-22 | `font-semibold` (600) and `0.5px` rules are off-token values | Headers use `font-bold` (`--font-weight-bold`, 700); rules use the new `global.border.width.hairline` token (1px) | Resolved |
+| 2026-09-22 | No unit tests; no `Playground` story or `component` in the story meta, so autodocs has no props table | Unit tests added for the chrome tokens and `scope="col"`; the story meta still has no `component` or `Playground` | Partly resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -238,6 +241,7 @@ None.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | Column headers use the `font-bold` token and rules use `--border-width-hairline`, replacing the off-token 600 weight and 0.5px rules |
 
 <!-- AUTO-END:changelog -->
 

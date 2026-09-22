@@ -34,6 +34,26 @@ describe("Checkbox hit area and messages", () => {
     expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 
+  it("dims the disabled control exactly once, on the label", () => {
+    render(<Checkbox label="Locked" disabled />);
+    const input = screen.getByRole("checkbox");
+    const visual = input.nextElementSibling as HTMLElement;
+    const label = input.closest("label") as HTMLElement;
+
+    expect(label.className).toContain("opacity-50");
+    // Stacking a second opacity-50 on the box rendered it at about 25%.
+    expect(visual.className).not.toContain("opacity-50");
+    expect(visual.className).toContain("cursor-not-allowed");
+  });
+
+  it("tokenizes the error check mark instead of hardcoding white", () => {
+    render(<Checkbox label="E" error checked readOnly />);
+    const visual = screen.getByRole("checkbox").nextElementSibling as HTMLElement;
+    const mark = visual.querySelector('[data-mark="check"]') as HTMLElement;
+    expect(mark.className).toContain("text-[var(--button-destructive-text)]");
+    expect(mark.className).not.toContain("text-white");
+  });
+
   it("wires errorMessage to the input", () => {
     render(<Checkbox label="Accept terms" errorMessage="Required to continue" />);
     const input = screen.getByRole("checkbox", { name: /accept terms/i });

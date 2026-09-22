@@ -91,6 +91,7 @@ Label text is `text-sm` at every size. The hit area is 44x44px at every size.
 | `--field-background` | Color | light `#FFFFFF`, dark `#120D09` | Unchecked inner fill |
 | `--button-primary-background` / `-hover` | Color | light `#FBBF24` / `#F59E0B`, dark `#E0A26A` / `#D97706` | Checked and indeterminate ring and fill |
 | `--button-primary-text` | Color | light `#000000`, dark `#1A150F` | Check and Minus icons |
+| `--button-destructive-text` | Color | `#FDFCFB` both themes | Check and Minus icons on the error fill |
 | `--focus-ring-primary` / `--focus-ring-error` | Color | `#FBBF24` / light `#DC2626`, dark `#EF4444` | Inset focus ring |
 | `--focus-ring-width` | Size | `2px` | Focus ring thickness |
 | `--touch-target` (`w-touch h-touch`) | Size | `44px` | Hit area |
@@ -114,8 +115,8 @@ Label text is `text-sm` at every size. The hit area is 44x44px at every size.
 | Checked | native `:checked` (`peer-checked`) | Ring and fill `--button-primary-background`, Check icon visible in `--button-primary-text` |
 | Indeterminate | `indeterminate` prop, rendered from native `:indeterminate` (`peer-indeterminate`) | Ring and fill `--button-primary-background` (hover `-hover`), Minus bar visible in `--button-primary-text`, Check hidden even if also checked |
 | Focus visible | `peer-focus-visible` | Inset ring `--focus-ring-primary` (error: `--focus-ring-error`) |
-| Error | `error` or `errorMessage` | Ring `--field-border-error`; checked or indeterminate fill turns `--field-border-error` with a white Check or Minus |
-| Disabled | `disabled` | Box `opacity-50` and label `opacity-50` (stacked), `cursor-not-allowed` |
+| Error | `error` or `errorMessage` | Ring `--field-border-error`; checked or indeterminate fill turns `--field-border-error` with the Check or Minus in `--button-destructive-text` |
+| Disabled | `disabled` | `opacity-50` once, on the `<label>`, so the box and the label dim together; `cursor-not-allowed` on both |
 | Helper / error message | `helperText` / `errorMessage` | FieldMessage under the label |
 
 <!-- AUTO-END:states -->
@@ -150,7 +151,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled`,
 
 <!-- AUTO-START:hardcoded -->
 
-- `text-white` on the Check and Minus icons in the checked / indeterminate error state (should be a token such as an on-error text color).
+None. The error Check and Minus use `--button-destructive-text`, the system's ink for a destructive fill (was a hardcoded `text-white` until 2026-09-22).
 
 <!-- AUTO-END:hardcoded -->
 
@@ -227,7 +228,8 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled`,
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | 16px small box below the 44px target; unlabeled boxes ignored mouse clicks; no helper or error text | 44px pseudo-element hit area at every size; control always wrapped in a label; added `helperText` and `errorMessage` | Resolved |
-| 2026-09-22 | Disabled opacity is applied to both the label and the box, so the box renders at about 25% | None yet | Open |
+| 2026-09-22 | Disabled opacity is applied to both the label and the box, so the box renders at about 25% | `opacity-50` now lives only on the `<label>`, which wraps both; the box keeps `cursor-not-allowed` | Resolved |
+| 2026-09-22 | The error Check and Minus were a hardcoded `text-white` | Tokenized to `--button-destructive-text` | Resolved |
 | 2026-09-22 | No indeterminate (mixed) state for "select all" patterns | `indeterminate` prop: native property via a merged ref, 1-bit Minus bar | Resolved |
 
 <!-- AUTO-END:known-gaps -->
@@ -245,6 +247,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled`,
 | Unreleased | 2026-09-21 | feat | Checkmark text glyph replaced by the 1-bit Check icon (sizes 3/4/5) |
 | Unreleased | 2026-09-21 | fix | 44px hit area, unlabeled click fix, `helperText`, `errorMessage` |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | Disabled opacity applied once (the box no longer renders at about 25%); error mark tokenized to `--button-destructive-text` |
 
 <!-- AUTO-END:changelog -->
 

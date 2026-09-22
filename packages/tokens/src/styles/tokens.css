@@ -251,7 +251,30 @@
   /* Focus state tokens (global - same for both themes) */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
-  
+
+  /* Rule weight: the system draws exactly one hairline (replaces ad hoc 0.5px) */
+  --border-width-hairline: 1px;
+
+  /* Switch geometry (global.switch): track box, knob box and knob travel.
+     travel = track width - knob size - inset, so the two x offsets are the
+     only numbers the component needs. md/lg track heights alias the control
+     scale; sm's 24px track sits one step below it and has no other token. */
+  --switch-track-height-sm: 24px;
+  --switch-track-height-md: var(--control-height-sm);
+  --switch-track-height-lg: var(--control-height-md);
+  --switch-track-width-sm: var(--touch-target);
+  --switch-track-width-md: 56px;
+  --switch-track-width-lg: 72px;
+  --switch-knob-size-sm: 20px;
+  --switch-knob-size-md: 24px;
+  --switch-knob-size-lg: 32px;
+  --switch-knob-inset-sm: 2px;
+  --switch-knob-inset-md: 3px;
+  --switch-knob-inset-lg: 3px;
+  --switch-knob-travel-sm: 22px;
+  --switch-knob-travel-md: 29px;
+  --switch-knob-travel-lg: 37px;
+
   /* Animation/Duration tokens — aligned with tokens.json global.duration */
   --duration-instant: 0ms;
   --duration-fast: 120ms; /* plate hovers; was 150ms pre-merge */
@@ -333,13 +356,16 @@
   --border-error: #EF4444;
   --border-focus: #FBBF24;
 
+  /* Light theme: control rails (Switch off track, Slider rail) */
+  --control-track: #968A75; /* sepia-600: 3.31:1 on the page, 3.39:1 vs the white knob (sepia-300 was 1.16:1) */
+
   /* Light theme — form fields */
   --field-background: #FFFFFF;
   --field-border: #968A75; /* sepia-600: 3.3:1 on white, meets the 3:1 control-boundary rule */
   --field-border-hover: #695F4D;
   --field-border-focus: #FBBF24;
   --field-border-error: #DC2626;
-  --field-placeholder: #BFB4A3;
+  --field-placeholder: #695F4D; /* sepia-700: 6.28:1 on the white field, clears AA (sepia-500 was 2.04:1) */
   --field-background-error: #FEF2F2;
 
   /* Light theme — focus rings */
@@ -428,6 +454,9 @@
   --border-hairline: #2B2718; /* near-black chrome hairline (sepia-900) */
   --border-error: #EF4444;
   --border-focus: #FBBF24;
+
+  /* Dark theme: control rails (Switch off track, Slider rail) */
+  --control-track: #968A75; /* sepia-600: 5.34:1 on the page, 5.69:1 vs the knob (sepia-700 was 2.89:1) */
 
   /* Dark theme — form fields (portfolio ramp: idle hairline → hover mut → focus accent) */
   --field-background: #120D09;

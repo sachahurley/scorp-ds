@@ -42,7 +42,10 @@ type CommonProps = {
   /**
    * Marks an external destination: opens in a new tab (`target="_blank"`,
    * `rel="noopener noreferrer"`, both overridable), appends the ExternalLink
-   * glyph, and announces "(opens in new tab)" to screen readers.
+   * glyph, and announces "(opens in new tab)" to screen readers. Behaves the
+   * same in the `as` form: the new-tab attributes are passed to the custom
+   * component (router links forward them to the anchor they render), and
+   * anything in `asProps` overrides them.
    */
   external?: boolean;
   /** Additional CSS classes (size, margin, color overrides). */
@@ -103,8 +106,13 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
 
   if ("as" in rest && rest.as) {
     const { as: As, asProps } = rest as { as: ElementType; asProps?: Record<string, unknown> };
+    // `external` means the same thing in both forms: the glyph, the screen
+    // reader notice AND the new-tab attributes. Router links forward unknown
+    // props to their underlying anchor, so target/rel land on the real <a>.
+    // `asProps` still wins, so a consumer can opt out per link.
+    const externalProps = external ? { target: "_blank", rel: "noopener noreferrer" } : undefined;
     return (
-      <As ref={ref} className={classes} {...asProps}>
+      <As ref={ref} className={classes} {...externalProps} {...asProps}>
         {content}
       </As>
     );

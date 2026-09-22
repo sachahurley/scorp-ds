@@ -6,7 +6,7 @@ const meta: Meta<typeof Stack> = {
   component: Stack,
   tags: ['autodocs'],
   argTypes: {
-    gap: { control: 'select', options: ['none', '1', '2', '3', '4', '6', '8'] },
+    gap: { control: 'select', options: ['none', '1', '2', '3', '4', '5', '6', '8'] },
     axis: { control: 'select', options: ['vertical', 'horizontal'] },
   },
   parameters: { layout: 'centered' },

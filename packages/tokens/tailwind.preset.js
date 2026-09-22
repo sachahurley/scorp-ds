@@ -226,6 +226,10 @@ module.exports = {
         },
         // Brand accent (single role; theme eggs may override --accent at runtime)
         accent: 'var(--accent)',
+        // Unfilled control rail: Switch off track, Slider rail
+        control: {
+          track: 'var(--control-track)',
+        },
         // Fire ramp (theme-invariant dither-art sepia tones)
         fire: {
           bright: 'var(--fire-bright)',
@@ -254,6 +258,18 @@ module.exports = {
       // Font families from tokens
       fontFamily: {
         mono: 'var(--font-family-mono)',
+      },
+      // Font weights from tokens (global.font.weight). The scale is 400 / 500 /
+      // 700 only. There is no 600, so `font-semibold` is off-token.
+      fontWeight: {
+        regular: 'var(--font-weight-regular)',
+        normal: 'var(--font-weight-regular)',
+        medium: 'var(--font-weight-medium)',
+        bold: 'var(--font-weight-bold)',
+      },
+      // The system's single rule weight: `border-hairline`, `border-b-hairline`
+      borderWidth: {
+        hairline: 'var(--border-width-hairline)',
       },
       // Font sizes from tokens (matches tokens.css / tokens.json global.font.size)
       fontSize: {
