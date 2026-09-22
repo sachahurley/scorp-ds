@@ -11,26 +11,38 @@
  *
  * FEATURES:
  * - Scrim backdrop (surface.overlay), click or ESC to close
+ * - Visible close button (1-bit X, 44px target) in the top-right of the header band
  * - Focus moves onto the sheet on open and returns to the invoker on close
- * - Grabber affordance at the top seam
+ * - Focus trap: Tab and Shift+Tab cycle inside the sheet (it is aria-modal)
+ * - Grabber marker at the top seam. It is a static marker, NOT a drag handle:
+ *   there is no swipe or drag gesture, so every dismissal path is the scrim,
+ *   the close button, or Escape.
  * - Slides up with the slow duration token
  * - Body scroll is locked while open
  *
  * TOKENS USED:
  * - plate.round-lg-top (silhouette), surface.container-stroke (ring), surface.card (fill)
  * - surface.overlay (scrim), z-index.overlay / z-index.modal (layers)
- * - duration.slow (enter/exit)
+ * - duration.slow (enter/exit), duration.fast (close button hover)
+ * - touch.target (44px close button)
  */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { TuiIcon } from "./TuiIcon";
+import { useFocusTrap } from "../lib/use-focus-trap";
 
 export interface BottomSheetProps {
   /** Controls whether the sheet is visible. */
   isOpen: boolean;
-  /** Called when the user dismisses the sheet (scrim click or ESC). */
+  /** Called when the user dismisses the sheet (close button, scrim click or ESC). */
   onClose: () => void;
   /** Accessible name for the sheet dialog. */
   ariaLabel: string;
+  /**
+   * Accessible name for the close button. Override it when several sheets can
+   * be announced in the same view and "Close" alone would be ambiguous.
+   */
+  closeLabel?: string;
   /** Sheet content. */
   children: ReactNode;
 }
@@ -39,11 +51,12 @@ export interface BottomSheetProps {
  * BottomSheet Component
  *
  * @param isOpen - Whether the sheet is currently visible
- * @param onClose - Callback when the user dismisses (scrim click or ESC)
+ * @param onClose - Callback when the user dismisses (close button, scrim click or ESC)
  * @param ariaLabel - Accessible name announced for the dialog
+ * @param closeLabel - Accessible name for the close button (default "Close")
  * @param children - Sheet content
  */
-export function BottomSheet({ isOpen, onClose, ariaLabel, children }: BottomSheetProps) {
+export function BottomSheet({ isOpen, onClose, ariaLabel, closeLabel = "Close", children }: BottomSheetProps) {
   // Stay mounted while the exit animation plays; unmount on animationend so the
   // timing always matches the CSS duration token (no JS timer to drift).
   const [visible, setVisible] = useState(isOpen);
@@ -68,6 +81,10 @@ export function BottomSheet({ isOpen, onClose, ariaLabel, children }: BottomShee
       prevFocusRef.current = null;
     };
   }, [sheetMounted]);
+
+  // FOCUS TRAP: the sheet is aria-modal="true", so Tab and Shift+Tab must cycle
+  // inside it instead of reaching the page behind the scrim.
+  useFocusTrap(sheetRef, sheetMounted);
 
   // ESC closes the sheet, matching Modal behavior
   useEffect(() => {
@@ -121,9 +138,23 @@ export function BottomSheet({ isOpen, onClose, ariaLabel, children }: BottomShee
           if (closing) setVisible(false);
         }}
       >
-        <div className="plate-round-lg-top bg-[var(--surface-card)] px-5 pb-6 pt-2.5 flex flex-col items-center gap-3 max-h-[70vh]">
-          {/* Grabber affordance */}
-          <div className="w-9 h-1 bg-[var(--surface-container-stroke)]" aria-hidden="true" />
+        <div className="plate-round-lg-top bg-[var(--surface-card)] px-5 pb-6 pt-1 flex flex-col items-center gap-3 max-h-[70vh]">
+          {/* HEADER BAND: a full 44px row so the close button gets its touch
+              target without overlapping the content below it. The grabber is
+              centered in the band; it is a static seam marker, not a drag
+              handle (no drag gesture exists), which is why the sheet now ships
+              a real close control. */}
+          <div className="relative flex h-touch w-full shrink-0 items-center justify-center">
+            <div className="w-9 h-1 bg-[var(--surface-container-stroke)]" aria-hidden="true" />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label={closeLabel}
+              className="absolute right-0 top-0 inline-flex h-touch w-touch items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors [transition-duration:var(--duration-fast)] focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]"
+            >
+              <TuiIcon name="X" size="4" />
+            </button>
+          </div>
           {/* Scrollable content region (focusable for keyboard scrolling) */}
           <div className="w-full overflow-y-auto" tabIndex={0}>
             {children}

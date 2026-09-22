@@ -177,12 +177,39 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
     });
   };
 
-  const moveFocus = (delta: number) => {
+  // Disabled triggers are rendered but must never be a keyboard destination:
+  // selection follows focus here, so landing on one would also select it.
+  // The DOM is the source of truth (the context only tracks values), so we ask
+  // each rendered trigger whether it is disabled.
+  const isEnabled = (candidate: string) => {
+    const el = document.getElementById(`${baseId}-tab-${candidate}`) as HTMLButtonElement | null;
+    return el == null || !el.disabled;
+  };
+
+  /** First enabled value walking `delta` steps from `value`, wrapping; null if there is none. */
+  const nextEnabled = (delta: number): string | null => {
     const vals = listValuesRef.current;
     const i = vals.indexOf(value);
-    if (i < 0) return;
-    const next = vals[(i + delta + vals.length) % vals.length];
-    focusTab(next);
+    if (i < 0) return null;
+    for (let step = 1; step <= vals.length; step += 1) {
+      const candidate = vals[(((i + delta * step) % vals.length) + vals.length) % vals.length];
+      if (candidate !== value && isEnabled(candidate)) return candidate;
+    }
+    return null;
+  };
+
+  /** First enabled value scanning the strip from `from` toward `delta`. */
+  const edgeEnabled = (from: number, delta: number): string | null => {
+    const vals = listValuesRef.current;
+    for (let i = from; i >= 0 && i < vals.length; i += delta) {
+      if (isEnabled(vals[i])) return vals[i];
+    }
+    return null;
+  };
+
+  const moveFocus = (delta: number) => {
+    const next = nextEnabled(delta);
+    if (next) focusTab(next);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
@@ -200,14 +227,18 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
         e.preventDefault();
         moveFocus(-1);
         break;
-      case "Home":
+      case "Home": {
         e.preventDefault();
-        if (vals[0]) focusTab(vals[0]);
+        const first = edgeEnabled(0, 1);
+        if (first) focusTab(first);
         break;
-      case "End":
+      }
+      case "End": {
         e.preventDefault();
-        if (vals.length) focusTab(vals[vals.length - 1]);
+        const last = edgeEnabled(vals.length - 1, -1);
+        if (last) focusTab(last);
         break;
+      }
       default:
         break;
     }
@@ -225,6 +256,14 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
       disabled={disabled}
       className={cn(
         "-mb-px rounded-none border-b-2 px-4 py-2 font-mono text-sm transition-colors [transition-duration:var(--duration-normal)]",
+        // TAP TARGET: the trigger box is ~37px tall and its underline sets the
+        // strip's baseline, so growing it with padding would shift that line.
+        // A 44px-tall pseudo-element centered on the trigger raises the target
+        // without moving a pixel (the Toast inline-button recipe).
+        "relative before:content-[''] before:absolute before:inset-x-0 before:top-1/2 before:-translate-y-1/2 before:h-touch",
+        // FOCUS: inset box-shadow ring, the system recipe (outlines are
+        // swallowed by the plate clip elsewhere, so every control uses inset).
+        "focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]",
         isSelected
           ? "border-[var(--button-primary-background)] bg-transparent text-[var(--text-primary)]"
           : "border-transparent text-secondary-700 hover:text-[var(--text-primary)] dark:text-secondary-300",
