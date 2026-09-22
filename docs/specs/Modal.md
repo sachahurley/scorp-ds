@@ -14,6 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-09-22 |
+| API hash | `d20e4c2180a68d03` |
 
 ---
 

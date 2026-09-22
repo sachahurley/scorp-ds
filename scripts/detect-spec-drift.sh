@@ -67,7 +67,7 @@ check_dir() {
   local dir="$1"
   local layer="$2"
 
-  # A configured layer that does not exist is worth saying out loud — silence
+  # A configured layer that does not exist is worth saying out loud -- silence
   # here is what hid the primitives layer being skipped entirely.
   if [ ! -d "$dir" ]; then
     echo "  SKIPPED        $layer (no such directory: ${dir#$PROJECT_ROOT/})"
@@ -86,14 +86,39 @@ check_dir() {
     if [ ! -f "$spec_file" ]; then
       echo "  MISSING SPEC   $layer/$filename"
       DRIFT_COUNT=$((DRIFT_COUNT + 1))
-    elif [ "$source_file" -nt "$spec_file" ]; then
-      days=$(( ( $(date -r "$source_file" +%s) - $(date -r "$spec_file" +%s) ) / 86400 ))
-      echo "  SPEC OUTDATED  $layer/$filename  (source newer by $days days)"
+      continue
+    fi
+
+    # Foundation is not in the API surface manifest (it is tokens, not components),
+    # so it has no hash to compare and is reported as present only.
+    live=$(printf '%s' "$SURFACE" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+c = d['components'].get('$name')
+print(c['apiHash'] if c else '')
+" 2>/dev/null)
+    [ -z "$live" ] && continue
+
+    recorded=$(grep -m1 '^| API hash |' "$spec_file" | sed -E 's/.*\`([0-9a-f]{16})\`.*/\1/')
+
+    if [ -z "$recorded" ]; then
+      echo "  NO HASH        $layer/$filename  (spec has no API hash row; run stamp-spec-api-hash.mjs)"
+      DRIFT_COUNT=$((DRIFT_COUNT + 1))
+    elif [ "$recorded" != "$live" ]; then
+      echo "  SPEC OUTDATED  $layer/$filename  (spec records $recorded, source is $live)"
       DRIFT_COUNT=$((DRIFT_COUNT + 1))
     fi
   done < <(find "$dir" -maxdepth 2 \( -name "*.ts" -o -name "*.tsx" \) \
              ! -name "*.stories.*" ! -name "*.test.*" -print0 2>/dev/null)
 }
+
+SURFACE_FILE="$PROJECT_ROOT/docs/contracts/api-surface.json"
+if [ ! -f "$SURFACE_FILE" ]; then
+  echo "  ERROR: $SURFACE_FILE is missing." >&2
+  echo "  Run: node scripts/generate-api-surface.mjs" >&2
+  exit 1
+fi
+SURFACE=$(cat "$SURFACE_FILE")
 
 check_dir "$FOUNDATION_DIR" "foundation"
 check_dir "$PRIMITIVES_DIR" "primitives"
