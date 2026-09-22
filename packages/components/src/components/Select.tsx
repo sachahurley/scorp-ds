@@ -25,11 +25,20 @@
  */
 
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useId, type ReactNode, type SelectHTMLAttributes } from "react";
+import { FieldMessage, useFieldMessage } from "../lib/field";
 
 // Define the props interface for the Select component
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   size?: "small" | "medium" | "large";
+  /** Error styling without a message. Prefer `errorMessage` so users learn what to fix. */
   error?: boolean;
+  /** Hint shown under the trigger. Linked via `aria-describedby`. */
+  helperText?: ReactNode;
+  /**
+   * Validation message shown under the trigger. Sets the error state and
+   * `aria-invalid`, and replaces `helperText` while present.
+   */
+  errorMessage?: ReactNode;
   /**
    * Optional visible label; associates with the custom trigger via `htmlFor` / `id` on the button.
    */
@@ -48,10 +57,14 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
  * @param defaultValue - Uncontrolled default value
  * @param onChange - Change handler
  * @param label - Optional visible label for the custom trigger (preferred over relying on `aria-label` alone)
+ * @param helperText - Hint under the trigger
+ * @param errorMessage - Validation message under the trigger (implies `error`)
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
   size = "medium",
-  error = false,
+  error: errorProp = false,
+  helperText,
+  errorMessage,
   disabled = false,
   className = "",
   children,
@@ -61,9 +74,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   name,
   label,
   "aria-label": ariaLabel,
+  "aria-describedby": ariaDescribedBy,
   id: htmlId,
   ...props
 }, ref) {
+  const field = useFieldMessage({ error: errorProp, helperText, errorMessage, describedBy: ariaDescribedBy });
+  const error = field.invalid;
   const autoId = useId();
   const triggerId = htmlId ?? `${autoId}-trigger`;
   // Parse option elements from children
@@ -341,6 +357,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
         `}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        aria-invalid={error || undefined}
+        aria-describedby={field.describedBy}
         aria-label={
           label != null && label !== ""
             ? undefined
@@ -427,19 +445,23 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     </div>
   );
 
-  if (label == null || label === "") {
+  const hasLabel = label != null && label !== "";
+  if (!hasLabel && !field.hasMessage) {
     return <div className={`w-full ${className}`.trim()}>{triggerBlock}</div>;
   }
 
   return (
     <div className={`w-full space-y-1 ${className}`.trim()}>
-      <label
-        htmlFor={triggerId}
-        className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
-      >
-        {label}
-      </label>
+      {hasLabel && (
+        <label
+          htmlFor={triggerId}
+          className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+        >
+          {label}
+        </label>
+      )}
       {triggerBlock}
+      <FieldMessage {...field.message} />
     </div>
   );
 });

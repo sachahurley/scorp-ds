@@ -8,6 +8,8 @@
  * - small: 16px × 16px
  * - medium: 20px × 20px (default)
  * - large: 24px × 24px
+ * Every size gets an invisible 44×44px hit area centered on the circle (a
+ * pseudo-element, so layout is unchanged) to meet the touch-target rule.
  * 
  * STATES:
  * - unchecked: Default state with border
@@ -123,8 +125,10 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
 
     const hasLabel = label != null && label !== false && label !== '';
 
+    // HIT AREA: the wrapper carries a 44×44px pseudo-element centered on the
+    // circle. It sits inside the <label>, so a tap anywhere in it selects.
     const control = (
-      <>
+      <span className="relative inline-flex shrink-0 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-11 before:h-11">
         <input
           ref={ref}
           type="radio"
@@ -158,21 +162,21 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             `}
           />
         </span>
-      </>
+      </span>
     );
 
+    // Always a <label>: the native input is sr-only, so without one a click
+    // on the visible circle would never reach it.
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        {hasLabel ? (
-          <label
-            className={`inline-flex items-center gap-2 font-mono ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
-          >
-            {control}
+        <label
+          className={`inline-flex items-center gap-2 font-mono ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+        >
+          {control}
+          {hasLabel && (
             <span className={`${currentSizeStyles.label} text-[var(--text-primary)]`}>{label}</span>
-          </label>
-        ) : (
-          <span className="inline-flex items-center gap-2">{control}</span>
-        )}
+          )}
+        </label>
       </div>
     );
   }

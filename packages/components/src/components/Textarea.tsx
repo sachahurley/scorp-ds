@@ -20,11 +20,20 @@
  */
 
 import { forwardRef, useId, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { FieldMessage, useFieldMessage } from "../lib/field";
 
 // Define the props interface for the Textarea component
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   size?: "small" | "medium" | "large";
+  /** Error styling without a message. Prefer `errorMessage` so users learn what to fix. */
   error?: boolean;
+  /** Hint shown under the field (length, format). Linked via `aria-describedby`. */
+  helperText?: ReactNode;
+  /**
+   * Validation message shown under the field. Sets the error state and
+   * `aria-invalid`, and replaces `helperText` while present.
+   */
+  errorMessage?: ReactNode;
   /**
    * Optional visible label. When set, renders a `<label>` associated with the textarea via `htmlFor` / `id`.
    */
@@ -39,20 +48,27 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  * @param disabled - Whether textarea is disabled
  * @param className - Additional CSS classes to apply
  * @param label - Optional visible label wired to the control with matching `id`
+ * @param helperText - Hint under the field
+ * @param errorMessage - Validation message under the field (implies `error`)
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     { 
       size = "medium", 
-      error = false,
+      error: errorProp = false,
+      helperText,
+      errorMessage,
       disabled = false,
       className = "", 
       label,
       id: idProp,
+      "aria-describedby": ariaDescribedBy,
       ...props 
     },
     ref
   ) => {
+    const field = useFieldMessage({ error: errorProp, helperText, errorMessage, describedBy: ariaDescribedBy });
+    const error = field.invalid;
     const generatedId = useId();
     const controlId =
       idProp ?? (label != null && label !== "" ? generatedId : undefined);
@@ -99,25 +115,31 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={controlId}
           disabled={disabled}
+          aria-invalid={error || undefined}
+          aria-describedby={field.describedBy}
           className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
           {...props}
         />
       </div>
     );
 
-    if (label == null || label === "") {
+    const hasLabel = label != null && label !== "";
+    if (!hasLabel && !field.hasMessage) {
       return areaEl;
     }
 
     return (
       <div className="w-full space-y-1">
-        <label
-          htmlFor={controlId}
-          className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
-        >
-          {label}
-        </label>
+        {hasLabel && (
+          <label
+            htmlFor={controlId}
+            className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+          >
+            {label}
+          </label>
+        )}
         {areaEl}
+        <FieldMessage {...field.message} />
       </div>
     );
   }

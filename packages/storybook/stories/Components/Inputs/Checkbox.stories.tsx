@@ -9,6 +9,8 @@ const meta: Meta<typeof Checkbox> = {
   argTypes: {
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     error: { control: 'boolean' },
+    helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
+    errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
     disabled: { control: 'boolean' },
   },
   parameters: { layout: 'centered' },
@@ -32,10 +34,19 @@ export const Checked: Story = {
   },
 };
 
+export const HelperText: Story = {
+  name: 'Helper text',
+  args: {
+    label: 'Email me release notes',
+    helperText: 'About once a month. Unsubscribe any time.',
+    onCheckedChange: fn(),
+  },
+};
+
 export const Error: Story = {
   args: {
-    label: 'Must confirm',
-    error: true,
+    label: 'I accept the terms',
+    errorMessage: 'Accept the terms to create an account.',
     onCheckedChange: fn(),
   },
 };

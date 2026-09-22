@@ -18,6 +18,7 @@
  */
 
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
+import { FieldMessage, useFieldMessage } from "../lib/field";
 
 // Define the props interface for the Input component
 // Omit the native HTML 'size' attribute to avoid conflict with our custom size prop
@@ -30,7 +31,15 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
    * idle hairline → hover mut → focus accent.
    */
   variant?: "box" | "quiet";
+  /** Error styling without a message. Prefer `errorMessage` so users learn what to fix. */
   error?: boolean;
+  /** Hint shown under the field (format, constraints). Linked via `aria-describedby`. */
+  helperText?: ReactNode;
+  /**
+   * Validation message shown under the field. Sets the error state and
+   * `aria-invalid`, and replaces `helperText` while present.
+   */
+  errorMessage?: ReactNode;
   /**
    * Optional visible label. When set, renders a `<label>` associated with the input via `htmlFor` / `id`.
    * Prefer this or `aria-label` so the field is announced correctly by screen readers.
@@ -46,21 +55,28 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * @param disabled - Whether input is disabled
  * @param className - Additional CSS classes to apply
  * @param label - Optional visible label wired to the input with matching `id`
+ * @param helperText - Hint under the field
+ * @param errorMessage - Validation message under the field (implies `error`)
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     { 
       size = "medium", 
       variant = "box",
-      error = false,
+      error: errorProp = false,
+      helperText,
+      errorMessage,
       disabled = false,
       className = "", 
       label,
       id: idProp,
+      "aria-describedby": ariaDescribedBy,
       ...props 
     },
     ref
   ) => {
+    const field = useFieldMessage({ error: errorProp, helperText, errorMessage, describedBy: ariaDescribedBy });
+    const error = field.invalid;
     const generatedId = useId();
     const controlId =
       idProp ?? (label != null && label !== "" ? generatedId : undefined);
@@ -113,6 +129,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={controlId}
           disabled={disabled}
+          aria-invalid={error || undefined}
+          aria-describedby={field.describedBy}
           className={`${baseStyles} ${sizeStyles[size].replace("plate-round", "rounded-none")} !px-0 bg-transparent text-[var(--text-primary)] ${quietStyles} ${className}`}
           {...props}
         />
@@ -124,25 +142,31 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={controlId}
           disabled={disabled}
+          aria-invalid={error || undefined}
+          aria-describedby={field.describedBy}
           className={`${baseStyles} ${sizeStyles[size]} ${stateStyles} ${className}`}
           {...props}
         />
       </div>
     );
 
-    if (label == null || label === "") {
+    const hasLabel = label != null && label !== "";
+    if (!hasLabel && !field.hasMessage) {
       return inputEl;
     }
 
     return (
       <div className="w-full space-y-1">
-        <label
-          htmlFor={controlId}
-          className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
-        >
-          {label}
-        </label>
+        {hasLabel && (
+          <label
+            htmlFor={controlId}
+            className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
+          >
+            {label}
+          </label>
+        )}
         {inputEl}
+        <FieldMessage {...field.message} />
       </div>
     );
   }

@@ -22,3 +22,22 @@ describe("Checkbox", () => {
     expect(visual.className).toContain("--field-border-error");
   });
 });
+
+describe("Checkbox hit area and messages", () => {
+  afterEach(() => cleanup());
+
+  it("toggles from a click on the visual box when there is no visible label", () => {
+    const onCheckedChange = vi.fn();
+    render(<Checkbox aria-label="Select row" checked={false} onCheckedChange={onCheckedChange} />);
+    const visual = screen.getByRole("checkbox").nextElementSibling as HTMLElement;
+    fireEvent.click(visual);
+    expect(onCheckedChange).toHaveBeenCalledWith(true);
+  });
+
+  it("wires errorMessage to the input", () => {
+    render(<Checkbox label="Accept terms" errorMessage="Required to continue" />);
+    const input = screen.getByRole("checkbox", { name: /accept terms/i });
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAccessibleDescription("Required to continue");
+  });
+});

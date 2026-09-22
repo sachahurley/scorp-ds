@@ -34,3 +34,33 @@ it("quiet variant renders the underline recipe without the plate wrapper", async
   expect(el.className).not.toContain("plate-round");
   expect(el.parentElement?.className ?? "").not.toContain("plate-round");
 });
+
+describe("Input field messages", () => {
+  afterEach(() => cleanup());
+
+  it("describes the control with helperText", () => {
+    render(<Input label="Handle" helperText="Lowercase letters only" />);
+    const el = screen.getByLabelText(/handle/i);
+    expect(el).toHaveAccessibleDescription("Lowercase letters only");
+    expect(el).not.toHaveAttribute("aria-invalid");
+  });
+
+  it("errorMessage sets aria-invalid, replaces the helper, and keeps consumer describedby", () => {
+    render(
+      <>
+        <span id="extra">Extra</span>
+        <Input
+          aria-label="Email"
+          aria-describedby="extra"
+          helperText="We never share it"
+          errorMessage="Enter a valid email"
+        />
+      </>
+    );
+    const el = screen.getByRole("textbox", { name: /email/i });
+    expect(el).toHaveAttribute("aria-invalid", "true");
+    expect(el).toHaveAccessibleDescription("Extra Enter a valid email");
+    expect(screen.queryByText("We never share it")).toBeNull();
+    expect(el.parentElement?.className).toContain("--field-border-error");
+  });
+});

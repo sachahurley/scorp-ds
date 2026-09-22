@@ -181,6 +181,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | Small track 24px tall, below the 44px target | Plate clip moved to an inner track span; the button carries a 44px-tall hit area | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -192,6 +193,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | 44px hit area at every size |
 
 <!-- AUTO-END:changelog -->
 

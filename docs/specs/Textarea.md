@@ -177,6 +177,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | `error` was boolean only; no helper or error text, no aria-invalid | Added `helperText` and `errorMessage`, wired via aria-describedby; aria-invalid set when in error | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -188,6 +189,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 
 <!-- AUTO-END:changelog -->
 

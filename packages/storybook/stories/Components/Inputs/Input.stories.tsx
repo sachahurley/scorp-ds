@@ -14,6 +14,8 @@ const meta: Meta<typeof Input> = {
     label: { control: 'text', description: 'Visible label (recommended for a11y)' },
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     error: { control: 'boolean' },
+    helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
+    errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
     disabled: { control: 'boolean' },
     placeholder: { control: 'text' },
   },
@@ -39,12 +41,20 @@ export const WithValue: Story = {
   },
 };
 
+export const HelperText: Story = {
+  name: 'Helper text',
+  args: {
+    label: 'Handle',
+    placeholder: 'scorp',
+    helperText: 'Lowercase letters and numbers only.',
+  },
+};
+
 export const Error: Story = {
   args: {
-    label: 'Required field',
-    placeholder: 'Cannot be empty',
-    error: true,
-    defaultValue: '',
+    label: 'Email',
+    defaultValue: 'hello@',
+    errorMessage: 'Enter a full email address, like you@example.com.',
   },
 };
 

@@ -164,6 +164,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | `size` typed as `string`, typos compiled | Typed as `TuiIconSize` ("3" | "4" | "5" | "6" | "8"), exported | Resolved |
 | 2026-09-21 | `X` glyph (U+2717 ✗) is not in Fragment Mono; it fell back to a per-OS system font and rendered as a slanted hand-drawn tick in close buttons. | `X` is now drawn as inline SVG (square-cap strokes, currentColor) via `DRAWN_ICONS`; `TUI_ICON_GLYPHS.X` keeps the in-font `×` as a text-only fallback. | Resolved |
 | 2026-09-21 | 45 of 49 glyphs are not in Fragment Mono and render in fallback system fonts (Menlo, Apple Symbols, STIX Two Math on macOS; different fonts elsewhere), so icon appearance varies by OS. | All three: icons drawn as SVG; Scorp Symbols face for text glyphs; `audit:glyphs` in CI. Root cause also included Google Fonts' subsets dropping glyphs Fragment Mono has (→ ↗ ▼ ▲ ▶ ✓). | Resolved |
 
@@ -177,6 +178,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | `size` typed as `TuiIconSize` |
 | v3 | 2026-09-21 | feat | Icons redrawn as 1-bit 7x7 pixel art (`TUI_ICON_BITMAPS`), replacing the line-drawn set. |
 | v2 | 2026-09-21 | feat | All 49 icons drawn as SVG (`TUI_ICON_DRAWINGS`); text forms render via the Scorp Symbols face; glyph audit in CI. |
 | v1.1 | 2026-09-21 | fix | `X` renders as a drawn SVG close mark instead of the fallback-font ✗ glyph. |

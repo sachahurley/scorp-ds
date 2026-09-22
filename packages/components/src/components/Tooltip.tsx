@@ -16,17 +16,44 @@
  * - Delay for show/hide (prevents accidental triggers)
  * - Max width constraint
  * - Full light/dark theme support
- * - Accessible (ARIA attributes)
+ *
+ * ACCESSIBILITY (WCAG 2.1.1, 1.4.13):
+ * - Opens on keyboard focus as well as hover; closes on blur.
+ * - Escape dismisses it without moving focus or the pointer.
+ * - Hoverable: the pointer can travel from the trigger onto the tooltip (a
+ *   transparent bridge spans the gap) without it closing.
+ * - The trigger is described by the tooltip via `aria-describedby`. That
+ *   wiring needs a single element child (a Button, a link); the tooltip
+ *   still opens for other children but can't describe them.
+ * - Content is for supplementary hints only: never put the only copy of
+ *   essential information, or anything interactive, in a tooltip.
  */
 
-import { useState, useRef, useEffect, type ReactNode } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type FocusEvent,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
 export interface TooltipProps {
+  /** Short supplementary hint. Plain text; no links or buttons. */
   content: ReactNode;
+  /** The trigger. Pass one focusable element so keyboard users can open the tooltip and hear it. */
   children: ReactNode;
+  /** Side of the trigger the tooltip sits on (default: "top"). */
   position?: "top" | "bottom" | "left" | "right";
-  delay?: number; // Delay in milliseconds before showing tooltip (default: 200ms)
-  maxWidth?: string; // Max width constraint (default: "200px")
+  /** Milliseconds before showing on hover or focus (default: 200). */
+  delay?: number;
+  /** Max width of the balloon, any CSS length (default: "200px"). */
+  maxWidth?: string;
+  /** Extra classes for the wrapper (e.g. a width class for a full-width trigger). */
   className?: string;
 }
 
@@ -50,39 +77,65 @@ export function Tooltip({
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fadeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const tooltipId = useId();
 
-  // Handle mouse enter - start delay timer
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+  const clearTimers = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (fadeRef.current) clearTimeout(fadeRef.current);
+  };
+
+  // Show after the delay (hover or focus)
+  const show = () => {
+    clearTimers();
     timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
       // Small delay before actually showing to allow positioning calculation
-      setTimeout(() => setShowTooltip(true), 50);
+      fadeRef.current = setTimeout(() => setShowTooltip(true), 50);
     }, delay);
   };
 
-  // Handle mouse leave - hide immediately
-  const handleMouseLeave = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+  // Hide immediately (pointer leaves, focus leaves, Escape)
+  const hide = useCallback(() => {
+    clearTimers();
     setIsVisible(false);
     setShowTooltip(false);
+  }, []);
+
+  // Blur only hides when focus leaves the wrapper entirely
+  const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
+    if (!wrapperRef.current?.contains(e.relatedTarget as Node | null)) hide();
   };
 
-  // Cleanup timeout on unmount
+  // Escape dismisses from anywhere while open (1.4.13 "dismissible")
   useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+    if (!isVisible) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") hide();
     };
-  }, []);
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isVisible, hide]);
+
+  // Cleanup timeouts on unmount
+  useEffect(() => clearTimers, []);
+
+  // Describe the trigger while the tooltip is open. Only possible when the
+  // child is a single element we can clone.
+  const trigger = isValidElement(children)
+    ? cloneElement(children as ReactElement<{ "aria-describedby"?: string }>, {
+        "aria-describedby":
+          [
+            (children as ReactElement<{ "aria-describedby"?: string }>).props["aria-describedby"],
+            isVisible ? tooltipId : undefined,
+          ]
+            .filter(Boolean)
+            .join(" ") || undefined,
+      })
+    : children;
 
   // POSITION STYLES - Positioning tooltip relative to trigger.
   // The container needs w-max: an absolutely-positioned box's auto width is
@@ -118,6 +171,16 @@ export function Tooltip({
     right: "right-full top-1/2 -translate-y-1/2 translate-x-[5px] rotate-90",
   };
 
+  // HOVER BRIDGE: transparent strip filling the 8px gap between trigger and
+  // balloon, so the pointer can cross onto the tooltip without leaving the
+  // wrapper (the tooltip is a DOM child of the wrapper).
+  const bridgePlacement = {
+    top: "top-full inset-x-0 h-2",
+    bottom: "bottom-full inset-x-0 h-2",
+    left: "left-full inset-y-0 w-2",
+    right: "right-full inset-y-0 w-2",
+  };
+
   return (
     <div
       ref={wrapperRef}
@@ -126,16 +189,19 @@ export function Tooltip({
       // centers on the stretched wrapper, not the trigger. Pass a width class
       // via `className` if the trigger itself is full-width.
       className={`relative inline-block w-fit ${className}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={handleBlur}
     >
       {/* Trigger Element */}
-      {children}
+      {trigger}
 
       {/* Tooltip */}
       {isVisible && (
         <div
           ref={tooltipRef}
+          id={tooltipId}
           role="tooltip"
           className={`
             absolute
@@ -144,10 +210,11 @@ export function Tooltip({
             z-[var(--z-index-tooltip)]
             ${showTooltip ? "opacity-100" : "opacity-0"}
             transition-opacity [transition-duration:var(--duration-fast)]
-            pointer-events-none
           `}
           style={{ maxWidth }}
         >
+          <span className={`absolute ${bridgePlacement[position]}`} aria-hidden="true" />
+
           {/* Tooltip Content — plate ring recipe (stroke layer + fill inset 1px) */}
           <div className="plate-round p-px bg-[var(--surface-container-stroke)]">
             <div className="plate-round bg-[var(--surface-card)] min-w-16 px-3 py-2 text-center font-mono text-xs text-[var(--text-primary)] whitespace-normal">
