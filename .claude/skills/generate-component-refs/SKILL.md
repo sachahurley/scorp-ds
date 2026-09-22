@@ -309,7 +309,7 @@ To use these references in a consumer project:
 ## Important
 
 - **Resolve all values.** The entire purpose of these files is that the consuming agent has no access to source. Every token must show its concrete value.
-- **No spec automation markers.** These files must NOT contain `AUTO-START`, `AUTO-END`, `HUMAN-SECTION`, Notion page IDs, version tracking, or coverage matrices.
+- **No spec automation markers.** These files must NOT contain `AUTO-START`, `AUTO-END`, `HUMAN-SECTION`, version tracking, or coverage matrices.
 - **Skip drafts.** Components in draft status are not stable enough for consumer guidance.
 - **Realistic examples only.** Code examples must use real token names and realistic prop combinations.
 - **One file per widget class.** If a file exports multiple widget classes (rare), generate one reference per class.

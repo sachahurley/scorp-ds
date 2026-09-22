@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 /**
  * Generates draft docs/specs/*.md files from component + foundation sources.
- * Local-only (does not sync Notion). Re-run after large API changes; refine via /update-spec.
+ * The skeleton comes from .claude/shared/spec-template*.md (Component row, "Last updated",
+ * `<!-- HUMAN-SECTION:* (preserved across auto-updates) -->` markers, 44x44 touch target), so
+ * keep those templates as the single source for spec layout. The markdown in docs/specs/ is the
+ * only documentation copy. Re-run after large API changes; refine via /update-spec.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -9,7 +12,6 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const PREFIX = "Scorp";
 const DATE = new Date().toISOString().slice(0, 10);
 
 const COMPONENTS_DIR = path.join(ROOT, "packages/components/src/components");
@@ -60,7 +62,7 @@ const CATEGORY_BY_COMPONENT = {
 
 function extractIntent(source) {
   const m = source.match(/^\s*\/\*\*([\s\S]*?)\*\//);
-  if (!m) return "[TODO: describe intent — preserved on /update-spec runs]";
+  if (!m) return "[TODO: describe intent, preserved on /update-spec runs]";
   return m[1]
     .replace(/^\s*\* ?/gm, "")
     .replace(/\n{3,}/g, "\n\n")
@@ -70,7 +72,6 @@ function extractIntent(source) {
 function fillWidgetTemplate(template, vars) {
   return template
     .replaceAll("{ComponentName}", vars.name)
-    .replaceAll("{Prefix}", PREFIX)
     .replaceAll("{layer}", "component")
     .replaceAll("{category}", vars.category)
     .replaceAll("{file_path}", vars.filePath)

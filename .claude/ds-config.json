@@ -12,10 +12,6 @@
     "storybook": "@scorp-ds/storybook",
     "site": "@scorp-ds/site"
   },
-  "notion": {
-    "databaseName": "Scorp DS Component Specs",
-    "parentPageId": "3e29a6335da181be8280c9bfc8730512"
-  },
   "paths": {
     "foundation": "packages/tokens/src",
     "components": "packages/components/src/components",

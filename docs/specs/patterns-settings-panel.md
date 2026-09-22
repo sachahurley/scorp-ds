@@ -1,28 +1,29 @@
 # Pattern: Settings panel
 
-> Pattern spec — not an exported component. Story: `Patterns/SettingsPanel`.
+> Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
 
 ## Status
 
 | Field | Value |
 |-------|-------|
-| Widget | `PatternSettingsPanel` |
+| Pattern | `Patterns/SettingsPanel` (story-only, not an exported component) |
 | Layer | `pattern` |
 | Category | `Patterns` |
 | File | `packages/storybook/stories/Patterns/SettingsPanel.stories.tsx` |
 | Story | `Patterns/SettingsPanel` |
 | Version | `v1` |
 | Status | `draft` |
-| Last synced | 2026-04-03 |
-| Notion Page | https://www.notion.so/3e29a6335da18154b397f15127c41c97 |
+| Last updated | 2026-09-22 |
 
 ---
 
 ## Intent
 
-Demonstrates a **single-card settings surface**: grouped fields (text, select), a **notifications** subsection with toggles and checkboxes, and **footer actions** (reset + save).
+<!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-Shows recommended spacing (`Stack`), semantic tokens only, and TUI-style hierarchy without new primitives.
+A single-card settings surface: a group of profile fields (two text inputs and a select), a notifications subsection with a switch and checkboxes, and footer actions (reset and save). It is the reference for spacing hierarchy with `Stack` (tight within a group, loose between groups) and for building product forms from existing components and semantic tokens without new primitives.
+
+<!-- /HUMAN-SECTION:intent -->
 
 ---
 
@@ -30,33 +31,57 @@ Shows recommended spacing (`Stack`), semantic tokens only, and TUI-style hierarc
 
 | Building block | Role |
 |----------------|------|
-| `Card` | Title + subtitle + body + `footerContent` actions. |
-| `Stack` | Vertical rhythm between field groups. |
-| `Input` | Display name, workspace slug. |
-| `Select` | Locale. |
-| `Switch` | Binary notification preference. |
-| `Checkbox` | Optional channels. |
-| `Button` | Ghost reset + primary save in footer. |
+| `Card` | `title="Workspace"`, `subtitle="Profile, locale, and alert defaults"`, body, and `footerContent` with the actions. `className="flex w-full flex-col"`. |
+| `Stack` | Outer `gap="6"` between groups; `gap="3"` inside the profile group; `gap="4"` inside notifications. |
+| `Input` | "Display name" and "Workspace slug", both `size="md"` with `defaultValue`. |
+| `Select` | "Locale", `size="md"`, native `<option>` children (English, Français). |
+| Section rule | Story-local `div` with a 0.5px top border in `--surface-container-stroke`, `pt-4`, and a `text-xs uppercase` "Notifications" label. |
+| `Switch` | "Email digests" (`defaultChecked`). |
+| `Checkbox` | "Push for deploy failures" (`defaultChecked`) and "Marketing updates". |
+| `Button` | Footer, right-aligned with `gap-2`: `variant="outline"` "Reset" then `variant="primary"` "Save changes", both `size="sm"`. |
 
 ---
 
 ## Storybook
 
-- **AccountPreferences** — full-screen story with `max-w-xl` centered column on `surface-page`.
+- **AccountPreferences** ("Account & notifications"): fullscreen story, `max-w-xl` centered column on `--surface-page`.
+- **Theme:** Storybook **Theme** toolbar (sun/moon) for light/dark.
+- **Test-runner:** included in `npm run test-storybook:ci` (axe on the composed story, both themes).
 
 ---
 
 ## Accessibility notes
 
-- Every input uses `label` or associated naming via components.
-- Footer buttons are explicit `type="button"` for Storybook (non-submitting).
+- Every field has a visible `label` wired by the component (`Input`, `Select`, `Switch`, `Checkbox`).
+- Footer buttons are explicit `type="button"` so the story does not submit; in product code wrap the body in a `<form>` and make Save `type="submit"`.
+- The "Notifications" label is a styled `<p>`, not a heading or `<legend>`; in product code use a `<fieldset>` with a `<legend>` so the group is announced.
+- Switch and Checkbox carry 44px hit areas; the `sm` footer buttons (32px) do not.
 
 ---
 
-## Storybook
+## Known Gaps & Amendments
 
-- **Theme:** use the Storybook **Theme** toolbar (sun/moon) for light/dark.
-- **Test-runner:** included in `npm run test-storybook:ci` (axe on the composed story).
+<!-- AUTO-START:known-gaps -->
+
+| Date | Issue | Resolution | Status |
+|------|-------|------------|--------|
+| 2026-09-22 | The notifications group has no `fieldset` / `legend` or heading semantics, and the section rule is hand-rolled instead of `Divider` | None yet | open |
+
+<!-- AUTO-END:known-gaps -->
+
+---
+
+## Changelog
+
+<!-- AUTO-START:changelog -->
+
+| Version | Date | Type | Summary |
+|---------|------|------|---------|
+| Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+
+<!-- AUTO-END:changelog -->
+
+---
 
 ## Reference
 

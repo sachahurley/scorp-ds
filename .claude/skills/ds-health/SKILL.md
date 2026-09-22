@@ -1,6 +1,6 @@
 ---
 name: ds-health
-description: Run a full health check across all design system layers — specs, design tokens, storybook, Notion sync, static analysis, tests, and Notion link coverage. Produces a dashboard-style report with prioritized action items.
+description: Run a full health check across all design system layers: spec drift, design tokens, storybook, spec staleness vs source, static analysis, tests, and hardcoded values. Produces a dashboard-style report with prioritized action items.
 argument-hint: "[quick | tokens | <empty for all>]"
 allowed-tools: Read, Grep, Glob, Bash
 ---
@@ -53,13 +53,13 @@ Status:
 - WARN if 1-5 violations
 - FAIL if 6+ violations
 
-### Check 4: Notion Sync Staleness
+### Check 4: Spec Staleness vs Source
 
-Read every spec file in `docs/specs/*.md`. For each spec, extract "Last synced" date and compare against the source file's last git commit date.
+Read every spec file in `docs/specs/*.md`. For each spec, extract the "Last updated" date from the Status table (older specs may still say "Last synced"; treat it the same) and compare against the source file's last git commit date.
 
 Flag as stale if:
-- The source file commit date is after the "Last synced" date, OR
-- The "Last synced" date is more than 30 days before today
+- The source file commit date is after the "Last updated" date, OR
+- The "Last updated" date is more than 30 days before today
 
 Status:
 - OK if 0 stale specs
@@ -107,7 +107,7 @@ Status:
 | Spec drift           | ✓ OK    | 82/82 up to date                    |
 | Design token docs    | ⚠ WARN  | 2 missing from docs                 |
 | Storybook tokens     | ✓ OK    | 0 violations across 47 files        |
-| Notion sync          | ⚠ WARN  | 5 stale (3 code drift, 2 time)      |
+| Spec staleness       | ⚠ WARN  | 5 stale (3 code drift, 2 time)      |
 | Static analysis      | ✓ OK    | No issues found                     |
 | Tests                | ✓ OK    | 148 passed                          |
 | Hardcoded values     | ✓ OK    | 0 violations in components          |
@@ -117,7 +117,7 @@ Status:
 > Only list items for FAIL and WARN statuses. Omit if everything is OK.
 
 1. **Design token docs** — 2 tokens in code missing from design-tokens.md. Run `/token-audit` for details.
-2. **Notion sync** — 5 specs are stale. Run `/sync-specs <name1> <name2> ...`.
+2. **Spec staleness**: 5 specs are older than their source. Run `/sync-specs` or `/update-spec <name>` for each.
 ```
 
 ## Important
@@ -131,6 +131,6 @@ Status:
 
 - `/token-audit` — Deep dive on design token doc sync
 - `/storybook-audit` — Deep dive on storybook token compliance
-- `/sync-specs` — Sync stale spec docs to Notion
+- `/sync-specs`: Batch-update stale specs in docs/specs/
 - `/review-component` — Audit a single component for CLAUDE.md compliance
 - `/a11y-audit` — WCAG AA accessibility audit
