@@ -2,13 +2,20 @@
  * CASE STUDY BLOCKS
  *
  * The long-form section library upstreamed from the portfolio's case-study
- * pages: a typed, data-driven set of nine blocks (meta grid, headlines,
- * prose, placeholder figures with wide/full breakouts, callout grids,
- * numbered insights, pull quotes, definition lists). Author content as a
- * `CaseStudyBlock[]` array; one renderer draws them all.
+ * pages: a typed, data-driven set of eleven blocks (meta grid, headlines,
+ * prose, figures with wide/full breakouts, box-drawing diagrams, live
+ * slots, callout grids, numbered insights, pull quotes, definition lists).
+ * Author content as a `CaseStudyBlock[]` array; one renderer draws them all.
+ *
+ * Figures degrade in one direction: every figure block renders the hatch
+ * placeholder until it is given real content (an `src`, or a filled slot),
+ * so a page can be laid out before its art exists and swapped a figure at
+ * a time.
  *
  * Don't use this for: app UI or dashboards — these are editorial layout
  * blocks for narrative pages. Compose app screens from components instead.
+ * The `slot` block is the escape hatch when a page needs a live component
+ * inside the narrative: the page owns that markup, not this library.
  *
  * TOKENS USED:
  * - plate.round + border.hairline (figure/placeholder ring recipe)
@@ -30,8 +37,49 @@ export type CaseStudyBlock =
   | { type: "meta"; items: { label: string; value: string }[] }
   | { type: "headline"; kicker?: string; title: string; text?: string }
   | { type: "prose"; text: string }
-  | { type: "image"; aspect?: string; caption?: string; width?: "wide" | "full" }
-  | { type: "imagePair"; captions?: [string, string]; width?: "wide" | "full" }
+  | {
+      type: "image";
+      aspect?: string;
+      caption?: string;
+      width?: "wide" | "full";
+      /** Real artwork. Omit for the hatch placeholder. */
+      src?: string;
+      /** Alt text. Empty string marks the image decorative (the default when
+       *  a caption already describes it). */
+      alt?: string;
+    }
+  | {
+      type: "imagePair";
+      captions?: [string, string];
+      width?: "wide" | "full";
+      /** Real artwork per side; either entry may be omitted for the placeholder. */
+      srcs?: [string | undefined, string | undefined];
+      alts?: [string | undefined, string | undefined];
+    }
+  | {
+      /** A box-drawing / monospace diagram, rendered as preformatted text
+       *  rather than an image so it stays selectable and retints with the
+       *  theme. Pair with @scorp-ds/tui-art to generate the string. */
+      type: "ascii";
+      text: string;
+      caption?: string;
+      width?: "wide" | "full";
+      /** What the diagram says, for screen readers, which cannot read box
+       *  characters. Falls back to the caption. */
+      label?: string;
+    }
+  | {
+      /** A live region the page fills via the `slots` prop — a component
+       *  specimen, a chart, an embed. Renders the hatch placeholder when the
+       *  named slot is empty. */
+      type: "slot";
+      name: string;
+      caption?: string;
+      width?: "wide" | "full";
+      /** Reserve space at the placeholder stage; omit once the slot is filled
+       *  and should size to its content. */
+      aspect?: string;
+    }
   | { type: "callouts"; items: { title: string; text: string }[] }
   | { type: "insights"; items: { title: string; text: string }[] }
   | { type: "quote"; text: string; name?: string; role?: string; image?: string }
@@ -59,26 +107,58 @@ const breakClass = (w: BreakWidth) =>
       ? " [--csb-bw:calc(100cqw-48px)] w-[var(--csb-bw)] ml-[calc((100%-var(--csb-bw))/2)]"
       : "";
 
-/** Hatched media placeholder on the plate ring recipe. */
-function Placeholder({
+/** The shared figure shell: hairline plate ring, optional breakout, caption. */
+function Figure({
+  caption,
+  width,
+  className = "",
+  children,
+}: {
+  caption?: string;
+  width?: BreakWidth;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <figure className={`my-11${breakClass(width)} ${className}`}>
+      <div className="plate-round p-px bg-[var(--border-hairline)]">{children}</div>
+      {caption && <figcaption className={`mt-2 text-xs ${LABEL_TEXT}`}>{caption}</figcaption>}
+    </figure>
+  );
+}
+
+/** A figure that shows real artwork when given an `src` and the hatch
+ *  placeholder until then. */
+function Media({
+  src,
+  alt,
   aspect,
   caption,
   width,
 }: {
+  src?: string;
+  alt?: string;
   aspect?: string;
   caption?: string;
   width?: BreakWidth;
 }) {
   return (
-    <figure className={`my-11${breakClass(width)}`}>
-      <div className="plate-round p-px bg-[var(--border-hairline)]">
+    <Figure caption={caption} width={width}>
+      {src ? (
+        <img
+          src={src}
+          // A captioned figure already names itself; alt would repeat it.
+          alt={alt ?? ""}
+          className="plate-round block w-full"
+          style={{ aspectRatio: aspect ?? "16 / 9", objectFit: "cover" }}
+        />
+      ) : (
         <div
           className="plate-round w-full"
           style={{ aspectRatio: aspect ?? "16 / 9", ...HATCH }}
         />
-      </div>
-      {caption && <figcaption className={`mt-2 text-xs ${LABEL_TEXT}`}>{caption}</figcaption>}
-    </figure>
+      )}
+    </Figure>
   );
 }
 
@@ -92,7 +172,7 @@ function TitledItem({ title, text }: { title: ReactNode; text: ReactNode }) {
   );
 }
 
-function Block({ b }: { b: CaseStudyBlock }) {
+function Block({ b, slots }: { b: CaseStudyBlock; slots?: CaseStudySlots }) {
   switch (b.type) {
     case "meta":
       return (
@@ -118,14 +198,53 @@ function Block({ b }: { b: CaseStudyBlock }) {
     case "prose":
       return <p className={`my-7 text-base leading-relaxed ${BODY_TEXT}`}>{b.text}</p>;
     case "image":
-      return <Placeholder aspect={b.aspect} caption={b.caption} width={b.width} />;
+      return (
+        <Media
+          src={b.src}
+          alt={b.alt}
+          aspect={b.aspect}
+          caption={b.caption}
+          width={b.width}
+        />
+      );
     case "imagePair":
       return (
         <div className={`my-11 grid grid-cols-1 gap-3.5 sm:grid-cols-2${breakClass(b.width)}`}>
-          <Placeholder aspect="4 / 3" caption={b.captions?.[0]} />
-          <Placeholder aspect="4 / 3" caption={b.captions?.[1]} />
+          {([0, 1] as const).map((i) => (
+            <Media
+              key={i}
+              aspect="4 / 3"
+              src={b.srcs?.[i]}
+              alt={b.alts?.[i]}
+              caption={b.captions?.[i]}
+            />
+          ))}
         </div>
       );
+    case "ascii":
+      // role="img" because box-drawing characters are noise read aloud; the
+      // label carries the meaning instead.
+      return (
+        <Figure caption={b.caption} width={b.width}>
+          <pre
+            role="img"
+            aria-label={b.label ?? b.caption ?? "diagram"}
+            className={`plate-round m-0 overflow-x-auto p-5 text-xs leading-snug ${BODY_TEXT}`}
+          >
+            {b.text}
+          </pre>
+        </Figure>
+      );
+    case "slot": {
+      const filled = slots?.[b.name];
+      return filled ? (
+        <Figure caption={b.caption} width={b.width}>
+          <div className="plate-round overflow-hidden">{filled}</div>
+        </Figure>
+      ) : (
+        <Media aspect={b.aspect} caption={b.caption} width={b.width} />
+      );
+    }
     case "callouts":
       // Subgrid rows keep every body starting on the same line however the
       // titles wrap; browsers without subgrid stack per column.
@@ -184,23 +303,30 @@ function Block({ b }: { b: CaseStudyBlock }) {
   }
 }
 
+/** Live content for `slot` blocks, keyed by the block's `name`. */
+export type CaseStudySlots = Record<string, ReactNode>;
+
 /**
  * CaseStudyBlocks Component
  *
  * @param blocks - The page's sections in order (see {@link CaseStudyBlock})
+ * @param slots - Live content for `slot` blocks; a name with no entry falls
+ *   back to the hatch placeholder
  * @param className - Additional classes on the wrapper (e.g. a column width)
  */
 export function CaseStudyBlocks({
   blocks,
+  slots,
   className = "",
 }: {
   blocks: CaseStudyBlock[];
+  slots?: CaseStudySlots;
   className?: string;
 }) {
   return (
     <div className={`font-mono ${className}`}>
       {blocks.map((b, i) => (
-        <Block key={i} b={b} />
+        <Block key={i} b={b} slots={slots} />
       ))}
     </div>
   );
