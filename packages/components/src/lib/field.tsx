@@ -69,7 +69,9 @@ export function FieldMessage({
     <p
       id={id}
       className={`font-mono text-xs ${
-        tone === "error" ? "text-error-700 dark:text-error-400" : "text-[var(--text-secondary)]"
+        // Helper uses explicit steps, not --text-secondary: that token is
+        // secondary-600 in light, 3.3:1 on the page, below AA for 12px text.
+        tone === "error" ? "text-error-700 dark:text-error-400" : "text-secondary-700 dark:text-secondary-500"
       } ${className}`}
     >
       {tone === "error" && <span aria-hidden="true">[er] </span>}

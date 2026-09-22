@@ -8,12 +8,14 @@
  * - small: 16px × 16px
  * - medium: 20px × 20px (default)
  * - large: 24px × 24px
- * Every size gets an invisible 44×44px hit area centered on the circle (a
+ * SHAPE: the stepped plate silhouette (--plate-round), same as Checkbox;
+ * checked shows a square dot where Checkbox shows a check.
+ * Every size gets an invisible 44×44px hit area centered on the box (a
  * pseudo-element, so layout is unchanged) to meet the touch-target rule.
  * 
  * STATES:
  * - unchecked: Default state with border
- * - checked: Filled with primary color, inner dot
+ * - checked: Filled with primary color, inner square dot
  * - disabled: Reduced opacity, not interactive
  * - error: Red border to indicate validation issues
  * 
@@ -69,50 +71,42 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     const sizeStyles = {
       small: {
         radio: "w-4 h-4",                          // 16px × 16px
-        dot: "w-1.5 h-1.5",                       // 6px inner dot
+        dot: "w-1.5 h-1.5",                       // 6px square dot
         label: "text-sm",                         // 14px text
       },
       medium: {
         radio: "w-5 h-5",                         // 20px × 20px
-        dot: "w-2 h-2",                           // 8px inner dot
+        dot: "w-2 h-2",                           // 8px square dot
         label: "text-sm",                         // 14px text
       },
       large: {
         radio: "w-6 h-6",                         // 24px × 24px
-        dot: "w-2.5 h-2.5",                       // 10px inner dot
+        dot: "w-2.5 h-2.5",                       // 10px square dot
         label: "text-sm",                         // 14px text
       },
     };
 
     const currentSizeStyles = sizeStyles[size];
 
-    // STATE STYLES - Color combinations for different states using SEMANTIC TOKENS
-    // Priority: error > disabled > checked > default
-    // Includes hover states for unchecked radios
-    // Includes focus states with ring
-    // Focus ring lives on the visual (peer of native input) so only one radio is exposed to assistive tech.
-    // Selection is rendered from the NATIVE input via peer-checked, so both
+    // PLATE RING RECIPE: same silhouette as Checkbox (the stepped
+    // --plate-round corners; Scorp DS has no circles). Outer layer is the
+    // border color clipped to the plate, inner layer the fill clipped 1px
+    // inset. Checked floods both with the primary fill and reveals a square
+    // dot, so radio (dot) and checkbox (check) still read differently.
+    // Selection renders from the NATIVE input via peer-checked, so both
     // controlled (`checked`) and uncontrolled (`defaultChecked` + group name)
-    // radios show state — a JS-only visual misses native group deselection.
-    const radioStyles = error
-      ? `
-        border-[var(--field-border-error)]
-        bg-[var(--field-background)] hover:bg-[var(--field-background-error)]
-        peer-checked:bg-[var(--field-border-error)]
-        transition-colors [transition-duration:var(--duration-fast)]
-      `
-      : `
-        border-[var(--field-border)] hover:border-[var(--field-border-hover)]
-        bg-[var(--field-background)]
-        peer-checked:border-[var(--button-primary-background)]
-        peer-checked:bg-[var(--button-primary-background)]
-        peer-checked:hover:bg-[var(--button-primary-background-hover)]
-        transition-colors [transition-duration:var(--duration-fast)]
-      `;
+    // radios show state; a JS-only visual misses native group deselection.
+    const ringStyles = error
+      ? 'bg-[var(--field-border-error)]'
+      : `bg-[var(--field-border)] hover:bg-[var(--field-border-hover)]
+         peer-checked:bg-[var(--button-primary-background)]
+         peer-checked:hover:bg-[var(--button-primary-background-hover)]`;
 
+    // Focus: inset ring on the plate (the clip swallows outside rings).
+    // Lives on the visual so only the native input is exposed to assistive tech.
     const focusPeerRing = error
-      ? `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-error)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`
-      : `peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--focus-ring-primary)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--focus-offset-color)]`;
+      ? 'peer-focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-error)]'
+      : 'peer-focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]';
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
@@ -126,7 +120,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     const hasLabel = label != null && label !== false && label !== '';
 
     // HIT AREA: the wrapper carries a 44×44px pseudo-element centered on the
-    // circle. It sits inside the <label>, so a tap anywhere in it selects.
+    // box. It sits inside the <label>, so a tap anywhere in it selects.
     const control = (
       <span className="relative inline-flex shrink-0 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-11 before:h-11">
         <input
@@ -142,31 +136,39 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         <span
           aria-hidden="true"
           className={`
-            relative inline-flex shrink-0 items-center justify-center
+            plate-round p-px inline-flex shrink-0
             ${currentSizeStyles.radio}
-            rounded-full
-            border-2
+            transition-colors [transition-duration:var(--duration-fast)]
             ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
-            ${radioStyles}
+            ${ringStyles}
+            ${error ? 'peer-checked:[&>span]:bg-[var(--field-border-error)]' : 'peer-checked:[&>span]:bg-[var(--button-primary-background)]'}
+            peer-checked:[&>span>span]:opacity-100
             ${focusPeerRing}
-            peer-checked:[&>span]:opacity-100
           `}
         >
-          {/* Inner dot — revealed by peer-checked on the outer span */}
           <span
             className={`
-              ${currentSizeStyles.dot}
-              rounded-full opacity-0
-              transition-opacity [transition-duration:var(--duration-fast)]
-              ${error ? 'bg-white' : 'bg-[var(--button-primary-text)]'}
+              plate-round inline-flex h-full w-full items-center justify-center
+              bg-[var(--field-background)]
+              transition-colors [transition-duration:var(--duration-fast)]
             `}
-          />
+          >
+            {/* Square dot, revealed by peer-checked on the outer span */}
+            <span
+              className={`
+                ${currentSizeStyles.dot}
+                opacity-0
+                transition-opacity [transition-duration:var(--duration-fast)]
+                ${error ? 'bg-white' : 'bg-[var(--button-primary-text)]'}
+              `}
+            />
+          </span>
         </span>
       </span>
     );
 
     // Always a <label>: the native input is sr-only, so without one a click
-    // on the visible circle would never reach it.
+    // on the visible box would never reach it.
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <label

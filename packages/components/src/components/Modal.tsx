@@ -87,11 +87,14 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
   const closing = visible && !isOpen;
 
   // Docked applies on wide viewports only; below the breakpoint the docked
-  // request degrades to the standard centered modal.
+  // request degrades to the standard centered modal. Environments without
+  // matchMedia (SSR, jsdom test runners) fall back to the centered modal.
   const [wideViewport, setWideViewport] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(min-width: 960px)").matches
+    () => typeof window !== "undefined" && typeof window.matchMedia === "function" &&
+      window.matchMedia("(min-width: 960px)").matches
   );
   useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
     const mq = window.matchMedia("(min-width: 960px)");
     const onChange = () => setWideViewport(mq.matches);
     mq.addEventListener("change", onChange);
@@ -101,9 +104,12 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
 
   // FOCUS MANAGEMENT: on open, remember the invoker and move focus into the
   // dialog (the panel itself, so screen readers announce the dialog name);
-  // on close, hand focus back to wherever the user was.
+  // on close, hand focus back to wherever the user was. Keyed on the panel
+  // actually being mounted: on the render where `isOpen` flips true,
+  // `visible` is still false and the panel isn't in the DOM yet.
+  const panelMounted = isOpen && visible;
   useEffect(() => {
-    if (isOpen) {
+    if (panelMounted) {
       prevFocusRef.current = document.activeElement as HTMLElement | null;
       panelRef.current?.focus();
       return () => {
@@ -111,7 +117,7 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
         prevFocusRef.current = null;
       };
     }
-  }, [isOpen]);
+  }, [panelMounted]);
 
   
   // EFFECT: Handle ESC key press to close modal
