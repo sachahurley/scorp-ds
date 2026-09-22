@@ -188,6 +188,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | Focus never moved into the dialog on open (focus effect ran before the panel mounted); crashed without window.matchMedia | Focus effect keyed on the panel being mounted; matchMedia guarded (falls back to centered modal) | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -199,6 +200,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | Focus moves into the dialog on open; no crash without matchMedia |
 
 <!-- AUTO-END:changelog -->
 
