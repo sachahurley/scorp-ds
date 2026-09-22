@@ -1,6 +1,11 @@
 /**
  * TABLE — semantic data grid primitives with token-backed chrome.
  * Compose `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, and `TableCell`.
+ *
+ * TOKENS: rules are drawn at `--border-width-hairline` (1px), the system's
+ * only rule weight, replacing the ad hoc 0.5px rules that browsers snapped
+ * unevenly. Column headers are `font-bold` (`--font-weight-bold`, 700);
+ * the weight scale is 400 / 500 / 700, so `font-semibold` (600) was off-token.
  */
 
 import { createContext, forwardRef, useContext, type HTMLAttributes, type TdHTMLAttributes, type ThHTMLAttributes, type TableHTMLAttributes } from "react";
@@ -78,7 +83,7 @@ export const TableHeader = forwardRef<HTMLTableSectionElement, TableHeaderProps>
     <thead
       ref={ref}
       className={cn(
-        "border-b-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)]",
+        "border-b-[length:var(--border-width-hairline)] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)]",
         className
       )}
       {...props}
@@ -111,7 +116,7 @@ export const TableFooter = forwardRef<HTMLTableSectionElement, TableFooterProps>
     <tfoot
       ref={ref}
       className={cn(
-        "border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)]",
+        "border-t-[length:var(--border-width-hairline)] border-solid border-[var(--surface-container-stroke)] bg-[var(--surface-subtle)]",
         className
       )}
       {...props}
@@ -132,7 +137,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(function 
     <tr
       ref={ref}
       className={cn(
-        "border-b-[0.5px] border-solid border-[var(--surface-container-stroke)] transition-colors [transition-duration:var(--duration-normal)]",
+        "border-b-[length:var(--border-width-hairline)] border-solid border-[var(--surface-container-stroke)] transition-colors [transition-duration:var(--duration-normal)]",
         className
       )}
       {...props}
@@ -156,7 +161,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(functi
       scope={scope}
       className={cn(
         DENSITY_CELL_PADDING[density],
-        "text-left font-semibold text-[var(--text-primary)]",
+        "text-left font-bold text-[var(--text-primary)]",
         className
       )}
       {...props}

@@ -31,7 +31,7 @@ Modal is a centered dialog over a scrim that interrupts the page for a task or d
 
 <!-- AUTO-START:anatomy -->
 
-Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) around the panel: outer ring plate (`plate-round-lg`, `--surface-container-stroke`, 1px padding) and inner `--surface-card` fill in a column of header (title `h2` plus close Button), scrollable body, optional footer. Header and footer are separated from the body by 0.5px `--surface-container-stroke` hairlines. The panel is capped at `80vh` and `max-w-full`.
+Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) around the panel: outer ring plate (`plate-round-lg`, `--surface-container-stroke`, 1px padding) and inner `--surface-card` fill in a column of header (title `h2` plus close Button in a hit-area wrapper span), scrollable body, optional footer. Header and footer are separated from the body by 0.5px `--surface-container-stroke` hairlines. The panel is capped at `80vh` and `max-w-full`.
 
 ### Variants
 
@@ -86,6 +86,7 @@ Exported type: `ModalProps`.
 | `--duration-normal` | Motion | 200ms | Fade in and fade out |
 | `text-base` | Typography | 16px | Title |
 | `px-6 py-5`, `gap-3`, `p-5`, `ml-4` | Spacing | 24px / 20px, 12px, 20px, 16px | Header, body, footer padding; footer gap; scrim padding; title to close gap |
+| `--touch-target` (`before:w-touch before:h-touch`) | Spacing | 44px | Close-button hit area on the wrapper span |
 | Button `secondary` `sm` (icon only) | Component | `size-control-sm` 32px square | Close control |
 
 <!-- AUTO-END:tokens -->
@@ -100,9 +101,9 @@ Exported type: `ModalProps`.
 |----------------|--------------|-----------------|
 | Closed | `isOpen={false}` after exit | Not rendered |
 | Opening | `isOpen` to `true` | `animate-in fade-in` over `--duration-normal`; focus moves to the panel |
-| Open | `isOpen` | Body scroll locked (centered only) |
+| Open | `isOpen` | Body scroll locked (centered only); Tab and Shift+Tab trapped inside the panel (centered only) |
 | Closing | `isOpen` to `false` | `animate-out fade-out fill-mode-forwards`; unmounts on `animationend`; focus returns to the invoker |
-| Docked | `docked` and viewport at least 960px | No scrim, `bottom: 48px`, drop shadow, no `aria-modal`, no scroll lock, no click-away |
+| Docked | `docked` and viewport at least 960px | No scrim, `bottom: 48px`, drop shadow, no `aria-modal`, no scroll lock, no click-away, no focus trap |
 | Docked fallback | `docked` below 960px | Same as centered; updates live on viewport change |
 | With footer | `footerContent` | Footer band with top hairline |
 | Long content | Body taller than the panel | Body scrolls (`overflow-y-auto`) and is keyboard focusable |
@@ -172,9 +173,10 @@ Interactive controls: N/A (render function stories).
 
 - Semantic role: panel is `role="dialog"` with `aria-modal="true"` (omitted when docked), named by `aria-label={title}`
 - Required labels: `title` is required and becomes the accessible name; the close button is labelled `Close modal`
-- Focus order: on open, focus moves to the panel (`tabIndex={-1}`) so the dialog name is announced; on close, focus returns to the element that had it. The body region is `tabIndex={0}` for keyboard scrolling. There is no focus trap, so Tab can leave the dialog
+- Focus order: on open, focus moves to the panel (`tabIndex={-1}`) so the dialog name is announced; on close, focus returns to the element that had it. The body region is `tabIndex={0}` for keyboard scrolling
+- Focus trap: while modal, Tab and Shift+Tab cycle within the panel (`useFocusTrap`, a capture-phase Tab handler). Shift+Tab from the panel itself, or from the first control, wraps to the last; Tab from the last control wraps to the first. The `docked` variant is non-modal by design and never traps, so Tab reaches the live page behind it
 - Keyboard: Escape calls `onClose` (listener on `document` while open, docked included)
-- Touch target minimum: 44x44 required; the close button is 32px (`size-control-sm`), so it falls short
+- Touch target minimum: met. The close button is a 32px plate (`size-control-sm`), and because a `clip-path` slices an element's own pseudo-elements the 44x44 hit area hangs off an unclipped wrapper span (the Checkbox pattern). The wrapper forwards only clicks whose target is the wrapper itself, so `onClose` fires once per click
 - Color independence: no color-coded meaning; the close control is an icon with an accessible name
 
 <!-- AUTO-END:accessibility -->
@@ -216,8 +218,9 @@ Interactive controls: N/A (render function stories).
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | Focus never moved into the dialog on open (focus effect ran before the panel mounted); crashed without window.matchMedia | Focus effect keyed on the panel being mounted; matchMedia guarded (falls back to centered modal) | Resolved |
-| 2026-09-22 | No focus trap in the centered modal (Tab reaches the page behind); close button is 32px, below the 44px target | None yet | Open |
-| 2026-09-22 | Source header still says the content area is capped at 66vh; the only cap is `max-h-[80vh]` on the panel | None yet | Open |
+| 2026-09-22 | No focus trap in the centered modal (Tab reaches the page behind); close button is 32px, below the 44px target | Focus trap added (`useFocusTrap`, modal only, never docked); close button wrapped in an unclipped span carrying a 44x44 pseudo-element hit area | Resolved |
+| 2026-09-22 | Source header still says the content area is capped at 66vh; the only cap is `max-h-[80vh]` on the panel | Header comment now states the 80vh panel cap | Resolved |
+| 2026-09-22 | `Default`, `Long content` and `Docked` stories added their own padding inside a body that already pads `px-6 py-5` | Padding removed from the story bodies | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -231,6 +234,7 @@ Interactive controls: N/A (render function stories).
 |---------|------|------|---------|
 | Unreleased | 2026-09-21 | fix | Focus moves into the dialog on open; no crash without matchMedia |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | Focus trap while modal (docked stays non-modal); 44px close-button hit area; 66vh comment corrected; story double padding removed |
 
 <!-- AUTO-END:changelog -->
 

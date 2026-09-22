@@ -16,12 +16,20 @@
  * - duration.fast (hover), focus inset ring (clip swallows outside outlines)
  */
 
-import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ElementType, type ReactNode } from "react";
+import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ElementType, type HTMLAttributes, type ReactNode } from "react";
 
 type CommonProps = {
-  /** Small line above the title (date, category). Rendered in text.tertiary. */
+  /**
+   * Small line above the title (date, category). Rendered one step darker
+   * than text.tertiary (`secondary-700` in light, `secondary-600` in dark),
+   * so it clears AA (6.13:1 / 5.34:1) at 14px; text.tertiary is 3.31:1 and
+   * only safe for large or decorative text.
+   */
   meta?: ReactNode;
-  /** Row title. Interactive rows (href/onClick) render it in the accent color. */
+  /**
+   * Row title. Interactive rows (href/onClick) render it in the accent color.
+   * Titles are single-line: anything longer than the row ellipsizes.
+   */
   title: ReactNode;
   /** Supporting line below the title. */
   description?: ReactNode;
@@ -54,8 +62,14 @@ export type ListRowProps = CommonProps &
      * interactive styling and spreads `asProps` onto it (`to`, `state`,
      * ...), so client-side navigation works without a full page load.
      */
-    | { as: ElementType; asProps?: Record<string, unknown>; href?: never; onClick?: never }
-    | { href?: never; onClick?: never; as?: never }
+    | ({ as: ElementType; asProps?: Record<string, unknown>; href?: never; onClick?: never } & Omit<
+        HTMLAttributes<HTMLElement>,
+        "className" | "title"
+      >)
+    | ({ href?: never; onClick?: never; as?: never } & Omit<
+        HTMLAttributes<HTMLDivElement>,
+        "className" | "title"
+      >)
   );
 
 /**
@@ -64,8 +78,13 @@ export type ListRowProps = CommonProps &
  * Renders an `<a>` when `href` is set, a `<button>` when `onClick` is set,
  * and a plain `<div>` for display-only rows.
  *
- * @param meta - Small tertiary line above the title (date, category)
- * @param title - Row title; accent-colored when the row is interactive
+ * Extra native attributes (`aria-*`, `id`, `data-*`) are forwarded in every
+ * form, including display rows and the `as` form.
+ *
+ * @param meta - Small line above the title (date, category), in the AA-passing
+ *               secondary pair (700 light / 600 dark), not text.tertiary
+ * @param title - Row title; accent-colored when the row is interactive, and
+ *                truncated with an ellipsis when it outgrows the row
  * @param description - Supporting copy under the title
  * @param titleSuffix - Trailing glyph beside the title (external-link arrows etc.)
  */
@@ -89,8 +108,10 @@ export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
   const text = (
     <>
       {meta && <span className="block text-sm text-secondary-700 dark:text-secondary-600">{meta}</span>}
+      {/* Titles are single-line and ellipsize: a row is a scannable line, and
+          with a thumb the text column must shrink rather than push the image. */}
       <span
-        className={`block text-base leading-6 ${
+        className={`block truncate text-base leading-6 ${
           interactive !== "div" ? "text-[var(--accent)]" : "text-[var(--text-primary)]"
         }`}
       >
@@ -115,10 +136,17 @@ export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
   );
 
   if (asComponent) {
-    const { asProps } = rest as { as: ElementType; asProps?: Record<string, unknown> };
+    // Native attributes passed alongside `as` (aria-*, id, data-*) are
+    // forwarded too; `asProps` wins so router-specific props can override.
+    const { asProps, ...withAs } = rest as {
+      as: ElementType;
+      asProps?: Record<string, unknown>;
+    } & HTMLAttributes<HTMLElement>;
+    const asRest = { ...withAs } as Partial<{ as: ElementType }> & HTMLAttributes<HTMLElement>;
+    delete asRest.as;
     const As = asComponent;
     return (
-      <As ref={ref} className={rowClasses} {...asProps}>
+      <As ref={ref} className={rowClasses} {...asRest} {...asProps}>
         {body}
       </As>
     );
@@ -139,8 +167,11 @@ export const ListRow = forwardRef<HTMLElement, ListRowProps>(function ListRow(
       </button>
     );
   }
+  // Display row: native attributes (aria-*, id, data-*) are forwarded, same as
+  // the anchor and button forms.
+  const divRest = rest as HTMLAttributes<HTMLDivElement>;
   return (
-    <div ref={ref as React.Ref<HTMLDivElement>} className={rowClasses}>
+    <div ref={ref as React.Ref<HTMLDivElement>} className={rowClasses} {...divRest}>
       {body}
     </div>
   );

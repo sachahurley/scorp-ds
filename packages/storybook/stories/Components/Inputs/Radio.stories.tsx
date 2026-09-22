@@ -31,6 +31,29 @@ export const Group: Story = {
   ),
 };
 
+/**
+ * `helperText` explains the option; `errorMessage` replaces it, sets the error
+ * state and is announced through `aria-describedby` (same plumbing as Checkbox).
+ */
+export const WithMessages: Story = {
+  name: 'Helper and error text',
+  render: () => (
+    <fieldset className="flex flex-col gap-3 border-0 p-0">
+      <legend className="mb-2 font-mono text-sm text-secondary-700 dark:text-secondary-300">
+        Billing
+      </legend>
+      <Radio name="billing" value="monthly" label="Monthly" helperText="Cancel any time." onChange={fn()} />
+      <Radio
+        name="billing"
+        value="invoice"
+        label="Invoice"
+        errorMessage="Not available on the free plan."
+        onChange={fn()}
+      />
+    </fieldset>
+  ),
+};
+
 export const Error: Story = {
   args: {
     name: 'solo',

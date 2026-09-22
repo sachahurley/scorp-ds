@@ -14,8 +14,10 @@
  * STATES:
  * - unchecked: Default state with border
  * - checked: Filled with primary color, checkmark icon
- * - disabled: Reduced opacity, not interactive
- * - error: Red border to indicate validation issues
+ * - disabled: 50% opacity, applied once on the <label> so the box and the
+ *   label dim together (stacking it on the box too rendered it at ~25%)
+ * - error: Red border to indicate validation issues; the mark switches to
+ *   `--button-destructive-text`, the system's ink for a destructive fill
  * 
  * Features:
  * - Accessible (ARIA attributes, keyboard support)
@@ -195,7 +197,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             plate-round p-px inline-flex shrink-0
             ${currentSizeStyles.checkbox}
             transition-colors [transition-duration:var(--duration-fast)]
-            ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
+            ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
             ${ringStyles}
             ${error
               ? 'peer-checked:[&>span]:bg-[var(--field-border-error)] peer-indeterminate:[&>span]:bg-[var(--field-border-error)]'
@@ -220,7 +222,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 key={mark}
                 data-mark={mark}
                 className={`absolute inset-0 inline-flex items-center justify-center opacity-0 transition-opacity [transition-duration:var(--duration-fast)] ${
-                  error ? 'text-white' : 'text-[var(--button-primary-text)]'
+                  error ? 'text-[var(--button-destructive-text)]' : 'text-[var(--button-primary-text)]'
                 }`}
                 aria-hidden="true"
               >

@@ -58,6 +58,33 @@ export const Disabled: Story = {
   ),
 };
 
+/**
+ * `<optgroup>` children render as labelled groups, and a disabled option (or a
+ * disabled group) is skipped by the arrow keys. Mixed static and mapped
+ * children are flattened, so nothing is dropped.
+ */
+export const Grouped: Story = {
+  name: 'Option groups',
+  render: (args) => (
+    <div className="w-72">
+      <Select {...args} label="Deploy target" defaultValue="use1">
+        <option value="local">Local</option>
+        <optgroup label="North America">
+          <option value="use1">us-east-1</option>
+          <option value="usw2">us-west-2</option>
+        </optgroup>
+        <optgroup label="Europe">
+          <option value="euw1">eu-west-1</option>
+          <option value="euc1" disabled>
+            eu-central-1 (full)
+          </option>
+        </optgroup>
+      </Select>
+    </div>
+  ),
+  args: { size: 'md' },
+};
+
 /** When you cannot show a visible label, pass `aria-label` on Select (applied to the trigger). */
 export const WithAriaLabelOnly: Story = {
   name: 'Aria label only',

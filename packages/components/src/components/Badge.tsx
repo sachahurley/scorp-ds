@@ -52,6 +52,13 @@ export interface BadgeProps {
   children: ReactNode;
   iconLeft?: ReactNode;
   onClose?: () => void;
+  /**
+   * Accessible name for the remove button. Defaults to `Remove {children}`
+   * when the badge label is a plain string (so a list of filter chips reads as
+   * "Remove Draft", "Remove Archived"), and to "Remove badge" otherwise. Pass
+   * it explicitly whenever the label alone does not identify what is removed.
+   */
+  onCloseLabel?: string;
   className?: string;
 }
 
@@ -63,6 +70,7 @@ export interface BadgeProps {
  * @param children - Badge content (text, numbers, etc.)
  * @param iconLeft - Optional icon to display on the left
  * @param onClose - Optional callback when close button is clicked
+ * @param onCloseLabel - Accessible name for the remove button (defaults to `Remove {children}`)
  * @param className - Additional CSS classes
  */
 export function Badge({
@@ -73,9 +81,14 @@ export function Badge({
   children,
   iconLeft,
   onClose,
+  onCloseLabel,
   className = "",
 }: BadgeProps) {
     const size = resolveSize(sizeProp, "Badge");
+  // Name the remove button after the chip it removes when the label is plain
+  // text; a caller can always override, and rich children fall back to the
+  // generic name.
+  const removeLabel = onCloseLabel ?? (typeof children === "string" ? `Remove ${children}` : "Remove badge");
   // SIZE STYLES - Heights and padding matching design system
   // Small: 20px height, 8px horizontal padding, 4px vertical padding
   // Medium: 24px height, 10px horizontal padding, 4px vertical padding
@@ -170,7 +183,13 @@ export function Badge({
       {/* Label — the plate is the container (bracket decoration retired with the TUI tier) */}
       <span className="inline-flex items-center">{children}</span>
       
-      {/* Close Button -- TUI text "x" instead of Lucide icon */}
+      {/* Close button: 1-bit X icon.
+          HIT AREA: a 44x44 pseudo-element centered on the 12px icon, the
+          system's touch-target recipe (Checkbox, Toast). On a plate badge the
+          chip's clip-path trims the part of it that reaches past the chip, so
+          the effective target is the full chip height by 44px wide; give
+          removable chips room in their row rather than packing them edge to
+          edge. */}
       {onClose && (
         <button
           type="button"
@@ -179,7 +198,9 @@ export function Badge({
             onClose();
           }}
           className={`
-            inline-flex items-center justify-center
+            relative inline-flex items-center justify-center
+            before:content-[''] before:absolute before:left-1/2 before:top-1/2
+            before:-translate-x-1/2 before:-translate-y-1/2 before:w-touch before:h-touch
             font-mono font-bold
             text-secondary-800 dark:text-secondary-200
             hover:text-error-700 dark:hover:text-error-400
@@ -188,7 +209,7 @@ export function Badge({
             focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring-primary)]
             focus:ring-offset-1 focus:ring-offset-[var(--focus-offset-color)]
           `}
-          aria-label="Remove badge"
+          aria-label={removeLabel}
         >
           <TuiIcon name="X" size="3" />
         </button>

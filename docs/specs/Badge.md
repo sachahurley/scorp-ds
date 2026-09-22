@@ -72,7 +72,8 @@ Modifiers that compose with any variant: `caps` (uppercase, `.08em` tracking) an
 | `caps` | `boolean` | `false` | No | Uppercase eyebrow voice for state chips ("EQUIPPED", "LEVEL UP"). |
 | `dashed` | `boolean` | `false` | No | Not-yet-real voice for placeholders, empty slots, free tiers. Drops the plate clip for sharp corners. |
 | `iconLeft` | `ReactNode` | `undefined` | No | Leading icon, boxed to the size's icon slot. |
-| `onClose` | `() => void` | `undefined` | No | Renders a remove button (`aria-label="Remove badge"`). Click is stopped from propagating to parents. |
+| `onClose` | `() => void` | `undefined` | No | Renders a remove button. Click is stopped from propagating to parents. |
+| `onCloseLabel` | `string` | `Remove {children}` when `children` is a string, else `"Remove badge"` | No | Accessible name for the remove button. Pass it whenever the label alone does not identify what is removed. |
 | `className` | `string` | `""` | No | Extra classes on the root `span`. |
 
 Exported type: `BadgeProps`. `ControlSizeProp` is exported from the package barrel.
@@ -116,7 +117,7 @@ Exported type: `BadgeProps`. `ControlSizeProp` is exported from the package barr
 | Size | `size` | Height, padding, font size, icon box |
 | Caps | `caps` | `uppercase`, `letter-spacing: .08em` |
 | Dashed | `dashed` | Fill removed, dashed 1px border, `rounded-none` instead of plate clip |
-| Removable | `onClose` | Remove button rendered |
+| Removable | `onClose` | Remove button rendered, named from `onCloseLabel` or the string label |
 | Remove hover | Pointer | Button text to `error-700` / `error-400` |
 | Remove focus | Keyboard | 2px `--focus-ring-primary` ring with 1px offset |
 
@@ -158,7 +159,7 @@ Interactive controls: `variant` (select, options omit `bone`), `size` (select).
 <!-- AUTO-START:hardcoded -->
 
 - `[letter-spacing:.08em]` for `caps`.
-- `aria-label="Remove badge"`: fixed English label, not overridable.
+- `"Remove "` prefix and the `"Remove badge"` fallback for the remove button: English, but now overridable via `onCloseLabel`.
 
 <!-- AUTO-END:hardcoded -->
 
@@ -189,7 +190,8 @@ Interactive controls: `variant` (select, options omit `bone`), `size` (select).
 - Semantic role: none; the chip is a plain `span` read inline as text
 - Required labels: the label text is the accessible content; the remove button is labelled `Remove badge` (generic, does not name the badge)
 - Focus order: only the remove button is focusable, in DOM order
-- Touch target minimum: 44x44 required; the remove button is the 12px icon only, so it falls short
+- Required labels (remove): the remove button is named after the chip (`Remove Draft`) when `children` is a string, falls back to `Remove badge` for rich children, and takes any `onCloseLabel` the caller passes
+- Touch target minimum: the remove button carries the system's 44x44 pseudo-element hit area. On a plate badge the chip's own `clip-path` trims whatever reaches past the chip, so the effective target is 44px wide by the chip height (20 / 24 / 28px); give removable chips room in their row rather than packing them edge to edge, and prefer `lg` for touch-first surfaces
 - Color independence: meaning is carried by the label text; status colors are reinforcement. Text scales (800 on 50, 300 on 950, 950 on bone) are chosen to meet WCAG AA
 
 <!-- AUTO-END:accessibility -->
@@ -219,7 +221,7 @@ Interactive controls: `variant` (select, options omit `bone`), `size` (select).
 - Inline element: sits on the text baseline next to titles, in ListRow trailing slots, and in Table cells.
 - Group several Badges with a `flex flex-wrap gap-2` container.
 - Pair `size` with the surrounding text: `sm` beside `text-xs` meta, `md` in rows, `lg` beside headings.
-- When `onClose` is used for filter chips, render the chip list with a visible heading so the generic `Remove badge` label has context.
+- When `onClose` is used for filter chips, keep the label a plain string so the remove button is named after the chip, or pass `onCloseLabel` when the chip list needs more context than its own text.
 
 <!-- /HUMAN-SECTION:composition -->
 
@@ -231,7 +233,7 @@ Interactive controls: `variant` (select, options omit `bone`), `size` (select).
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | Heights use `h-5` / `h-6` / `h-7` (20/24/28px), not the control-height tokens the 2026-09-21 changelog row mentions; remove button is below the 44px target and its label does not name the badge | None yet | Open |
+| 2026-09-22 | Heights use `h-5` / `h-6` / `h-7` (20/24/28px), not the control-height tokens the 2026-09-21 changelog row mentions; remove button is below the 44px target and its label does not name the badge | Remove button: 44x44 pseudo-element hit area (clipped to the chip height by the plate, see Accessibility) and a new `onCloseLabel` prop defaulting to `Remove {children}`. The height scale is unchanged and stays intentional: badges are inline text markers, not controls | Partially resolved |
 | 2026-09-22 | Story `variant` control omits `bone`; test "renders bracket-wrapped label" name is stale (brackets were retired) | None yet | Open |
 
 <!-- AUTO-END:known-gaps -->
@@ -247,6 +249,7 @@ Interactive controls: `variant` (select, options omit `bone`), `size` (select).
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` (fixed 20/24/28px heights, not control-height tokens); small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | feat | Remove button text `x` replaced by the 1-bit X icon (12px) |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | feat | `onCloseLabel` prop; the remove button is named after the badge by default and gains a 44px hit area |
 
 <!-- AUTO-END:changelog -->
 

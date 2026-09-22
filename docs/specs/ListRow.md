@@ -34,7 +34,7 @@ ListRow is the list and navigation tier of the container system, promoted from t
 Row element (`<a>`, `<button>`, the `as` component, or `<div>`) with `block w-full p-3 plate-round`, containing:
 
 1. `meta` (optional): `text-sm` line above the title.
-2. `title`: `text-base leading-6`, with an optional `titleSuffix` span (`ml-2`).
+2. `title`: `text-base leading-6 truncate` (single line, ellipsized), with an optional `titleSuffix` span (`ml-2`).
 3. `description` (optional): `text-sm leading-6`, `mt-1`.
 4. `thumb` (optional): when present the body becomes a flex pair (`gap-4`, `items-start`): a `flex-shrink-0` slot plus a `min-w-0 flex-1` text column. `thumbPosition="end"` reverses it.
 
@@ -64,8 +64,8 @@ Row element (`<a>`, `<button>`, the `as` component, or `<div>`) with `block w-fu
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `title` | `ReactNode` | none | Yes | Row title. Accent color when the row is interactive, `text-primary` otherwise. |
-| `meta` | `ReactNode` | none | No | Small line above the title (date, category). |
+| `title` | `ReactNode` | none | Yes | Row title. Accent color when the row is interactive, `text-primary` otherwise. Single line: longer titles ellipsize. |
+| `meta` | `ReactNode` | none | No | Small line above the title (date, category), in the AA-passing secondary pair (700 light / 600 dark), not `text.tertiary`. |
 | `description` | `ReactNode` | none | No | Supporting line below the title. |
 | `titleSuffix` | `ReactNode` | none | No | Trailing affordance beside the title, for example `<TuiIcon name="ExternalLink" size="3" />`. |
 | `thumb` | `ReactNode` | none | No | Thumbnail node (sized `<img>` or framed element). Reserved with `flex-shrink: 0`, never scaled. |
@@ -77,7 +77,7 @@ Row element (`<a>`, `<button>`, the `as` component, or `<div>`) with `block w-fu
 | `asProps` | `Record<string, unknown>` | none | No | Props spread onto the `as` component (`to`, `state`, `aria-current`, ...). |
 | `className` | `string` | `""` | No | Appended to the row classes (plain concatenation, no tailwind-merge). |
 | `ref` | `Ref<HTMLElement>` | none | No | Forwarded to the rendered element. |
-| `...rest` | native `<a>` or `<button>` attributes | | No | Forwarded on link and button rows (`aria-current`, `target`, `disabled`, ...). Dropped on display and `as` rows. |
+| `...rest` | native element attributes | | No | Forwarded in every form, including display (`<div>`) and `as` rows (`aria-current`, `id`, `data-*`, `target`, `disabled`, ...). On `as` rows `asProps` is spread last, so it wins. |
 
 <!-- AUTO-END:properties -->
 
@@ -97,6 +97,7 @@ Row element (`<a>`, `<button>`, the `as` component, or `<div>`) with `block w-fu
 | `secondary-800` / `secondary-500` | Color | `#474030` light / `#BFB4A3` dark | `description` |
 | `--focus-ring-primary`, `--focus-ring-width` | Focus | `#FBBF24`, `2px` | Inset focus ring (`box-shadow: inset`), since the clip swallows outside outlines |
 | `--duration-fast` | Motion | `120ms` | Hover color transition |
+| `truncate` | Typography | `overflow: hidden; text-overflow: ellipsis; white-space: nowrap` | Title overflow |
 | `text-sm` / `text-base` | Typography | `14px` / `16px` | Meta and description / title |
 
 <!-- AUTO-END:tokens -->
@@ -114,7 +115,8 @@ Row element (`<a>`, `<button>`, the `as` component, or `<div>`) with `block w-fu
 | Hover | `:hover` (interactive only) | Background `--surface-muted` |
 | Focus visible | `:focus-visible` (interactive only) | Inset 2px `--focus-ring-primary` |
 | Selected | `selected` | Background `--surface-muted` at rest (title color unchanged; accent only if interactive) |
-| With thumbnail | `thumb`, `thumbPosition` | Layout only |
+| With thumbnail | `thumb`, `thumbPosition` | Layout only; the text column is `min-w-0 flex-1` so a long title ellipsizes instead of pushing the image |
+| Long title | title longer than the row | `truncate`: single line with an ellipsis |
 
 <!-- AUTO-END:states -->
 
@@ -179,6 +181,8 @@ None imported. `titleSuffix` and `thumb` are consumer-provided (typically `TuiIc
 - Keyboard: native Enter (links) and Enter/Space (buttons).
 - Touch target minimum: met. 12px padding plus the 24px title line gives a 48px minimum height at full width.
 - Color independence: `selected` pairs the fill with the accent title (fill plus color, never color alone), and `aria-current` carries it for screen readers.
+- Text contrast: `meta` is 6.13:1 (light) / 5.34:1 (dark) and `description` 8.9:1 / 8.87:1, both clearing AA at 14px. `text.tertiary` (3.31:1 in light) is deliberately not used here.
+- Truncated titles: the full text stays in the accessible name, so screen readers still read it in full. Keep titles short enough to scan visually.
 
 <!-- AUTO-END:accessibility -->
 
@@ -220,9 +224,9 @@ None imported. `titleSuffix` and `thumb` are consumer-provided (typically `TuiIc
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | JSDoc says `meta` renders in `text.tertiary`, and the story says long titles ellipsize; the code uses `secondary-700/600` for meta and has no `truncate`, so long titles wrap | Docs or code to be reconciled | open |
-| 2026-09-22 | Display rows (`<div>`) and `as` rows drop extra native attributes (`aria-*`, `id`); `className` is concatenated without tailwind-merge | None yet | open |
-| 2026-09-22 | No unit tests for ListRow | None yet | open |
+| 2026-09-22 | JSDoc says `meta` renders in `text.tertiary`, and the story says long titles ellipsize; the code uses `secondary-700/600` for meta and has no `truncate`, so long titles wrap | Reconciled in favour of contrast: the JSDoc now documents the AA-passing secondary pair the code uses, and titles really do ellipsize (`truncate`). The `WithThumbnail` story shows a title long enough to prove it | Resolved |
+| 2026-09-22 | Display rows (`<div>`) and `as` rows drop extra native attributes (`aria-*`, `id`); `className` is concatenated without tailwind-merge | Both forms now forward native attributes; on `as` rows `asProps` is spread last so it still wins. `className` is still plain concatenation | Partly resolved |
+| 2026-09-22 | No unit tests for ListRow | Added: attribute forwarding on display and `as` rows, title truncation, and the `meta` colour pair | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -235,6 +239,7 @@ None imported. `titleSuffix` and `thumb` are consumer-provided (typically `TuiIc
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | Titles truncate as documented, `meta` docs match the AA-passing colours the code uses, and native attributes are forwarded on display and `as` rows |
 
 <!-- AUTO-END:changelog -->
 

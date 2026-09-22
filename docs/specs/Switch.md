@@ -43,12 +43,12 @@ An outer `flex items-center gap-3` wrapper (receives `className`) holding the sw
 
 | Enum Value | Description |
 |-----------|-------------|
-| `sm` | Track 24x44px (`h-6 w-11`), knob 20px, knob x 2px off / 22px on, 12px icon box |
-| `md` (default) | Track 32x56px (`h-8 w-14`), knob 24px, knob x 3px off / 29px on, 12px icon box |
-| `lg` | Track 40x72px (`h-10 w-[72px]`), knob 32px, knob x 3px off / 37px on, 16px icon box |
+| `sm` | Track 24x44px, knob 20px, knob x 2px off / 22px on, 12px icon box |
+| `md` (default) | Track 32x56px, knob 24px, knob x 3px off / 29px on, 12px icon box |
+| `lg` | Track 40x72px, knob 32px, knob x 3px off / 37px on, 16px icon box |
 | `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
-Switch does not use the control-height tokens; its track heights are one step below the Button scale. The hit area is 44px tall at every size (44x44 for `sm`).
+Every measurement comes from `global.switch` (`--switch-track-height/width-*`, `--switch-knob-size/inset/travel-*`), so none of it is typed into the component. The `md` and `lg` track heights alias `control.height.sm` and `control.height.md`; `sm`'s 24px track is one step below the control scale and has no other token, and its 44px width aliases `touch.target`. The knob's on offset is `track width - knob size - inset`. The hit area is 44px tall at every size (44x44 for `sm`).
 
 <!-- AUTO-END:anatomy -->
 
@@ -62,7 +62,7 @@ Switch does not use the control-height tokens; its track heights are one step be
 |----------|------|---------|----------|-------------|
 | `checked` | `boolean` | `false` | No (effectively yes) | Current state. Switch keeps no internal state, so pass it from the parent. |
 | `onCheckedChange` | `(checked: boolean) => void` | none | No (effectively yes) | Called with the next state on click, Enter, or Space. Without it the switch cannot change. |
-| `label` | `string` | none | No | Visible label and the accessible name (`aria-label`). |
+| `label` | `string` | none | No | Visible label and the accessible name (`aria-label`). Clicking the visible text toggles the switch. |
 | `hideLabel` | `boolean` | `false` | No | Keeps `label` as the accessible name only, with no visible text. Use in rows that already show a heading, such as settings rows. |
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Track size. Legacy names are deprecated. |
 | `disabled` | `boolean` | `false` | No | Native disabled; switch dims to 50% and the label uses `secondary-700` / `dark:secondary-400`. |
@@ -81,8 +81,8 @@ Switch does not use the control-height tokens; its track heights are one step be
 
 | Token | Category | Resolved Value | Usage |
 |-------|----------|---------------|-------|
-| `--button-primary-background` | Color | light `#FBBF24`, dark `#E0A26A` | Track when on |
-| `secondary-300` / `dark:secondary-700` | Color | `#F0EBE4` / `#695F4D` | Track when off |
+| `--accent` | Color | light `#B45309`, dark `#E0A26A` | Track when on (4.9:1 / 8.24:1 on the page; 4.9:1 / 8.78:1 against the knob) |
+| `--control-track` | Color | `#968A75` both themes | Track when off (3.31:1 light / 5.34:1 dark on the page; 3.39:1 / 5.69:1 against the knob) |
 | `--field-background` | Color | light `#FFFFFF`, dark `#120D09` | Knob fill |
 | `--focus-ring-primary` | Color | `#FBBF24` | Inset focus ring on the track |
 | `--focus-ring-width` | Size | `2px` | Focus ring thickness |
@@ -90,7 +90,12 @@ Switch does not use the control-height tokens; its track heights are one step be
 | `--text-primary` | Color | light `#2B2718`, dark `#FDFCFB` | Label text |
 | `secondary-700` / `dark:secondary-400` | Color | `#695F4D` / `#E0DACE` | Disabled label text |
 | `--plate-round` | Shape | stepped 6px corner polygon | Track and knob clip |
-| `--duration-normal` | Motion | `200ms` | Track color and knob glide (Tailwind default ease) |
+| `--duration-normal` | Motion | `200ms` | Track color and knob glide (Tailwind default ease); both drop to `transition-none` under `prefers-reduced-motion` |
+| `--switch-track-height-sm\|md\|lg` | Size | `24px` / `var(--control-height-sm)` / `var(--control-height-md)` | Track height |
+| `--switch-track-width-sm\|md\|lg` | Size | `var(--touch-target)` / `56px` / `72px` | Track width |
+| `--switch-knob-size-sm\|md\|lg` | Size | `20px` / `24px` / `32px` | Knob box |
+| `--switch-knob-inset-sm\|md\|lg` | Size | `2px` / `3px` / `3px` | Knob x when off |
+| `--switch-knob-travel-sm\|md\|lg` | Size | `22px` / `29px` / `37px` | Knob x when on |
 
 <!-- AUTO-END:tokens -->
 
@@ -102,14 +107,15 @@ Switch does not use the control-height tokens; its track heights are one step be
 
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Off | `checked={false}` | Track `secondary-300` / `secondary-700`, knob at the left |
-| On | `checked={true}` | Track `--button-primary-background`, knob at the right |
+| Off | `checked={false}` | Track `--control-track`, knob at `--switch-knob-inset-*` |
+| On | `checked={true}` | Track `--accent`, knob at `--switch-knob-travel-*` |
 | Focus visible | `group-focus-visible` on the track | Inset ring `--focus-ring-primary` |
 | Disabled | `disabled` | Button `opacity-50`, `cursor-not-allowed`; label `secondary-700` / `secondary-400` |
 | Hidden label | `hideLabel` | No visible span; `aria-label` still set |
 | Knob icon | `icon` | Icon box inside the knob |
+| Reduced motion | `prefers-reduced-motion: reduce` | Track colour and knob glide become instant (`motion-reduce:transition-none`) |
 
-There is no hover style.
+There is no hover style. The `data-state` attribute on the track reads `on` or `off` for tests and product CSS.
 
 <!-- AUTO-END:states -->
 
@@ -140,9 +146,7 @@ Interactive controls: `size`, `disabled` via args.
 
 <!-- AUTO-START:hardcoded -->
 
-- `w-[72px]` track width for `lg`.
-- Inline `transform: translateX(2px | 22px | 3px | 29px | 3px | 37px)` knob offsets.
-- `h-6 w-11`, `h-8 w-14`, `h-10`, knob `h-5/6/8` sizes use the Tailwind scale rather than control tokens.
+None. Track and knob geometry moved to `global.switch` tokens on 2026-09-22; the inline `transform` now interpolates `--switch-knob-inset-*` / `--switch-knob-travel-*`. The icon boxes (`w-3`, `w-4`) are Tailwind spacing steps that map to the 4px scale.
 
 <!-- AUTO-END:hardcoded -->
 
@@ -173,7 +177,9 @@ None imported. `ThemeToggle` composes Switch with a knob `icon`.
 - Required labels: `label` (visible or with `hideLabel`) or `aria-label`. Without either, the name falls back to "On" or "Off", which describes the state, not the setting.
 - Keyboard: Tab to focus; Space or Enter toggles (handled in `onKeyDown`).
 - Focus: 2px inset ring on the track via `group-focus-visible`.
-- Touch target minimum: 44px tall hit area at every size; width is the track width (44/56/72px). The visible label text is not clickable.
+- Touch target minimum: 44px tall hit area at every size; width is the track width (44/56/72px). The visible label text toggles the switch too, like a native control label. It is a plain `<span>` (a `<button>` is not a labelable element), so the accessible name still comes from `aria-label` and the click is wired by hand; it does nothing while `disabled`.
+- Motion: the knob glide and track colour honour `prefers-reduced-motion: reduce` and become instant.
+- Non-text contrast: off track 3.31:1 (light) / 5.34:1 (dark) on the page, on track 4.9:1 / 8.24:1; knob against the track 3.39:1 / 5.69:1 off and 4.9:1 / 8.78:1 on. All clear the 3:1 rule in WCAG 1.4.11.
 - Color independence: state is also shown by knob position.
 
 <!-- AUTO-END:accessibility -->
@@ -214,7 +220,9 @@ None imported. `ThemeToggle` composes Switch with a knob `icon`.
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | Small track 24px tall, below the 44px target | Plate clip moved to an inner track span; the button carries a 44px-tall hit area | Resolved |
-| 2026-09-22 | Off track in light mode (`secondary-300` `#F0EBE4` on the `#FDFCFB` page, with a white knob) is far below the 3:1 non-text contrast guideline; the visible label is not clickable; no reduced-motion handling for the knob glide | None yet | Open |
+| 2026-09-22 | Off track in light mode (`secondary-300` `#F0EBE4` on the `#FDFCFB` page, with a white knob) is far below the 3:1 non-text contrast guideline; the visible label is not clickable; no reduced-motion handling for the knob glide | Off track is now `--control-track` (sepia-600): 3.31:1 light / 5.34:1 dark on the page, 3.39:1 / 5.69:1 against the knob. The visible label toggles the switch. Track colour and knob glide carry `motion-reduce:transition-none` | Resolved |
+| 2026-09-22 | On track was `--button-primary-background` (amber-400), leaving the white knob at 1.67:1 in the light theme | On track is now `--accent`: 4.9:1 on the light page and 4.9:1 against the knob (dark is unchanged, the accent and the primary fill are both the gold there) | Resolved |
+| 2026-09-22 | Track and knob geometry were hardcoded (`w-[72px]`, inline `translateX` literals, Tailwind height steps) | Moved to `global.switch` tokens; `md` / `lg` track heights alias the control-height tokens and `sm`'s width aliases `touch.target` | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -229,6 +237,7 @@ None imported. `ThemeToggle` composes Switch with a knob `icon`.
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | fix | 44px hit area at every size |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | Off track moved to `--control-track` and the on track to `--accent` so both states clear the 3:1 non-text rule; visible label now toggles; knob glide is reduced-motion safe; track and knob geometry moved to `global.switch` tokens |
 
 <!-- AUTO-END:changelog -->
 

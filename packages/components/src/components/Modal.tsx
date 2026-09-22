@@ -7,9 +7,11 @@
  * FEATURES:
  * - Fixed header with title and a secondary-plate close button (always visible)
  * - Optional fixed footer band for CTAs via `footerContent`
- * - Scrollable content area (max-height: 66vh)
+ * - Scrollable content area (the panel is capped at 80vh; the body takes
+ *   whatever is left after the header and optional footer and scrolls)
  * - Fades in on open and out on close (duration.normal); stays mounted
  *   through the exit animation and unmounts on animationend
+ * - Focus trap: while modal, Tab and Shift+Tab cycle inside the panel
  * - Backdrop scrim (semi-transparent overlay)
  * - `docked` variant: on wide viewports (>=960px) the panel skips the scrim
  *   and pins bottom-center as a NON-modal dialog (no aria-modal, no scroll
@@ -39,6 +41,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "./Button";
 import { TuiIcon } from "./TuiIcon";
+import { useFocusTrap } from "../lib/use-focus-trap";
 
 // Define the props interface for the Modal component
 export interface ModalProps {
@@ -119,7 +122,13 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
     }
   }, [panelMounted]);
 
-  
+  // FOCUS TRAP: a dialog with aria-modal="true" promises nothing behind it is
+  // reachable, so Tab and Shift+Tab cycle inside the panel. The docked variant
+  // is deliberately non-modal (the page behind stays interactive), so it never
+  // traps.
+  useFocusTrap(panelRef, panelMounted && !isDocked);
+
+
   // EFFECT: Handle ESC key press to close modal
   // This listens for keyboard events and closes the modal when ESC is pressed
   useEffect(() => {
@@ -188,17 +197,33 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
               {title}
             </h2>
 
-            {/* Close control: icon-only secondary plate button (square, gold drawn X) */}
-            <Button
-              variant="secondary"
-              size="sm"
-              type="button"
-              onClick={onClose}
-              aria-label="Close modal"
-              className="ml-4 shrink-0"
+            {/*
+              Close control: icon-only secondary plate button (square, gold drawn X).
+
+              HIT AREA: the button is 32px (size-control-sm) and is plate-clipped,
+              and a clip-path slices the button's own pseudo-elements, so the
+              44x44 hit area lives on this unclipped wrapper instead (same idea as
+              Checkbox, which hangs the pseudo off the wrapper outside the plate).
+              The wrapper forwards only clicks that land on the pseudo ring
+              (target === the wrapper itself); clicks on the button bubble up with
+              a different target and are ignored, so onClose fires exactly once.
+            */}
+            <span
+              className="relative ml-4 inline-flex shrink-0 before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-touch before:h-touch"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) onClose();
+              }}
             >
-              <TuiIcon name="X" />
-            </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                type="button"
+                onClick={onClose}
+                aria-label="Close modal"
+              >
+                <TuiIcon name="X" />
+              </Button>
+            </span>
           </div>
 
           {/* 

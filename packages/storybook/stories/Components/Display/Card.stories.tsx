@@ -5,6 +5,9 @@ const meta: Meta<typeof Card> = {
   title: 'Components/Display/Card',
   component: Card,
   tags: ['autodocs'],
+  argTypes: {
+    layout: { control: 'inline-radio', options: ['block', 'flex'] },
+  },
   parameters: { layout: 'centered' },
 };
 
@@ -27,7 +30,8 @@ export const WithFooter: Story = {
   args: {
     title: 'Deploy',
     subtitle: 'Production',
-    className: 'w-96 flex flex-col',
+    layout: 'flex',
+    className: 'w-96',
     children: (
       <p className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
         Ready to ship this release?
@@ -86,13 +90,15 @@ export const WithHeaderContent: Story = {
 };
 
 /**
- * A bare Card (no header, no footer) as a flex column: the quote fills the
- * available height and the attribution locks to the bottom behind a hairline.
- * Upstreamed from the showcase's testimonial cards (2026-09-20).
+ * A bare Card (no header, no footer) as a flex column: `layout="flex"` makes
+ * the quote fill the available height so the attribution locks to the bottom
+ * behind a hairline. Upstreamed from the showcase's testimonial cards
+ * (2026-09-20); the layout used to be inferred from the `className` string,
+ * which also fired on `inline-flex`, `flex-1` and `flex-wrap`.
  */
 export const Testimonial: Story = {
   render: () => (
-    <Card className="flex h-72 w-96 flex-col">
+    <Card layout="flex" className="h-72 w-96">
       <figure className="flex min-h-0 flex-1 flex-col">
         <blockquote className="flex-1 font-mono text-base leading-relaxed text-[var(--text-primary)]">
           The token-based approach means we can iterate quickly while keeping
