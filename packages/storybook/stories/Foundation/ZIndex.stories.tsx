@@ -11,13 +11,13 @@ import { TokenDocTable, type TokenDocRow } from '../doc-blocks/TokenDocTable';
  */
 
 const LAYERS: { label: string; cssVar: string; parserKey: string; usage: string }[] = [
-  { label: 'zIndex.base', cssVar: '--z-index-base', parserKey: 'zIndex-base', usage: 'Default document flow' },
-  { label: 'zIndex.dropdown', cssVar: '--z-index-dropdown', parserKey: 'zIndex-dropdown', usage: 'Menus attached to inputs' },
-  { label: 'zIndex.sticky', cssVar: '--z-index-sticky', parserKey: 'zIndex-sticky', usage: 'Sticky headers or columns' },
-  { label: 'zIndex.overlay', cssVar: '--z-index-overlay', parserKey: 'zIndex-overlay', usage: 'Scrim below modals' },
-  { label: 'zIndex.modal', cssVar: '--z-index-modal', parserKey: 'zIndex-modal', usage: 'Modal dialog surfaces' },
-  { label: 'zIndex.popover', cssVar: '--z-index-popover', parserKey: 'zIndex-popover', usage: 'Popovers above modals when needed' },
-  { label: 'zIndex.tooltip', cssVar: '--z-index-tooltip', parserKey: 'zIndex-tooltip', usage: 'Highest hints and coach marks' },
+  { label: 'zIndex.base', cssVar: '--z-index-base', parserKey: 'z-index-base', usage: 'Default document flow' },
+  { label: 'zIndex.dropdown', cssVar: '--z-index-dropdown', parserKey: 'z-index-dropdown', usage: 'Menus attached to inputs' },
+  { label: 'zIndex.sticky', cssVar: '--z-index-sticky', parserKey: 'z-index-sticky', usage: 'Sticky headers or columns' },
+  { label: 'zIndex.overlay', cssVar: '--z-index-overlay', parserKey: 'z-index-overlay', usage: 'Scrim below modals' },
+  { label: 'zIndex.modal', cssVar: '--z-index-modal', parserKey: 'z-index-modal', usage: 'Modal dialog surfaces' },
+  { label: 'zIndex.popover', cssVar: '--z-index-popover', parserKey: 'z-index-popover', usage: 'Popovers above modals when needed' },
+  { label: 'zIndex.tooltip', cssVar: '--z-index-tooltip', parserKey: 'z-index-tooltip', usage: 'Highest hints and coach marks' },
 ];
 
 /** Opaque semantic fills — cards stay empty; copy lives in the label column. */
@@ -217,7 +217,11 @@ function ZIndexPage() {
 
       <section id="tokens" className="mb-12">
         <h2 className="mb-2 font-mono text-lg font-bold text-secondary-800 dark:text-secondary-200">Token table</h2>
-        <Note className="mb-4">Parser keys use camelCase (<code className="text-primary-800 dark:text-primary-400">zIndex.modal</code>); CSS variables are kebab-case.</Note>
+        <Note className="mb-4">
+          The JSON path is camelCase (<code className="text-primary-800 dark:text-primary-400">zIndex.modal</code>); the parser and the
+          CSS variable are both kebab-case (<code className="text-primary-800 dark:text-primary-400">z-index-modal</code>), and a drift
+          test keeps them identical.
+        </Note>
         <TokenDocTable rows={ROWS} />
       </section>
 

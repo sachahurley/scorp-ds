@@ -10,9 +10,26 @@
  * }
  */
 
+const tokens = require('./src/tokens.json');
+
+/**
+ * Responsive prefixes, read straight from `global.breakpoint` in tokens.json so
+ * the `sm:`/`md:`/`lg:`/`xl:` utilities and the `--breakpoint-*` custom
+ * properties cannot drift apart. sm/md/lg/xl carry Tailwind's default pixel
+ * values, so existing responsive classes keep behaving exactly as before.
+ * `docked` is a component breakpoint (Modal's docked variant), included here so
+ * the one scale covers both CSS and JS consumers.
+ */
+const screens = Object.fromEntries(
+  Object.entries(tokens.global.breakpoint).map(([name, token]) => [name, token.$value])
+);
+
 module.exports = {
   theme: {
     extend: {
+      // Breakpoints from tokens (global.breakpoint). Declared under `extend` so
+      // Tailwind's remaining default screens (2xl) stay available.
+      screens,
       // Colors from design tokens - reference CSS variables
       colors: {
         amber: {

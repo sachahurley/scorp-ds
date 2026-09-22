@@ -94,7 +94,8 @@ export const WithFooter: Story = {
 /**
  * Docked: on wide viewports the panel pins bottom-center with no scrim and
  * no scroll lock — a non-modal dialog acting on a page that stays visible
- * (the portfolio's equip/compare card). Narrow the viewport below 960px and
+ * (the portfolio's equip/compare card). The switch point is the
+ * --breakpoint-docked token (960px); narrow the viewport below it and
  * the same props render the standard centered modal.
  */
 export const Docked: Story = {

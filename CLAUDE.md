@@ -32,8 +32,9 @@ packages/
   tokens/                     # @scorp-ds/tokens — token definitions and utilities
     src/
       tokens.json             # Source of truth for ALL tokens (W3C Design Token format)
-      lib/token-parser.ts     # Resolves references, generates CSS vars and Tailwind config
-      styles/tokens.css       # Generated CSS custom properties
+      lib/token-parser.ts     # Resolves references; emits CSS-variable names and values for docs tooling
+      lib/token-parser.test.ts # Drift test: tokens.json vs the hand-written tokens.css
+      styles/tokens.css       # Hand-written CSS custom properties (never generated)
       index.ts                # Barrel export
     tailwind.preset.js        # Tailwind theme extension — import in consumer projects
   tui-art/                    # @scorp-ds/tui-art — TUI frames & table rows (plain strings; no React)
@@ -67,7 +68,7 @@ docs/
 - NEVER use raw hex color values in components. Always reference CSS variables via Tailwind classes (`bg-primary-400`, `text-secondary-700`) or via the token utilities.
 - NEVER use raw font sizes in components. Always use Tailwind font size classes that map to token CSS variables (`text-sm`, `text-base`, etc.).
 - NEVER use raw numeric spacing values. Always use Tailwind spacing classes that map to the design unit scale.
-- NEVER use raw border-radius values — the Scorp design language uses sharp corners (`rounded-none`). If a token value is needed, reference `var(--radius-button)` via Tailwind.
+- NEVER use raw border-radius values. The Scorp design language uses sharp corners (`rounded-none`); where a softened corner is wanted, use the plate silhouettes (`plate-round`, `plate-round-lg` from the preset plugin, backed by `--plate-round*`). There are no radius tokens: they were retired when plates became the shape language.
 - The ONLY place raw values are permitted is inside `packages/tokens/src/tokens.json` and the generated `styles/tokens.css`.
 
 ## Naming Conventions
@@ -82,8 +83,8 @@ docs/
 
 The token system has three layers in `tokens.json`:
 
-1. **`global`** — Foundation: raw color scales (amber, sepia, green, blue, purple, red), typography, spacing, motion, opacity, z-index, radius
-2. **`light`** — Semantic light-theme tokens: surface, elevation, text, focus, button (reference global tokens)
+1. **`global`** — Foundation: raw color scales (amber, sepia, green, blue, purple, red), typography, plates, spacing, breakpoints, button box, control and touch sizes, focus and border geometry, switch geometry, motion, z-index, opacity. No radius tokens: plates replaced them.
+2. **`light`** — Semantic light-theme tokens: terminal accents, accent, fire, surface, elevation, text, border, control, field, focus, button (reference global tokens)
 3. **`dark`** — Semantic dark-theme tokens: same structure as light, different values
 
 Semantic aliases in global: `primary → amber`, `secondary → sepia`, `success → green`, `info → blue`, `warning → purple`, `error → red`
@@ -136,10 +137,15 @@ Every documentation page in Storybook MUST follow the rules in `design-system-do
 ## How to Add
 
 ### New Token
-1. Add to `packages/tokens/src/tokens.json` in the correct section (global for base, light/dark for semantic)
-2. Run the token parser to regenerate CSS vars: `pnpm --filter @scorp-ds/tokens build`
-3. Update `design-tokens.md` with the new token's entry
-4. Add a visual example to the relevant Foundation story
+
+`tokens.json` and `tokens.css` are **both hand-maintained**. Nothing generates one from the other, and nothing must: `tokens.css` carries comments no generator could reproduce (measured contrast ratios, the deliberate dark `field.border` exception at 1.76:1). There is no `build` script in `packages/tokens`.
+
+1. Add the token to `packages/tokens/src/tokens.json` (global for base, light/dark for semantic)
+2. Add the matching custom property to `packages/tokens/src/styles/tokens.css` **in the same commit**, in both `:root` and `.dark` if the value is theme-specific. The name is the JSON path hyphen-joined with camelCase segments kebab-cased (`zIndex.modal` → `--z-index-modal`)
+3. Run `npm test` — `packages/tokens/src/lib/token-parser.test.ts` fails and names any token present in one file and not the other, or resolving to a different value
+4. If the token needs a Tailwind class, add it to `packages/tokens/tailwind.preset.js`
+5. Update `design-tokens.md` with the new token's entry
+6. Add a visual example to the relevant Foundation story
 
 ### New Component
 1. Create `packages/components/src/components/{ComponentName}.tsx`
