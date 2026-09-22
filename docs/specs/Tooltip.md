@@ -177,6 +177,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | Hover-only: no keyboard focus trigger, no Escape, not hoverable (WCAG 2.1.1, 1.4.13) | Opens on focus, closes on blur and Escape, hover bridge keeps it open over the balloon, trigger gets aria-describedby | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -188,6 +189,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | Added keyboard focus, Escape dismiss, hoverable content, aria-describedby on the trigger |
 
 <!-- AUTO-END:changelog -->
 

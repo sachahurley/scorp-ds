@@ -182,6 +182,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | `error` was boolean only; no helper or error text | Added `helperText` and `errorMessage` on the trigger via aria-describedby and aria-invalid | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -193,6 +194,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 
 <!-- AUTO-END:changelog -->
 

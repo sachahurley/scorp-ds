@@ -8,9 +8,12 @@
  * - small: 24px height (h-6)
  * - medium: 32px height (h-8) - matches small button/input - default
  * - large: 40px height (h-10) - matches medium button/input
+ * Every size's tap target is at least 44px tall: the (unclipped) button
+ * carries a pseudo-element hit area, so the visual track keeps its size.
  * 
  * SHAPE: track and knob are both clipped to the small plate (--plate-round).
- * Focus is an inset ring (the clip swallows outside outlines) and the knob
+ * The clip lives on an inner track span, not the button, so the hit area
+ * isn't clipped away. Focus is an inset ring on the track and the knob
  * glides on the standard ease at duration-normal (200ms) — smooth, inside
  * the 150-200ms interactive-motion ceiling.
  *
@@ -27,7 +30,9 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 export interface SwitchProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
+  /** Track size. The tap target is at least 44px tall at every size. */
   size?: "small" | "medium" | "large";
+  /** Visible label and accessible name. Use `hideLabel` to keep it aria-only. */
   label?: string;
   /**
    * Keep `label` as the accessible name only (no visible text). Use in
@@ -120,20 +125,28 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           onClick={handleClick}
           onKeyDown={handleKeyDown}
           className={`
-            relative inline-flex items-center
-            shrink-0
-            ${currentSizeStyles.track}
-            plate-round
-            transition-colors [transition-duration:var(--duration-normal)]
-            focus:outline-none focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]
+            group relative inline-flex shrink-0
+            before:content-[''] before:absolute before:inset-x-0 before:top-1/2 before:-translate-y-1/2 before:h-11
+            focus:outline-none
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-            ${checked
-              ? 'bg-[var(--button-primary-background)]'
-              : 'bg-secondary-300 dark:bg-secondary-700'
-            }
           `}
           {...props}
         >
+          {/* Track: the visible plate */}
+          <span
+            aria-hidden="true"
+            className={`
+              relative inline-flex items-center
+              ${currentSizeStyles.track}
+              plate-round
+              transition-colors [transition-duration:var(--duration-normal)]
+              group-focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]
+              ${checked
+                ? 'bg-[var(--button-primary-background)]'
+                : 'bg-secondary-300 dark:bg-secondary-700'
+              }
+            `}
+          >
           {/* Sliding Knob */}
           <span
             className={`
@@ -154,6 +167,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
                 {icon}
               </span>
             )}
+          </span>
           </span>
         </button>
 

@@ -180,6 +180,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | `size="icon"` duplicated automatic icon-only squaring; `link` variant purpose undocumented | `size="icon"` deprecated with a dev warning (use "medium"); JSDoc explains link variant vs Link | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -191,6 +192,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | Deprecated `size="icon"`; documented `variant="link"` |
 
 <!-- AUTO-END:changelog -->
 

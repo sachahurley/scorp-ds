@@ -8,6 +8,8 @@ const meta: Meta<typeof Select> = {
   argTypes: {
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     error: { control: 'boolean' },
+    helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
+    errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
     disabled: { control: 'boolean' },
   },
   parameters: { layout: 'centered' },
@@ -41,7 +43,7 @@ export const Error: Story = {
     </div>
   ),
   args: {
-    error: true,
+    errorMessage: 'Pick an option to continue.',
     size: 'medium',
   },
 };

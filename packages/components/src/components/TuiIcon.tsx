@@ -544,7 +544,10 @@ const ICON_PATHS = Object.fromEntries(
  * size of one art pixel. Whole-pixel steps keep 1-bit edges sharp, so the
  * 7x7 art sits centered with a small margin rather than stretching to fill.
  * The text size only applies to the "?" shown for an unknown name. */
-const SIZE_MAP: Record<string, { box: string; pixel: number }> = {
+/** Icon box sizes, named after the Tailwind size number (4 = 16px). */
+export type TuiIconSize = "3" | "4" | "5" | "6" | "8";
+
+const SIZE_MAP: Record<TuiIconSize, { box: string; pixel: number }> = {
   "3": { box: "w-3 h-3 text-xs", pixel: 1.5 },
   "4": { box: "w-4 h-4 text-sm", pixel: 2 },
   "5": { box: "w-5 h-5 text-base", pixel: 2 },
@@ -555,8 +558,8 @@ const SIZE_MAP: Record<string, { box: string; pixel: number }> = {
 export interface TuiIconProps {
   /** Icon name -- must match a key in {@link TUI_ICON_GLYPHS} (same as the Lucide component name). */
   name: string;
-  /** Tailwind size number: "3" | "4" | "5" | "6" | "8". Defaults to "4". */
-  size?: string;
+  /** Box size as a Tailwind size number: "3" (12px), "4" (16px, default), "5" (20px), "6" (24px), "8" (32px). */
+  size?: TuiIconSize;
   /** Additional CSS classes (color, margin, etc.) */
   className?: string;
 }

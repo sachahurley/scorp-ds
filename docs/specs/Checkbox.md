@@ -180,6 +180,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | 16px small box below the 44px target; unlabeled boxes ignored mouse clicks; no helper or error text | 44px pseudo-element hit area at every size; control always wrapped in a label; added `helperText` and `errorMessage` | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -191,6 +192,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | 44px hit area, unlabeled click fix, `helperText`, `errorMessage` |
 
 <!-- AUTO-END:changelog -->
 

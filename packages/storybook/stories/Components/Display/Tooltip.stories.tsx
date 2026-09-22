@@ -17,10 +17,10 @@ type Story = StoryObj<typeof Tooltip>;
 
 export const OnButton: Story = {
   args: {
-    content: 'Extra context appears after a short delay.',
+    content: 'Opens on hover or keyboard focus. Escape closes it.',
     position: 'top',
     delay: 200,
-    children: <Button variant="secondary">Hover me</Button>,
+    children: <Button variant="secondary">Hover or focus me</Button>,
   },
 };
 

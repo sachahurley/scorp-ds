@@ -8,6 +8,8 @@ const meta: Meta<typeof Textarea> = {
   argTypes: {
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     error: { control: 'boolean' },
+    helperText: { control: 'text', description: 'Hint under the field (linked via aria-describedby)' },
+    errorMessage: { control: 'text', description: 'Validation message; implies error and replaces helperText' },
     disabled: { control: 'boolean' },
   },
   parameters: { layout: 'centered' },
@@ -28,9 +30,10 @@ export const Default: Story = {
 export const Error: Story = {
   args: {
     label: 'Feedback',
-    error: true,
     defaultValue: '',
-    placeholder: 'Fix validation errors',
+    placeholder: 'What should we change?',
+    helperText: 'Up to 500 characters.',
+    errorMessage: 'Add a sentence or two before sending.',
     className: 'w-96',
     rows: 3,
   },

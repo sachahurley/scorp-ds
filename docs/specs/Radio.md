@@ -181,6 +181,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-21 | 16px small circle below the 44px target; unlabeled radios ignored mouse clicks | 44px pseudo-element hit area at every size; control always wrapped in a label | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -192,6 +193,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | fix | 44px hit area, unlabeled click fix |
 
 <!-- AUTO-END:changelog -->
 

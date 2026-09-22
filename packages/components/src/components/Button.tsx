@@ -20,14 +20,34 @@
  * - small: 32px height
  * - medium: 40px height (default)
  * - large: 48px height
+ * - icon: DEPRECATED alias for a 40px square. Icon-only buttons are detected
+ *   automatically and squared at every size, so use `size="medium"` instead.
+ *
+ * ICON-ONLY BUTTONS: `variant` picks the look, `size` picks the dimension.
+ * `variant="icon"` is the dedicated icon plate (`--button-icon-*`); any other
+ * variant with only an icon child is also squared.
+ *
+ * LINK VARIANT vs `Link`: `variant="link"` is a BUTTON that looks like text,
+ * for in-place actions ("Forgot password?", "Show more"). For navigation to
+ * another page, use the `Link` component so it has anchor semantics.
  */
 
 import { forwardRef, useEffect, type ButtonHTMLAttributes, type CSSProperties } from "react";
 
 // Define the props interface for the Button component
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /**
+   * Visual style (default: "primary"). One primary per view; "link" is an
+   * action styled as text (navigate with `Link` instead); "icon" is the
+   * square icon plate, pair it with `aria-label`.
+   */
   variant?: "primary" | "secondary" | "ghost" | "link" | "outline" | "destructive" | "icon";
+  /**
+   * Height: small 32px, medium 40px (default), large 48px. Icon-only buttons
+   * are squared automatically. `"icon"` is deprecated: use "medium".
+   */
   size?: "small" | "medium" | "large" | "icon";
+  /** Disables the button (anchors drop `href` and set `aria-disabled`). */
   disabled?: boolean;
   // Icon support - can be any React element (TUI: typically TuiIcon or Unicode characters)
   iconLeft?: React.ReactNode;
@@ -131,6 +151,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         );
       }
     }, [variant, size, children, iconLeft, iconRight, ariaLabel, ariaLabelledBy]);
+
+    useEffect(() => {
+      if (process.env.NODE_ENV === "production" || size !== "icon") return;
+      console.warn(
+        '[@scorp-ds/components] Button: size="icon" is deprecated. Icon-only buttons are squared automatically; use size="medium".'
+      );
+    }, [size]);
 
     // SIZE STYLES - All values from tokens.json
     // Small: 32px height, 16px horizontal padding
