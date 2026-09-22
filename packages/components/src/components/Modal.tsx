@@ -220,7 +220,7 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
             - Border bottom separates header from content
           */}
           {/* Header — plain title (box-drawing decoration retired with the TUI tier) */}
-          <div className="flex items-center justify-between px-6 py-5 border-b-[0.5px] border-solid border-[var(--surface-container-stroke)]">
+          <div className="flex items-center justify-between px-6 py-5 border-b-[length:var(--border-width-hairline)] border-solid border-[var(--surface-container-stroke)]">
             <h2 className="text-base font-mono text-[var(--text-primary)] font-medium flex-1 min-w-0 truncate">
               {title}
             </h2>
@@ -269,7 +269,7 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
           {/* Optional fixed footer — CTA band, actions right-aligned. Same
               card fill as the header (no tint), separated by the hairline. */}
           {footerContent && (
-            <div className="flex items-center justify-end gap-3 px-6 py-5 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)]">
+            <div className="flex items-center justify-end gap-3 px-6 py-5 border-t-[length:var(--border-width-hairline)] border-solid border-[var(--surface-container-stroke)]">
               {footerContent}
             </div>
           )}
@@ -293,9 +293,9 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
         }`}
         style={{
           zIndex: "var(--z-index-modal)",
-          bottom: "48px",
+          bottom: "var(--spacing-12)",
           animationDuration: "var(--duration-normal)",
-          filter: "drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))",
+          filter: "var(--elevation-docked-filter)",
         }}
         onAnimationEnd={() => {
           if (closing) setVisible(false);

@@ -584,6 +584,19 @@ export interface TuiIconProps {
   className?: string;
 }
 
+/**
+ * Renders a design-system icon as 1-bit pixel art on a 7x7 grid.
+ *
+ * Use it anywhere an icon is needed: inside `Button` via `iconLeft` / `iconRight`,
+ * in rows, headers and empty states. Icons carry no colour of their own, so they
+ * inherit `currentColor` from the surrounding text: set colour with a text class
+ * on the icon or its parent.
+ *
+ * One art pixel is 2px at the default size, the same 2px step the plates use, and
+ * larger sizes step in whole pixels so edges never blur. An icon used on its own
+ * as the meaning of a control is decorative to assistive tech: give the control an
+ * `aria-label` rather than relying on the glyph.
+ */
 export const TuiIcon: React.FC<TuiIconProps> = ({
   name,
   size = "4",

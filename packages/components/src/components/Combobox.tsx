@@ -416,7 +416,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
             role="listbox"
             aria-labelledby={hasLabel ? labelId : undefined}
             aria-label={hasLabel ? undefined : ariaLabel}
-            className="max-h-[min(300px,var(--popover-available-height,300px))] overflow-y-auto py-1"
+            className="max-h-[min(var(--control-menu-max-height),var(--popover-available-height,var(--control-menu-max-height)))] overflow-y-auto py-1"
           >
             {visible.map((option, index) => {
               const isSelected = option.value === value;
