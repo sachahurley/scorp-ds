@@ -136,6 +136,41 @@ export type {
 } from './components/Accordion';
 // --- end Popover family ---
 
+// --- Navigation + terminal components (ds-nav-terminal) ---
+export { Breadcrumbs } from './components/Breadcrumbs';
+export type { BreadcrumbsProps, BreadcrumbItem } from './components/Breadcrumbs';
+
+export { Pagination, getPaginationRange } from './components/Pagination';
+export type { PaginationProps, PaginationRangeItem } from './components/Pagination';
+
+export { SideNav, SideNavSection, SideNavItem } from './components/SideNav';
+export type { SideNavProps, SideNavSectionProps, SideNavItemProps } from './components/SideNav';
+
+export { AppHeader } from './components/AppHeader';
+export type { AppHeaderProps } from './components/AppHeader';
+
+export { Window } from './components/Window';
+export type { WindowProps } from './components/Window';
+
+export { LogView } from './components/LogView';
+export type { LogViewProps, LogLine, LogLevel } from './components/LogView';
+
+export { StatusLine, StatusLineSegment } from './components/StatusLine';
+export type { StatusLineProps, StatusLineSegmentProps, StatusLineTone } from './components/StatusLine';
+
+export { DescriptionList } from './components/DescriptionList';
+export type { DescriptionListProps, DescriptionListItem } from './components/DescriptionList';
+
+export { Meter, getMeterTone } from './components/Meter';
+export type { MeterProps, MeterTone } from './components/Meter';
+
+export { TreeView } from './components/TreeView';
+export type { TreeViewProps, TreeNode } from './components/TreeView';
+
+export { Kbd } from './components/Kbd';
+export type { KbdProps } from './components/Kbd';
+// --- end navigation + terminal components ---
+
 // Primitives
 export { Stack } from './primitives/Stack';
 export type { StackProps, StackGap } from './primitives/Stack';
