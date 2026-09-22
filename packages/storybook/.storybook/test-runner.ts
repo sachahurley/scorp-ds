@@ -34,9 +34,22 @@ const config: TestRunnerConfig = {
   },
   async postVisit(page) {
     await waitForPageReady(page);
-    // Defer until addon-a11y’s scan can finish — avoids concurrent axe.run with checkA11y.
+    // Defer so addon-a11y's own scan can finish first: two overlapping
+    // axe.run() calls on one page throw "Axe is already running".
     await new Promise((r) => setTimeout(r, 750));
-    await checkA11y(page, '#storybook-root');
+    // The wait alone is not enough on a loaded CI machine, where the addon
+    // scan can start late. axe-core has no public "is running" flag, so the
+    // supported workaround is to retry that specific error.
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        await checkA11y(page, '#storybook-root');
+        return;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        if (attempt >= 4 || !message.includes('Axe is already running')) throw error;
+        await new Promise((r) => setTimeout(r, 500 * attempt));
+      }
+    }
   },
 };
 

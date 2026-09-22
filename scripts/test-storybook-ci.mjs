@@ -104,7 +104,9 @@ const storybookUrl = baseUrl.replace(/\/$/, '');
 function runTestStorybook(theme) {
   return new Promise((resolve, reject) => {
     console.log(`\n[test-storybook-ci] STORYBOOK_TEST_THEME=${theme}\n`);
-    const test = spawn('npx', ['test-storybook', '--url', storybookUrl], {
+    // Two workers: one axe run per page at a time keeps the "Axe is already
+    // running" race rare, and the retry in test-runner.ts covers the rest.
+    const test = spawn('npx', ['test-storybook', '--url', storybookUrl, '--maxWorkers', '2'], {
       cwd: storybookPkg,
       stdio: 'inherit',
       shell: true,
