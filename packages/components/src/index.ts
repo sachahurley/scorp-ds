@@ -175,6 +175,42 @@ export type { KbdProps } from './components/Kbd';
 export { Stack } from './primitives/Stack';
 export type { StackProps, StackGap } from './primitives/Stack';
 
+// --- Layout primitives (ds-layout-primitives) ---
+// Box is the base surface (padding, semantic background, plate ring); Inline,
+// Grid and Stack arrange children; Container and Center set page and column
+// width; VisuallyHidden is the screen-reader-only text wrapper.
+export { Box } from './primitives/Box';
+export type {
+  BoxProps,
+  BoxSpace,
+  BoxBackground,
+  BoxBorder,
+  BoxElement,
+} from './primitives/Box';
+
+export { Inline } from './primitives/Inline';
+export type { InlineProps, InlineGap, InlineAlign, InlineJustify } from './primitives/Inline';
+
+export { Grid } from './primitives/Grid';
+export type {
+  GridProps,
+  GridGap,
+  GridColumns,
+  GridColumnCount,
+  GridBreakpoint,
+  GridAlign,
+} from './primitives/Grid';
+
+export { Container } from './primitives/Container';
+export type { ContainerProps, ContainerSize, ContainerElement } from './primitives/Container';
+
+export { Center } from './primitives/Center';
+export type { CenterProps, CenterMaxWidth, CenterElement } from './primitives/Center';
+
+export { VisuallyHidden } from './primitives/VisuallyHidden';
+export type { VisuallyHiddenProps, VisuallyHiddenElement } from './primitives/VisuallyHidden';
+// --- end layout primitives ---
+
 // Lab barrel (empty — add as experimental components are built)
 // export * from './lab';
 
