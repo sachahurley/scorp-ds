@@ -15,7 +15,10 @@
  * - Severity icon per variant from the 1-bit set: default Bell, info Info,
  *   success CheckCircle, warning AlertTriangle, error AlertCircle
  *   (override with iconLeft)
- * - Optional close button (onClose prop), a 1-bit X
+ * - Optional close button (onClose prop), a 1-bit X. It is a `type="button"`
+ *   control so an Alert inside a form never submits it, carries the system's
+ *   inset focus ring, and gets an invisible 44x44px hit area from a
+ *   pseudo-element (same recipe as Checkbox, so the visual stays 12px).
  * - Optional title and description
  * - Full light/dark theme support
  * - Accessible (ARIA attributes)
@@ -25,11 +28,17 @@ import { type ReactNode } from "react";
 import { TuiIcon, type TuiIconName } from "./TuiIcon";
 
 export interface AlertProps {
+  /** Severity: picks the color set and the 1-bit severity icon. */
   variant?: "default" | "success" | "warning" | "error" | "info";
+  /** Short bold headline, one line. Say what happened, not "Error". */
   title?: string;
+  /** Body copy under the title: what it means and what to do next. */
   description?: ReactNode;
+  /** Replaces the variant's severity icon. Use a `TuiIcon`. */
   iconLeft?: ReactNode;
+  /** Adds a dismiss control (44px hit area) and is called when it is pressed. */
   onClose?: () => void;
+  /** Extra classes on the outer ring layer (spacing and width only). */
   className?: string;
 }
 
@@ -118,6 +127,14 @@ export function Alert({
 
   const styles = variantStyles[variant];
 
+  // Close control focus ring: the system's inset box-shadow ring (an outside
+  // ring would be sliced by the plate clip). There is no per-severity ring
+  // token, so error takes the error ring and every other variant the primary.
+  const closeFocusRing =
+    variant === "error"
+      ? "focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-error)]"
+      : "focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]";
+
   return (
     <div role="alert" className={`plate-round p-px ${styles.ring} ${className}`}>
     <div
@@ -150,17 +167,22 @@ export function Alert({
         )}
       </div>
 
-      {/* Close Button */}
+      {/* Close Button: 12px glyph, 44px hit area from a centered
+          pseudo-element (layout unchanged), inset token focus ring */}
       {onClose && (
         <button
+          type="button"
           onClick={onClose}
           className={`
-            flex-shrink-0
+            relative flex-shrink-0
             font-mono text-xs font-bold
             ${styles.description}
             hover:text-error-800 dark:hover:text-error-300
             transition-colors [transition-duration:var(--duration-fast)]
-            focus:outline-none focus:ring-1 focus:ring-offset-1
+            before:content-[''] before:absolute before:left-1/2 before:top-1/2
+            before:-translate-x-1/2 before:-translate-y-1/2
+            before:w-touch before:h-touch
+            focus:outline-none ${closeFocusRing}
           `}
           aria-label="Close alert"
         >

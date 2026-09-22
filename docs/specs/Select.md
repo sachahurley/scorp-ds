@@ -31,7 +31,7 @@ Select picks one value from a list of options inside a form. It takes native `<o
 
 <!-- AUTO-START:anatomy -->
 
-Outer `w-full` wrapper (receives `className`), optional `<label>` (targets the trigger button), then: a hidden native `<select>` (`sr-only`, `aria-hidden`, `tabIndex=-1`), a ring wrapper (`plate-round p-px`) around the trigger `<button>` (selected label or "Select..." plus a `ChevronDown` icon that rotates 180 degrees when open), the open menu (ring layer in `--border-default` around a `role="listbox"` panel on `--surface-card`, max 300px tall with scrolling), and an optional `FieldMessage`. Each option is a `<button role="option">`; the selected option shows a `Check` icon.
+Outer `w-full` wrapper (receives `className`), optional `<label>` (targets the trigger button), then: a hidden native `<select>` (`sr-only`, `aria-hidden`, `tabIndex=-1`), a ring wrapper (`plate-round p-px`) around the trigger `<button>` (selected label or "Select..." plus a `ChevronDown` icon that rotates 180 degrees when open), the open menu (ring layer in `--border-default` around a `role="listbox"` panel on `--surface-card`, `max-h-80` / 320px with scrolling), and an optional `FieldMessage`. Each option is a `<button type="button" role="option">` with a stable id, so the trigger can point `aria-activedescendant` at the highlighted one; the selected option shows a `Check` icon. Options that came from an `<optgroup>` are wrapped in a `role="group"` with a quiet heading row carrying the group label.
 
 ### Variants
 
@@ -48,7 +48,7 @@ Outer `w-full` wrapper (receives `className`), optional `<label>` (targets the t
 | `lg` | Trigger 48px (`h-control-lg`), `px-4 py-3.5`, 24px icon box |
 | `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
-Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows).
+Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows). Group headings are `px-4 py-2`, `text-xs`, uppercase, in `--text-secondary`.
 
 <!-- AUTO-END:anatomy -->
 
@@ -60,7 +60,7 @@ Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows).
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `children` | `<option>` elements | none | Yes | Options, read from each child's `value`, text `children`, and `disabled`. Must be direct `<option>` children (see Known Gaps). |
+| `children` | `<option>` / `<optgroup>` elements | none | Yes | Options, read from each child's `value`, text `children` and `disabled`. Children are flattened, so arrays, fragments and a static option mixed with a mapped list all work; `<optgroup>` children are read with the group's `label` and `disabled` inherited. An option with no `value` submits its text, as in a native select. |
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Trigger height. Legacy names are deprecated. |
 | `label` | `ReactNode` | none | No | Visible label, associated with the trigger button via `htmlFor`/`id`. Preferred over `aria-label`. |
 | `aria-label` | `string` | `"Select an option"` when there is no `label` | No | Accessible name for the trigger when no visible label is set. |
@@ -94,7 +94,9 @@ Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows).
 | `--text-secondary` | Color | light `#695F4D`, dark `#BFB4A3` | Chevron icon, helper text |
 | `--border-default` | Color | light `#F0EBE4`, dark `#695F4D` | Menu ring |
 | `--surface-card` | Color | light `#FFFFFF`, dark `#120D09` | Menu fill |
-| `--surface-subtle` | Color | light `#FCFBFA`, dark `#1A150F` | Option hover and keyboard highlight |
+| `--surface-muted` | Color | light `#F7F5F2`, dark `#221E13` | Option hover and keyboard highlight (light `--surface-subtle` was 1.02:1 against the card fill, this is 1.09:1) |
+| `--accent` | Color | light `#B45309`, dark `#E0A26A` | Keyboard-highlighted option text: 4.6:1 on the light highlight, 7.6:1 on the dark one, so the highlight is legible where the fill difference alone is quiet |
+| `--z-index-dropdown` | Layer | `1000` | Menu stacking |
 | `--border-focus` | Color | `#FBBF24` | Selected-option check icon |
 | `secondary-800` / `dark:secondary-200` | Color | `#474030` / `#F7F5F2` | Label |
 | `--control-height-sm/md/lg` | Size | `32px` / `40px` / `48px` | Trigger height |
@@ -116,11 +118,14 @@ Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows).
 | Hover | `:hover` on ring wrapper | Ring `--field-border-hover` |
 | Focus | `:focus-within` on ring wrapper | Ring `--field-border-focus` |
 | Open | internal `isOpen` | Menu rendered (`fade-in slide-in-from-top-2`), chevron `rotate-180`, `aria-expanded="true"` |
-| Option highlighted | hover or arrow keys | Option background `--surface-subtle` |
+| Option hover | `:hover` | Option background `--surface-muted` |
+| Option highlighted | arrow keys | `--surface-muted` fill plus `--accent` text, and `aria-activedescendant` on the trigger names the option |
 | Option selected | current value | `aria-selected="true"`, Check icon in `--border-focus` |
 | Option disabled | `<option disabled>` | `opacity-50`, skipped by arrow keys |
 | Error | `error` or `errorMessage` | Ring `--field-border-error`, fill `--field-background-error` |
 | Disabled | `disabled` | Ring wrapper `opacity-50`, chevron also `opacity-50`, `cursor-not-allowed`, cannot open |
+| Grouped options | `<optgroup>` children | `role="group"` wrapper with an `--text-secondary` heading row |
+| Closed by Tab | `Tab` while open | Menu unmounts, focus moves on normally |
 
 <!-- AUTO-END:states -->
 
@@ -138,12 +143,13 @@ Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows).
 | aria-label only | Yes | Yes | `Aria label only` |
 | sm / md / lg | Yes | Controls only | No all-sizes story |
 | Helper text | Yes | Controls only | |
-| Disabled option | Yes | No | |
+| Disabled option | Yes | Yes | `Option groups` |
+| Option groups (`<optgroup>`) | Yes | Yes | `Option groups` |
 | Open menu | Yes | Interactive only | |
 
 Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` via args on each story.
 
-**Coverage:** 57% (4/7, open menu interactive only)
+**Coverage:** 71% (5/7, open menu interactive only)
 
 <!-- AUTO-END:storybook -->
 
@@ -153,9 +159,8 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 
 <!-- AUTO-START:hardcoded -->
 
-- `min-w-[200px]` on the menu.
-- `max-h-[300px]` on the listbox.
-- `z-[1051]` on the menu: an arbitrary layer, not the `--z-index-dropdown` (1000) or `--z-index-popover` (1050) token.
+- `min-w-52` (208px) on the menu and `max-h-80` (320px, about seven 44px rows) on the listbox: Tailwind spacing-scale utilities rather than arbitrary pixels; there are no menu width or height tokens.
+- Menu layer is `z-[var(--z-index-dropdown)]`. The dropdown token (1000) is the right one, not popover (1050): the menu is absolutely positioned inside the field's own stacking context with no portal, so it only competes with siblings there, while the popover and modal layers own their own contexts.
 - `mt-2` menu offset and `ml-2` chevron gap (Tailwind scale).
 
 <!-- AUTO-END:hardcoded -->
@@ -184,11 +189,11 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic role: trigger is a `button` with `aria-haspopup="listbox"` and `aria-expanded`; the menu is `role="listbox"` with `role="option"` buttons carrying `aria-selected`. The native select is hidden from assistive tech.
+- Semantic role: trigger is a `type="button"` control with `aria-haspopup="listbox"`, `aria-expanded` and, while open, `aria-controls` pointing at the listbox; the menu is `role="listbox"` (labelled by the visible `label`, or by `aria-label`) with `role="option"` buttons carrying `aria-selected`. `<optgroup>` children become `role="group"` with a labelling heading. The native select is hidden from assistive tech. No control here submits a surrounding form.
 - Required labels: `label` (associated with the trigger) or `aria-label`; falls back to the generic "Select an option".
 - Description: helper or error text on the trigger via `aria-describedby`; `aria-invalid` in error.
 - Keyboard: with focus in the component, Enter, Space, ArrowDown or ArrowUp opens and highlights the selected (or first enabled) option. While open: ArrowDown/ArrowUp move the highlight (wrapping, skipping disabled), Enter/Space select and close, Escape closes. Click outside closes.
-- Focus management: focus stays on the trigger; the highlighted option is visual only (no `aria-activedescendant`), so screen readers do not announce it while navigating. Tab does not close the menu.
+- Focus management: focus stays on the trigger and `aria-activedescendant` names the highlighted option, so screen readers announce it while arrowing. Tab closes the menu and lets focus move on.
 - Touch target minimum: options are 44px tall. The trigger is 32/40/48px; only `lg` meets 44px.
 - Color independence: selection is marked with a Check icon, errors with the AlertCircle icon and text.
 
@@ -206,6 +211,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 - Don't use Select for actions; use `Dropdown`.
 - Don't use Select for two or three choices that fit on screen; use `Radio`.
 - Don't rely on `onChange` receiving a real DOM event: read only `event.target.value` and `event.target.name`.
+- Do use `<optgroup label="...">` to group long option lists; groups render as labelled sections and a disabled group disables its options.
 
 <!-- /HUMAN-SECTION:do-dont -->
 
@@ -230,8 +236,10 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | `error` was boolean only; no helper or error text | Added `helperText` and `errorMessage` on the trigger via aria-describedby and aria-invalid | Resolved |
-| 2026-09-22 | Keyboard highlight is visual only (no `aria-activedescendant`, no `aria-controls`/labelled listbox) and `--surface-subtle` is nearly invisible against `--surface-card` in light mode | None yet | Open |
-| 2026-09-22 | Options are only parsed from direct `<option>` children: `<optgroup>`, fragments, or a static option mixed with a mapped array are dropped | None yet | Open |
+| 2026-09-22 | Keyboard highlight is visual only (no `aria-activedescendant`, no `aria-controls`/labelled listbox) and `--surface-subtle` is nearly invisible against `--surface-card` in light mode | Option ids plus `aria-activedescendant` and `aria-controls` on the trigger, a labelled listbox, and the highlight moved to `--surface-muted` + `--accent` text | Resolved |
+| 2026-09-22 | Options are only parsed from direct `<option>` children: `<optgroup>`, fragments, or a static option mixed with a mapped array are dropped | Children are flattened through `Children.forEach` with fragments unwrapped and `<optgroup>` read (label and `disabled` inherited); groups render as labelled `role="group"` sections | Resolved |
+| 2026-09-22 | The hidden native `<select>` is still flat: it mirrors values, not `<optgroup>` structure. Submission is unaffected | None yet | Open |
+| 2026-09-22 | The trigger is 32/40/48px tall, so only `lg` meets the 44px touch minimum | None yet | Open |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -247,6 +255,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 | Unreleased | 2026-09-21 | feat | Trigger arrow and selected-option check use 1-bit ChevronDown and Check icons |
 | Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | `aria-activedescendant` / `aria-controls` and option ids, one raw-index keyboard model, Tab closes the menu, children flattened (fragments, arrays, `<optgroup>`), an option with no `value` falls back to its text, highlight moved to `--surface-muted` + `--accent`, menu uses `--z-index-dropdown`, `min-w-52` and `max-h-80`, stale "Unicode" comments removed |
 
 <!-- AUTO-END:changelog -->
 

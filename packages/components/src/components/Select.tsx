@@ -19,15 +19,97 @@
  * 
  * Features:
  * - Custom dropdown menu matching Dropdown component styling
- * - Keyboard navigation (Arrow keys, Escape, Enter)
+ * - Keyboard navigation (Arrow keys, Escape, Enter, Tab closes), announced
+ *   through `aria-activedescendant` on the trigger
  * - Click outside to close
  * - Maintains form compatibility with hidden native select
+ * - Children are flattened, so fragments, arrays and `<optgroup>` all work
  */
 
-import { useState, useRef, useEffect, forwardRef, useImperativeHandle, useId, type ReactNode, type SelectHTMLAttributes } from "react";
+import { Children, Fragment, isValidElement, useState, useRef, useEffect, forwardRef, useImperativeHandle, useId, type ReactElement, type ReactNode, type SelectHTMLAttributes } from "react";
 import { FieldMessage, useFieldMessage } from "../lib/field";
 import { TuiIcon } from "./TuiIcon";
 import { resolveSize, type ControlSizeProp } from "../lib/size";
+
+/** One flattened option, plus the label of the `<optgroup>` it came from. */
+interface ParsedOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  group?: string;
+}
+
+/** Text of an option child: a string, a number, or a run of them. */
+function optionLabel(children: ReactNode): string {
+  if (children == null || typeof children === "boolean") return "";
+  if (Array.isArray(children)) return children.map(optionLabel).join("");
+  if (typeof children === "string" || typeof children === "number") return String(children);
+  if (isValidElement(children)) {
+    return optionLabel((children.props as { children?: ReactNode }).children);
+  }
+  return String(children);
+}
+
+/**
+ * Flattens `children` into options.
+ *
+ * `Children.forEach` already walks arrays (a static option next to a mapped
+ * list), fragments are unwrapped here, and `<optgroup>` children are read with
+ * the group's `label` and `disabled` inherited, so nothing is silently dropped.
+ * Any other element is still read as an option (its `value`, text and
+ * `disabled`), which keeps custom option wrappers working as before.
+ */
+function parseOptions(children: ReactNode, group?: string, groupDisabled?: boolean, out: ParsedOption[] = []): ParsedOption[] {
+  Children.forEach(children, (child) => {
+    if (!isValidElement(child)) return;
+    const element = child as ReactElement<{
+      value?: string | number | readonly string[];
+      children?: ReactNode;
+      disabled?: boolean;
+      label?: string;
+    }>;
+    const props = element.props;
+
+    if (element.type === Fragment) {
+      parseOptions(props.children, group, groupDisabled, out);
+      return;
+    }
+
+    if (element.type === "optgroup") {
+      parseOptions(props.children, props.label ?? group, props.disabled || groupDisabled, out);
+      return;
+    }
+
+    const label = optionLabel(props.children);
+    out.push({
+      // Native fallback: an option with no `value` submits its text
+      value: props.value != null ? String(props.value) : label,
+      label,
+      disabled: props.disabled || groupDisabled || undefined,
+      group,
+    });
+  });
+
+  return out;
+}
+
+/**
+ * Moves the highlight to the next non-disabled option, wrapping at both ends.
+ * Indices are raw `options` indices, so the highlighted row, the row Enter
+ * selects and the row `aria-activedescendant` names are always the same one.
+ */
+function nextEnabledIndex(options: ParsedOption[], from: number, delta: 1 | -1): number {
+  const count = options.length;
+  if (count === 0) return -1;
+  let index = from;
+  for (let step = 0; step < count; step++) {
+    index += delta;
+    if (index >= count) index = 0;
+    if (index < 0) index = count - 1;
+    if (!options[index]?.disabled) return index;
+  }
+  return -1;
+}
 
 // Define the props interface for the Select component
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
@@ -86,35 +168,24 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   const error = field.invalid;
   const autoId = useId();
   const triggerId = htmlId ?? `${autoId}-trigger`;
-  // Parse option elements from children
-  const parseOptions = (): Array<{ value: string; label: string; disabled?: boolean }> => {
-    const options: Array<{ value: string; label: string; disabled?: boolean }> = [];
-    
-    if (Array.isArray(children)) {
-      children.forEach((child) => {
-        if (typeof child === 'object' && child !== null && 'props' in child) {
-          const props = child.props as { value?: string; children?: ReactNode; disabled?: boolean };
-          options.push({
-            value: props.value || '',
-            label: typeof props.children === 'string' ? props.children : String(props.children || ''),
-            disabled: props.disabled,
-          });
-        }
-      });
-    } else if (typeof children === 'object' && children !== null && 'props' in children) {
-      const props = (children as any).props;
-      options.push({
-        value: props.value || '',
-        label: typeof props.children === 'string' ? props.children : String(props.children || ''),
-        disabled: props.disabled,
-      });
-    }
-    
-    return options;
-  };
+  const listboxId = `${autoId}-listbox`;
+  const labelId = `${autoId}-label`;
+  /** Stable id per option, so the trigger can point `aria-activedescendant` at it. */
+  const optionId = (index: number) => `${autoId}-option-${index}`;
 
-  const options = parseOptions();
-  
+  const options = parseOptions(children);
+
+  // Consecutive options from the same `<optgroup>`, for the group headings
+  const optionGroups: Array<{ label?: string; entries: Array<{ option: ParsedOption; index: number }> }> = [];
+  options.forEach((option, index) => {
+    const current = optionGroups[optionGroups.length - 1];
+    if (current && current.label === option.group) {
+      current.entries.push({ option, index });
+    } else {
+      optionGroups.push({ label: option.group, entries: [{ option, index }] });
+    }
+  });
+
   // State management
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -213,16 +284,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           if (dropdownRef.current?.contains(event.target as Node)) {
             event.preventDefault();
             toggleDropdown();
-            // Set initial focus to selected option or first option
-            const enabledOptions = options.filter(opt => !opt.disabled);
-            const selectedIndex = enabledOptions.findIndex(opt => opt.value === selectedValue);
-            setFocusedIndex(selectedIndex >= 0 ? selectedIndex : 0);
+            // Highlight the selected option, or the first enabled one
+            const selectedIndex = options.findIndex(opt => opt.value === selectedValue && !opt.disabled);
+            setFocusedIndex(selectedIndex >= 0 ? selectedIndex : nextEnabledIndex(options, -1, 1));
           }
         }
         return;
       }
 
-      const enabledOptions = options.filter(opt => !opt.disabled);
       const currentIndex = focusedIndex;
 
       switch (event.key) {
@@ -230,28 +299,27 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           event.preventDefault();
           closeDropdown();
           break;
-        
+
+        case "Tab":
+          // Let focus move on, but never leave an orphaned menu behind
+          closeDropdown();
+          break;
+
         case "ArrowDown":
           event.preventDefault();
-          setFocusedIndex((prevIndex) => {
-            const nextIndex = prevIndex + 1;
-            return nextIndex >= enabledOptions.length ? 0 : nextIndex;
-          });
+          setFocusedIndex((prevIndex) => nextEnabledIndex(options, prevIndex, 1));
           break;
-        
+
         case "ArrowUp":
           event.preventDefault();
-          setFocusedIndex((prevIndex) => {
-            const nextIndex = prevIndex - 1;
-            return nextIndex < 0 ? enabledOptions.length - 1 : nextIndex;
-          });
+          setFocusedIndex((prevIndex) => nextEnabledIndex(options, prevIndex, -1));
           break;
-        
+
         case "Enter":
         case " ":
           event.preventDefault();
-          if (currentIndex >= 0 && currentIndex < enabledOptions.length) {
-            handleSelect(enabledOptions[currentIndex].value);
+          if (currentIndex >= 0 && currentIndex < options.length && !options[currentIndex].disabled) {
+            handleSelect(options[currentIndex].value);
           }
           break;
       }
@@ -263,29 +331,17 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     };
   }, [isOpen, focusedIndex, options, selectedValue]);
 
-  // Scroll focused item into view
+  // Scroll focused item into view. `focusedIndex` is a raw option index and
+  // the option buttons render in that same order, so no remapping is needed.
   useEffect(() => {
     if (focusedIndex >= 0 && menuRef.current) {
       const items = menuRef.current.querySelectorAll('[role="option"]');
-      // Find the actual DOM index of the focused option
-      let domIndex = 0;
-      let enabledCount = 0;
-      for (let i = 0; i < items.length; i++) {
-        const option = options[i];
-        if (!option.disabled) {
-          if (enabledCount === focusedIndex) {
-            domIndex = i;
-            break;
-          }
-          enabledCount++;
-        }
-      }
-      const focusedItem = items[domIndex] as HTMLElement;
+      const focusedItem = items[focusedIndex] as HTMLElement | undefined;
       if (focusedItem) {
         focusedItem.scrollIntoView({ block: "nearest" });
       }
     }
-  }, [focusedIndex, options]);
+  }, [focusedIndex]);
 
   // Size styles matching Dropdown component exactly
   const sizeStyles = {
@@ -321,6 +377,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   const triggerRing = error
     ? "bg-[var(--field-border-error)]"
     : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
+
+  const hasLabel = label != null && label !== "";
 
   const triggerBlock = (
     <div ref={dropdownRef} className="relative inline-block w-full">
@@ -361,16 +419,16 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
         `}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        aria-controls={isOpen ? listboxId : undefined}
+        // Names the highlighted option so screen readers announce it while
+        // arrowing; focus itself never leaves the trigger.
+        aria-activedescendant={isOpen && focusedIndex >= 0 ? optionId(focusedIndex) : undefined}
         aria-invalid={error || undefined}
         aria-describedby={field.describedBy}
-        aria-label={
-          label != null && label !== ""
-            ? undefined
-            : ariaLabel ?? "Select an option"
-        }
+        aria-label={hasLabel ? undefined : ariaLabel ?? "Select an option"}
       >
         <span className="truncate text-left flex-1">{selectedLabel || 'Select...'}</span>
-        {/* TUI Tier 2: Unicode ▼ instead of Lucide ChevronDown */}
+        {/* 1-bit ChevronDown, rotated while the menu is open */}
         <span
           className={`
             ${currentSizeStyles.icon}
@@ -388,33 +446,42 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       </button>
       </div>
 
-      {/* Custom dropdown menu — plate ring recipe, matching Dropdown */}
+      {/* Custom dropdown menu: plate ring recipe, matching Dropdown.
+          Layer: --z-index-dropdown. The menu is absolutely positioned inside
+          the field's own stacking context (no portal), so it only competes
+          with siblings there; the popover and modal layers own their own
+          contexts. Width min-w-52 (208px) and height max-h-80 (320px, about
+          seven 44px rows) come from the spacing scale. */}
       {isOpen && (
         <div
           style={{ animationDuration: "var(--duration-normal)" }}
           className={`
             absolute top-full mt-2 left-0 right-0
-            min-w-[200px]
+            min-w-52
             plate-round p-px bg-[var(--border-default)]
-            z-[1051]
+            z-[var(--z-index-dropdown)]
             animate-in fade-in slide-in-from-top-2
           `}
         >
         <div
           ref={menuRef}
+          id={listboxId}
           role="listbox"
-          className={`plate-round bg-[var(--surface-card)] ${currentSizeStyles.menu} max-h-[300px] overflow-y-auto`}
+          aria-labelledby={hasLabel ? labelId : undefined}
+          aria-label={hasLabel ? undefined : ariaLabel ?? "Select an option"}
+          className={`plate-round bg-[var(--surface-card)] ${currentSizeStyles.menu} max-h-80 overflow-y-auto`}
         >
-          {options.map((option, index) => {
+          {optionGroups.map((group, groupIndex) => {
+            const headingId = `${autoId}-group-${groupIndex}`;
+            const rows = group.entries.map(({ option, index }) => {
             const isDisabled = option.disabled;
             const isSelected = option.value === selectedValue;
-            const enabledOptions = options.filter(opt => !opt.disabled);
-            const enabledIndex = enabledOptions.findIndex(opt => opt.value === option.value);
-            const isFocused = enabledIndex === focusedIndex && !isDisabled;
-            
+            const isFocused = focusedIndex === index && !isDisabled;
+
             return (
               <button
                 key={index}
+                id={optionId(index)}
                 type="button"
                 role="option"
                 aria-selected={isSelected}
@@ -427,20 +494,36 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
                   transition-colors [transition-duration:var(--duration-fast)]
                   ${isDisabled
                     ? 'opacity-50 cursor-not-allowed'
-                    : 'text-[var(--text-primary)] hover:bg-[var(--surface-subtle)] cursor-pointer'
+                    : 'text-[var(--text-primary)] hover:bg-[var(--surface-muted)] cursor-pointer'
                   }
-                  ${isFocused && !isDisabled ? 'bg-[var(--surface-subtle)]' : ''}
+                  ${isFocused ? 'bg-[var(--surface-muted)] text-[var(--accent)]' : ''}
                   ${currentSizeStyles.menuItem}
                 `}
               >
                 {/* Option label */}
                 <span className="truncate flex-1 min-w-0">{option.label}</span>
-                
-                {/* TUI Tier 2: Unicode ✓ instead of Lucide Check */}
+
+                {/* 1-bit Check on the current value */}
                 {isSelected && (
                   <span className={`${currentSizeStyles.icon} inline-flex items-center justify-center font-mono font-bold text-[var(--border-focus)] flex-shrink-0`} aria-hidden="true"><TuiIcon name="Check" /></span>
                 )}
               </button>
+            );
+            });
+
+            // Ungrouped options render flat; an `<optgroup>` becomes a
+            // labelled `role="group"` with a quiet heading row.
+            if (group.label == null) return <Fragment key={groupIndex}>{rows}</Fragment>;
+            return (
+              <div key={groupIndex} role="group" aria-labelledby={headingId}>
+                <div
+                  id={headingId}
+                  className="px-4 py-2 font-mono text-xs uppercase tracking-wide text-[var(--text-secondary)]"
+                >
+                  {group.label}
+                </div>
+                {rows}
+              </div>
             );
           })}
         </div>
@@ -449,7 +532,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     </div>
   );
 
-  const hasLabel = label != null && label !== "";
   if (!hasLabel && !field.hasMessage) {
     return <div className={`w-full ${className}`.trim()}>{triggerBlock}</div>;
   }
@@ -458,6 +540,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     <div className={`w-full space-y-1 ${className}`.trim()}>
       {hasLabel && (
         <label
+          id={labelId}
           htmlFor={triggerId}
           className="block font-mono text-sm text-secondary-800 dark:text-secondary-200"
         >
