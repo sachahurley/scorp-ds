@@ -144,7 +144,7 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 | Variant | Role tokens (CSS vars) |
 |---------|-------------------------|
 | Primary | `--button-primary-background`, `--button-primary-background-hover`, `--button-primary-text` |
-| Secondary | `--button-secondary-background`, `--button-secondary-background-hover`, `--button-secondary-text` |
+| Secondary | `--button-secondary-background`, `--button-secondary-background-hover`, `--button-secondary-text`, `--button-secondary-text-hover` (light hover flips to dark sepia-950 text on the sepia-600 fill, 5.3:1, mirroring the dark-theme flip) |
 | Ghost | `--button-ghost-background`, `--button-ghost-background-hover`, `--button-ghost-text` |
 | Outline | `--button-outline-border`, `--button-outline-background`, `--button-outline-background-hover`, `--button-outline-text` |
 | Destructive | `--button-destructive-background`, `--button-destructive-background-hover`, `--button-destructive-text` |

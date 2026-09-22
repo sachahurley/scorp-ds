@@ -357,7 +357,7 @@
   --button-secondary-background: #695F4D;
   --button-secondary-background-hover: #968A75;
   --button-secondary-text: #FDFCFB;
-  --button-secondary-text-hover: #FDFCFB;
+  --button-secondary-text-hover: #1A150F; /* sepia-950 on the sepia-600 hover fill: 5.3:1 (white was 3.3:1) */
   --button-ghost-background: transparent;
   --button-ghost-background-hover: #F7F5F2;
   --button-ghost-text: #2B2718;

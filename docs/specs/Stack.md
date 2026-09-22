@@ -1,28 +1,27 @@
 # Stack
 
-> Primitive spec — layout helper. Last synced 2026-04-05.
+> Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
 
 ## Status
 
 | Field | Value |
 |-------|-------|
-| Widget | `ScorpStack` |
+| Component | `Stack` (import from `@scorp-ds/components`) |
 | Layer | `primitive` |
 | Category | `Layout` |
 | File | `packages/components/src/primitives/Stack.tsx` |
 | Story | `Primitives/Layout/Stack` |
 | Version | `v1` |
 | Status | `draft` |
-| Last synced | 2026-04-05 |
-| Notion Page | https://www.notion.so/3e29a6335da181feae9efc7c3f2fda43 |
+| Last updated | 2026-09-22 |
 
 ---
 
 ## Intent
 
-<!-- HUMAN-SECTION:intent -->
+<!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-Vertical or horizontal flex layout with **token-backed gap** (`gap-*` utilities). Use inside screens and compound components instead of one-off `flex` + arbitrary gap values.
+Stack is the layout primitive for spacing a group of elements along one axis with a gap from the spacing scale. Use it inside screens, patterns and compound components instead of one-off `flex` plus arbitrary gap values: vertical for form fields and sections, horizontal for toolbars and button groups. It only lays children out; it has no visual styling, semantics or padding of its own. For two-dimensional layouts use CSS grid directly.
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -32,18 +31,26 @@ Vertical or horizontal flex layout with **token-backed gap** (`gap-*` utilities)
 
 <!-- AUTO-START:anatomy -->
 
-### Variants
+A single `<div class="flex ...">` around `children`.
+
+### Variants (`axis`)
 
 | Enum Value | Description |
 |-----------|-------------|
-| *(axis)* | `vertical` (default) — column; `horizontal` — row with wrap |
+| `vertical` (default) | `flex-col`. Children stretch to the container width. |
+| `horizontal` | `flex-row flex-wrap items-center`. Children wrap onto new lines and are vertically centered. |
 
-### Sizes (gap)
+### Sizes (`gap`, type `StackGap`)
 
-| Enum Value | Maps to |
-|-----------|---------|
-| `none` | `gap-0` |
-| `1`–`8` | Tailwind `gap-{n}` on the 4px scale |
+| Enum Value | Description |
+|-----------|-------------|
+| `none` | `gap-0` (0) |
+| `"1"` | `gap-1` (4px) |
+| `"2"` | `gap-2` (8px) |
+| `"3"` | `gap-3` (12px) |
+| `"4"` (default) | `gap-4` (16px) |
+| `"6"` | `gap-6` (24px) |
+| `"8"` | `gap-8` (32px) |
 
 <!-- AUTO-END:anatomy -->
 
@@ -55,10 +62,12 @@ Vertical or horizontal flex layout with **token-backed gap** (`gap-*` utilities)
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `children` | `ReactNode` | — | Yes | Child elements |
-| `gap` | `StackGap` | `4` | No | Spacing between children |
-| `axis` | `"vertical" \| "horizontal"` | `vertical` | No | Layout direction |
-| `className` | `string` | `""` | No | Extra Tailwind / utility classes |
+| `children` | `ReactNode` | none | Yes | Elements to lay out. |
+| `gap` | `StackGap` (`"none" \| "1" \| "2" \| "3" \| "4" \| "6" \| "8"`) | `"4"` | No | Space between children, from the spacing scale. |
+| `axis` | `"vertical" \| "horizontal"` | `"vertical"` | No | Layout direction. Horizontal also wraps and centers items. |
+| `className` | `string` | none | No | Extra classes, merged with `cn()` (tailwind-merge), so overrides such as `items-start` win. |
+
+No other props: Stack does not forward a `ref`, spread native attributes (`id`, `aria-*`, `role`) or support an `as` element.
 
 <!-- AUTO-END:properties -->
 
@@ -70,9 +79,22 @@ Vertical or horizontal flex layout with **token-backed gap** (`gap-*` utilities)
 
 | Token | Category | Resolved Value | Usage |
 |-------|----------|---------------|-------|
-| Spacing scale | spacing | 4px base unit | `gap-*` utilities |
+| `--spacing-1` to `--spacing-8` (via `gap-*`) | Spacing | `4px`, `8px`, `12px`, `16px`, `24px`, `32px` | Gap between children |
 
 <!-- AUTO-END:tokens -->
+
+---
+
+## States & Variants
+
+<!-- AUTO-START:states -->
+
+| State / Variant | Controlled By | Tokens Affected |
+|----------------|--------------|-----------------|
+| Vertical | `axis="vertical"` | `gap-*` |
+| Horizontal | `axis="horizontal"` | `gap-*` (applies to both row and wrap gaps) |
+
+<!-- AUTO-END:states -->
 
 ---
 
@@ -82,10 +104,13 @@ Vertical or horizontal flex layout with **token-backed gap** (`gap-*` utilities)
 
 | State / Variant | In Code | In Storybook | Notes |
 |----------------|---------|--------------|-------|
-| Vertical | Yes | Yes | Default story |
-| Horizontal | Yes | Yes | `Horizontal` story |
+| Vertical | Yes | Yes | `Vertical` (gap `"4"`) |
+| Horizontal | Yes | Yes | `Horizontal` (gap `"3"`) |
+| All gap values | Yes | Via controls | `gap` select control |
 
-**Coverage:** High for primitive scope.
+Interactive controls: `gap` (select: none, 1, 2, 3, 4, 6, 8), `axis` (select).
+
+**Coverage:** 100% (2/2)
 
 <!-- AUTO-END:storybook -->
 
@@ -95,7 +120,7 @@ Vertical or horizontal flex layout with **token-backed gap** (`gap-*` utilities)
 
 <!-- AUTO-START:hardcoded -->
 
-None — uses Tailwind gap utilities tied to the design scale.
+No hardcoded values found. Gaps map to Tailwind spacing utilities on the 4px scale, which match the `--spacing-*` tokens.
 
 <!-- AUTO-END:hardcoded -->
 
@@ -111,9 +136,51 @@ None.
 
 ### Foundation Files Referenced
 
-`packages/tokens` (implicit via Tailwind preset)
+- `packages/components/src/lib/utils.ts` (`cn`)
+- Spacing scale (Tailwind `gap-*`, equal to `--spacing-*` in `packages/tokens/src/styles/tokens.css`)
 
 <!-- AUTO-END:dependencies -->
+
+---
+
+## Accessibility
+
+<!-- AUTO-START:accessibility -->
+
+- Semantic role: none (a plain `<div>`). Wrap in or place inside semantic elements (`<form>`, `<nav>`, `<ul>`) as needed.
+- Required labels: none.
+- Focus order: visual order equals DOM order (no `reverse` option), so keyboard order matches what is seen.
+- Touch target minimum: n/a; use at least `gap="2"` between adjacent small controls so hit areas do not overlap.
+- Color independence: n/a.
+
+<!-- AUTO-END:accessibility -->
+
+---
+
+## Do / Don't
+
+<!-- HUMAN-SECTION:do-dont (preserved across auto-updates) -->
+
+- Do use `gap="3"` for fields within a group and `gap="6"` between groups (as the SettingsPanel pattern does).
+- Do use `axis="horizontal"` for button groups and toolbars; it wraps on narrow screens.
+- Do nest Stacks for hierarchy rather than adding margins to children.
+- Don't add `gap-[...]` or `space-y-*` overrides through `className`; pick a `gap` value.
+- Don't use Stack when you need a `ref`, an `id` or ARIA attributes on the container; use a plain element with the same classes.
+- Don't use Stack for grids or for alignment across rows; use CSS grid or `Table`.
+
+<!-- /HUMAN-SECTION:do-dont -->
+
+---
+
+## Composition Rules
+
+<!-- HUMAN-SECTION:composition (preserved across auto-updates) -->
+
+- Used by `Patterns/SettingsPanel` (nested `gap="6"` / `"3"` / `"4"`), `Patterns/WorkbenchSplit`, `Patterns/DenseListRow`, `Patterns/MusicPlayer` (queue, `gap="1"`) and the `Tabs` form-field story (`gap="3"`).
+- Inside `Card` bodies, Stack provides the vertical rhythm; the card provides the padding.
+- Components that own their margins (`CaseStudyBlocks`) should not be placed in a Stack with a gap.
+
+<!-- /HUMAN-SECTION:composition -->
 
 ---
 
@@ -123,6 +190,7 @@ None.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-09-22 | No `ref` forwarding, no native attribute spread, no `as`, and no `gap="5"` (20px) although `--spacing-5` exists; no unit tests | None yet | open |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -135,6 +203,7 @@ None.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-04-04 | spec-created | Initial primitive spec |
+| Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 
 <!-- AUTO-END:changelog -->
 

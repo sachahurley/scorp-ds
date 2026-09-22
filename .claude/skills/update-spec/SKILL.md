@@ -1,14 +1,14 @@
 ---
 name: update-spec
-description: Generate or update a spec for any DS layer (foundation, semantic, primitive, component, lab, screen) and sync to Notion
+description: Generate or update a spec for any DS layer (foundation, semantic, primitive, component, lab, screen) and write it to docs/specs/
 argument-hint: <name e.g. "badge", "colors", "semantic-color", "box">
 ---
 
 # Generate / Update Spec
 
-> Before running: read `.claude/ds-config.json` to get the prefix, stack, paths, and Notion database name for this project.
+> Before running: read `.claude/ds-config.json` to get the prefix, stack, and paths for this project.
 
-Generate or update a structured spec for `$ARGUMENTS`, then sync it to the Notion component specs database. Supports all layers: foundation tokens, semantic tokens, primitives, components, lab prototypes, and screen templates.
+Generate or update a structured spec for `$ARGUMENTS` at `docs/specs/{Name}.md`. The markdown file in the repo is the only documentation copy. Supports all layers: foundation tokens, semantic tokens, primitives, components, lab prototypes, and screen templates.
 
 The **code is the single source of truth**. Never validate code values against Figma.
 
@@ -122,7 +122,7 @@ For **widget layers**, extract which variants/sizes/states are demonstrated and 
 
 Read `.claude/ds-config.json: project.storybookUrl`. Build the live preview URL by appending the story path hash.
 
-If no story file exists, leave the Live Preview property empty.
+If no story file exists, leave the live preview URL empty.
 
 ### 5. Check for existing spec
 
@@ -130,17 +130,18 @@ Check if `docs/specs/$ARGUMENTS.md` already exists.
 
 **If it exists:**
 - Read the file
-- Preserve ALL content between `<!-- HUMAN-SECTION:* -->` and `<!-- /HUMAN-SECTION:* -->` markers exactly as written, **except**: if intent content is still the unmodified TODO placeholder, replace it with `extracted_intent` (if available)
+- Preserve ALL content between `<!-- HUMAN-SECTION:* ... -->` and `<!-- /HUMAN-SECTION:* -->` markers exactly as written, **except**: if intent content is still the unmodified TODO placeholder, replace it with `extracted_intent` (if available)
 - Preserve `Status`, `Version`, and existing Changelog/Known Gaps rows
 - Regenerate all content between `<!-- AUTO-START:* -->` and `<!-- AUTO-END:* -->` markers (except `changelog` — that is append-only)
-- Extract the `Notion Page` ID from the Status table if present
+- If the Status table still uses the old layout (an external page ID row or a `Last synced` row), migrate it to the template layout: drop the page ID row, rename `Last synced` to `Last updated`, and make sure the first row is `| Component | \`{Name}\` (import from \`@scorp-ds/components\`) |`
+- Match markers by prefix (`HUMAN-SECTION:*`, `AUTO-START:*`, `AUTO-END:*`) so older marker wording is still recognized. When writing, use the template format: `<!-- HUMAN-SECTION:intent (preserved across auto-updates) -->`
 
 **If it does not exist:**
 - Use the appropriate template as the starting point
 - Set status to `draft`
 - Set version to `v1`
+- Set the Component row to `| Component | \`{Name}\` (import from \`@scorp-ds/components\`) |`
 - Substitute `extracted_intent` if available, else keep the TODO placeholder
-- Set `notion_page_id` to null
 
 ### 6. Derive status proposal
 
@@ -164,33 +165,11 @@ If criteria are met, present the proposal and wait for user confirmation.
 
 ### 7. Write the spec
 
-Write to `docs/specs/$ARGUMENTS.md`. Update the "Last synced" date to today.
+Write to `docs/specs/$ARGUMENTS.md`. Update the "Last updated" date to today.
 
-Fill all auto-generated sections based on data extracted in Steps 2-3. See `.claude/shared/spec-template.md` for section structure.
+Fill all auto-generated sections based on data extracted in Steps 2-3. See `.claude/shared/spec-template.md` for section structure. In the Accessibility section, the touch target minimum is 44x44.
 
-### 8. Sync to Notion
-
-Read `.claude/ds-config.json: notion.databaseName` to locate or create the specs database.
-
-**Find or create the database:**
-1. Use `notion-search` with the configured database name
-2. If found, use it
-3. If not found, create it with the standard properties: Title, Layer, Category, Version, Live Preview, Status, Last Updated
-
-**Find or create the page:**
-1. If `notion_page_id` is set: use `notion-fetch` to confirm it exists
-2. If null or not found: use `notion-search` to find by name, or create with `notion-create-pages`
-3. Write `notion_page_id` back to the local spec Status table
-
-**Set page properties:** Title, Layer, Category, Version, Live Preview, Status, Last Updated.
-
-**Set page content:** the full spec markdown for text-only sections (strip `<!-- -->` marker comments).
-
-For widget specs, create inline databases for: Properties, Token Map, Storybook Coverage, Known Gaps, Changelog.
-
-For foundation/semantic specs, create inline databases for: Token Definitions, Storybook Coverage, Known Gaps, Changelog.
-
-### 9. Propose version bump (existing specs only)
+### 8. Propose version bump (existing specs only)
 
 Skip for brand-new specs (they start at `v1`).
 
@@ -204,21 +183,19 @@ For existing specs, compare newly generated sections against the previous file t
 
 If triggered, present the proposal and wait for user confirmation.
 
-### 10. Append changelog entries
+### 9. Append changelog entries
 
 After the version decision, append changelog entries.
 
 **Determine change type:** `spec-created`, `tokens-changed`, or `spec-updated`.
 
-**Skip** if the only change was the "Last synced" date.
+**Skip** if the only change was the "Last updated" date.
 
-**Per-spec changelog (local file):** Prepend a new row to the `<!-- AUTO-START:changelog -->` section (newest first).
+**Per-spec changelog:** Prepend a new row to the `<!-- AUTO-START:changelog -->` section (newest first).
 
-**Global changelog (local):** Prepend a new row to `docs/specs/CHANGELOG.md` (newest first).
+**Global changelog:** Prepend a new row to `docs/specs/CHANGELOG.md` (newest first).
 
-**Do NOT update the Notion master changelog directly.** That is managed by `/release-notes`.
-
-### 11. Output summary
+### 10. Output summary
 
 ```
 ## Spec Update: [name]
@@ -251,11 +228,6 @@ After the version decision, append changelog entries.
 - Current: [draft / design-complete / production-complete]
 - Transition proposed: Yes / No
 - User confirmed: Yes / No / N/A
-
-### Notion Sync
-- Database: [name]
-- Page: Created / Updated
-- Page ID: [uuid]
 ```
 
 ## Important

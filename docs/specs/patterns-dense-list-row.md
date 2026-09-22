@@ -1,28 +1,29 @@
 # Pattern: Dense list row
 
-> Pattern spec — not an exported component. Story: `Patterns/DenseListRow`.
+> Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
 
 ## Status
 
 | Field | Value |
 |-------|-------|
-| Widget | `PatternDenseListRow` |
+| Pattern | `Patterns/DenseListRow` (story-only, not an exported component) |
 | Layer | `pattern` |
 | Category | `Patterns` |
 | File | `packages/storybook/stories/Patterns/DenseListRow.stories.tsx` |
 | Story | `Patterns/DenseListRow` |
 | Version | `v1` |
 | Status | `draft` |
-| Last synced | 2026-04-03 |
-| Notion Page | https://www.notion.so/3e29a6335da1812daae9c9b9dff08bc3 |
+| Last updated | 2026-09-22 |
 
 ---
 
 ## Intent
 
-Repeatable **compact row** for jobs, inbox items, or log-style lists: **avatar**, **primary + secondary lines**, **status badge**, and **actions** (text button + icon menu).
+<!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-Uses a local `RowShell` div in the story for row chrome; product apps may extract a shared row component when the API stabilizes.
+A repeatable compact row for jobs, inbox items or log-style lists: avatar, a primary line with an id, a truncating secondary line, a status badge, and trailing actions (a text button and an icon menu). It shows how to reach TUI density with existing components and semantic tokens only. The row chrome is a story-local `RowShell` div; product apps can extract a shared row component once the API settles. For quiet navigation lists without per-row actions, use `ListRow` instead.
+
+<!-- /HUMAN-SECTION:intent -->
 
 ---
 
@@ -30,31 +31,58 @@ Uses a local `RowShell` div in the story for row chrome; product apps may extrac
 
 | Building block | Role |
 |----------------|------|
-| `Avatar` | Leading identity (`initials`, optional `status`). |
-| `Badge` | Status (`success`, `error`, `warning`). |
-| `Button` | Secondary “Logs”; `variant="icon"` + `TuiIcon` for overflow. |
-| `TuiIcon` | `MoreVertical` for menu affordance. |
-| `Divider` | Separates list from footnote copy. |
+| `RowShell` (story-local) | `flex flex-wrap items-center gap-3`, 0.5px `--surface-container-stroke` border, `--surface-card` fill, `px-3 py-2`, `text-sm` mono. Square corners (no plate clip). |
+| `Avatar` | Leading identity at `size="sm"` with `initials`; the first row also shows `status="online"`. |
+| Text column | `min-w-0 flex-1`: primary line (`font-medium`, truncating) plus a run number, then a `text-xs` truncating secondary line. Secondary text uses `text-secondary-900 dark:text-secondary-200`. |
+| `Badge` | Status: `variant="success"` ("passed") and `variant="default"` ("queued"). |
+| `Button` | `variant="outline" size="sm"` "Logs" (disabled on the queued row); `variant="icon" size="sm"` overflow menu. |
+| `TuiIcon` | `MoreVertical` inside the icon button (default size 4). |
+| `Stack` | `gap="2"` between rows. |
+| `Divider` | Separates the rows from the footnote copy. |
 
 ---
 
 ## Storybook
 
-- **JobRunRow** — two sample rows (passed + queued) with truncation and wrap-friendly flex.
+- **JobRunRow** ("Job run (status + actions)"): two rows (passed + queued) on `--surface-page`, `max-w-3xl`, fullscreen layout.
+- **Theme:** Storybook **Theme** toolbar for light/dark.
+- **Test-runner:** covered by `npm run test-storybook:ci` (axe in both themes).
 
 ---
 
 ## Accessibility notes
 
-- Icon-only menu buttons use `aria-label="Open menu"`.
-- `TuiIcon` is decorative in context of labeled button.
+- Icon-only menu buttons use `aria-label="Open menu"`; the `TuiIcon` inside is `aria-hidden`.
+- Status is carried by the badge text ("passed", "queued"), not color alone.
+- The disabled "Logs" button is a native disabled button (removed from the tab order).
+- Rows are plain `div`s: in product code, render the list as `<ul>` / `<li>` so the count is announced.
+- Controls are `sm` (32px), below the 44px touch target; acceptable for dense desktop tooling, not for touch-first lists.
 
 ---
 
-## Storybook
+## Known Gaps & Amendments
 
-- **Theme:** Storybook **Theme** toolbar for light/dark.
-- **Test-runner:** covered by `npm run test-storybook:ci`.
+<!-- AUTO-START:known-gaps -->
+
+| Date | Issue | Resolution | Status |
+|------|-------|------------|--------|
+| 2026-09-22 | Rows are `div`s in a `Stack` rather than list semantics; both menu buttons share the same label "Open menu" with no row context | None yet | open |
+
+<!-- AUTO-END:known-gaps -->
+
+---
+
+## Changelog
+
+<!-- AUTO-START:changelog -->
+
+| Version | Date | Type | Summary |
+|---------|------|------|---------|
+| Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+
+<!-- AUTO-END:changelog -->
+
+---
 
 ## Reference
 

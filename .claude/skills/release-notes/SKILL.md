@@ -1,15 +1,15 @@
 ---
 name: release-notes
-description: Generate a formatted changelog, update CHANGELOG.md and package version, sync to Notion, and tag the release
+description: Generate a formatted changelog, update CHANGELOG.md and package version, and tag the release
 argument-hint: "[patch|minor|major|<version>] (default: minor)"
-allowed-tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion, mcp__notion__notion-search, mcp__notion__notion-fetch, mcp__notion__notion-update-page
+allowed-tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
 ---
 
 # Release Notes — Generate Changelog & Tag Release
 
-> Before running: read `.claude/ds-config.json` to get the package paths, stack, and Notion configuration for this project.
+> Before running: read `.claude/ds-config.json` to get the package paths and stack for this project.
 
-Generate a versioned changelog from git history, spec changes, and storybook updates. Update `CHANGELOG.md` and the package version file, sync the release to the Notion changelog page, and create a git tag.
+Generate a versioned changelog from git history, spec changes, and storybook updates. Update `CHANGELOG.md` and the package version file, and create a git tag.
 
 ## Reference Files
 
@@ -137,8 +137,7 @@ Storybook updates: {count story files}
 Proceed with release? This will:
 1. Update CHANGELOG.md
 2. Update package version to {next}
-3. Sync to Notion changelog page
-4. Create git tag v{next}
+3. Create git tag v{next}
 ```
 
 **Wait for user confirmation.** Do NOT proceed without explicit approval.
@@ -153,16 +152,7 @@ Read the current `CHANGELOG.md`. Prepend the new version section at the top.
 
 **React/TS:** Edit the root `package.json` `version` field.
 
-### 9. Sync to Notion
-
-Read `.claude/ds-config.json: notion` to get the changelog page reference.
-
-1. Search for the changelog page via `notion-search` with a query matching the project name.
-2. Fetch the current page content with `notion-fetch`.
-3. Prepend the new version section above any previous version sections.
-4. Use `notion-update-page` with `replace_content_range` to update the Changelog section.
-
-### 10. Create git tag
+### 9. Create git tag
 
 Ask the user for confirmation before tagging:
 
@@ -184,7 +174,7 @@ To push: git push origin v{VERSION}
 
 **Never push the tag automatically.** The user must do it manually.
 
-### 11. Output summary
+### 10. Output summary
 
 ```
 ## Release: v{VERSION}
@@ -197,9 +187,6 @@ To push: git push origin v{VERSION}
 ### Files Updated
 - CHANGELOG.md — prepended v{VERSION} section
 - Package version — bumped from {old} to {new}
-
-### Notion
-- Status: Updated / Error: {message}
 
 ### Git Tag
 - Tag: v{VERSION}

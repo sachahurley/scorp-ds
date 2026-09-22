@@ -1,14 +1,14 @@
 ---
 name: sync-specs
-description: Detect changed files across all layers and batch-update their specs and Notion pages
-argument-hint: "[--all | --since=<date|commit> | --missing | --layer=<layer> | --dry-run] (default: since last spec sync)"
+description: Detect changed files across all layers and batch-update their specs in docs/specs/
+argument-hint: "[--all | --since=<date|commit> | --missing | --layer=<layer> | --dry-run] (default: since last spec update)"
 ---
 
 # Sync Specs — Detect Changes Across All Layers & Batch-Update Specs
 
 > Before running: read `.claude/ds-config.json` to get the stack, prefix, and all directory paths for this project.
 
-Detect which source files have changed since the last spec sync across all layers (foundation, semantic, primitive, component, lab, screen), identify entries with no spec at all, and run `/update-spec` for each one. This is the "catch everything" pipeline for keeping specs and Notion in sync.
+Detect which source files have changed since the last spec update across all layers (foundation, semantic, primitive, component, lab, screen), identify entries with no spec at all, and run `/update-spec` for each one. This is the "catch everything" pipeline for keeping the local specs in `docs/specs/` current with the code.
 
 ## Reference Files
 
@@ -24,7 +24,7 @@ Parse `$ARGUMENTS` to determine the sync mode:
 
 | Argument | Behavior |
 |----------|----------|
-| *(empty)* | Default: detect changes since the last spec sync date |
+| *(empty)* | Default: detect changes since the last spec update date |
 | `--all` | Regenerate specs for ALL entries across all layers (full rebuild) |
 | `--since=<date>` | Detect changes since a specific date (e.g., `--since=2026-03-01`) |
 | `--since=<commit>` | Detect changes since a specific commit hash or ref |
@@ -60,7 +60,7 @@ Read `.claude/ds-config.json: paths` to get all layer directories. Build a compl
 - `name`: spec identifier
 - `layer`: which layer it belongs to
 - `has_spec`: whether `docs/specs/{name}.md` exists
-- `spec_last_synced`: if spec exists, parse the "Last synced" date
+- `spec_last_updated`: if spec exists, parse the "Last updated" date from the Status table (older specs may still say "Last synced"; treat it the same)
 - `source_last_modified`: date of the most recent git commit touching the source file
 
 **Apply `--layer` filter** if specified.
@@ -122,7 +122,7 @@ Layer filter: {layer or "all"}
 | 1 | colors | foundation | New | No spec exists |
 | 2 | semantic-color | semantic | New | No spec exists |
 | 3 | box | primitive | New | No spec exists |
-| 4 | badge | component | Update | Source modified after last sync |
+| 4 | badge | component | Update | Source modified after last update |
 
 **Total: {N} entries to process**
 - New specs: {count}
@@ -157,19 +157,7 @@ For each entry in the plan (sorted: foundation → semantic → primitive → co
 - If `/update-spec` fails for an entry, log the error and continue to the next.
 - Collect all errors for the final summary.
 
-### 6. Refresh storybook Notion links
-
-After all specs have been processed, if a link refresh script exists:
-
-```bash
-bash scripts/refresh-notion-links.sh
-```
-
-This rebuilds the Storybook → Notion URL mapping from all spec files. Print the script output verbatim.
-
-If the script fails or does not exist, log the warning and continue.
-
-### 7. Output summary
+### 6. Output summary
 
 ```
 ## Spec Sync Complete
@@ -188,11 +176,6 @@ If the script fails or does not exist, log the warning and continue.
 
 ### By Layer
 [counts per layer]
-
-### Notion Sync
-- Pages created: {count}
-- Pages updated: {count}
-- Errors: {list or "None"}
 
 ### Global Changelog
 - Entries appended to docs/specs/CHANGELOG.md: {count}
