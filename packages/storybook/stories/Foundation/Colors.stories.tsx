@@ -165,8 +165,10 @@ function ColorsPage() {
         Terminal accents (TUI tier 2)
       </h2>
       <p className="mb-4 text-secondary-600 dark:text-secondary-400">
-        Not in <code className="text-primary-800 dark:text-primary-400">tokens.json</code> — lives in{' '}
-        <code className="text-primary-800 dark:text-primary-400">tokens.css</code>; light vs dark uses different values. Tailwind:{' '}
+        Theme-specific: they live in the <code className="text-primary-800 dark:text-primary-400">light</code> and{' '}
+        <code className="text-primary-800 dark:text-primary-400">dark</code> sets of{' '}
+        <code className="text-primary-800 dark:text-primary-400">tokens.json</code> and in{' '}
+        <code className="text-primary-800 dark:text-primary-400">tokens.css</code>, with different values per theme. Tailwind:{' '}
         <code className="text-primary-800 dark:text-primary-400">text-term-green</code>, …
       </p>
       <div className="space-y-2">

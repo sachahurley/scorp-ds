@@ -13,11 +13,12 @@
  *   through the exit animation and unmounts on animationend
  * - Focus trap: while modal, Tab and Shift+Tab cycle inside the panel
  * - Backdrop scrim (semi-transparent overlay)
- * - `docked` variant: on wide viewports (>=960px) the panel skips the scrim
- *   and pins bottom-center as a NON-modal dialog (no aria-modal, no scroll
- *   lock, page stays interactive), so the content behind stays in view while
- *   the dialog acts on it. Below 960px docked falls back to the standard
- *   centered modal, so consumers never branch on breakpoint themselves.
+ * - `docked` variant: at or above the `--breakpoint-docked` token (960px) the
+ *   panel skips the scrim and pins bottom-center as a NON-modal dialog (no
+ *   aria-modal, no scroll lock, page stays interactive), so the content behind
+ *   stays in view while the dialog acts on it. Below it docked falls back to
+ *   the standard centered modal, so consumers never branch on breakpoint
+ *   themselves.
  * - Drop shadow using elevation tokens
  * - Click outside to close
  * - ESC key to close
@@ -33,15 +34,40 @@
  * borders, so a border property cannot draw the ring).
  *
  * TOKENS USED:
+ * - breakpoint.docked: the width at which `docked` takes effect
  * - surface.card, surface.container-stroke, surface.overlay
  * - text.primary (title)
  * - plate.round-lg: panel silhouette
  */
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Button } from "./Button";
 import { TuiIcon } from "./TuiIcon";
 import { useFocusTrap } from "../lib/use-focus-trap";
+
+/**
+ * Value of `global.breakpoint.docked` in tokens.json, used only where the
+ * stylesheet cannot be read (SSR, jsdom test runners). Keep it in step with
+ * `--breakpoint-docked`; the drift test in @scorp-ds/tokens guards the token
+ * itself, and this is the last-resort copy.
+ */
+const DOCKED_BREAKPOINT_FALLBACK_PX = 960;
+
+/**
+ * Builds the docked media query from the `--breakpoint-docked` token on the
+ * document element, so the switch point lives in tokens.json rather than being
+ * typed into this component. Falls back to the token's current value when
+ * there is no document or the stylesheet has not been loaded.
+ */
+function dockedMediaQuery(): string {
+  let px = DOCKED_BREAKPOINT_FALLBACK_PX;
+  if (typeof document !== "undefined") {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue("--breakpoint-docked");
+    const parsed = Number.parseFloat(raw);
+    if (Number.isFinite(parsed) && parsed > 0) px = parsed;
+  }
+  return `(min-width: ${px}px)`;
+}
 
 // Define the props interface for the Modal component
 export interface ModalProps {
@@ -60,11 +86,11 @@ export interface ModalProps {
    */
   width?: number | string;
   /**
-   * Dock instead of covering: on viewports >= 960px the panel pins
-   * bottom-center with no scrim and no scroll lock (a non-modal dialog),
-   * keeping the page behind visible and interactive. Below 960px this is
-   * ignored and the standard centered modal renders, so the responsive
-   * fallback lives here, not in the consumer.
+   * Dock instead of covering: at or above the `--breakpoint-docked` token
+   * (960px) the panel pins bottom-center with no scrim and no scroll lock (a
+   * non-modal dialog), keeping the page behind visible and interactive. Below
+   * it this is ignored and the standard centered modal renders, so the
+   * responsive fallback lives here, not in the consumer.
    */
   docked?: boolean;
 }
@@ -90,19 +116,21 @@ export function Modal({ isOpen, onClose, title, children, footerContent, width =
   const closing = visible && !isOpen;
 
   // Docked applies on wide viewports only; below the breakpoint the docked
-  // request degrades to the standard centered modal. Environments without
-  // matchMedia (SSR, jsdom test runners) fall back to the centered modal.
+  // request degrades to the standard centered modal. The width comes from the
+  // --breakpoint-docked token. Environments without matchMedia (SSR, jsdom
+  // test runners) fall back to the centered modal.
+  const dockedQuery = useMemo(dockedMediaQuery, []);
   const [wideViewport, setWideViewport] = useState(
     () => typeof window !== "undefined" && typeof window.matchMedia === "function" &&
-      window.matchMedia("(min-width: 960px)").matches
+      window.matchMedia(dockedQuery).matches
   );
   useEffect(() => {
     if (typeof window.matchMedia !== "function") return;
-    const mq = window.matchMedia("(min-width: 960px)");
+    const mq = window.matchMedia(dockedQuery);
     const onChange = () => setWideViewport(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
-  }, []);
+  }, [dockedQuery]);
   const isDocked = docked && wideViewport;
 
   // FOCUS MANAGEMENT: on open, remember the invoker and move focus into the

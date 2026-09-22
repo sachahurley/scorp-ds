@@ -10,9 +10,34 @@
  * }
  */
 
+/**
+ * Responsive prefixes, mirroring `global.breakpoint` in tokens.json and the
+ * `--breakpoint-*` custom properties in tokens.css. sm/md/lg/xl carry
+ * Tailwind's default pixel values, so existing responsive classes keep
+ * behaving exactly as before; `docked` is a component breakpoint (Modal's
+ * docked variant), here so one scale covers both CSS and JS consumers.
+ *
+ * These are literals on purpose: consumer sites vendor this preset as a
+ * single standalone file (the showcase imports
+ * `vendor/scorp-ds/tailwind.preset.cjs` with no sibling src/), so the preset
+ * must not require tokens.json at load time. The token-parser drift test
+ * asserts these values match tokens.json and tokens.css, so they cannot
+ * silently diverge.
+ */
+const screens = {
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+  docked: '960px',
+};
+
 module.exports = {
   theme: {
     extend: {
+      // Breakpoints mirroring global.breakpoint. Declared under `extend` so
+      // Tailwind's remaining default screens (2xl) stay available.
+      screens,
       // Colors from design tokens - reference CSS variables
       colors: {
         amber: {

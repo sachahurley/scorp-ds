@@ -38,7 +38,7 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 | Enum Value | Description |
 |-----------|-------------|
 | Centered (default) | Scrim, `aria-modal="true"`, body scroll locked, backdrop click closes. |
-| `docked` | On viewports at least 960px wide: no scrim, pinned 48px above the bottom, drop shadow, non-modal (no `aria-modal`, no scroll lock, page stays interactive). Below 960px, or without `matchMedia`, it renders as the centered variant. |
+| `docked` | On viewports at least `--breakpoint-docked` (960px) wide: no scrim, pinned 48px above the bottom, drop shadow, non-modal (no `aria-modal`, no scroll lock, page stays interactive). Below 960px, or without `matchMedia`, it renders as the centered variant. |
 
 ### Sizes
 
@@ -83,6 +83,7 @@ Exported type: `ModalProps`.
 | `--surface-overlay` | Color | `rgba(10, 7, 4, 0.65)` light, `rgba(0, 0, 0, 0.72)` dark | Scrim (centered only) |
 | `--text-primary` | Color | `#2B2718` light, `#FDFCFB` dark | Title |
 | `--z-index-modal` | Layer | 1040 | Scrim or docked wrapper |
+| `--breakpoint-docked` | Layout | 960px | Width at which `docked` takes effect; read off the document element at mount |
 | `--duration-normal` | Motion | 200ms | Fade in and fade out |
 | `text-base` | Typography | 16px | Title |
 | `px-6 py-5`, `gap-3`, `p-5`, `ml-4` | Spacing | 24px / 20px, 12px, 20px, 16px | Header, body, footer padding; footer gap; scrim padding; title to close gap |
@@ -142,7 +143,7 @@ Interactive controls: N/A (render function stories).
 - `max-h-[80vh]` panel height cap.
 - `border-b-[0.5px]` / `border-t-[0.5px]` hairlines.
 - Docked: `bottom: "48px"` and `filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))` (drop shadow follows the clipped silhouette; values track `elevation.high`'s dark blur).
-- Docked breakpoint media query `(min-width: 960px)`.
+- Docked breakpoint fallback `960` (`DOCKED_BREAKPOINT_FALLBACK_PX`), used only when there is no document or `--breakpoint-docked` is unreadable (SSR, jsdom). In the browser the query is built from the token.
 - `aria-label="Close modal"`: fixed English label.
 
 <!-- AUTO-END:hardcoded -->
@@ -221,6 +222,7 @@ Interactive controls: N/A (render function stories).
 | 2026-09-22 | No focus trap in the centered modal (Tab reaches the page behind); close button is 32px, below the 44px target | Focus trap added (`useFocusTrap`, modal only, never docked); close button wrapped in an unclipped span carrying a 44x44 pseudo-element hit area | Resolved |
 | 2026-09-22 | Source header still says the content area is capped at 66vh; the only cap is `max-h-[80vh]` on the panel | Header comment now states the 80vh panel cap | Resolved |
 | 2026-09-22 | `Default`, `Long content` and `Docked` stories added their own padding inside a body that already pads `px-6 py-5` | Padding removed from the story bodies | Resolved |
+| 2026-09-22 | The docked breakpoint was the literal `960` typed into `window.matchMedia("(min-width: 960px)")`, so the switch point was not a token | Reads `--breakpoint-docked` from the document element (`global.breakpoint.docked`), with a documented 960 fallback for SSR and jsdom; the `typeof window.matchMedia !== "function"` guards are unchanged | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -235,6 +237,7 @@ Interactive controls: N/A (render function stories).
 | Unreleased | 2026-09-21 | fix | Focus moves into the dialog on open; no crash without matchMedia |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Focus trap while modal (docked stays non-modal); 44px close-button hit area; 66vh comment corrected; story double padding removed |
+| Unreleased | 2026-09-22 | change | Docked breakpoint comes from the `--breakpoint-docked` token instead of a hardcoded 960 (same 960px switch point) |
 
 <!-- AUTO-END:changelog -->
 

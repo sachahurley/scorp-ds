@@ -242,12 +242,39 @@
   --spacing-20: 80px;
   --spacing-24: 96px;
 
+  /* Breakpoint tokens (global.breakpoint). sm/md/lg/xl are Tailwind's default
+     screens; the Tailwind preset reads them straight out of tokens.json, so the
+     `sm:`/`md:`/`lg:`/`xl:` utilities and these variables cannot drift apart.
+     `docked` is a component breakpoint, not a layout step: Modal reads
+     --breakpoint-docked to decide when its docked variant pins bottom-center.
+     Media queries cannot read custom properties, so these are the values JS
+     measures against and the readable record of the scale. */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-docked: 960px;
+
   /* Control sizes (global.control / global.touch) */
   --control-height-sm: 32px;
   --control-height-md: 40px;
   --control-height-lg: 48px;
   --touch-target: 44px;
-  
+
+  /* Button box (global.button.size): heights alias the control scale, the
+     padding pairs are Button's own geometry (px-4/py-1.5, px-5/py-2.5,
+     px-6/py-3.5). Published so the box is inspectable, not because Button
+     reads them: Button uses the Tailwind classes above. */
+  --button-size-sm-height: var(--control-height-sm);
+  --button-size-sm-padding-x: 16px;
+  --button-size-sm-padding-y: 6px;
+  --button-size-md-height: var(--control-height-md);
+  --button-size-md-padding-x: 20px;
+  --button-size-md-padding-y: 10px;
+  --button-size-lg-height: var(--control-height-lg);
+  --button-size-lg-padding-x: 24px;
+  --button-size-lg-padding-y: 14px;
+
   /* Focus state tokens (global - same for both themes) */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;

@@ -9,7 +9,7 @@
 
 Scorp DS uses a three-layer token architecture:
 
-1. **Foundation** (`global` in tokens.json) — raw color scales, typography, spacing, motion, opacity, z-index, focus geometry. Reference these only from semantic tokens (or documented global utilities), never raw scales from components.
+1. **Foundation** (`global` in tokens.json) — raw color scales, typography, spacing, breakpoints, motion, opacity, z-index, focus geometry. Reference these only from semantic tokens (or documented global utilities), never raw scales from components.
 2. **Semantic** (`light` / `dark` in tokens.json) — purpose-named tokens that reference foundation values. Components always use these for color roles, elevation, and focus ring *colors*.
 3. **CSS Variables** — defined in `tokens.css` (kebab-case). Tailwind maps to them via `@scorp-ds/tokens` preset.
 
@@ -23,6 +23,9 @@ Dot paths in this doc map to custom properties by flattening with hyphens:
 | `focus.ring.primary` | `--focus-ring-primary` |
 | `button.primary.background-hover` | `--button-primary-background-hover` |
 | `zIndex.modal` (JSON) | `--z-index-modal` |
+| `font.lineHeight.tight` (JSON) | `--line-height-tight` (the `font-` prefix is implied) |
+
+`getToken` / `getTokensForTheme` in `@scorp-ds/tokens` return exactly these names without the leading `--`, and a drift test fails the build if any name or value disagrees with `tokens.css`.
 
 ## Semantic Aliases
 
@@ -59,7 +62,7 @@ Resolved scrim (check `tokens.css` if you change JSON): light `rgba(10, 7, 4, 0.
 
 ### Terminal colors (foundation, TUI tier 2)
 
-ANSI-style accents for terminal-inspired UI. CSS: `--color-term-green`, `--color-term-amber`, `--color-term-cyan`, `--color-term-magenta`, `--color-term-red`, `--color-term-blue`, `--color-term-white`, `--color-term-dim`. Values differ in `.dark` (brighter on dark backgrounds).
+ANSI-style accents for terminal-inspired UI. CSS: `--color-term-green`, `--color-term-amber`, `--color-term-cyan`, `--color-term-magenta`, `--color-term-red`, `--color-term-blue`, `--color-term-white`, `--color-term-dim`. Values differ per theme, so they live in the `light` and `dark` sets of `tokens.json` (as `color.term.*`) rather than in `global`; dark is brighter for dark backgrounds.
 
 **Tailwind:** `text-term-green`, `bg-term-amber`, …
 
@@ -159,7 +162,7 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 | Link (text) | `--button-link-text`, `--button-link-text-hover` |
 | Icon (square control) | `--button-icon-background`, `--button-icon-background-hover`, `--button-icon-text`, `--button-icon-disabled-background`, `--button-icon-disabled-text` |
 
-Sizes remain `button.size.*` in `tokens.json` (height, padding-x, padding-y per size).
+Sizes live in `global.button.size.{sm,md,lg}` (height, padding-x, padding-y) and ship as `--button-size-{sm,md,lg}-{height,padding-x,padding-y}`. The heights alias `control.height.*`; the padding pairs are Button's own geometry. Button itself styles with the Tailwind classes, so these are published for inspection rather than consumption. The old `small | medium | large` key names were renamed to match the `sm | md | lg` control scale.
 
 ## Elevation tokens (semantic)
 
@@ -172,7 +175,7 @@ Theme-aware depth for cards and raised surfaces. Each level defines a **shadow**
 | `elevation.2` | Mid lift (menus, popovers) |
 | `elevation.3` | Strong lift (modals, emphasis) |
 
-> **TUI note:** `packages/tokens/src/styles/tokens.css` ships **flat** elevation: shadow tokens resolve to `none`; borders carry visual depth. `tokens.json` may list richer shadows for other pipelines — runtime product UI follows the CSS file.
+> **TUI note:** elevation is **flat**: every shadow token is `none` in both `tokens.json` and `tokens.css`, and the border pair carries the depth. The two files used to disagree here (the JSON listed real box shadows); the drift test in `packages/tokens/src/lib/token-parser.test.ts` now fails if they ever diverge again.
 
 **Storybook:** **Semantic / Elevation** — side-by-side light/dark previews and full token table.
 
@@ -280,6 +283,22 @@ Base unit: **4px** per step (see `global.spacing` in `tokens.json`). Tailwind sp
 
 **Storybook:** **Foundation / Spacing** — visual spacing scale.
 
+## Breakpoint Tokens (foundation)
+
+The widths at which the interface is allowed to change (`global.breakpoint`). `sm | md | lg | xl` carry Tailwind's default pixel values, so every existing responsive class keeps behaving exactly as before; the Tailwind preset builds its `screens` by reading this group out of `tokens.json`, so the utilities and the custom properties cannot drift apart. Media queries cannot read custom properties, which is why the `--breakpoint-*` variables exist only for JavaScript that has to make the same decision.
+
+| Token | CSS variable | Value | Tailwind | Used by |
+|-------|--------------|-------|----------|---------|
+| `breakpoint.sm` | `--breakpoint-sm` | 640px | `sm:` | CaseStudy (`sm:mt-24`, `sm:grid-cols-2`) |
+| `breakpoint.md` | `--breakpoint-md` | 768px | `md:` | AppHeader (`md:block` desktop nav, `md:hidden` menu button) |
+| `breakpoint.docked` | `--breakpoint-docked` | 960px | none | Modal `docked` variant (read from JS; a component breakpoint, not a layout step) |
+| `breakpoint.lg` | `--breakpoint-lg` | 1024px | `lg:` | Card (`lg:p-6`) |
+| `breakpoint.xl` | `--breakpoint-xl` | 1280px | `xl:` | Nothing yet |
+
+Tailwind's `2xl:` default (1536px) survives because the preset declares `screens` under `theme.extend`; it is deliberately not a token, so prefer `xl:` unless a composition genuinely needs it.
+
+**Storybook:** **Foundation / Breakpoints** — proportional ruler, the per-component map, and the token table.
+
 ## Control Size Tokens
 
 One size scale for every sized component: `sm | md | lg` (Avatar adds `xl`). The old `small | medium | large` names are deprecated aliases that still resolve (one dev warning per component).
@@ -349,6 +368,7 @@ The radius tokens are **retired**. Corners are stepped one-bit "plate" silhouett
 | Raw color scales + terminal | **Foundation / Colors** |
 | Type, line height, weight | **Foundation / Typography** |
 | Spacing steps | **Foundation / Spacing** |
+| Responsive breakpoints | **Foundation / Breakpoints** |
 | Duration + easing | **Foundation / Motion** |
 | Z-index scale | **Foundation / Z-index** |
 | Semantic color roles | **Semantic / Colors** |

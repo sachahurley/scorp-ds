@@ -1,12 +1,21 @@
 /**
  * TOKEN PARSER UTILITY
- * 
+ *
  * This file takes your design tokens (from tokens.json) and:
  * 1. Resolves token references like "{color.amber.500}" to actual values
  * 2. Generates CSS custom properties (CSS variables)
  * 3. Provides utilities for Tailwind configuration
- * 
+ *
  * Think of this as the "translator" between your design tokens and the CSS/Tailwind system.
+ *
+ * NAMING CONTRACT: every key this file emits is the CSS custom property name
+ * minus the leading `--`, exactly as it appears in `styles/tokens.css`. JSON
+ * path segments are hyphen-joined and camelCase segments are kebab-cased, so
+ * `zIndex.modal` becomes `z-index-modal` and `easing.easeIn` becomes
+ * `easing-ease-in`. `token-parser.test.ts` fails the build if the two files
+ * ever disagree on a name or a value; `tokens.css` stays hand-written (it
+ * carries measured contrast ratios and deliberate exceptions), so the test is
+ * what keeps the pair honest.
  */
 
 import tokensData from '../tokens.json';
@@ -78,11 +87,46 @@ export function resolveTokenValue(value: string, context: TokenObject = tokens.g
 }
 
 /**
+ * Groups whose CSS custom property name deliberately drops or rewrites a JSON
+ * path segment. `font.lineHeight.tight` ships as `--line-height-tight` (the
+ * `font-` prefix is implied), so the flattened key is rewritten to match.
+ * Every entry here is a documented difference between tokens.json and
+ * tokens.css; anything not listed must match segment for segment.
+ */
+const KEY_PREFIX_ALIASES: ReadonlyArray<readonly [string, string]> = [
+  ['font-line-height', 'line-height'],
+];
+
+/**
+ * Converts one JSON path segment to its CSS custom property spelling:
+ * camelCase becomes kebab-case (`zIndex` → `z-index`, `easeIn` → `ease-in`).
+ * Numeric and already-kebab segments (`500`, `2xl`, `round-lg-top`) pass through.
+ */
+function toCssSegment(segment: string): string {
+  return segment.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+/**
+ * Applies the documented group aliases to a fully joined key.
+ */
+function applyKeyAliases(key: string): string {
+  for (const [from, to] of KEY_PREFIX_ALIASES) {
+    if (key === from || key.startsWith(`${from}-`)) {
+      return `${to}${key.slice(from.length)}`;
+    }
+  }
+  return key;
+}
+
+/**
  * FLATTEN TOKEN OBJECT
- * 
- * Converts nested tokens into a flat object with dot notation keys
+ *
+ * Converts nested tokens into a flat object keyed by CSS custom property name
+ * (without the leading `--`).
  * Example: { color: { amber: { 500: { $value: "#F59E0B" } } } }
  * Becomes: { "color-amber-500": "#F59E0B" }
+ * camelCase segments are kebab-cased, so { zIndex: { modal: … } } becomes
+ * { "z-index-modal": … } and matches `--z-index-modal` in tokens.css.
  */
 export function flattenTokens(
   obj: TokenObject,
@@ -96,7 +140,8 @@ export function flattenTokens(
     if (key.startsWith('$')) continue;
 
     const value = obj[key];
-    const newKey = prefix ? `${prefix}-${key}` : key;
+    const segment = toCssSegment(key);
+    const newKey = applyKeyAliases(prefix ? `${prefix}-${segment}` : segment);
 
     if (typeof value === 'object' && value !== null && '$value' in value) {
       // This is a token with a value - resolve it and add to result
