@@ -57,14 +57,14 @@ An `<a>` (or the `as` component) containing the children and, when `external` is
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `variant` | `"inline" \| "quiet"` | `"inline"` | No | Underline treatment (see Variants). |
-| `external` | `boolean` | `false` | No | Anchor form: sets `target="_blank"` and `rel="noopener noreferrer"` unless you pass your own. Both forms: appends the `ExternalLink` glyph and the sr-only "(opens in new tab)" notice. |
+| `external` | `boolean` | `false` | No | Sets `target="_blank"` and `rel="noopener noreferrer"` in both forms, appends the `ExternalLink` glyph and the sr-only "(opens in new tab)" notice. In the anchor form your own `target` / `rel` win; in the `as` form anything in `asProps` wins. |
 | `href` | `string` | none | One of `href` / `as` | Destination; renders an `<a>`. |
 | `as` | `ElementType` | none | One of `href` / `as` | Custom link component (for example a router `Link`), rendered with identical styling. |
 | `asProps` | `Record<string, unknown>` | none | No | Props spread onto the `as` component (`to`, `state`, ...). Only with `as`. |
 | `children` | `ReactNode` | none | Yes | Link text. Describe the destination; avoid bare "here". |
 | `className` | `string` | `""` | No | Extra classes, merged with `cn()` (tailwind-merge), so color or size overrides win. |
 | `ref` | `Ref<HTMLAnchorElement>` | none | No | Forwarded to the `<a>` or the `as` component. |
-| `...rest` | native `<a>` attributes | | No | Anchor form only (`target`, `rel`, `onClick`, `aria-*`, ...). Not forwarded in the `as` form: pass them through `asProps`. |
+| `...rest` | native `<a>` attributes | | No | Anchor form only (`target`, `rel`, `onClick`, `aria-*`, ...). Not forwarded in the `as` form: pass them through `asProps`. The `external` new-tab attributes are the exception and reach the `as` component. |
 
 <!-- AUTO-END:properties -->
 
@@ -97,7 +97,7 @@ An `<a>` (or the `as` component) containing the children and, when `external` is
 | Rest | `variant` | `--accent`; underline on `inline` only |
 | Hover | `:hover` | `--text-link-hover`; `quiet` gains the underline |
 | Focus visible | `:focus-visible` | Outline `--focus-ring-width` solid `--focus-ring-primary`, offset `--focus-ring-offset`; `quiet` gains the underline |
-| External | `external` prop | Adds `ExternalLink` glyph and sr-only notice; anchor form also gets `target` / `rel` defaults |
+| External | `external` prop | Adds `ExternalLink` glyph, sr-only notice, and the `target="_blank"` / `rel="noopener noreferrer"` defaults in both the anchor and `as` forms |
 | Router link | `as` / `asProps` | Same classes on the custom component |
 
 <!-- AUTO-END:states -->
@@ -156,7 +156,7 @@ No hardcoded values found. `underline-offset-2` and `ml-1` are Tailwind scale ut
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: native `<a>` (or the `as` component's element); never a button.
-- Required labels: descriptive children. External links add an sr-only "(opens in new tab)"; the glyph itself is `aria-hidden`.
+- Required labels: descriptive children. External links add an sr-only "(opens in new tab)"; the glyph itself is `aria-hidden`. The notice is now always true: `external` sets the new-tab attributes in the `as` form as well, so the announcement matches the behaviour.
 - Focus order: document order; a visible 2px outside outline on focus-visible.
 - Keyboard: native Enter on the anchor.
 - Touch target minimum: not enforced. Inline text links fall under the WCAG 2.5.8 inline exception; stacked `quiet` nav lists should get vertical spacing from the parent (`gap-2` in the story).
@@ -208,8 +208,8 @@ modes before nesting links.
 |------|-------|------------|--------|
 | 2026-09-20 | `Button variant="link"` overlaps this component for text links | Documented as legacy for inline use; revisit full deprecation once usages migrate | open |
 | 2026-09-20 | `text.link` rest token duplicates the accent role (predates the merged identity; identical in light, bright amber-400 in dark vs accent gold) | Link renders `accent` at rest per the token docs; `text.link` rest is unconsumed again and a candidate for retirement or re-pointing at accent | open |
-| 2026-09-22 | `external` with `as` adds the glyph and notice but not `target` / `rel`, and native anchor attributes are not forwarded in the `as` form | Pass them via `asProps`; consider applying the defaults to `asProps` in code | open |
-| 2026-09-22 | No unit tests for Link | None yet | open |
+| 2026-09-22 | `external` with `as` adds the glyph and notice but not `target` / `rel`, and native anchor attributes are not forwarded in the `as` form | `external` now passes `target="_blank"` and `rel="noopener noreferrer"` to the `as` component (router links forward them to the anchor they render), with `asProps` spread last so a consumer can opt out. Other native attributes still go through `asProps` | Resolved |
+| 2026-09-22 | No unit tests for Link | Added: `external` in both forms, the `asProps` override, and the non-external default | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -223,6 +223,7 @@ modes before nesting links.
 |---------|------|------|---------|
 | v1 | 2026-09-20 | added | Initial component: inline/quiet variants, external affordance, router polymorphism |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | `external` sets `target` / `rel` in the `as` form too, so the glyph and the "(opens in new tab)" notice always match the behaviour |
 
 <!-- AUTO-END:changelog -->
 

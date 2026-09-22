@@ -5,9 +5,13 @@ import { Slider } from '@scorp-ds/components';
 /**
  * Components / Inputs / Slider
  *
- * Styled native range input: muted track, solid accent thumb, sharp
- * corners. Keyboard arrows, min/max/step and form participation come from
- * the native control underneath.
+ * Styled native range input: a `--control-track` rail with an `--accent`
+ * fill before the thumb, a solid accent thumb, sharp corners, and a 44px-tall
+ * pointer target. Keyboard arrows, min/max/step and form participation come
+ * from the native control underneath.
+ *
+ * The slider is full width and takes its size from its container, so wrap it
+ * (or pass a width in `className`) to constrain it.
  */
 const meta: Meta<typeof Slider> = {
   title: 'Components/Inputs/Slider',
@@ -41,6 +45,24 @@ export const Disabled: Story = {
   render: (args) => (
     <div className="w-64">
       <Slider {...args} />
+    </div>
+  ),
+};
+
+/**
+ * Width comes from the container: the slider fills whatever box it is given,
+ * so the same control works in a 256px settings column and a 512px panel.
+ */
+export const Widths: Story = {
+  name: 'Container widths',
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="w-64">
+        <Slider label="Narrow (w-64)" min={0} max={100} defaultValue={25} />
+      </div>
+      <div className="w-[32rem]">
+        <Slider label="Wide (w-128)" min={0} max={100} defaultValue={75} />
+      </div>
     </div>
   ),
 };

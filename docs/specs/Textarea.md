@@ -88,12 +88,14 @@ Actual height is usually driven by the native `rows` attribute; the size sets th
 | `--field-border-hover` | Color | light `#695F4D`, dark `#968A75` | Hover ring |
 | `--field-border-focus` | Color | light `#FBBF24`, dark `#E0A26A` | Focus ring (`focus-within`) |
 | `--field-border-error` | Color | light `#DC2626`, dark `#EF4444` | Error ring |
-| `--field-placeholder` | Color | `#BFB4A3` | Placeholder |
+| `--field-placeholder` | Color | light `#695F4D`, dark `#BFB4A3` | Placeholder (6.28:1 on the white field, 9.45:1 on the dark field) |
 | `--text-primary` | Color | light `#2B2718`, dark `#FDFCFB` | Value text |
 | `secondary-800` / `dark:secondary-200` | Color | `#474030` / `#F7F5F2` | Label |
 | `--text-secondary`, `error-700` / `dark:error-400` | Color | see FieldMessage | Helper and error message |
 | `--control-height-sm/md/lg` | Size | `32px` / `40px` / `48px` | Minimum height |
 | `--plate-round` | Shape | stepped 6px corner polygon | Wrapper and textarea clip |
+| `--focus-ring-primary` / `--focus-ring-error` | Color | `#FBBF24` / light `#DC2626`, dark `#EF4444` | Inset focus ring on the field |
+| `--focus-ring-width` | Size | `2px` | Focus ring thickness |
 | `--duration-fast` | Motion | `120ms` | Ring color transition |
 | `text-sm` | Typography | `14px` | Value and label |
 
@@ -109,9 +111,9 @@ Actual height is usually driven by the native `rows` attribute; the size sets th
 |----------------|--------------|-----------------|
 | Idle | default | Ring `--field-border`, fill `--field-background` |
 | Hover | `:hover` on wrapper | Ring `--field-border-hover` |
-| Focus | `:focus-within` on wrapper | Ring `--field-border-focus`; no outline |
-| Error | `error` or `errorMessage` | Ring `--field-border-error`, fill `--field-background-error` |
-| Disabled | `disabled` | Textarea `opacity-50`, `cursor-not-allowed`; ring not dimmed |
+| Focus | `:focus-within` on the wrapper plus `:focus-visible` on the textarea | Ring `--field-border-focus` and a 2px inset `--focus-ring-primary` ring inside the plate |
+| Error | `error` or `errorMessage` | Ring `--field-border-error`, fill `--field-background-error`; focus still draws the 2px inset ring in `--focus-ring-error` |
+| Disabled | `disabled` | The whole field dims: `opacity-50` on the ring wrapper plus `cursor-not-allowed` |
 | Helper / error message | `helperText` / `errorMessage` | FieldMessage (error adds AlertCircle icon) |
 | Resize | native | `resize-y` only (no horizontal resize) |
 
@@ -175,7 +177,8 @@ None in `Textarea.tsx`. The shared `FieldMessage` uses `h-[1lh]`.
 - Semantic role: native `textbox` (multi-line).
 - Required labels: `label` or `aria-label` / `aria-labelledby`; no dev warning when missing.
 - Description: helper or error text via `aria-describedby` (consumer ids kept first); `aria-invalid="true"` in error.
-- Focus order: native. Focus shows as the ring color changing to `--field-border-focus`.
+- Focus order: native. Focus shows as the ring changing to `--field-border-focus` plus the system's 2px inset `--focus-ring-primary` ring inside the plate, matching Input. In the error state the inset ring is drawn in `--focus-ring-error`, so focus is visible in every state.
+- Placeholder contrast: `--field-placeholder` is 6.28:1 on the light field and 9.45:1 on the dark field, clearing AA. Placeholders must still never carry essential information: they disappear on input, so the field name belongs in `label` and format hints in `helperText`.
 - Touch target minimum: height comes from `rows`; at default rows the area exceeds 44px.
 - Color independence: error messages carry the AlertCircle icon and text; the boolean `error` flag alone is color only.
 
@@ -216,7 +219,9 @@ None in `Textarea.tsx`. The shared `FieldMessage` uses `h-[1lh]`.
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | `error` was boolean only; no helper or error text, no aria-invalid | Added `helperText` and `errorMessage`, wired via aria-describedby; aria-invalid set when in error | Resolved |
-| 2026-09-22 | Focus is a 1px ring color change only (no 2px inset ring); no visible focus change in the error state | None yet | Open |
+| 2026-09-22 | Focus is a 1px ring color change only (no 2px inset ring); no visible focus change in the error state | The field draws the system's 2px inset focus ring (`--focus-ring-primary`, `--focus-ring-error` in the error state) | Resolved |
+| 2026-09-22 | Disabled dimmed only the inner field, leaving a full-strength ring wrapper | `opacity-50` moved to the ring wrapper, so the border and fill dim together | Resolved |
+| 2026-09-22 | `--field-placeholder` was sepia-500, about 2:1 on the white field | Light placeholder is now sepia-700 at 6.28:1; the rule that placeholders never carry essential information is documented in the component header and this spec | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -232,6 +237,7 @@ None in `Textarea.tsx`. The shared `FieldMessage` uses `h-[1lh]`.
 | Unreleased | 2026-09-21 | feat | Error message leads with the 1-bit AlertCircle icon (was `[er]`), centered on the first line |
 | Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-09-22 | fix | 2px inset focus ring in every state (error included), disabled dims the ring wrapper, and `--field-placeholder` raised to 6.28:1 in light |
 
 <!-- AUTO-END:changelog -->
 

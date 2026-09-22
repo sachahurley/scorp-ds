@@ -114,10 +114,18 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 | `field.border-hover` | Hovered (light: sepia-700; dark: sepia-600) |
 | `field.border-focus` | Focused (dark: accent gold) |
 | `field.border-error` | Invalid |
-| `field.placeholder` | Placeholder text color |
+| `field.placeholder` | Placeholder text color. Light: sepia-700, **6.28:1** on the white field, clearing AA (was sepia-500 at 2.04:1). Dark: sepia-500, 9.45:1 on the field. Placeholders still never carry essential information (they vanish on input), so put format hints in `helperText` and the name in `label` |
 | `field.background-error` | Invalid field background |
 
 **Tailwind:** `bg-field-bg`, `bg-field-bg-error`, `border-field-border`, `border-field-border-focus`, `text-field-placeholder`, …
+
+### Control (rails)
+
+| Token | Use For |
+|-------|---------|
+| `control.track` | Unfilled control rail: the Switch off track and the Slider rail. sepia-600 in both themes: **3.31:1** on the light page and **3.39:1** against the white knob, **5.34:1** / **5.69:1** in dark, so the control clears the 3:1 non-text rule (WCAG 1.4.11). Replaces sepia-300 (1.16:1) on the Switch and `surface.muted` (1.06:1 light / 1.09:1 dark) on the Slider. The filled portion of a Slider uses `accent` (4.9:1 light, 8.24:1 dark on the page) |
+
+**Tailwind:** `bg-control-track`, or `bg-[var(--control-track)]`.
 
 ### Focus
 
@@ -246,6 +254,8 @@ Global stacking scale (`global.zIndex`). Theme-independent — same numbers in l
 | `weight.medium` | `--font-weight-medium` | 500 |
 | `weight.bold` | `--font-weight-bold` | 700 |
 
+There is no 600 step, so `font-semibold` is off-token: use `font-medium` or `font-bold`. The Tailwind preset repoints `font-normal` / `font-medium` / `font-bold` at these variables.
+
 **Storybook:** **Foundation / Typography** — live type samples at token sizes.
 
 ## Spacing Tokens
@@ -279,7 +289,25 @@ One size scale for every sized component: `sm | md | lg` (Avatar adds `xl`). The
 | `control.height.sm` | `--control-height-sm` | 32px | `h-control-sm`, `min-h-control-sm`, `size-control-sm` | Button, Input, Select, Dropdown trigger, Textarea min-height |
 | `control.height.md` | `--control-height-md` | 40px | `h-control-md` … | Default for the same set |
 | `control.height.lg` | `--control-height-lg` | 48px | `h-control-lg` … | Large variants |
-| `touch.target` | `--touch-target` | 44px | `w-touch`, `h-touch` | Hit areas on small controls (Checkbox, Radio, Switch) |
+| `touch.target` | `--touch-target` | 44px | `w-touch`, `h-touch` | Hit areas on small controls (Checkbox, Radio, Switch); the Slider row is `h-touch` tall |
+
+## Switch Geometry Tokens
+
+The Switch's track box, knob box and knob travel live in `global.switch`, so nothing about the geometry is typed into the component. `travel = track width - knob size - inset`, which is why the two x offsets are the only numbers the glide needs.
+
+| Size | Track (`--switch-track-height/width-*`) | Knob (`--switch-knob-size-*`) | Knob x off / on (`--switch-knob-inset/travel-*`) |
+|------|------------------------------------------|-------------------------------|--------------------------------------------------|
+| `sm` | 24 x 44px (width aliases `touch.target`) | 20px | 2px / 22px |
+| `md` | 32 x 56px (height aliases `control.height.sm`) | 24px | 3px / 29px |
+| `lg` | 40 x 72px (height aliases `control.height.md`) | 32px | 3px / 37px |
+
+## Border Width Tokens
+
+| Token | CSS variable | Value | Tailwind |
+|-------|--------------|-------|----------|
+| `border.width.hairline` | `--border-width-hairline` | 1px | `border-b-[length:var(--border-width-hairline)]` (the preset also exposes `border-hairline`) |
+
+The system draws exactly one rule weight. It replaces the ad hoc `0.5px` rules, which browsers snapped to 0 or 1 device pixel unevenly.
 
 ## Motion Tokens
 

@@ -68,7 +68,7 @@ export const WithThumbnail: Story = {
       <ListRow
         href="#"
         meta="2026"
-        title="Sealed case study"
+        title="Sealed case study with a title long enough to run past the row"
         description="A password-protected write-up with a cover image."
         thumb={<span className="block w-28 aspect-video bg-[var(--surface-muted)]" />}
       />
