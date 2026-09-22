@@ -63,6 +63,80 @@ export const Figures: Story = {
     ]),
 };
 
+// Inline specimen art, so the story has no network dependency in the
+// test-runner. Real pages pass a URL.
+const specimenArt = (label: string) =>
+  `data:image/svg+xml;utf8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90">` +
+      `<rect width="160" height="90" fill="dimgray"/>` +
+      `<text x="80" y="49" fill="white" font-family="monospace" font-size="9" text-anchor="middle">${label}</text>` +
+      `</svg>`,
+  )}`;
+
+/** An `src` swaps the hatch for real artwork; everything else about the
+ *  figure (ring, breakout, caption) is unchanged. */
+export const RealArtwork: Story = {
+  render: () =>
+    demo([
+      {
+        type: 'image',
+        src: specimenArt('artwork'),
+        caption: 'A figure given an src renders the image instead of the placeholder',
+      },
+      {
+        type: 'imagePair',
+        srcs: [specimenArt('A'), undefined],
+        captions: ['Real artwork on the left', 'Placeholder on the right'],
+      },
+    ]),
+};
+
+/** Box-drawing diagrams stay live text: selectable, themed, and carrying an
+ *  aria-label because the characters themselves read as noise. */
+export const AsciiDiagram: Story = {
+  render: () =>
+    demo([
+      {
+        type: 'ascii',
+        label: 'Package layering: tokens, then tui-art, then components, then storybook',
+        caption: 'A tui-art frame rendered as text, not an image',
+        text: [
+          '┌────────────────────────────────┐',
+          '│  storybook                     │',
+          '├────────────────────────────────┤',
+          '│  components                    │',
+          '├────────────────────────────────┤',
+          '│  tui-art          tokens       │',
+          '└────────────────────────────────┘',
+        ].join('\n'),
+      },
+    ]),
+};
+
+/** The escape hatch: the page passes live markup in, the library only
+ *  supplies the frame. An unfilled slot falls back to the placeholder. */
+export const Slots: Story = {
+  render: () => (
+    <div className="mx-auto max-w-2xl [container-type:inline-size]">
+      <CaseStudyBlocks
+        slots={{
+          swatches: (
+            <div className="flex">
+              {['bg-primary-300', 'bg-primary-500', 'bg-primary-700', 'bg-secondary-500'].map((c) => (
+                <div key={c} className={`h-20 flex-1 ${c}`} />
+              ))}
+            </div>
+          ),
+        }}
+        blocks={[
+          { type: 'slot', name: 'swatches', caption: 'A filled slot renders whatever the page passes' },
+          { type: 'slot', name: 'nothing-here', aspect: '21 / 9', caption: 'An empty slot keeps the placeholder' },
+        ]}
+      />
+    </div>
+  ),
+};
+
 export const Callouts: Story = {
   render: () =>
     demo([
