@@ -6,7 +6,7 @@
 
 | Field | Value |
 |-------|-------|
-| Token Class | `{ClassName}` |
+| Source | `{source}` (tokens are CSS custom properties, not a class) |
 | Layer | `{layer}` |
 | Category | `{category}` |
 | File | `{file_path}` |
@@ -57,7 +57,7 @@
 
 <!-- AUTO-START:dependencies -->
 
-### Foundation Files Referenced
+### Token Groups Referenced
 
 None.
 
