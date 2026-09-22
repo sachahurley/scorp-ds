@@ -158,3 +158,41 @@ describe('token parser naming contract', () => {
     expect(global['breakpoint-docked']).toBe('960px');
   });
 });
+
+/**
+ * The Tailwind preset declares its breakpoints as literals, because consumer
+ * sites vendor it as a single standalone file with no sibling tokens.json
+ * (the showcase imports `vendor/scorp-ds/tailwind.preset.cjs` directly). This
+ * test is what stops those literals from drifting from the token source.
+ */
+describe('tailwind preset breakpoints', () => {
+  const presetPath = resolve(dirname(findTokensCss()), '../../tailwind.preset.js');
+  const presetSource = readFileSync(presetPath, 'utf8');
+  const presetScreens = Object.fromEntries(
+    [...presetSource.slice(presetSource.indexOf('const screens = {')).matchAll(/(\w+):\s*'([^']+)'/g)]
+      .slice(0, 5)
+      .map(([, name, value]) => [name, value])
+  );
+
+  it('does not load tokens.json at require time (vendored copies have no sibling src/)', () => {
+    expect(presetSource).not.toMatch(/require\(['"]\.\/src\/tokens\.json['"]\)/);
+  });
+
+  it('matches global.breakpoint in tokens.json', () => {
+    const fromTokens = Object.fromEntries(
+      Object.entries(tokens.global.breakpoint as Record<string, { $value: string }>).map(
+        ([name, token]) => [name, token.$value]
+      )
+    );
+    expect(presetScreens).toEqual(fromTokens);
+  });
+
+  it('matches the --breakpoint-* custom properties in tokens.css', () => {
+    const fromCss = Object.fromEntries(
+      Object.entries(rootDeclarations)
+        .filter(([name]) => name.startsWith('breakpoint-'))
+        .map(([name, value]) => [name.replace('breakpoint-', ''), value])
+    );
+    expect(presetScreens).toEqual(fromCss);
+  });
+});
