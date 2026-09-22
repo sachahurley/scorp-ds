@@ -32,8 +32,9 @@
  * another page, use the `Link` component so it has anchor semantics.
  */
 
-import { forwardRef, useEffect, type ButtonHTMLAttributes, type CSSProperties } from "react";
+import { forwardRef, useEffect, type ButtonHTMLAttributes, type CSSProperties, type MouseEvent } from "react";
 import { resolveSize, type ControlSizeProp } from "../lib/size";
+import { Spinner } from "./Spinner";
 
 // Define the props interface for the Button component
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -64,6 +65,14 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   target?: string;
   /** Anchor rel (only with `href`); pair `target="_blank"` with "noopener noreferrer". */
   rel?: string;
+  /**
+   * Busy state for async actions (submitting, saving). Shows a Spinner over
+   * the label, sets `aria-busy` and `aria-disabled`, and ignores clicks. The
+   * button stays focusable (no native `disabled`, so focus isn't dropped
+   * mid-submit) and keeps its width: the label is hidden in place, not
+   * removed. Works for icon-only buttons too. `disabled` wins over `loading`.
+   */
+  loading?: boolean;
 }
 
 /**
@@ -76,6 +85,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * @param children - Button content (text, icons, etc.)
  * @param iconLeft - Icon element to display on the left side of text
  * @param iconRight - Icon element to display on the right side of text
+ * @param loading - Busy state: Spinner over the label, clicks ignored, stays focusable
  *
  * Icon-only usage: pass `aria-label` or `aria-labelledby` (standard button attributes) so assistive tech has an accessible name.
  */
@@ -92,6 +102,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       href,
       target,
       rel,
+      loading = false,
+      onClick,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       ...props 
@@ -331,6 +343,42 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       outline: 'none',
     } as CSSProperties;
 
+    // LOADING: busy, not disabled. The click is swallowed (preventDefault also
+    // stops a submit button from submitting its form again) while focus stays
+    // put. Disabled wins over loading.
+    const busy = loading && !disabled;
+    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+      if (busy) {
+        e.preventDefault();
+        return;
+      }
+      onClick?.(e);
+    };
+    const spinnerSize = size === "icon" ? "md" : size;
+    const busyStyles = busy ? "relative cursor-progress" : "";
+
+    // Content: while busy, the label stays in the layout (so the width holds)
+    // at opacity 0 (so it stays in the accessible name), and the Spinner is
+    // overlaid in the center. The overlay is aria-hidden: aria-busy on the
+    // button carries the state, the label carries the name.
+    const content = (
+      <>
+        {iconLeft && renderIcon(iconLeft)}
+        {renderChildren()}
+        {iconRight && renderIcon(iconRight)}
+      </>
+    );
+    const body = busy ? (
+      <>
+        <span className={`inline-flex items-center justify-center opacity-0 ${gapStyles[size]}`}>{content}</span>
+        <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
+          <Spinner size={spinnerSize} />
+        </span>
+      </>
+    ) : (
+      content
+    );
+
     // Anchor rendering: same classes and focus ring, real link semantics.
     if (href) {
       return (
@@ -339,18 +387,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           href={disabled ? undefined : href}
           target={target}
           rel={rel}
-          aria-disabled={disabled || undefined}
-          className={`${baseStyles} ${getSizeStyles()} ${variantStyles[variant]} ${gapStyles[size]} no-underline ${
+          aria-disabled={disabled || busy || undefined}
+          aria-busy={busy || undefined}
+          className={`${baseStyles} ${getSizeStyles()} ${variantStyles[variant]} ${gapStyles[size]} ${busyStyles} no-underline ${
             disabled ? "pointer-events-none opacity-50" : ""
           } ${className}`}
           style={focusRingStyles}
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
+          onClick={handleClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
           {...(props as unknown as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
-          {iconLeft && renderIcon(iconLeft)}
-          {renderChildren()}
-          {iconRight && renderIcon(iconRight)}
+          {body}
         </a>
       );
     }
@@ -359,20 +407,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled}
-        className={`${baseStyles} ${getSizeStyles()} ${variantStyles[variant]} ${gapStyles[size]} ${className}`}
+        className={`${baseStyles} ${getSizeStyles()} ${variantStyles[variant]} ${gapStyles[size]} ${busyStyles} ${className}`}
         style={focusRingStyles}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
+        aria-disabled={busy || undefined}
+        aria-busy={busy || undefined}
+        onClick={handleClick}
         {...props}
       >
-        {/* Left icon (if provided) */}
-        {iconLeft && renderIcon(iconLeft)}
-        
-        {/* Button text/children - automatically wraps icons when size="icon" */}
-        {renderChildren()}
-        
-        {/* Right icon (if provided) */}
-        {iconRight && renderIcon(iconRight)}
+        {body}
       </button>
     );
   }

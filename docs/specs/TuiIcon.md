@@ -21,7 +21,7 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-TuiIcon is the system's only icon component: 50 names drawn as 1-bit pixel art on a 7x7 grid. Use it for every glyph inside interactive UI (button icons, close marks, chevrons, status markers); use the `TUI_ICON_GLYPHS` text forms only in plain-text contexts such as tui-art frames and terminal strings. Icons are always decorative (`aria-hidden`), so the surrounding control or text must carry the meaning.
+TuiIcon is the system's only icon component: 51 names drawn as 1-bit pixel art on a 7x7 grid. Use it for every glyph inside interactive UI (button icons, close marks, chevrons, status markers); use the `TUI_ICON_GLYPHS` text forms only in plain-text contexts such as tui-art frames and terminal strings. Icons are always decorative (`aria-hidden`), so the surrounding control or text must carry the meaning.
 
 Every icon renders identically on every OS. Three layers, decided by Sacha on 2026-09-21:
 
@@ -39,7 +39,7 @@ Every icon renders identically on every OS. Three layers, decided by Sacha on 20
 
 `<span aria-hidden="true">` (`inline-flex`, centered, `font-mono leading-none select-none`, box size from `size`) containing one `<svg viewBox="0 0 7 7" fill="currentColor" shape-rendering="crispEdges">` with a single `<path>`. The path is precomputed once per icon at module load (`ICON_PATHS`): each horizontal run of `#` in a bitmap row becomes one rect subpath. The art is drawn at `7 x pixel` px and centered in the box, never stretched. An unknown `name` renders a text `?` instead of the SVG.
 
-### Icon set (50 names, keys of `TUI_ICON_GLYPHS`)
+### Icon set (51 names, keys of `TUI_ICON_GLYPHS`)
 
 Keys are Lucide-compatible component names.
 
@@ -47,12 +47,12 @@ Keys are Lucide-compatible component names.
 |-------|-------|
 | Status | `AlertCircle`, `AlertTriangle`, `Check`, `CheckCircle`, `HelpCircle`, `Info`, `X` |
 | Navigation | `ArrowLeft`, `ArrowRight`, `ChevronDown`, `ChevronRight`, `ChevronUp`, `ExternalLink`, `LogOut`, `Menu`, `MoreVertical` |
-| Actions | `Copy`, `Download`, `Edit`, `Plus`, `Save`, `Search`, `Send`, `Share2`, `Trash2`, `Upload` |
+| Actions | `Copy`, `Download`, `Edit`, `Minus`, `Plus`, `Save`, `Search`, `Send`, `Share2`, `Trash2`, `Upload` |
 | Objects | `Archive`, `Bell`, `FileText`, `Globe`, `Lock`, `Mail`, `Settings`, `Shield`, `Star`, `Tag`, `User` |
 | Visibility / theme | `Eye`, `EyeOff`, `Moon`, `Sun` |
 | Media | `Music2`, `Pause`, `Play`, `Repeat`, `Shuffle`, `SkipBack`, `SkipForward`, `Volume2`, `VolumeX` |
 
-`Menu` (U+2630) is the most recent addition. Several names share a text form (for example `AlertCircle` / `AlertTriangle` both map to U+26A0, `Download` / `Save` to U+2913), but each has its own bitmap except `ChevronRight` and `Play`, which are identical.
+`Minus` (U+2212, a full-width 7px horizontal bar on the center row) is the most recent addition, used by Checkbox's indeterminate mark; `Menu` (U+2630) came just before it. Several names share a text form (for example `AlertCircle` / `AlertTriangle` both map to U+26A0, `Download` / `Save` to U+2913), but each has its own bitmap except `ChevronRight` and `Play`, which are identical.
 
 ### Variants
 
@@ -138,7 +138,7 @@ Each size also sets a text size (`text-xs` to `text-2xl`) that only applies to t
 | Single icon | Yes | Yes | `Check` (size 4), `ChevronDown` (size 5) |
 | Sizes 3 / 4 / 5 / 6 / 8 | Yes | Yes | `Size scale` |
 | Common set | Yes | Yes | `Common glyphs` (7 names) |
-| Full catalog (all 50 names, glyphs, code points) | Yes | Yes | `Foundation/1-bit icons` > `Catalog` |
+| Full catalog (all 51 names, glyphs, code points) | Yes | Yes | `Foundation/1-bit icons` > `Catalog` |
 | Unknown-name fallback `?` | Yes | No | |
 
 Interactive controls: `name` (text), `size` (select) on the arg-driven stories.
@@ -177,7 +177,7 @@ None.
 
 ### Used by
 
-Imported by `Alert`, `Badge`, `Checkbox`, `Dropdown`, `Link`, `Modal`, `Select`, `ThemeToggle`. `Button` does not import it but sizes `TuiIcon` children passed as icons.
+Imported by `Alert`, `Badge`, `Checkbox` (`Check`, `Minus`), `Dropdown`, `Link`, `Modal`, `Select`, `ThemeToggle`, `Toast` (variant icons, `X`). `Button` does not import it but sizes `TuiIcon` children passed as icons.
 
 <!-- AUTO-END:dependencies -->
 
@@ -247,6 +247,7 @@ Imported by `Alert`, `Badge`, `Checkbox`, `Dropdown`, `Link`, `Modal`, `Select`,
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-09-21 | feat | Added `Minus` (7x7 horizontal bar, text form U+2212); Scorp Symbols rebuilt. 51 icons |
 | Unreleased | 2026-09-21 | feat | Added Menu (three bars, U+2630); Scorp Symbols face rebuilt so the glyph audit passes. 50 icons |
 | Unreleased | 2026-09-21 | fix | `size` typed as `TuiIconSize` |
 | v3 | 2026-09-21 | feat | Icons redrawn as 1-bit 7x7 pixel art (`TUI_ICON_BITMAPS`), replacing the line-drawn set. |

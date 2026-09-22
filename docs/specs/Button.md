@@ -33,6 +33,8 @@ Button triggers an action in place: submitting a form, opening a dialog, saving,
 
 A `<button>` (or an `<a>` when `href` is set) containing optional `iconLeft`, the children, and optional `iconRight`. Icons are wrapped in a centered span sized to the button (16/20/24px). A button whose only child is a React element (or whose `variant` is `icon`) is detected as icon-only and rendered as a square plate.
 
+While `loading`, that content is wrapped in an `opacity-0` span that stays in the layout (so the width holds and the label stays in the accessible name), and an `aria-hidden` overlay (`absolute inset-0`) centers a `Spinner` at the button's size (`sm` / `md` / `lg`; the deprecated `size="icon"` uses `md`).
+
 ### Variants
 
 | Enum Value | Description |
@@ -67,7 +69,8 @@ A `<button>` (or an `<a>` when `href` is set) containing optional `iconLeft`, th
 |----------|------|---------|----------|-------------|
 | `variant` | `"primary" \| "secondary" \| "ghost" \| "link" \| "outline" \| "destructive" \| "icon"` | `"primary"` | No | Visual style. See Variants. |
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large" \| "icon"` | `"md"` | No | Height from the control-height tokens. Legacy names and `"icon"` are deprecated. |
-| `disabled` | `boolean` | `false` | No | Disables the button (50% opacity, `not-allowed` cursor). On an anchor it removes `href`, sets `aria-disabled`, and blocks pointer events. |
+| `disabled` | `boolean` | `false` | No | Disables the button (50% opacity, `not-allowed` cursor). On an anchor it removes `href`, sets `aria-disabled`, and blocks pointer events. Wins over `loading`. |
+| `loading` | `boolean` | `false` | No | Busy state for async actions. Shows a Spinner over the hidden label, sets `aria-busy` and `aria-disabled`, and swallows clicks (`preventDefault`, so a submit button does not resubmit its form; `onClick` is not called). No native `disabled`, so the button stays focusable, and the width does not change. Works on icon-only buttons and the `href` anchor form. |
 | `iconLeft` | `ReactNode` | none | No | Icon before the label, typically a `TuiIcon`. React elements are wrapped in a size-matched box. |
 | `iconRight` | `ReactNode` | none | No | Icon after the label (for example `ExternalLink` or `ChevronRight`). |
 | `href` | `string` | none | No | Renders an `<a>` with identical plate styling instead of a `<button>`. Use for plate-styled navigation CTAs. |
@@ -78,7 +81,8 @@ A `<button>` (or an `<a>` when `href` is set) containing optional `iconLeft`, th
 | `className` | `string` | `""` | No | Extra classes appended to the button or anchor. |
 | `children` | `ReactNode` | none | No | Label text, or a single icon element for an icon-only button. |
 | `ref` | `Ref<HTMLButtonElement>` | none | No | Forwarded to the `<button>` (or the `<a>` when `href` is set). |
-| `...rest` | native `<button>` attributes | | No | `type`, `onClick`, `form`, and so on. Note `type` is not defaulted, so a Button inside a `<form>` submits unless you pass `type="button"`. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | none | No | Click handler. Not called while `loading`. |
+| `...rest` | native `<button>` attributes | | No | `type`, `form`, and so on. Note `type` is not defaulted, so a Button inside a `<form>` submits unless you pass `type="button"`. |
 
 <!-- AUTO-END:properties -->
 
@@ -130,6 +134,7 @@ A `<button>` (or an `<a>` when `href` is set) containing optional `iconLeft`, th
 | Focus visible | `:focus-visible` | Inset `box-shadow` of `--focus-ring-width` in `--btn-ring` (per-variant focus token). Outline draws it on `::before` |
 | Disabled | `disabled` prop | `opacity-50`, `cursor-not-allowed`; `icon` uses `--button-icon-disabled-*` at full opacity |
 | Disabled anchor | `disabled` + `href` | `href` removed, `aria-disabled="true"`, `pointer-events-none opacity-50` |
+| Loading | `loading` prop (ignored when `disabled`) | Variant colors unchanged; `relative cursor-progress`; content at `opacity-0` with a centered `Spinner` in `currentColor` (the variant's text token); `aria-busy="true"` and `aria-disabled="true"`; clicks prevented; still focusable |
 | Icon-only | single element child or `variant="icon"` | Square `size-control-*`, no padding |
 | Anchor | `href` | Renders `<a>` with the same classes plus `no-underline` |
 
@@ -155,11 +160,12 @@ A `<button>` (or an `<a>` when `href` is set) containing optional `iconLeft`, th
 | Icon-only on every variant | Yes | Yes | `Icon buttons (all variants)` |
 | iconLeft / iconRight props | Yes | No | Only an inline icon child in `As link (href)` |
 | href anchor | Yes | Yes | `As link (href)` |
+| Loading | Yes | Yes | `Loading` (interactive save demo, icon-only, all three sizes) |
 | Hover / focus | Yes | Interactive only | No static story |
 
-Interactive controls: `Playground` with `variant`, `size`, `disabled`, `children`.
+Interactive controls: `Playground` with `variant`, `size`, `disabled`, `loading`, `children`.
 
-**Coverage:** 92% (12/13)
+**Coverage:** 93% (13/14)
 
 <!-- AUTO-END:storybook -->
 
@@ -183,7 +189,9 @@ Interactive controls: `Playground` with `variant`, `size`, `disabled`, `children
 
 ### Child Components
 
-None imported. Icons are passed in by the consumer (typically `TuiIcon`).
+- `Spinner` (`./Spinner`), rendered in the loading overlay.
+
+Icons are passed in by the consumer (typically `TuiIcon`).
 
 ### Foundation Files Referenced
 
@@ -203,6 +211,7 @@ None imported. Icons are passed in by the consumer (typically `TuiIcon`).
 - Required labels: visible text, or `aria-label` / `aria-labelledby` for icon-only buttons (dev warning when missing).
 - Focus order: native tab order. Focus shows as a 2px inset ring because the plate clip swallows outside outlines.
 - Keyboard: native Enter and Space on `<button>`; Enter on the anchor form.
+- Loading: `aria-busy="true"` plus `aria-disabled="true"` announce the busy, unavailable state while the button stays in the tab order and keeps focus (native `disabled` would drop focus mid-submit). The label stays in the accessible name at `opacity-0`; the Spinner overlay is `aria-hidden`, so its own `role="status"` is not announced a second time.
 - Touch target minimum: only `lg` (48px) meets 44x44. `sm` (32px) and `md` (40px) have no expanded hit area.
 - Color independence: variants differ by fill, but meaning must come from the label (for example "Delete account", not a red "OK").
 
@@ -218,6 +227,7 @@ None imported. Icons are passed in by the consumer (typically `TuiIcon`).
 - Do pass `type="button"` for buttons inside a form that should not submit it.
 - Do give every icon-only button an `aria-label` that names the action ("Open menu", not "Menu icon").
 - Do use `href` (with `rel="noopener noreferrer"` for `_blank`) for plate-styled navigation CTAs.
+- Do use `loading` for async submits instead of `disabled` or swapping the label for "Saving..."; it keeps focus and width stable.
 - Don't use `variant="link"` for navigation; use `Link` so it has anchor semantics.
 - Don't use `size="icon"` or the `small|medium|large` names in new code.
 - Don't pass a single wrapper element (for example `<span>Save</span>`) as children: it is detected as icon-only and squared. Pass plain text.
@@ -261,6 +271,7 @@ None imported. Icons are passed in by the consumer (typically `TuiIcon`).
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | fix | Light secondary hover text is now `--button-secondary-text-hover` sepia-950 on the sepia-600 fill (5.3:1, was white at 3.3:1) |
+| Unreleased | 2026-09-21 | feat | `loading` prop: Spinner over the label, `aria-busy` + `aria-disabled`, clicks blocked, stays focusable, width stable (icon-only too) |
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | fix | Deprecated `size="icon"`; documented `variant="link"` |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |

@@ -101,6 +101,14 @@ export type {
   TableCellProps,
 } from './components/Table';
 
+// Quick wins: Spinner, imperative toast API (ds-quick-wins).
+// Button `loading`, Checkbox `indeterminate`, and Tooltip flip ship on the
+// existing exports above.
+export { Spinner } from './components/Spinner';
+export type { SpinnerProps } from './components/Spinner';
+export { toast, useToast } from './components/Toast';
+export type { ToastProps, ToastVariant, ToastAction, ToastOptions, ToastApi } from './components/Toast';
+
 // Primitives
 export { Stack } from './primitives/Stack';
 export type { StackProps, StackGap } from './primitives/Stack';
