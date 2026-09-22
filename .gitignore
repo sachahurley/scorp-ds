@@ -10,3 +10,6 @@ coverage/
 
 # Conductor machine-local settings
 .conductor/settings.local.toml
+
+# Visual-regression output. Baselines ARE committed; diffs are run artifacts.
+packages/storybook/visual-diffs/

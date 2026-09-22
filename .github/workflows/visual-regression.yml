@@ -1,0 +1,60 @@
+# Screenshots every story in both themes and diffs against committed baselines.
+#
+# Baselines are platform-specific: font rasterisation differs between macOS and
+# Linux, so a baseline captured on a laptop will never match here. They are
+# generated and compared ONLY in this container. To (re)create them, run this
+# workflow manually with `update` set to true and commit the result.
+name: Visual regression
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      update:
+        description: 'Rewrite the baselines instead of comparing against them'
+        type: boolean
+        default: false
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright (Chromium)
+        run: npx playwright install chromium --with-deps
+
+      - name: Build static Storybook
+        run: npm run build-storybook --workspace=@scorp-ds/storybook
+
+      - name: Compare against baselines
+        if: ${{ github.event.inputs.update != 'true' }}
+        run: node scripts/visual-regression.mjs
+
+      - name: Upload diffs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: packages/storybook/visual-diffs/
+          if-no-files-found: ignore
+
+      - name: Rewrite baselines
+        if: ${{ github.event.inputs.update == 'true' }}
+        run: node scripts/visual-regression.mjs --update
+
+      - name: Upload new baselines
+        if: ${{ github.event.inputs.update == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: packages/storybook/visual-baselines/
