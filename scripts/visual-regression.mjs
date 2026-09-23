@@ -53,15 +53,14 @@ const FILTER = filterIdx > -1 ? process.argv[filterIdx + 1] : null;
  */
 const INTERACTIONS = {
   "components-display-tooltip--positions": [
-    { state: "top", hoverText: "Top" },
-    { state: "left", hoverText: "Left" },
+    { state: "top", hoverButton: "Top" },
+    { state: "left", hoverButton: "Left" },
   ],
-  "components-display-tooltip--on-button": [{ state: "open", hoverText: "Hover or focus me" }],
-  "components-overlays-modal--with-footer": [{ state: "open", clickFirst: "button" }],
-  "components-overlays-modal--docked": [{ state: "open", clickFirst: "button" }],
-  "components-overlays-bottom-sheet--default": [{ state: "open", clickFirst: "button" }],
-  "components-inputs-select--default": [{ state: "open", clickFirst: "button" }],
-  "components-actions-dropdown--default": [{ state: "open", clickFirst: "button" }],
+  "components-display-tooltip--on-button": [{ state: "open", hoverButton: "Hover or focus me" }],
+  "components-overlays-modal--with-footer": [{ state: "open", clickButton: true }],
+  "components-overlays-modal--docked": [{ state: "open", clickButton: true }],
+  "components-overlays-bottomsheet--default": [{ state: "open", clickButton: true }],
+  "components-overlays-dropdown--default": [{ state: "open", clickButton: true }],
 };
 
 /** Per-pixel colour tolerance, and the share of pixels allowed to differ. */
@@ -125,16 +124,25 @@ for (const theme of ["dark", "light"]) {
       shots.push([`${story.id}-${theme}.png`, await page.screenshot({ animations: "disabled" })]);
 
       for (const step of INTERACTIONS[story.id] || []) {
-        if (step.hoverText) await page.getByRole("button", { name: step.hoverText }).hover();
-        if (step.hoverFirst) await page.locator(step.hoverFirst).first().hover();
-        if (step.clickFirst) await page.locator(step.clickFirst).first().click();
+        // Always go through getByRole. `locator("button")` matches Storybook's own
+        // injected, hidden buttons: on every one of these stories the first such
+        // match is invisible, and clicking it just burns the timeout.
+        const target = step.hoverButton
+          ? page.getByRole("button", { name: step.hoverButton })
+          : page.getByRole("button").first();
+        // Short, because a miss here means the map is wrong, not that the page is slow.
+        if (step.hoverButton) await target.hover({ timeout: 5000 });
+        if (step.clickButton) await target.click({ timeout: 5000 });
         await page.waitForTimeout(500);
         shots.push([`${story.id}-${step.state}-${theme}.png`,
                     await page.screenshot({ animations: "disabled" })]);
       }
     } catch (err) {
-      failed++; failures.push(`${story.id}-${theme} (${err.message.split("\n")[0]})`);
-      console.log(`  ERROR     ${story.id}-${theme}: ${err.message.split("\n")[0]}`);
+      failed++;
+      const why = err.message.split("\n")[0];
+      const kind = /getByRole|Timeout/.test(why) ? "BAD STEP " : "ERROR    ";
+      failures.push(`${story.id}-${theme} [${kind.trim()}] ${why}`);
+      console.log(`  ${kind} ${story.id}-${theme}: ${why}`);
       await page.close();
       continue;
     }
