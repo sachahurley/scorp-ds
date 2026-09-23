@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent } from '@storybook/test';
 import { useState } from 'react';
 import { Slider } from '@scorp-ds/components';
 
@@ -65,4 +66,19 @@ export const Widths: Story = {
       </div>
     </div>
   ),
+};
+
+/**
+ * Keyboard focus. Covers the ring on the slider row, which carries it instead of the thumb.
+ *
+ * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
+ * programmatic focus, so a story focusing the control in JS would render no ring
+ * at all and still look like passing coverage.
+ */
+export const Focus: Story = {
+  ...Default,
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
 };

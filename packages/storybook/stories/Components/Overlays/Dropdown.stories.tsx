@@ -105,3 +105,21 @@ export const CustomTrigger: Story = {
     items: [item('Rename'), item('Archive'), item('Delete', 'destructive')],
   },
 };
+
+/**
+ * Keyboard focus on the closed trigger. Dropdown is the only component using
+ * `--focus-ring-secondary`, so nothing else covers that token, and every other
+ * Dropdown story opens its menu on render.
+ *
+ * Tab rather than `.focus()`: `focus-visible` does not match programmatic focus.
+ */
+export const Focus: Story = {
+  args: {
+    label: 'Actions',
+    items: [item('Edit'), item('Duplicate')],
+  },
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
+};

@@ -42,6 +42,13 @@ export const Default: Story = {
 };
 
 export const Error: Story = {
+  // Tab to the field. This is the regression guard for the focus-within fix:
+  // before it, focusing an errored field changed nothing at all, which is a
+  // WCAG 2.4.7 failure and one axe cannot detect.
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
   render: (args) => (
     <div className="w-72">
       <Select {...args} label="Required choice" defaultValue="">

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent } from '@storybook/test';
 import { useState } from 'react';
 import { Button, TuiIcon, type TuiIconName } from '@scorp-ds/components';
 
@@ -245,5 +246,20 @@ export const Loading: Story = {
         </div>
       </div>
     );
+  },
+};
+
+/**
+ * Keyboard focus. Covers the primary inset ring (--focus-ring-primary) clipped to the plate silhouette.
+ *
+ * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
+ * programmatic focus, so a story focusing the control in JS would render no ring
+ * at all and still look like passing coverage.
+ */
+export const Focus: Story = {
+  ...Primary,
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
   },
 };
