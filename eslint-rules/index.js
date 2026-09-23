@@ -185,6 +185,48 @@ module.exports = {
       },
     },
 
+    "no-element-focus-in-story": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "Story play functions must drive focus with the keyboard. :focus-visible does not match programmatic focus, so element.focus() renders no ring while still looking like passing coverage.",
+        },
+        schema: [],
+        messages: {
+          programmatic:
+            "Focus a control with `await userEvent.tab()`, not `.focus()`. The focus ring recipe is `focus-visible`, which does not match programmatic focus: this would capture a frame with no ring in it and still look like passing coverage. Focusing the window (`canvasElement.ownerDocument.defaultView?.focus()`) is fine and is not what this flags.",
+        },
+      },
+      create(context) {
+        /** `window.focus()` and `…defaultView?.focus()` are legitimate: they focus the
+         *  frame so that a subsequent Tab lands somewhere. Only element focus is wrong. */
+        function isWindowFocus(object) {
+          if (!object) return false;
+          if (object.type === "Identifier") return object.name === "window";
+          if (object.type === "MemberExpression" || object.type === "OptionalMemberExpression") {
+            const prop = object.property;
+            return prop && prop.type === "Identifier" && (prop.name === "defaultView" || prop.name === "window");
+          }
+          if (object.type === "TSNonNullExpression" || object.type === "ChainExpression") {
+            return isWindowFocus(object.expression);
+          }
+          return false;
+        }
+
+        return {
+          CallExpression(node) {
+            const callee = node.callee;
+            if (!callee) return;
+            if (callee.type !== "MemberExpression" && callee.type !== "OptionalMemberExpression") return;
+            if (!callee.property || callee.property.name !== "focus") return;
+            if (isWindowFocus(callee.object)) return;
+            context.report({ node, messageId: "programmatic" });
+          },
+        };
+      },
+    },
+
     "public-jsdoc": {
       meta: {
         type: "suggestion",

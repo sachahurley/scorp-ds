@@ -79,5 +79,16 @@ export default tseslint.config(
       "scorp/no-sans": "error",
       "scorp/no-legacy-package": "error",
     },
+  },
+  // Story files only. A `play` function that focuses an element in JS captures a
+  // frame with no focus ring in it, because the ring recipe is `focus-visible`
+  // and that does not match programmatic focus. The frame then matches its
+  // baseline forever and reads as coverage, which is worse than having none.
+  {
+    files: ["packages/storybook/stories/**/*.stories.{ts,tsx}"],
+    plugins: { scorp },
+    rules: {
+      "scorp/no-element-focus-in-story": "error",
+    },
   }
 );

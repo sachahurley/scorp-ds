@@ -140,6 +140,20 @@ Every documentation page in Storybook MUST follow the rules in `design-system-do
 - `Patterns/Card` — compound patterns
 - `Lab/…` — experimental
 
+**A story whose subject only exists after an interaction carries a Storybook `play`
+function.** There is no interaction map in the visual harness, and one must not be added:
+the previous one silently captured nothing for two wrong story ids. Put the story into the
+state the story is *about*, which is not always "open".
+
+- Focus states use `await userEvent.tab()`, never `element.focus()`. `:focus-visible` does
+  not match programmatic focus, so a JS-focused story captures a frame with no ring and
+  still looks like coverage. Enforced by `scorp/no-element-focus-in-story`.
+- A story that cannot render a stable frame (anything on a timer) gets
+  `tags: ['skip-visual']` **and a comment saying why**. It stays in the a11y pass.
+
+Rules: `design-system-doc-requirements.md`. Reasoning:
+`docs/decisions/0012-stories-drive-their-own-interactions.md`.
+
 ## How to Add
 
 ### New Token
@@ -210,7 +224,7 @@ screenshot in both themes before it is approved.
 - [ ] All public components and props have JSDoc comments
 - [ ] Interactive components have ARIA labels
 - [ ] New components exported through `packages/components/src/index.ts`
-- [ ] Storybook story added
+- [ ] Storybook story added; interaction-gated stories carry a `play` function
 - [ ] `npm run lint`, `npm run type-check` and `npm test` pass (CI runs all three)
 - [ ] No imports from `@sachahurley/scorpion-ui` (old package — forbidden)
 

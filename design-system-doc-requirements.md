@@ -55,6 +55,35 @@ A rendered story and a one-line description. No other requirements.
 
 Placeholder filler may be plain HTML; the component under test always uses tokens.
 
+## Interaction states (visual regression depends on this)
+
+Visual regression screenshots a story as it renders, so anything behind a hover, a click
+or a keypress is invisible to it unless the story puts itself there.
+
+- **A story whose subject only exists after an interaction carries a `play` function.**
+  There is no interaction map in the harness, and one must not be added back: the previous
+  one had two wrong story ids that captured nothing, silently.
+- **The play function puts the story into the state the story is about**, which is not
+  always "open". Do not open everything. `Combobox/Sizes` compares three fields and one
+  open list would cover two of them; the `Error` stories are about the message under the
+  field; `Disabled` stories cannot open at all.
+- **Focus states use `await userEvent.tab()`, never `element.focus()`.** `:focus-visible`
+  does not match programmatic focus, so a JS-focused story captures a frame with no ring
+  and still looks like passing coverage. Enforced by `scorp/no-element-focus-in-story`.
+  Focusing the window first (`canvasElement.ownerDocument.defaultView?.focus()`) is fine
+  and is how you make the Tab land.
+- **A story that cannot produce a stable frame gets `tags: ['skip-visual']` and a comment
+  saying why.** Anything driven by a timer or randomness renders differently every run:
+  `ProgressBar/Live` ticks every 400ms, `LogView/Streaming` every 700ms. `skip-visual`
+  leaves the visual comparison only; the story stays in the a11y pass. It is not lint
+  enforced, so a new one is a claim to justify in review, not a quick fix for a red run.
+
+Why this matters beyond screenshots: the a11y runner executes play functions too. The
+first one ever added found a contrast failure that had been shipping, and the focus work
+found two fields with no focus indicator at all, which axe cannot detect on its own.
+
+Full reasoning: `docs/decisions/0012-stories-drive-their-own-interactions.md`.
+
 ## Writing rules
 
 - First paragraph of every page: zero jargon; readable with no coding background.
@@ -68,3 +97,5 @@ Placeholder filler may be plain HTML; the component under test always uses token
 - [ ] Exactly one code snippet per page (component pages: one per section max)
 - [ ] Component pages: props are autodocs-generated, a11y bullets present
 - [ ] Nothing on the page duplicates a fact that lives in another file
+- [ ] Interaction-gated stories carry a `play` function; focus states use `userEvent.tab()`
+- [ ] Any `skip-visual` tag says, in a comment, why the frame cannot be stable
