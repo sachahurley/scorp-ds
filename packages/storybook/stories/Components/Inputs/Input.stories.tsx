@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent } from '@storybook/test';
 import { Input } from '@scorp-ds/components';
 
 /**
@@ -96,4 +97,19 @@ export const Quiet: Story = {
       <Input variant="quiet" error aria-label="Wrong passphrase" defaultValue="hunter2" />
     </div>
   ),
+};
+
+/**
+ * Keyboard focus. Covers the plate-ring mechanism: the wrapper border switches to --field-border-focus rather than drawing an inset shadow.
+ *
+ * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
+ * programmatic focus, so a story focusing the control in JS would render no ring
+ * at all and still look like passing coverage.
+ */
+export const Focus: Story = {
+  ...Default,
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
 };

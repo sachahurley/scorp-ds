@@ -80,6 +80,13 @@ export const Sizes: Story = {
 };
 
 export const Error: Story = {
+  // Tab to the field. This is the regression guard for the focus-within fix:
+  // before it, focusing an errored field changed nothing at all, which is a
+  // WCAG 2.4.7 failure and one axe cannot detect.
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
   render: Default.render,
   args: { label: 'Country', errorMessage: 'Pick a country to continue.' },
 };

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent } from '@storybook/test';
 import { Input, Stack, Tabs, TabsContent, TabsList, TabsTrigger } from '@scorp-ds/components';
 
 const meta: Meta = {
@@ -101,4 +102,19 @@ export const WithFormFields: Story = {
       </div>
     </div>
   ),
+};
+
+/**
+ * Keyboard focus. Covers the tab ring, which the previous ratio-based diff gate could not see at all.
+ *
+ * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
+ * programmatic focus, so a story focusing the control in JS would render no ring
+ * at all and still look like passing coverage.
+ */
+export const Focus: Story = {
+  ...Default,
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
 };

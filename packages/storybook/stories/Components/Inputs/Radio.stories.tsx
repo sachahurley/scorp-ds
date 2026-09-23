@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, userEvent } from '@storybook/test';
 import { Radio } from '@scorp-ds/components';
 
 const meta: Meta<typeof Radio> = {
@@ -69,5 +69,20 @@ export const Disabled: Story = {
     value: 'y',
     label: 'Disabled',
     disabled: true,
+  },
+};
+
+/**
+ * Keyboard focus. Covers the smallest ring in the system, about 25 px, on a round-plate control.
+ *
+ * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
+ * programmatic focus, so a story focusing the control in JS would render no ring
+ * at all and still look like passing coverage.
+ */
+export const Focus: Story = {
+  ...Group,
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
   },
 };

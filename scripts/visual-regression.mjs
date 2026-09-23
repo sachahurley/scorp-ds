@@ -83,16 +83,26 @@ const PIXEL_THRESHOLD = 0.01;
  *
  * The floor is set from the measured noise rather than guessed. Two `--update`
  * runs at the same commit, 520 frames each, differed by exactly 0 px: this
- * renderer is bit-exact across runs in the CI container. So the real choice is
- * anywhere between 1 and ~150, and 20 sits far from both ends. It will not fire
- * on a stray pixel, and it is an order of magnitude below the smallest change
- * worth seeing.
+ * renderer is bit-exact across runs in the CI container.
+ *
+ * Lowered from 20 to 10 once the focus stories were measured. A focus ring on a
+ * small control is the smallest real signal the suite carries, and it is small:
+ *
+ *     Radio focus ring     25 px
+ *     Checkbox focus ring  33 px
+ *     Switch focus ring   232 px
+ *     Tabs focus ring     456 px
+ *
+ * At 20 the radio ring cleared the gate by 5 px, which is the same uncomfortable
+ * margin the old ratio gate gave the button ring before it was replaced. 10
+ * keeps a 2.5x margin under the smallest real signal while still sitting
+ * infinitely above a measured noise floor of zero.
  *
  * If this ever starts failing everywhere at once, suspect a runner or browser
  * update rather than the components, and re-measure the noise floor before
  * raising the number.
  */
-const MAX_DIFF_PIXELS = 20;
+const MAX_DIFF_PIXELS = 10;
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
   ".css": "text/css", ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml",

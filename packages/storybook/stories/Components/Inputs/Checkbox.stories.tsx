@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, userEvent } from '@storybook/test';
 import { useState } from 'react';
 import { Checkbox } from '@scorp-ds/components';
 
@@ -123,4 +123,19 @@ export const IndeterminateSizes: Story = {
       <Checkbox size="lg" label="Large" indeterminate />
     </div>
   ),
+};
+
+/**
+ * Keyboard focus. Covers the smallest ring in the system: about 33 px of change on a 16 px control.
+ *
+ * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
+ * programmatic focus, so a story focusing the control in JS would render no ring
+ * at all and still look like passing coverage.
+ */
+export const Focus: Story = {
+  ...Unchecked,
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
 };

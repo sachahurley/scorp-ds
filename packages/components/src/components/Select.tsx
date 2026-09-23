@@ -374,8 +374,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
 
   // PLATE RING RECIPE — wrapper carries the border color (portfolio ramp:
   // idle hairline → hover mut → focus accent); the trigger is the inset fill.
+  // Focus wins over error on the ring. Without the focus-within override an
+  // errored field showed no focus change at all, which fails WCAG 2.4.7; the
+  // error stays conveyed by the error fill and the message below, so it is
+  // still carried by more than one channel.
   const triggerRing = error
-    ? "bg-[var(--field-border-error)]"
+    ? "bg-[var(--field-border-error)] focus-within:!bg-[var(--field-border-focus)]"
     : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
 
   const hasLabel = label != null && label !== "";

@@ -304,8 +304,12 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   }[size];
 
   const invalid = field.invalid;
+  // Focus wins over error on the ring. Without the focus-within override an
+  // errored field showed no focus change at all, which fails WCAG 2.4.7; the
+  // error stays conveyed by the error fill and the message below, so it is
+  // still carried by more than one channel.
   const ringStyles = invalid
-    ? "bg-[var(--field-border-error)]"
+    ? "bg-[var(--field-border-error)] focus-within:!bg-[var(--field-border-focus)]"
     : "bg-[var(--field-border)] hover:bg-[var(--field-border-hover)] focus-within:!bg-[var(--field-border-focus)]";
 
   const hasLabel = label != null && label !== "";

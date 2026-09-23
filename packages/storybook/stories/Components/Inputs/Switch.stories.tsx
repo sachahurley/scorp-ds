@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { fn } from '@storybook/test';
+import { fn, userEvent } from '@storybook/test';
 import { Switch } from '@scorp-ds/components';
 
 const meta: Meta<typeof Switch> = {
@@ -54,5 +54,20 @@ export const AllSizes: Story = {
         <Switch size="lg" label="Large" checked={c} onCheckedChange={setC} />
       </div>
     );
+  },
+};
+
+/**
+ * Keyboard focus. Covers the ring on a track rather than a box.
+ *
+ * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
+ * programmatic focus, so a story focusing the control in JS would render no ring
+ * at all and still look like passing coverage.
+ */
+export const Focus: Story = {
+  ...Off,
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
   },
 };
