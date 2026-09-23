@@ -37,3 +37,9 @@ jobs:
 
       - name: Unit tests
         run: npm test
+
+      # Fails if a component's public API changed without the generated manifest
+      # being regenerated. The manifest is what spec-drift detection compares
+      # against, so a stale one silently disables that check.
+      - name: API surface manifest is current
+        run: node scripts/generate-api-surface.mjs --check
