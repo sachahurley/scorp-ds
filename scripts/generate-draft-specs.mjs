@@ -46,13 +46,20 @@ function buildStoryMap(storiesDir) {
       const src = fs.readFileSync(full, "utf8");
       const title = src.match(/title:\s*['"`]([^'"`]+)['"`]/)?.[1];
       if (!title) continue;
-      // `Components/Display/Tooltip` -> component Tooltip, category Display.
+      // `Components/Display/Tooltip` -> category Display.
       const parts = title.split("/");
-      const name = entry.name.replace(/\.stories\.tsx$/, "");
-      byComponent[name] = {
+      const record = {
         story: title,
         category: parts.length >= 3 ? parts[parts.length - 2] : parts[0],
       };
+      // Key by BOTH the file name and the `component:` the meta points at. A
+      // component's stories are not always in a file named after its source:
+      // CaseStudy.tsx exports CaseStudyBlocks, whose stories live in
+      // CaseStudyBlocks.stories.tsx and CaseStudyTemplate.stories.tsx. Keying on
+      // the file name alone reported it as having no story at all.
+      byComponent[entry.name.replace(/\.stories\.tsx$/, "")] ??= record;
+      const component = src.match(/\bcomponent:\s*([A-Za-z0-9_]+)/)?.[1];
+      if (component) byComponent[component] ??= record;
     }
   };
   if (fs.existsSync(storiesDir)) walk(storiesDir);
@@ -130,7 +137,11 @@ function main() {
     const name = path.basename(file, ".tsx");
     const full = path.join(COMPONENTS_DIR, file);
     const src = fs.readFileSync(full, "utf8");
-    const mapped = STORY_MAP[name];
+    // Try the source file name, then each name the file exports: a component
+    // whose export differs from its file name still has to resolve.
+    const exported = [...src.matchAll(/export\s+(?:const|function|class)\s+([A-Z][A-Za-z0-9_]*)/g)]
+      .map((m) => m[1]);
+    const mapped = STORY_MAP[name] ?? exported.map((e) => STORY_MAP[e]).find(Boolean);
     if (!mapped) console.error(`  no story found for ${name} (spec will say General)`);
     const story = mapped?.story ?? `Components/General/${name}`;
     const category = mapped?.category ?? "General";
