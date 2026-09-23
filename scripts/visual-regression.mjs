@@ -61,12 +61,38 @@ const FILTER = filterIdx > -1 ? process.argv[filterIdx + 1] : null;
  *     threshold 0.02   1,581 px   0.293%
  *     threshold 0.1    1,394 px   0.258%   <- previous setting
  *
- * At 0.1 that change still failed, but only by 2.6x over MAX_DIFF_RATIO; a smaller
+ * At 0.1 that change still failed, but only by 2.6x over the size gate; a smaller
  * element appearing would have slipped under. Not 0, which invites anti-aliasing
  * noise for a signal 0.01 already captures.
  */
 const PIXEL_THRESHOLD = 0.01;
-const MAX_DIFF_RATIO = 0.001;
+
+/**
+ * How many differing pixels count as a real change.
+ *
+ * This was a ratio (0.1% of the frame, 540 px at 900x600), which is the wrong
+ * model. The things most worth catching are a fixed absolute size, not a share
+ * of the viewport: a focus ring is a 2px inset outline around one control, so
+ * expressing the gate as a percentage of the frame guarantees that rings on
+ * small controls fall under it. Measured at PIXEL_THRESHOLD 0.01:
+ *
+ *     Tabs focus ring                    456 px   missed by the old ratio
+ *     Destructive text colour fix        191 px   missed by the old ratio
+ *     Button focus ring                  544 px   cleared it by 4 px
+ *     Input focus ring                   944 px   cleared it
+ *
+ * The floor is set from the measured noise rather than guessed. Two `--update`
+ * runs at the same commit, 520 frames each, differed by exactly 0 px: this
+ * renderer is bit-exact across runs in the CI container. So the real choice is
+ * anywhere between 1 and ~150, and 20 sits far from both ends. It will not fire
+ * on a stray pixel, and it is an order of magnitude below the smallest change
+ * worth seeing.
+ *
+ * If this ever starts failing everywhere at once, suspect a runner or browser
+ * update rather than the components, and re-measure the noise floor before
+ * raising the number.
+ */
+const MAX_DIFF_PIXELS = 20;
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
   ".css": "text/css", ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml",
@@ -163,7 +189,7 @@ for (const theme of ["dark", "light"]) {
           const changed = pixelmatch(expected.data, actual.data, diff.data,
                                      expected.width, expected.height, { threshold: PIXEL_THRESHOLD });
           const ratio = changed / (expected.width * expected.height);
-          if (ratio > MAX_DIFF_RATIO) {
+          if (changed > MAX_DIFF_PIXELS) {
             failed++; failures.push(`${name} (${changed} px, ${(ratio * 100).toFixed(3)}%)`);
             writeFileSync(join(DIFFS, name), PNG.sync.write(diff));
             writeFileSync(join(DIFFS, name.replace(/\.png$/, ".actual.png")), shot);
