@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@scorp-ds/components';
 
 const meta: Meta<typeof Accordion> = {
@@ -36,6 +37,13 @@ const Items = ({ disabledValue }: { disabledValue?: string }) => (
 );
 
 export const Default: Story = {
+  // Expands a panel, since a fully collapsed accordion shows none of the open
+  // state. Most of the other stories already open one via defaultValue and need
+  // no play: Open, Multiple, Single-not-collapsible and Controlled.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Shipping' }));
+  },
   render: (args) => (
     <div className="w-96">
       <Accordion {...args}>
@@ -81,6 +89,12 @@ export const NotCollapsible: Story = {
 };
 
 export const DisabledItem: Story = {
+  // Expands an enabled panel so the frame carries both states at once: the dimmed
+  // disabled trigger this story is named for, and an open panel beside it.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Shipping' }));
+  },
   name: 'Disabled item',
   render: () => (
     <div className="w-96">

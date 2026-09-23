@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { Button, Checkbox, Input, Popover, TuiIcon } from '@scorp-ds/components';
 
 const meta: Meta<typeof Popover> = {
@@ -52,6 +53,12 @@ const FilterPanel = () => (
 );
 
 export const Default: Story = {
+  // Open, so the panel is what the baseline covers. The Open story needs no play:
+  // it already passes defaultOpen.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Filters' }));
+  },
   args: { side: 'bottom', align: 'start' },
   render: (args) => (
     <Stage>
@@ -78,6 +85,12 @@ export const Open: Story = {
 
 /** Every side; a panel flips to the opposite side when the canvas has no room for it. */
 export const Sides: Story = {
+  // Only one popover can be open at a time, so this covers `top`. The other three
+  // sides share the same placement code path and differ only in direction.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'top' }));
+  },
   render: () => (
     <div className="grid min-h-[420px] grid-cols-2 place-items-center gap-24 p-24">
       {(['top', 'bottom', 'left', 'right'] as const).map((side) => (
@@ -101,6 +114,12 @@ export const Sides: Story = {
 
 /** Controlled: the parent owns `open` and closes it from inside the panel on submit. */
 export const Controlled: Story = {
+  // Open, so the baseline shows the controlled panel rather than a trigger that
+  // looks identical to every other closed state.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Rename' }));
+  },
   render: function ControlledStory() {
     const [open, setOpen] = useState(false);
     return (

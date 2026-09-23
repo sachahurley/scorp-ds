@@ -39,6 +39,12 @@ export const Default: Story = {
 };
 
 export const AlignRight: Story = {
+  // Right-alignment is only observable against an open menu; the resting frame is
+  // a picture of the trigger.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Menu' }));
+  },
   args: {
     label: 'Menu',
     align: 'right',
@@ -47,6 +53,11 @@ export const AlignRight: Story = {
 };
 
 export const Small: Story = {
+  // Open: the sm size applies to the menu rows as well as the trigger.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'More' }));
+  },
   args: {
     label: 'More',
     size: 'sm',
@@ -60,6 +71,11 @@ export const Small: Story = {
  */
 export const WithDisabledItem: Story = {
   name: 'Disabled item',
+  // Open: the dimmed disabled row this story documents exists only in the menu.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Actions' }));
+  },
   args: {
     label: 'Actions',
     items: [
@@ -78,6 +94,12 @@ export const WithDisabledItem: Story = {
  */
 export const CustomTrigger: Story = {
   name: 'Custom trigger',
+  // Open: this story is about aria-expanded landing on the cloned trigger itself,
+  // which is only true once the menu is open.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Row actions' }));
+  },
   args: {
     trigger: <Button variant="outline">Row actions</Button>,
     items: [item('Rename'), item('Archive'), item('Delete', 'destructive')],

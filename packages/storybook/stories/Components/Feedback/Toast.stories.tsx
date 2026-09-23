@@ -31,6 +31,15 @@ export default meta;
 type Story = StoryObj<typeof Toaster>;
 
 /** Pattern C: the story owns the queue; the Toaster just renders it. */
+/**
+ * Deliberately has no `play` function, and should not be given one.
+ *
+ * Pushing a toast here starts a 3200ms self-expiry, so any screenshot becomes a
+ * race between the settle wait and the dismissal. The appearance of a toast is
+ * already covered, stably, by Variants and With action, which render `<Toast>`
+ * directly with no queue and no timer. Opening this one would buy redundant
+ * coverage at the cost of a frame that can flake.
+ */
 export const Default: Story = {
   render: function ToasterDemo() {
     const [toasts, setToasts] = useState<ToastItem[]>([]);
@@ -58,6 +67,7 @@ export const Default: Story = {
 };
 
 /** Imperative: one `<Toaster />`, then `toast()` from any handler. */
+/** No `play` here either, for the same reason as Default: the queue self-expires. */
 export const Imperative: Story = {
   render: () => (
     <div className="flex flex-wrap gap-3">
