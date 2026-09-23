@@ -46,6 +46,7 @@ Motion: grid-rows 0fr to 1fr over duration.normal (200ms) with a rotating 1-bit 
 
 | Enum Value | Description |
 |-----------|-------------|
+| `(none)` | No `size` prop. Row height comes from the trigger's own padding and the content it wraps; the open/closed transition animates `grid-template-rows` rather than a fixed height. |
 
 <!-- AUTO-END:anatomy -->
 
