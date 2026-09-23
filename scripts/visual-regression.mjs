@@ -63,8 +63,26 @@ const INTERACTIONS = {
   "components-overlays-dropdown--default": [{ state: "open", clickButton: true }],
 };
 
-/** Per-pixel colour tolerance, and the share of pixels allowed to differ. */
-const PIXEL_THRESHOLD = 0.1;
+/**
+ * Per-pixel colour tolerance, and the share of pixels allowed to differ.
+ *
+ * PIXEL_THRESHOLD is 0.01 rather than pixelmatch's usual 0.1 because this palette
+ * is dark-on-dark and the generic default assumes more contrast than it has. The
+ * dark menu fill (--surface-card, #120D09) sits so close to the page background
+ * that at 0.1 an entire dropdown menu appearing registers as only its border and
+ * text: 1,394 px, where the true difference is 19,315. Measured across the range,
+ * the cliff is between 0.01 and 0.02:
+ *
+ *     threshold 0     19,315 px   3.577%
+ *     threshold 0.01  19,310 px   3.576%
+ *     threshold 0.02   1,581 px   0.293%
+ *     threshold 0.1    1,394 px   0.258%   <- previous setting
+ *
+ * At 0.1 that change still failed, but only by 2.6x over MAX_DIFF_RATIO; a smaller
+ * element appearing would have slipped under. Not 0, which invites anti-aliasing
+ * noise for a signal 0.01 already captures.
+ */
+const PIXEL_THRESHOLD = 0.01;
 const MAX_DIFF_RATIO = 0.001;
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
