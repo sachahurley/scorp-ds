@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { Select } from '@scorp-ds/components';
 
 const meta: Meta<typeof Select> = {
@@ -19,6 +20,13 @@ export default meta;
 type Story = StoryObj<typeof Select>;
 
 export const Default: Story = {
+  // Opens the listbox. Only the stories whose subject IS the list get this:
+  // Error and Disabled are about the field, and opening them would hide the very
+  // thing they document.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button'));
+  },
   render: (args) => (
     <div className="w-72">
       <Select {...args} label="Choose option" defaultValue="two">
@@ -65,6 +73,12 @@ export const Disabled: Story = {
  */
 export const Grouped: Story = {
   name: 'Option groups',
+  // Essential here: optgroup headings exist only inside the open listbox, so the
+  // resting frame documents nothing this story is named for.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button'));
+  },
   render: (args) => (
     <div className="w-72">
       <Select {...args} label="Deploy target" defaultValue="use1">
@@ -88,6 +102,12 @@ export const Grouped: Story = {
 /** When you cannot show a visible label, pass `aria-label` on Select (applied to the trigger). */
 export const WithAriaLabelOnly: Story = {
   name: 'Aria label only',
+  // Open, so the a11y pass inspects an expanded listbox whose trigger is named
+  // only by aria-label.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button'));
+  },
   render: (args) => (
     <div className="w-72">
       <Select {...args} defaultValue="b" aria-label="Pick a letter">

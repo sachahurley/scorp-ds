@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, userEvent, within } from '@storybook/test';
 import { Combobox, type ComboboxOption } from '@scorp-ds/components';
 
 const COUNTRIES: ComboboxOption[] = [
@@ -42,6 +42,13 @@ type Story = StoryObj<typeof Combobox>;
 const Frame = ({ children }: { children: ReactNode }) => <div className="min-h-[420px] w-72 pt-4">{children}</div>;
 
 export const Default: Story = {
+  // Opens the list, which is the part of a combobox worth a baseline. Only the
+  // stories whose subject IS the list get this: opening Sizes would cover the
+  // other two fields and destroy the size comparison the story exists for.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('combobox'));
+  },
   render: (args) => (
     <Frame>
       <Combobox {...args} />
@@ -52,6 +59,12 @@ export const Default: Story = {
 
 export const WithValue: Story = {
   name: 'With value',
+  // Open, so the baseline covers how the already-selected option is marked in
+  // the list rather than just the field showing its value.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('combobox'));
+  },
   render: Default.render,
   args: { label: 'Country', defaultValue: 'jp', size: 'md' },
 };
@@ -79,6 +92,13 @@ export const Disabled: Story = {
 /** A custom matcher: only labels that start with the query. */
 export const CustomFilter: Story = {
   name: 'Custom filter',
+  // Types a query, because a prefix matcher is invisible until something is
+  // filtered. "n" keeps New Zealand and Norway and drops Canada, which a
+  // substring matcher would have kept: the baseline shows the difference.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('combobox'), 'n');
+  },
   render: Default.render,
   args: {
     label: 'Country (prefix match)',
@@ -90,6 +110,12 @@ export const CustomFilter: Story = {
 /** When a visible label is not possible, name the field with `aria-label`. */
 export const AriaLabelOnly: Story = {
   name: 'Aria label only',
+  // Open, so the a11y pass inspects an expanded listbox whose field is named
+  // only by aria-label. That combination is the whole point of this story.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('combobox'));
+  },
   render: Default.render,
   args: { 'aria-label': 'Country', placeholder: 'Country' },
 };

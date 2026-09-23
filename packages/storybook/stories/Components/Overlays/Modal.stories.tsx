@@ -14,6 +14,12 @@ export default meta;
 type Story = StoryObj<typeof Modal>;
 
 export const Default: Story = {
+  // Open, so the baseline covers the dialog rather than its launcher. LongContent
+  // needs no play: it already starts open via useState(true).
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }));
+  },
   render: function ModalDemo() {
     const [open, setOpen] = useState(false);
     return (

@@ -105,6 +105,13 @@ export const PositionLeft: Story = {
  */
 export const ViewportFlip: Story = {
   name: 'Viewport flip',
+  // Hovers the top-edge trigger, the one whose flip is easiest to read: it asks
+  // for `top`, has no room, and renders below instead. Flipping is the entire
+  // subject of this story and is invisible while every tooltip is closed.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByRole('button', { name: 'Top edge' }));
+  },
   parameters: { layout: 'fullscreen' },
   render: () => (
     <div className="relative h-screen w-full">
