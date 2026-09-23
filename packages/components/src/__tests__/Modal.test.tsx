@@ -172,6 +172,18 @@ describe("Modal focus trap", () => {
     fireEvent.click(screen.getByRole("button", { name: "Close modal" }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
+
+  it("rules header and footer with the hairline token, not 0.5px rules", () => {
+    render(
+      <Modal isOpen onClose={() => {}} title="T" footerContent={<button>ok</button>}>
+        body
+      </Modal>
+    );
+    const rule = "[length:var(--border-width-hairline)]";
+    expect(document.body.innerHTML).toContain(`border-b-${rule}`);
+    expect(document.body.innerHTML).toContain(`border-t-${rule}`);
+    expect(document.body.innerHTML).not.toContain("0.5px");
+  });
 });
 
 it("honors the width prop and restores focus on close", async () => {
@@ -198,4 +210,5 @@ it("honors the width prop and restores focus on close", async () => {
   expect(dialog).toHaveFocus();
   fireEvent.click(screen.getByRole("button", { name: "Close modal" }));
   await waitFor(() => expect(launch).toHaveFocus());
+
 });

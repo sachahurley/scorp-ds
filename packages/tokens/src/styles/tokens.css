@@ -226,6 +226,21 @@
   --plate-round: polygon(0 6px, 2px 6px, 2px 2px, 6px 2px, 6px 0, calc(100% - 6px) 0, calc(100% - 6px) 2px, calc(100% - 2px) 2px, calc(100% - 2px) 6px, 100% 6px, 100% calc(100% - 6px), calc(100% - 2px) calc(100% - 6px), calc(100% - 2px) calc(100% - 2px), calc(100% - 6px) calc(100% - 2px), calc(100% - 6px) 100%, 6px 100%, 6px calc(100% - 2px), 2px calc(100% - 2px), 2px calc(100% - 6px), 0 calc(100% - 6px));
   --plate-round-lg: polygon(0 12px, 4px 12px, 4px 4px, 12px 4px, 12px 0, calc(100% - 12px) 0, calc(100% - 12px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 12px, 100% 12px, 100% calc(100% - 12px), calc(100% - 4px) calc(100% - 12px), calc(100% - 4px) calc(100% - 4px), calc(100% - 12px) calc(100% - 4px), calc(100% - 12px) 100%, 12px 100%, 12px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 12px), 0 calc(100% - 12px));
   --plate-round-lg-top: polygon(0 12px, 4px 12px, 4px 4px, 12px 4px, 12px 0, calc(100% - 12px) 0, calc(100% - 12px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 12px, 100% 12px, 100% 100%, 0 100%); /* bottom sheets: stepped top, square bottom */
+
+  /* Tooltip caret -- the stepped one-bit arrow, on the same 2px step rhythm as
+     --plate-round so caret and balloon read as a single silhouette. Two layers:
+     the outer polygon paints the ring colour, the inner polygon paints the fill
+     1px inside it. inner-inset-y is negative so the fill overlaps the balloon
+     edge and no seam shows where the two meet. */
+  --plate-caret-outer: polygon(0 0, 16px 0, 16px 2px, 14px 2px, 14px 4px, 12px 4px, 12px 6px, 10px 6px, 10px 8px, 6px 8px, 6px 6px, 4px 6px, 4px 4px, 2px 4px, 2px 2px, 0 2px);
+  --plate-caret-inner: polygon(0 0, 12px 0, 12px 2px, 10px 2px, 10px 4px, 8px 4px, 8px 6px, 4px 6px, 4px 4px, 2px 4px, 2px 2px, 0 2px);
+  --plate-caret-width: 16px;
+  --plate-caret-height: 8px;
+  --plate-caret-inner-width: 12px;
+  --plate-caret-inner-height: 6px;
+  --plate-caret-inner-inset-x: 2px;
+  --plate-caret-inner-inset-y: -1px;
+  --plate-caret-offset: 5px;
   
   /* Spacing tokens (matches Tailwind's 4px-based scale) */
   --spacing-0: 0;
@@ -259,6 +274,7 @@
   --control-height-sm: 32px;
   --control-height-md: 40px;
   --control-height-lg: 48px;
+  --control-menu-max-height: 300px; /* floating menu list fallback before the popover measures available space */
   --touch-target: 44px;
 
   /* Button box (global.button.size): heights alias the control scale, the
@@ -438,6 +454,10 @@
   --elevation-2-border: #F0EBE4;
   --elevation-3-shadow: none;
   --elevation-3-border: #F0EBE4;
+  /* The one non-flat elevation: the docked modal floating over a live page.
+     A filter, not a box-shadow -- the plate clip-path slices box shadows off,
+     while drop-shadow follows the stepped silhouette. Same in both themes. */
+  --elevation-docked-filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35));
 }
 
 .dark {
@@ -537,4 +557,5 @@
   --elevation-2-border: rgba(255, 255, 255, 0.10);
   --elevation-3-shadow: none;
   --elevation-3-border: rgba(255, 255, 255, 0.12);
+  --elevation-docked-filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35));
 }

@@ -227,18 +227,18 @@ export function Tooltip({
   // colors come from the same tokens as the plate ring.
   // 16×8 outer / 12×6 inner on the 2px step grid: the visible ring is ~2px,
   // matching the plate's hairline weight instead of reading as a dense wedge.
-  const CARET_OUTER =
-    "polygon(0 0, 16px 0, 16px 2px, 14px 2px, 14px 4px, 12px 4px, 12px 6px, 10px 6px, 10px 8px, 6px 8px, 6px 6px, 4px 6px, 4px 4px, 2px 4px, 2px 2px, 0 2px)";
-  const CARET_INNER =
-    "polygon(0 0, 12px 0, 12px 2px, 10px 2px, 10px 4px, 8px 4px, 8px 6px, 4px 6px, 4px 4px, 2px 4px, 2px 2px, 0 2px)";
+  // Caret geometry is tokenised (--plate-caret-*) so the arrow steps on the same
+  // 2px rhythm as --plate-round. Changing the plate step means changing one place.
+  const CARET_OUTER = "var(--plate-caret-outer)";
+  const CARET_INNER = "var(--plate-caret-inner)";
 
   // Placement + rotation per position; the 1px translate keeps the fill layer
   // overlapping the tooltip body so ring and plate read as one outline.
   const caretPlacement = {
     top: "top-full left-1/2 -translate-x-1/2 -translate-y-px",
     bottom: "bottom-full left-1/2 -translate-x-1/2 translate-y-px rotate-180",
-    left: "left-full top-1/2 -translate-y-1/2 -translate-x-[5px] -rotate-90",
-    right: "right-full top-1/2 -translate-y-1/2 translate-x-[5px] rotate-90",
+    left: "left-full top-1/2 -translate-y-1/2 translate-x-[calc(var(--plate-caret-offset)*-1)] -rotate-90",
+    right: "right-full top-1/2 -translate-y-1/2 translate-x-[var(--plate-caret-offset)] rotate-90",
   };
 
   // HOVER BRIDGE: transparent strip filling the 8px gap between trigger and
@@ -301,13 +301,13 @@ export function Tooltip({
             style={{ marginLeft: caretShift || undefined }}
             aria-hidden="true"
           >
-            <div className="relative h-[8px] w-[16px]">
+            <div className="relative h-[var(--plate-caret-height)] w-[var(--plate-caret-width)]">
               <div
                 className="absolute inset-0 bg-[var(--surface-container-stroke)]"
                 style={{ clipPath: CARET_OUTER }}
               />
               <div
-                className="absolute left-[2px] top-[-1px] h-[6px] w-[12px] bg-[var(--surface-card)]"
+                className="absolute left-[var(--plate-caret-inner-inset-x)] top-[var(--plate-caret-inner-inset-y)] h-[var(--plate-caret-inner-height)] w-[var(--plate-caret-inner-width)] bg-[var(--surface-card)]"
                 style={{ clipPath: CARET_INNER }}
               />
             </div>

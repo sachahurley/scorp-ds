@@ -17,6 +17,19 @@ import { useEffect, useState } from "react";
 import { Switch } from "./Switch";
 import { TuiIcon } from "./TuiIcon";
 
+/**
+ * A switch that flips the app between the light and dark themes.
+ *
+ * Drop it into a header, a settings row or a toolbar. It needs a `ThemeProvider`
+ * above it in the tree, and it renders a neutral placeholder until mounted so the
+ * markup matches on hydration.
+ *
+ * It reads `resolvedTheme`, not `theme`: the provider runs with `enableSystem`, so
+ * `theme` can be "system" while the page actually renders dark. The knob, the
+ * visible label and the accessible name all derive from that one resolved value,
+ * so what the toggle says is always what is on screen, and pressing it pins the
+ * opposite concrete theme.
+ */
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);

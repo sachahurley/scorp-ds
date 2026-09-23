@@ -139,4 +139,11 @@ describe("Tabs trigger affordances", () => {
     expect(screen.getByRole("tab", { name: "Alpha" })).toHaveAttribute("tabindex", "0");
     expect(screen.getByRole("tab", { name: "Gamma" })).toHaveAttribute("tabindex", "-1");
   });
+
+  it("rules the tab list with the hairline token, not a 0.5px rule", () => {
+    render(<MiddleDisabled />);
+    const list = screen.getByRole("tablist", { name: "Sections" });
+    expect(list.className).toContain("border-b-[length:var(--border-width-hairline)]");
+    expect(document.body.innerHTML).not.toContain("0.5px");
+  });
 });
