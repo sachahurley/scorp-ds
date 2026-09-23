@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { useState } from 'react';
 import { BottomSheet, Button } from '@scorp-ds/components';
 
@@ -26,6 +27,15 @@ type Story = StoryObj<typeof BottomSheet>;
 
 /** Pattern C: the sheet owns its interaction lifecycle. */
 export const Default: Story = {
+  // Opens on render so the baseline captures the sheet and its stepped top corners, which is the whole
+  // point of this story and is invisible while it is closed. Storybook runs play
+  // functions in the preview, so the visual harness and the a11y runner both see
+  // the open state without either needing to know this story exists.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+  },
+
   render: function SheetDemo() {
     const [open, setOpen] = useState(false);
     return (

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { useState } from 'react';
 import { Button, Modal } from '@scorp-ds/components';
 
@@ -59,6 +60,15 @@ export const LongContent: Story = {
 
 /** Footer variant: right-aligned CTA band (secondary cancel + primary confirm). */
 export const WithFooter: Story = {
+  // Opens on render so the baseline captures the modal, its hairline-ruled header and footer, which is the whole
+  // point of this story and is invisible while it is closed. Storybook runs play
+  // functions in the preview, so the visual harness and the a11y runner both see
+  // the open state without either needing to know this story exists.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open modal with footer' }));
+  },
+
   name: 'With footer CTAs',
   render: function ModalFooterDemo() {
     const [open, setOpen] = useState(false);
@@ -99,6 +109,15 @@ export const WithFooter: Story = {
  * the same props render the standard centered modal.
  */
 export const Docked: Story = {
+  // Opens on render so the baseline captures the docked panel and its drop-shadow elevation, which is the whole
+  // point of this story and is invisible while it is closed. Storybook runs play
+  // functions in the preview, so the visual harness and the a11y runner both see
+  // the open state without either needing to know this story exists.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open docked panel' }));
+  },
+
   render: function DockedModalDemo() {
     const [open, setOpen] = useState(false);
     return (
