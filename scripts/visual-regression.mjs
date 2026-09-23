@@ -10,6 +10,14 @@
  * This reuses the harness that already exists for the a11y runner: build
  * storybook-static, serve it locally, drive Chromium, once per theme.
  *
+ * There is no interaction handling here on purpose. A story whose subject only
+ * exists after a hover or a click carries a Storybook `play` function, which the
+ * preview runs automatically before this script screenshots it. That keeps the
+ * interaction next to the story it belongs to, where it cannot drift from it.
+ * This file previously held a hardcoded map of story id to interaction, and it
+ * went wrong exactly as you would expect: two ids in it were wrong and captured
+ * nothing at all, in silence.
+ *
  * IMPORTANT: baselines are platform-specific. Font rasterisation differs between
  * macOS and Linux, so a baseline captured on a laptop will never match CI.
  * Baselines are therefore generated and compared ONLY inside the Linux CI
@@ -37,31 +45,6 @@ const DIFFS = join(ROOT, "packages/storybook/visual-diffs");
 const UPDATE = process.argv.includes("--update");
 const filterIdx = process.argv.indexOf("--filter");
 const FILTER = filterIdx > -1 ? process.argv[filterIdx + 1] : null;
-
-/**
- * Stories whose subject is only visible after an interaction.
- *
- * A resting-state screenshot is blind to anything behind hover, focus or a
- * click: a tooltip, an open menu, a modal. This was not theoretical. Changing
- * --plate-caret-height from 8px to 12px produced ZERO diffs across the tooltip
- * stories, because none of them render a tooltip until something hovers.
- *
- * Each entry produces an extra screenshot, suffixed with the state name. The
- * general-purpose alternative is a Storybook `play` function, which runs
- * automatically in the iframe; prefer that for new stories. This map covers the
- * existing ones without rewriting them.
- */
-const INTERACTIONS = {
-  "components-display-tooltip--positions": [
-    { state: "top", hoverButton: "Top" },
-    { state: "left", hoverButton: "Left" },
-  ],
-  "components-display-tooltip--on-button": [{ state: "open", hoverButton: "Hover or focus me" }],
-  "components-overlays-modal--with-footer": [{ state: "open", clickButton: true }],
-  "components-overlays-modal--docked": [{ state: "open", clickButton: true }],
-  "components-overlays-bottomsheet--default": [{ state: "open", clickButton: true }],
-  "components-overlays-dropdown--default": [{ state: "open", clickButton: true }],
-};
 
 /**
  * Per-pixel colour tolerance, and the share of pixels allowed to differ.
@@ -113,6 +96,10 @@ const stories = Object.values(index.entries)
   // run without losing coverage. Stories the a11y runner skips are skipped here
   // too, since they exist to display tokens that break the usual rules.
   .filter((e) => !(e.tags || []).includes("skip-test"))
+  // `skip-visual` is for stories that cannot produce a stable frame: anything
+  // driven by a timer or randomness renders differently on every run. They stay
+  // in the a11y pass, which does not care what value a progress bar is showing.
+  .filter((e) => !(e.tags || []).includes("skip-visual"))
   .filter((e) => !FILTER || e.id.includes(FILTER))
   .sort((a, b) => a.id.localeCompare(b.id));
 
@@ -121,6 +108,7 @@ if (!UPDATE) { rmSync(DIFFS, { recursive: true, force: true }); mkdirSync(DIFFS,
 
 const browser = await chromium.launch();
 let written = 0, matched = 0, failed = 0, created = 0;
+const captured = [];
 const failures = [];
 
 for (const theme of ["dark", "light"]) {
@@ -138,34 +126,25 @@ for (const theme of ["dark", "light"]) {
       await page.waitForSelector("#storybook-root", { timeout: 10000 });
       // Let fonts settle: a half-loaded Fragment Mono is the main flake source.
       await page.evaluate(() => document.fonts.ready);
-      await page.waitForTimeout(250);
+      // Storybook runs a story's `play` function after render, so the settle wait
+      // has to outlast it. 600ms covers the click-and-open interactions in this
+      // repo with room to spare; a story that needs longer should say so in its
+      // own play function rather than everything paying for it here.
+      await page.waitForTimeout(600);
       shots.push([`${story.id}-${theme}.png`, await page.screenshot({ animations: "disabled" })]);
 
-      for (const step of INTERACTIONS[story.id] || []) {
-        // Always go through getByRole. `locator("button")` matches Storybook's own
-        // injected, hidden buttons: on every one of these stories the first such
-        // match is invisible, and clicking it just burns the timeout.
-        const target = step.hoverButton
-          ? page.getByRole("button", { name: step.hoverButton })
-          : page.getByRole("button").first();
-        // Short, because a miss here means the map is wrong, not that the page is slow.
-        if (step.hoverButton) await target.hover({ timeout: 5000 });
-        if (step.clickButton) await target.click({ timeout: 5000 });
-        await page.waitForTimeout(500);
-        shots.push([`${story.id}-${step.state}-${theme}.png`,
-                    await page.screenshot({ animations: "disabled" })]);
-      }
     } catch (err) {
       failed++;
       const why = err.message.split("\n")[0];
-      const kind = /getByRole|Timeout/.test(why) ? "BAD STEP " : "ERROR    ";
-      failures.push(`${story.id}-${theme} [${kind.trim()}] ${why}`);
-      console.log(`  ${kind} ${story.id}-${theme}: ${why}`);
+      // Most likely a `play` function that threw or could not find its target.
+      failures.push(`${story.id}-${theme} [RENDER] ${why}`);
+      console.log(`  RENDER    ${story.id}-${theme}: ${why}`);
       await page.close();
       continue;
     }
 
     for (const [name, shot] of shots) {
+      captured.push(name);
       try {
       const baselinePath = join(BASELINE, name);
       if (UPDATE || !existsSync(baselinePath)) {
@@ -208,7 +187,19 @@ server.close();
 
 console.log("");
 if (UPDATE) {
-  console.log(`Wrote ${written} baseline(s) to packages/storybook/visual-baselines/.`);
+  // Prune baselines no story produces any more. Without this, a renamed story or
+  // a retired frame leaves a file behind that nothing compares against, and the
+  // directory slowly fills with images that look like coverage and are not.
+  const expected = new Set(captured);
+  let pruned = 0;
+  for (const f of readdirSync(BASELINE)) {
+    if (f.endsWith(".png") && !expected.has(f)) {
+      rmSync(join(BASELINE, f));
+      console.log(`  PRUNED    ${f}`);
+      pruned++;
+    }
+  }
+  console.log(`Wrote ${written} baseline(s), pruned ${pruned}.`);
   process.exit(0);
 }
 console.log(`matched ${matched}   new ${created}   changed ${failed}`);

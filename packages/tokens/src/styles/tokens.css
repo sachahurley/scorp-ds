@@ -388,6 +388,7 @@
   --text-tertiary: #968A75; /* sepia-600: 3.3:1, large or decorative text only (500 was 2:1) */
   --text-disabled: #E0DACE;
   --text-link: #B45309;
+  --text-error: #B91C1C; /* error-700: 6.47:1 on the card, 5.91:1 on the error hover fill (600 was 4.83 / 4.41, hover below AA) */
   --text-link-hover: #92400E;
   --text-on-inverse: #FDFCFB;
 
@@ -489,6 +490,7 @@
   --text-primary: #FDFCFB;
   --text-secondary: #BFB4A3; /* sepia-500: one step darker than pre-merge so body sits below accent */
   --text-tertiary: #968A75;
+  --text-error: #F87171; /* error-400: 6.98:1 on the card, 5.84:1 on the error hover fill (600 was 4.00 / 3.34, both below AA; 500 still fails hover at 4.29) */
   --text-disabled: #695F4D;
   --text-link: #FBBF24;
   --text-link-hover: #FCD34D;

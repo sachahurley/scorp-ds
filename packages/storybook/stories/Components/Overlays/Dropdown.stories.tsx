@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, userEvent, within } from '@storybook/test';
 import { Button, Dropdown, TuiIcon } from '@scorp-ds/components';
 
 const meta: Meta<typeof Dropdown> = {
@@ -30,6 +30,11 @@ export const Default: Story = {
       item('Duplicate'),
       item('Delete', 'destructive'),
     ],
+  },
+  // Opens on render so the baseline captures the menu, not just the trigger.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Actions' }));
   },
 };
 

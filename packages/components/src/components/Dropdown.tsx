@@ -334,7 +334,7 @@ export function Dropdown({
                   ${isDisabled
                     ? 'opacity-50 cursor-not-allowed'
                     : isDestructive
-                      ? 'text-error-600 hover:bg-[var(--field-background-error)]'
+                      ? 'text-[var(--text-error)] hover:bg-[var(--field-background-error)]'
                       : 'text-[var(--text-primary)] hover:bg-[var(--surface-muted)]'
                   }
                   ${isFocused && !isDisabled ? (isDestructive ? 'bg-[var(--field-background-error)]' : 'bg-[var(--surface-muted)] text-[var(--accent)]') : ''}

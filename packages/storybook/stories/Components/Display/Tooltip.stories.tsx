@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { Button, Tooltip } from '@scorp-ds/components';
 
 const meta: Meta<typeof Tooltip> = {
@@ -16,6 +17,12 @@ export default meta;
 type Story = StoryObj<typeof Tooltip>;
 
 export const OnButton: Story = {
+  // A tooltip has no controlled `open` prop: hover and focus are the only ways in,
+  // so the baseline is a picture of the trigger unless a play function opens it.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByRole('button', { name: 'Hover or focus me' }));
+  },
   args: {
     content: 'Opens on hover or keyboard focus. Escape closes it.',
     position: 'top',
@@ -24,8 +31,18 @@ export const OnButton: Story = {
   },
 };
 
+/**
+ * Only one tooltip can be hovered at a time, so a single story can only ever
+ * capture one placement. This one covers `top`; {@link PositionLeft} covers the
+ * rotated path (`left` and `right` share the rotate-plus-offset recipe, which is
+ * the geometry most likely to break). `bottom` is the mirror of `top`.
+ */
 export const Positions: Story = {
   name: 'Positions',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByRole('button', { name: 'Top' }));
+  },
   render: () => (
     <div className="grid grid-cols-2 gap-8 p-8">
       <Tooltip content="Top" position="top">
@@ -38,6 +55,34 @@ export const Positions: Story = {
           Bottom
         </Button>
       </Tooltip>
+      <Tooltip content="Left" position="left">
+        <Button variant="ghost" size="sm">
+          Left
+        </Button>
+      </Tooltip>
+      <Tooltip content="Right" position="right">
+        <Button variant="ghost" size="sm">
+          Right
+        </Button>
+      </Tooltip>
+    </div>
+  ),
+};
+
+/**
+ * The rotated caret path. `left` and `right` share a recipe the vertical
+ * placements do not use: the caret is rotated 90 degrees and nudged by
+ * `--plate-caret-offset` so it stays flush against the balloon. Worth its own
+ * story because that offset is the part a token change breaks quietly.
+ */
+export const PositionLeft: Story = {
+  name: 'Position: left',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByRole('button', { name: 'Left' }));
+  },
+  render: () => (
+    <div className="grid grid-cols-2 gap-8 p-8">
       <Tooltip content="Left" position="left">
         <Button variant="ghost" size="sm">
           Left
