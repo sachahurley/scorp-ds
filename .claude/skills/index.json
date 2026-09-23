@@ -71,6 +71,10 @@
     "update-spec": {
       "category": "Core",
       "description": "Generate or update a spec for any DS layer"
+    },
+    "vendor-portfolio": {
+      "category": "Release",
+      "description": "Re-vendor the DS into all three consumers (portfolio, showcase, protodash) and ship their vendor PRs. Run after ANY merge to main."
     }
   }
 }

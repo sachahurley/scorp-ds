@@ -26,40 +26,46 @@ Audit the component file at `$ARGUMENTS` against every rule in CLAUDE.md and des
 
 ### 1. No Hardcoding
 
-Read `.claude/ds-config.json: tokens.classPrefix` to get the prefix (e.g., `Aura`, `Scorpion`). Scan for violations — these patterns are NEVER allowed in component code:
+Scan for violations. These are NEVER allowed in component code:
 
-**Flutter:**
-- Raw colors: `Color(0x`, `Colors.`, `Color.fromRGBO`, `Color.fromARGB`
-- Raw font sizes: `fontSize:` followed by a number literal
-- Raw spacing: `EdgeInsets` with number literals instead of `{prefix}Spacing.*`
-- Raw radii: `BorderRadius.circular(` with number literals instead of `{prefix}Spacing.radius*`
-- Raw durations: `Duration(milliseconds:` instead of `{prefix}Motion.*`
+- Raw colors: hex literals, `rgb()`, `rgba()`, `hsl()` in classes or style props
+- Raw color scales: `amber-*`, `sepia-*`, `green-*`, `blue-*`, `purple-*`, `red-*`.
+  Use the semantic aliases (`primary-*`, `secondary-*`, `success-*`, `info-*`,
+  `warning-*`, `error-*`) so the system stays re-themeable
+- Border radius: any `rounded-{sm,md,lg,xl,2xl,3xl,full}`. Scorp DS is sharp-cornered;
+  use `rounded-none`, or the `plate-round` / `plate-round-lg` silhouettes for a
+  softened corner. There are no radius tokens
+- Sans-serif or serif font classes. Monospace (`Fragment Mono`) only
+- Arbitrary Tailwind values with bare numbers (`w-[18px]`, `max-h-[300px]`).
+  `-[var(--token)]`, `content-['']`, and intrinsic units (`70vh`, `1lh`, `0fr`) are
+  fine; a bare pixel or rem literal is not
+- Raw values inside inline `style={{ }}` objects, which class-based checks miss
+- Hardcoded geometry in JS string constants (clip-path polygons, transforms). These
+  are invisible to class-based linting and are a common hiding place
 
-**React/TS:**
-- Raw color hex values in style props or CSS
-- Raw numeric spacing/size values in style props
-- Hard-coded `fontFamily`, `fontSize`, `fontWeight` strings
-
-Only `{paths.foundation}/` files may contain raw values.
+Only `packages/tokens/src/tokens.json` and `packages/tokens/src/styles/tokens.css` may
+contain raw values.
 
 ### 2. Naming Conventions
 
-Read `.claude/ds-config.json: tokens.classPrefix` to verify:
-- Class/component names: PascalCase with `{prefix}` prefix (e.g. `{prefix}Button`)
-- File name: snake_case (Flutter) or kebab-case/PascalCase (React/TS per project convention)
-- Parameters/props: camelCase
+- Component names: PascalCase and **unprefixed** (`Button`, not `ScorpButton`). The
+  `@scorp-ds/components` import provides the namespace
+- File names: PascalCase for components (`Button.tsx`), kebab-case for utilities
+  (`token-parser.ts`)
+- Props: camelCase
+- CSS variables: `--color-{scale}-{step}`. Never a `--scorp-*` prefix
 
 ### 3. Documentation
 
-- Every public class has a doc comment (`///` in Dart, JSDoc in TS)
-- Every public method has a doc comment
-- Every public property has a doc comment
+- Every public component has a JSDoc comment
+- Every public prop has a JSDoc comment
 - Doc comments explain USAGE, not just restate the name
 
 ### 4. Accessibility
 
-- Interactive widgets include `semanticLabel` parameter or `Semantics` wrapper (Flutter) or ARIA attributes (React)
+- Interactive components have an accessible label or ARIA attribute
 - Color is not the sole indicator of meaning (check for icon/text pairing)
+- Minimum touch target 44x44px
 
 ### 5. Architecture
 

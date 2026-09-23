@@ -35,66 +35,55 @@ When `$ARGUMENTS` is empty, audit **all** storybook code:
 
 ## Checks
 
-Read `.claude/ds-config.json: tokens.classPrefix` (e.g., `Aura`) before running these checks. Replace `{prefix}` in all patterns with the actual prefix.
+These checks apply to story files, samples, presets and shared widgets.
 
 ### 1. No Hardcoded Colors
 
-**Flutter:** Scan for:
-- `Color(0x` — raw hex color constructor
-- `Colors.` — Flutter material palette colors (except `Colors.transparent`)
-- `Color.fromRGBO(` or `Color.fromARGB(`
-- `.withOpacity(` or `.withAlpha(` — should use `{prefix}Opacity.*`
-
-**React/TS:** Scan for:
-- Inline hex values (`#fff`, `#000000`, etc.) in style props
-- `rgba(`, `rgb(`, `hsl(` values in style props
-- Hard-coded color variable names that don't reference CSS custom properties
+Scan for:
+- Hex literals (`#fff`, `#000000`) in class names or style props
+- `rgb(`, `rgba(`, `hsl(`, `hsla(` values
+- Raw color scales used directly (`bg-amber-400`, `text-sepia-700`). Stories must use
+  the semantic aliases (`primary-*`, `secondary-*`) like components do
 
 **Allowed exceptions:**
-- Color values inside token swatch/documentation parameters
-- Comments and string literals (code snippet text)
+- Color values inside token swatch and documentation parameters (the Foundation and
+  Semantic colour stories exist precisely to render raw values)
+- Comments and string literals used as displayed code snippets
 
 ### 2. No Hardcoded Spacing
 
-**Flutter:** Scan for:
-- `EdgeInsets.all(`, `EdgeInsets.symmetric(`, `EdgeInsets.only(`, `EdgeInsets.fromLTRB(` with number literals
-- `SizedBox(width:` or `SizedBox(height:` with number literals
-- `padding:` with number literals
-
-**React/TS:** Scan for:
-- Inline numeric padding/margin values in style props
-- Hard-coded pixel values that don't reference token variables
+Scan for:
+- Numeric padding/margin values in inline style props
+- Arbitrary Tailwind values with bare numbers (`p-[18px]`, `gap-[7px]`)
 
 **Allowed exceptions:**
-- `0` and `0.0` — zero spacing is acceptable as a literal
-- Large values used for page-level document padding in story pages
+- `0`, which is unambiguous
+- Page-level document padding in story layout wrappers
+- `-[var(--token)]` references and intrinsic units (`70vh`, `1lh`, `0fr`)
 
 ### 3. No Hardcoded Typography
 
-**Flutter:** Scan for:
-- `fontSize:` followed by a number literal
-- `fontWeight: FontWeight.` (should use composed text style)
-- `fontFamily:` with a raw string
-- `letterSpacing:` or line-height `height:` with a number literal
-- `TextStyle(` constructed inline with raw values
-
-**React/TS:** Scan for:
+Scan for:
 - Inline `fontSize`, `fontWeight`, `fontFamily`, `letterSpacing`, `lineHeight` style props
+- `font-sans` or `font-serif` classes. Scorp DS is monospace only
 
 **Allowed exceptions:**
 - Values inside code snippet content strings
 - Values inside token documentation `rawValue` fields
 
-### 4. No Hardcoded Border Radius
+### 4. No Border Radius
 
-Scan for raw radius values not referencing `{prefix}Spacing.radius*` (or equivalent token).
+Scan for any `rounded-{sm,md,lg,xl,2xl,3xl,full}`. Scorp DS is sharp-cornered: use
+`rounded-none`, or `plate-round` / `plate-round-lg` for a softened corner. There are no
+radius tokens in this system.
 
 ### 5. No Hardcoded Durations
 
-**Flutter:** `Duration(milliseconds:` or `Duration(seconds:` — should use `{prefix}Motion.*`
+Scan for raw `ms` values in `transition`, `animationDuration` or `style` props. Use
+`--duration-*` tokens.
 
 **Allowed exceptions:**
-- Durations used for demo/preview purposes (e.g., countdown timers)
+- Durations used for demo or preview purposes (countdown timers, simulated loading)
 
 ### 6. Foundation Token Misuse
 

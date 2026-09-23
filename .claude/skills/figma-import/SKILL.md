@@ -23,7 +23,6 @@ Read these supporting files during the import process:
 ## Platform Context
 
 Read `.claude/ds-config.json: stack` to determine:
-- **flutter**: Dart/Flutter output. No CSS, HTML, or web tokens. All values in logical pixels (dp). Use `WidgetState` / `WidgetStateProperty` for interactive states.
 - **react-ts**: TypeScript/React output. Use CSS custom properties or a CSS-in-JS approach as established in the project.
 
 ## Philosophy
@@ -126,8 +125,8 @@ Every new component needs storybook documentation following the page structure i
 9. **ALWAYS check gradient directions precisely.**
 10. **ALWAYS verify stroke alignment** (inside/outside/center affects padding).
 11. **Prefer semantic tokens over base tokens.**
-12. **Prefer project primitives over raw framework widgets.**
-13. **Ensure touch targets are at least 48×48dp (Flutter) or 44×44px (web).**
+12. **Prefer project primitives over raw HTML elements.**
+13. **Ensure touch targets are at least 44x44px.**
 14. **Ask the user for behavioral specs.**
 
 ## Related Skills

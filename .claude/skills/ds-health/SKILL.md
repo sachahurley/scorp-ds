@@ -68,10 +68,11 @@ Status:
 
 ### Check 5: Static Analysis
 
-Read `.claude/ds-config.json: stack` to determine the check:
+Run `npm run lint` and `npm run type-check` from the repo root.
 
-- **flutter**: Run `flutter analyze --no-pub` from the ds directory
-- **react-ts**: Run `tsc --noEmit && eslint src`
+`packages/site` type-checks against the built `@scorp-ds/components` dist, so run
+`npm run build:components` first on a clean tree or type-check reports a spurious
+"Cannot find module" error.
 
 Status:
 - OK if exits cleanly
@@ -79,10 +80,7 @@ Status:
 
 ### Check 6: Tests
 
-Read `.claude/ds-config.json: stack` to determine the check:
-
-- **flutter**: Run `flutter test --no-pub` from the ds directory
-- **react-ts**: Run `pnpm test`
+Run `npm test` from the repo root (vitest). This repo uses npm workspaces, not pnpm.
 
 Status:
 - OK if all pass (report pass count)
@@ -123,7 +121,6 @@ Status:
 ## Important
 
 - **Do NOT modify any files.** Read-only audit.
-- Always run static analysis with `--no-pub` (Flutter) to skip dependency resolution.
 - In `quick` mode, skip Check 3 entirely and note it was skipped.
 - In `tokens` mode, run only Checks 2 and 4.
 

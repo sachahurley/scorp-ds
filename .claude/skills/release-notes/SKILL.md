@@ -15,7 +15,7 @@ Generate a versioned changelog from git history, spec changes, and storybook upd
 
 Read `.claude/ds-config.json: paths` and `.claude/ds-config.json: stack` to determine:
 - **Package changelog** → `{paths.ds}/CHANGELOG.md`
-- **Package version** → `ds/pubspec.yaml` (Flutter) or root `package.json` (React/TS)
+- **Package version** -> root `package.json`
 - **Spec changelog** → `docs/specs/CHANGELOG.md`
 - **Stories** → `{paths.stories}/*`
 - **CLAUDE.md** → Project rules
@@ -24,8 +24,7 @@ Read `.claude/ds-config.json: paths` and `.claude/ds-config.json: stack` to dete
 
 ### 1. Determine the current and next version
 
-**Flutter:** Read `ds/pubspec.yaml` and extract the current `version:` field.
-**React/TS:** Read the root `package.json` `version` field.
+Read the root `package.json` `version` field.
 
 Check for existing git tags:
 ```
@@ -147,8 +146,6 @@ Proceed with release? This will:
 Read the current `CHANGELOG.md`. Prepend the new version section at the top.
 
 ### 8. Update package version
-
-**Flutter:** Edit `ds/pubspec.yaml` and change the `version:` field to the new version string (without the `v` prefix).
 
 **React/TS:** Edit the root `package.json` `version` field.
 
