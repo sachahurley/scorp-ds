@@ -96,6 +96,10 @@ const stories = Object.values(index.entries)
   // run without losing coverage. Stories the a11y runner skips are skipped here
   // too, since they exist to display tokens that break the usual rules.
   .filter((e) => !(e.tags || []).includes("skip-test"))
+  // `skip-visual` is for stories that cannot produce a stable frame: anything
+  // driven by a timer or randomness renders differently on every run. They stay
+  // in the a11y pass, which does not care what value a progress bar is showing.
+  .filter((e) => !(e.tags || []).includes("skip-visual"))
   .filter((e) => !FILTER || e.id.includes(FILTER))
   .sort((a, b) => a.id.localeCompare(b.id));
 

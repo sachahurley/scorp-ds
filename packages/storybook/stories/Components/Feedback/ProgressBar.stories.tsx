@@ -65,6 +65,11 @@ export const HiddenLabel: Story = {
 
 /** A live bar stepping from 0 to 100. */
 export const Live: Story = {
+  // Excluded from visual regression: this story advances itself every 400ms, so
+  // the frame depends on how long the harness took to get to it. It was quietly
+  // producing a different baseline on every run. It stays in the a11y pass,
+  // which does not care what value the bar is showing.
+  tags: ['skip-visual'],
   render: function LiveStory() {
     const [value, setValue] = useState(0);
     useEffect(() => {
