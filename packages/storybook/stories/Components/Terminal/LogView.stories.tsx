@@ -78,6 +78,13 @@ const messages = [
  * "Jump to latest" button resumes it.
  */
 export const Streaming: Story = {
+  // Excluded from visual regression: this story appends a line every 700ms against
+  // a 600ms settle wait, so its frame is stable only because no tick has landed
+  // yet. Any CI slowness pushes it over and the frame gains a log line. Same
+  // failure ProgressBar/Live already had, with a 100ms margin instead of a
+  // negative one. The other four LogView stories keep the component covered, and
+  // this one stays in the a11y pass.
+  tags: ['skip-visual'],
   render: () => {
     const Demo = () => {
       const [lines, setLines] = useState<LogLine[]>(sample);
