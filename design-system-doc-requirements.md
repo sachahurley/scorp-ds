@@ -78,6 +78,19 @@ or a keypress is invisible to it unless the story puts itself there.
   leaves the visual comparison only; the story stays in the a11y pass. It is not lint
   enforced, so a new one is a claim to justify in review, not a quick fix for a red run.
 
+- **A story whose subject depends on viewport width declares it**, with
+  `parameters: { viewport: { defaultViewport: '…' } }`. The harness honours a story's own
+  declaration (the project-wide default in `preview.tsx` is not one). Two stories were
+  documenting the opposite of their names before this: `AppHeader/MobileMenuOpen` captured
+  the desktop nav, and `Modal/Docked` captured a centred modal, because the harness shot
+  everything at 900px.
+- **If the subject is the *change* across breakpoints, split the story per breakpoint.**
+  One frame shows one width. `Grid/ResponsiveColumns` is `base` / `md` / `xl` as three
+  stories for that reason, the same way `Tooltip/Positions` split when one frame could not
+  hold two placements.
+- A responsive class is not by itself a reason for a second frame. Only add one when a
+  story's subject *is* the responsive behaviour.
+
 Why this matters beyond screenshots: the a11y runner executes play functions too. The
 first one ever added found a contrast failure that had been shipping, and the focus work
 found two fields with no focus indicator at all, which axe cannot detect on its own.
@@ -99,3 +112,4 @@ Full reasoning: `docs/decisions/0012-stories-drive-their-own-interactions.md`.
 - [ ] Nothing on the page duplicates a fact that lives in another file
 - [ ] Interaction-gated stories carry a `play` function; focus states use `userEvent.tab()`
 - [ ] Any `skip-visual` tag says, in a comment, why the frame cannot be stable
+- [ ] Stories whose subject depends on width declare a viewport, or are split per breakpoint

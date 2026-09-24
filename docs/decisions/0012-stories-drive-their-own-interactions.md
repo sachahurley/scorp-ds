@@ -44,6 +44,13 @@ Three rules follow:
    comment saying why.** Distinct from `skip-test`: a `skip-visual` story stays in the
    a11y pass, which does not care what value a progress bar is showing.
 
+4. **A story whose subject depends on viewport width declares it**, with
+   `parameters.viewport.defaultViewport`. The harness reads the story's *own* parameters,
+   not the merged ones: `preview.tsx` sets a project-wide default that every story
+   inherits, so merged values cannot tell a request apart from an inheritance. If the
+   subject is the *change* across breakpoints, split the story per breakpoint, because one
+   frame shows one width.
+
 **The play function puts the story into the state the story is about, which is not always
 "open".** Opening everything loses information: `Combobox/Sizes` renders three fields to
 compare and one open list would cover two of them; the `Error` stories are about the

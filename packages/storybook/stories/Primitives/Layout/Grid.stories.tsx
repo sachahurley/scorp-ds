@@ -68,12 +68,33 @@ export const Columns: Story = {
  * A responsive map: one column on phones, two from `md` (768px) and four from
  * `xl` (1280px). Resize the preview to see it change.
  */
+/**
+ * `columns` takes a breakpoint map. One frame can only ever show one breakpoint,
+ * so the three states are three stories: this one is `md` (2 columns), captured
+ * at the harness default width. {@link ResponsiveColumnsBase} and
+ * {@link ResponsiveColumnsWide} cover the other two.
+ */
 export const ResponsiveColumns: Story = {
+  name: 'Responsive Columns: md',
   args: {
     columns: { base: 1, md: 2, xl: 4 },
     gap: '4',
     children: cells(8),
   },
+};
+
+/** The same grid below `md`: the map falls back to `base`, one column. */
+export const ResponsiveColumnsBase: Story = {
+  name: 'Responsive Columns: base',
+  parameters: { viewport: { defaultViewport: 'mobileSmall' } },
+  args: ResponsiveColumns.args,
+};
+
+/** The same grid at `xl` and above: four columns. */
+export const ResponsiveColumnsWide: Story = {
+  name: 'Responsive Columns: xl',
+  parameters: { viewport: { defaultViewport: 'desktopSm' } },
+  args: ResponsiveColumns.args,
 };
 
 /** `rowGap` and `columnGap` split the gap when rows need more air than columns. */
