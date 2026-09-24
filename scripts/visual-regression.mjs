@@ -115,8 +115,7 @@ if (!existsSync(join(STATIC, "index.json"))) {
 }
 
 /**
- * Reads the viewport a story declares for itself, if it differs from the
- * project-wide default.
+ * Reads the viewport a story declares for itself, if any.
  *
  * Stories already have a way to say they need a particular width
  * (`parameters.viewport.defaultViewport`, the addon-viewport API the Storybook
@@ -125,52 +124,42 @@ if (!existsSync(join(STATIC, "index.json"))) {
  * baseline contained the desktop nav with no menu in it: a frame documenting the
  * opposite of the story's name, passing every run.
  *
- * Only OVERRIDES are honoured. `preview.tsx` sets a project-wide default of
- * `desktopSm` (1280x800) which every story inherits, so obeying the value
- * unconditionally would move all ~536 frames to a new width for no benefit. The
- * harness default stays 900x600 and only a story that asks for something else
- * gets it.
+ * This reads the story's OWN parameters, from the CSF file, rather than the
+ * merged ones. `preview.tsx` sets a project-wide `desktopSm` that every story
+ * inherits, so merged parameters cannot tell "this story asked for a width"
+ * apart from "this story asked for nothing". An earlier version compared against
+ * the project default instead, which worked until a story genuinely wanted the
+ * same value the project declares: it would have been read as no request at all
+ * and silently ignored.
  *
  * `index.json` (v5) does not carry parameters, so this asks the running preview.
  */
-async function declaredViewport(page, storyId, projectDefault) {
+async function declaredViewport(page, storyId) {
   const info = await page.evaluate(async (id) => {
     const store = window.__STORYBOOK_PREVIEW__?.storyStore;
-    if (!store?.loadStory) return null;
+    if (!store?.loadCSFFileByStoryId) return null;
     try {
-      const story = await store.loadStory({ storyId: id });
-      const vp = story?.parameters?.viewport;
-      if (!vp?.defaultViewport) return null;
-      const styles = vp.viewports?.[vp.defaultViewport]?.styles;
-      return { name: vp.defaultViewport, styles: styles ?? null };
+      const csf = await store.loadCSFFileByStoryId(id);
+      // Story first, then the file's meta: both are author intent, unlike the
+      // project default which everything inherits.
+      const own =
+        csf?.stories?.[id]?.parameters?.viewport ?? csf?.meta?.parameters?.viewport ?? null;
+      if (!own?.defaultViewport) return null;
+
+      // The viewport set itself only exists on the merged parameters.
+      const merged = await store.loadStory({ storyId: id });
+      const styles = merged?.parameters?.viewport?.viewports?.[own.defaultViewport]?.styles;
+      return { name: own.defaultViewport, styles: styles ?? null };
     } catch {
       return null;
     }
   }, storyId);
 
-  if (!info || !info.styles) return null;
-  if (projectDefault && info.name === projectDefault) return null;
-
+  if (!info?.styles) return null;
   const width = Number.parseInt(info.styles.width, 10);
   const height = Number.parseInt(info.styles.height, 10);
   if (!Number.isFinite(width) || !Number.isFinite(height)) return null;
   return { name: info.name, width, height };
-}
-
-/**
- * The value every story inherits from `preview.tsx`, so real overrides can be
- * told apart from it. Without this the first run resized all ~536 frames to
- * 1280x800, because `desktopSm` reads as "declared" on every story.
- */
-async function projectDefaultViewport(page) {
-  return page.evaluate(async () => {
-    try {
-      const annotations = await window.__STORYBOOK_PREVIEW__?.getProjectAnnotations?.();
-      return annotations?.parameters?.viewport?.defaultViewport ?? null;
-    } catch {
-      return null;
-    }
-  });
 }
 
 const server = createServer((req, res) => {
@@ -204,8 +193,6 @@ if (!UPDATE) { rmSync(DIFFS, { recursive: true, force: true }); mkdirSync(DIFFS,
 const browser = await chromium.launch();
 let written = 0, matched = 0, failed = 0, created = 0;
 const captured = [];
-/** Resolved once; `undefined` means not looked up yet, `null` means none. */
-let projectDefault;
 const announced = new Set();
 const failures = [];
 
@@ -227,8 +214,7 @@ for (const theme of ["dark", "light"]) {
       // render is deliberate: it is what makes matchMedia fire, which is how
       // Modal decides whether it is docked and how AppHeader decides whether to
       // fold its nav behind a toggle.
-      if (projectDefault === undefined) projectDefault = await projectDefaultViewport(page);
-      const vp = await declaredViewport(page, story.id, projectDefault);
+      const vp = await declaredViewport(page, story.id);
       if (vp) {
         await page.setViewportSize({ width: vp.width, height: vp.height });
         await page.waitForTimeout(300);
