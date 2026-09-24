@@ -88,8 +88,19 @@ or a keypress is invisible to it unless the story puts itself there.
   One frame shows one width. `Grid/ResponsiveColumns` is `base` / `md` / `xl` as three
   stories for that reason, the same way `Tooltip/Positions` split when one frame could not
   hold two placements.
-- A responsive class is not by itself a reason for a second frame. Only add one when a
-  story's subject *is* the responsive behaviour.
+- **A responsive class that changes *structure* needs a frame on each side of its
+  breakpoint; one that changes *scale* does not.** Structure is the track count, the
+  direction, or whether something is there at all (`grid-cols-*`, `flex-col`/`flex-row`,
+  `hidden`/`block`). Scale is padding, margin, gap, type size. The test: would a reader
+  looking at one frame be surprised by the other? `CaseStudy`'s `imagePair` is two-up in
+  `Figures` at 900 and one column in `Figures: stacked` at 375 for this reason.
+- **`Card`'s `lg:p-6` and `Container`'s `lg:px-10` are the named exception.** They render
+  in no frame at all, since the harness captures at 900 and the only stories above 1024
+  contain neither component. That is accepted: neither component's subject is its padding
+  at 1024. Decision 0012 carries the full audit, so a gap here is a decision rather than
+  an oversight.
+- Verify a responsive frame by reading the computed style, not by trusting that the
+  viewport applied. `grid-template-columns` was `329px 329px` at 900 and `311px` at 375.
 
 Why this matters beyond screenshots: the a11y runner executes play functions too. The
 first one ever added found a contrast failure that had been shipping, and the focus work
@@ -113,3 +124,4 @@ Full reasoning: `docs/decisions/0012-stories-drive-their-own-interactions.md`.
 - [ ] Interaction-gated stories carry a `play` function; focus states use `userEvent.tab()`
 - [ ] Any `skip-visual` tag says, in a comment, why the frame cannot be stable
 - [ ] Stories whose subject depends on width declare a viewport, or are split per breakpoint
+- [ ] A new responsive class that changes structure has a frame on each side of its breakpoint

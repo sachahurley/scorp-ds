@@ -63,6 +63,26 @@ export const Figures: Story = {
     ]),
 };
 
+/**
+ * An image pair below `sm` (640px): the two figures stack into one column, so a
+ * side-by-side comparison becomes a sequence and each figure gets the full
+ * measure.
+ *
+ * A second frame rather than a note, because the track count changes and one
+ * frame shows one width. The two-up state is already captured, by `Figures` and
+ * `RealArtwork` at the harness default of 900px; this is the side that had no
+ * frame at all, so `sm:grid-cols-2` could have been deleted and nothing would
+ * have gone red.
+ */
+export const FiguresStacked: Story = {
+  name: 'Figures: stacked',
+  parameters: { viewport: { defaultViewport: 'mobileSmall' } },
+  render: () =>
+    demo([
+      { type: 'imagePair', captions: ['Direction A (4:3)', 'Direction B (4:3)'] },
+    ]),
+};
+
 // Inline specimen art, so the story has no network dependency in the
 // test-runner. Real pages pass a URL.
 const specimenArt = (label: string) =>

@@ -51,6 +51,30 @@ Three rules follow:
    subject is the *change* across breakpoints, split the story per breakpoint, because one
    frame shows one width.
 
+5. **A responsive class that changes *structure* needs a frame on each side of its
+   breakpoint. One that changes *scale* does not.** Structure means the track count, the
+   direction, or whether something is there at all: `grid-cols-*`, `flex-col`/`flex-row`,
+   `hidden`/`block`. Scale means padding, margin, gap and type size. The test is whether a
+   reader looking at one frame would be surprised by the other.
+
+   The whole responsive surface in `packages/components/src`, audited 2026-09-23:
+
+   | Component | Class | Kind | Frames |
+   |---|---|---|---|
+   | `Grid` | `{sm,md,lg,xl}:grid-cols-*` | structural | `ResponsiveColumns` base / md / xl |
+   | `AppHeader` | `md:block`, `md:hidden` | structural | `MobileMenuOpen` at 320, the rest at 900 |
+   | `CaseStudy` | `sm:grid-cols-2` (`imagePair`) | structural | `Figures` / `RealArtwork` at 900, `Figures: stacked` at 375 |
+   | `Card` | `lg:p-6` ×3 | scalar | none, deliberately |
+   | `Container` | `lg:px-10` | scalar | none, deliberately |
+   | `CaseStudy` | `sm:mt-24`, `sm:first:mt-0` | scalar | none, deliberately |
+
+   **`Card` and `Container` are the named exception.** Their `lg:` padding renders in no
+   frame at all: the harness captures at 900, and the only two stories above 1024
+   (`Modal/Docked`, `Grid: xl`) contain neither component. You could delete `lg:p-6` and
+   `lg:px-10` today and nothing would go red. That is accepted, because a story exists to
+   document its subject and neither component's subject is its padding at 1024. It is
+   written down here so the next person finds a decision rather than a gap.
+
 **The play function puts the story into the state the story is about, which is not always
 "open".** Opening everything loses information: `Combobox/Sizes` renders three fields to
 compare and one open list would cover two of them; the `Error` stories are about the
@@ -84,3 +108,12 @@ message under the field; `Disabled` stories cannot open at all.
   new ones whenever a story animates itself.
 - **`skip-visual` is not lint-enforced**, and it is the obvious place for a flaky story to
   go and be forgotten. Treat a new one as a claim to be justified in review, not a fix.
+- **The structural/scalar split is a judgement, not a check.** Nothing enforces it, and a
+  derived audit was considered and not built: it would list roughly forty responsive
+  classes, nearly all scalar, and a report nobody reads decays the same way the
+  interaction map did. Build it the second time someone has to ask whether something is
+  covered, not the first.
+- **A responsive frame is verified by reading the computed style, not by trusting the
+  viewport applied.** `Figures: stacked` was checked with `grid-template-columns`:
+  `329px 329px` at 900, `311px` at 375. The same method caught that
+  `Grid/ResponsiveColumns` was showing one breakpoint of three.
