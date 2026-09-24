@@ -114,6 +114,65 @@ if (!existsSync(join(STATIC, "index.json"))) {
   process.exit(1);
 }
 
+/**
+ * Reads the viewport a story declares for itself, if it differs from the
+ * project-wide default.
+ *
+ * Stories already have a way to say they need a particular width
+ * (`parameters.viewport.defaultViewport`, the addon-viewport API the Storybook
+ * toolbar respects), and one already used it while this harness ignored it.
+ * `AppHeader/MobileMenuOpen` asks for `mobile1`, was captured at 900px, and its
+ * baseline contained the desktop nav with no menu in it: a frame documenting the
+ * opposite of the story's name, passing every run.
+ *
+ * Only OVERRIDES are honoured. `preview.tsx` sets a project-wide default of
+ * `desktopSm` (1280x800) which every story inherits, so obeying the value
+ * unconditionally would move all ~536 frames to a new width for no benefit. The
+ * harness default stays 900x600 and only a story that asks for something else
+ * gets it.
+ *
+ * `index.json` (v5) does not carry parameters, so this asks the running preview.
+ */
+async function declaredViewport(page, storyId, projectDefault) {
+  const info = await page.evaluate(async (id) => {
+    const store = window.__STORYBOOK_PREVIEW__?.storyStore;
+    if (!store?.loadStory) return null;
+    try {
+      const story = await store.loadStory({ storyId: id });
+      const vp = story?.parameters?.viewport;
+      if (!vp?.defaultViewport) return null;
+      const styles = vp.viewports?.[vp.defaultViewport]?.styles;
+      return { name: vp.defaultViewport, styles: styles ?? null };
+    } catch {
+      return null;
+    }
+  }, storyId);
+
+  if (!info || !info.styles) return null;
+  if (projectDefault && info.name === projectDefault) return null;
+
+  const width = Number.parseInt(info.styles.width, 10);
+  const height = Number.parseInt(info.styles.height, 10);
+  if (!Number.isFinite(width) || !Number.isFinite(height)) return null;
+  return { name: info.name, width, height };
+}
+
+/**
+ * The value every story inherits from `preview.tsx`, so real overrides can be
+ * told apart from it. Without this the first run resized all ~536 frames to
+ * 1280x800, because `desktopSm` reads as "declared" on every story.
+ */
+async function projectDefaultViewport(page) {
+  return page.evaluate(async () => {
+    try {
+      const annotations = await window.__STORYBOOK_PREVIEW__?.getProjectAnnotations?.();
+      return annotations?.parameters?.viewport?.defaultViewport ?? null;
+    } catch {
+      return null;
+    }
+  });
+}
+
 const server = createServer((req, res) => {
   let p = decodeURIComponent(req.url.split("?")[0]);
   if (p === "/") p = "/index.html";
@@ -145,6 +204,9 @@ if (!UPDATE) { rmSync(DIFFS, { recursive: true, force: true }); mkdirSync(DIFFS,
 const browser = await chromium.launch();
 let written = 0, matched = 0, failed = 0, created = 0;
 const captured = [];
+/** Resolved once; `undefined` means not looked up yet, `null` means none. */
+let projectDefault;
+const announced = new Set();
 const failures = [];
 
 for (const theme of ["dark", "light"]) {
@@ -160,6 +222,21 @@ for (const theme of ["dark", "light"]) {
       await page.goto(`${base}/iframe.html?id=${story.id}&globals=theme:${theme}&viewMode=story`,
                       { waitUntil: "networkidle", timeout: 30000 });
       await page.waitForSelector("#storybook-root", { timeout: 10000 });
+
+      // A story that declares its own width gets it. Resizing after the first
+      // render is deliberate: it is what makes matchMedia fire, which is how
+      // Modal decides whether it is docked and how AppHeader decides whether to
+      // fold its nav behind a toggle.
+      if (projectDefault === undefined) projectDefault = await projectDefaultViewport(page);
+      const vp = await declaredViewport(page, story.id, projectDefault);
+      if (vp) {
+        await page.setViewportSize({ width: vp.width, height: vp.height });
+        await page.waitForTimeout(300);
+        if (!announced.has(story.id)) {
+          console.log(`  VIEWPORT  ${story.id} -> ${vp.name} (${vp.width}x${vp.height})`);
+          announced.add(story.id);
+        }
+      }
       // Let fonts settle: a half-loaded Fragment Mono is the main flake source.
       await page.evaluate(() => document.fonts.ready);
       // Storybook runs a story's `play` function after render, so the settle wait
@@ -226,6 +303,14 @@ if (UPDATE) {
   // Prune baselines no story produces any more. Without this, a renamed story or
   // a retired frame leaves a file behind that nothing compares against, and the
   // directory slowly fills with images that look like coverage and are not.
+  //
+  // Never prune a filtered run: it only captured a subset, so everything outside
+  // the filter looks retired. `--update --filter x` used to delete every other
+  // baseline in the directory, which is a quiet way to destroy the suite.
+  if (FILTER) {
+    console.log(`Wrote ${written} baseline(s). Pruning skipped: --filter only captured a subset.`);
+    process.exit(0);
+  }
   const expected = new Set(captured);
   let pruned = 0;
   for (const f of readdirSync(BASELINE)) {
