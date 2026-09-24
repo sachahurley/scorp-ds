@@ -23,3 +23,4 @@ Start from `0000-template.md`. Number sequentially.
 | [0010](0010-one-rule-weight.md) | One rule weight in the system | Dividers and separators |
 | [0011](0011-unified-size-scale.md) | One size scale: `sm` \| `md` \| `lg` | Every sized component |
 | [0012](0012-stories-drive-their-own-interactions.md) | Stories drive their own interactions via `play` | Visual regression, story authoring |
+| [0013](0013-update-writes-only-changed-baselines.md) | `--update` writes only the baselines that changed | Visual regression, baseline refreshes |
