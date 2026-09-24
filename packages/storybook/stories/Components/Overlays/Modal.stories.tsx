@@ -115,6 +115,12 @@ export const WithFooter: Story = {
  * the same props render the standard centered modal.
  */
 export const Docked: Story = {
+  // The docked variant only exists above --breakpoint-docked (960px), and the
+  // harness captures at 900 by default. Without this the baseline showed an
+  // ordinary centred modal: a frame of the exact behaviour this story is named
+  // for NOT happening. The other Modal stories stay at the default, since the
+  // non-docked path is what they document.
+  parameters: { viewport: { defaultViewport: 'desktopSm' } },
   // Opens on render so the baseline captures the docked panel and its drop-shadow elevation, which is the whole
   // point of this story and is invisible while it is closed. Storybook runs play
   // functions in the preview, so the visual harness and the a11y runner both see
