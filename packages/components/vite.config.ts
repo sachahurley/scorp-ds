@@ -8,6 +8,11 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   build: {
+    // `build:css` writes dist/styles.css separately, and Vite empties outDir by
+    // default when it sits inside root. Without this, every `build:js` deletes
+    // styles.css. `npm run dev` reruns build:js on each watch rebuild, and the
+    // portfolio's dev.sh syncs that gap straight into its vendor/ copy.
+    emptyOutDir: false,
     lib: {
       entry: path.resolve(dirname, "src/index.ts"),
       name: "ScorpDSComponents",
