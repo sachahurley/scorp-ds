@@ -8,15 +8,19 @@
 > the rule. `docs/vision.md` is the one-page overview. `docs/insights/` holds findings
 > from audits and CI runs.
 
-## Personal knowledge (sacha-agent MCP)
+## Personal knowledge (DAWG MCP)
 
-This repo’s rules below are **Scorp DS–specific** (structure, tokens, TUI language). For **Sacha’s cross-project notes** (identity, process, comms style, generic DS patterns, Flutter/product context when indexed), use the **`sacha-agent`** MCP tools before guessing:
+This repo’s rules below are **Scorp DS–specific** (structure, tokens, TUI language). For **Sacha’s cross-project notes** (identity, process, comms style, generic DS patterns, Flutter and product context), use the **`dawg`** MCP tools before guessing:
 
-- **`search_knowledge`** — semantic search over the KB at `~/Projects/sacha-agent` (parameters: `query`, optional `top_k`, optional `filter_folder` e.g. `knowledge/design-system`).
-- **`reindex`** — after KB markdown changes in that repo.
-- **`list_sources`** — debug what is indexed.
+- **`search_knowledge`** — semantic search over the KB at `~/Projects/dawg` (`query`, optional `top_k`, optional `filter_folder` e.g. `knowledge/design-system`). Folder matching is segment-aware: pass a whole path prefix, not a partial segment.
+- **`dawg_health`** — check Ollama, Chroma and whether the index matches disk. Run this before trusting an empty search result.
+- **`list_sources`** — see what is indexed.
+- **`reindex`** — after editing markdown in the dawg repo (`folder` scopes it to one subtree).
+- **`add_knowledge`** / **`get_project_profile`** — write and read project-scoped notes.
 
-Requires Ollama + Chroma running; see `sacha-agent/docs/portable-setup.md`. Server config: `.claude/mcp.json` in this repo.
+Requires Ollama and Chroma running; see `dawg/docs/portable-setup.md`. The server is registered at **user scope**, so it is available here without any per-repo MCP config.
+
+Retrieval covers `identity/`, `knowledge/`, `process/` and `examples/` only. `skills/` and `docs/` are deliberately excluded, so do not expect DAWG to return workflow docs.
 
 ---
 
