@@ -1,0 +1,33 @@
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+# Conductor workspace config for scorp-ds.
+#
+# A workspace is a git worktree, so node_modules (gitignored) never comes
+# along. `setup` installs from the lockfile at creation, across all workspaces
+# in the monorepo.
+
+[scripts]
+setup = "npm ci"
+# Nothing is shared between workspaces: no database, no Docker, and each gets
+# its own ports. Several can serve at once.
+run_mode = "concurrent"
+
+[scripts.run.storybook]
+# The main dev surface. STORYBOOK_PORT is read by packages/storybook's script,
+# which still defaults to 6006 when unset, so CI is unaffected.
+command = "STORYBOOK_PORT=$CONDUCTOR_PORT npm run storybook"
+available_in = [ "local" ]
+default = true
+icon = "book-open"
+
+[scripts.run.site]
+# The marketing front door. Uses CONDUCTOR_PORT+1 so it can run alongside
+# Storybook without a collision; Conductor allocates ten ports per workspace.
+command = "npm --workspace=@scorp-ds/site exec -- vite --port $((CONDUCTOR_PORT+1)) --strictPort"
+available_in = [ "local" ]
+icon = "globe"
+
+[scripts.run.test]
+# Token drift + unit tests (vitest), the same suite CI runs.
+command = "npm test"
+icon = "test-tube"
