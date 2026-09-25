@@ -194,7 +194,7 @@ immediately run the `/vendor-portfolio` skill, which covers ALL THREE:
 
 - **Portfolio** (`~/Projects/portfolio`, Vercel): `npm run vendor:ds` +
   `npm run ds:check` in a feature branch, PR → merge.
-- **Scorpion Design System showcase** (repo `scorpion-design-system`, checkout `~/Desktop/scorpion-ui-v2`, GitHub Pages):
+- **Scorpion Design System showcase** (repo `scorpion-design-system`, checkout `~/Projects/scorp-showcase`, GitHub Pages):
   `npm run vendor:ds` + `npm run ds:check`, PR → merge; merging deploys via CI.
 - **scorp-protodash** (repo `scorp-protodash`, checkout `~/conductor/repos/aura-protodash`, Vercel):
   `npm run vendor:ds` + `npm run ds:check` + `npm run check` in a temp worktree, PR → merge.

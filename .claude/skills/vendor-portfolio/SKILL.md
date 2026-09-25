@@ -15,7 +15,7 @@ description: Run after ANY scorp-ds merge to main — pulls the local checkout, 
 
 The portfolio (`~/Projects/portfolio`, deployed to Vercel from its `main`)
 carries a committed copy of scorp-ds under `vendor/`. The showcase
-(repo `scorpion-design-system`, local checkout `~/Desktop/scorpion-ui-v2`,
+(repo `scorpion-design-system`, local checkout `~/Projects/scorp-showcase`,
 deployed to GitHub Pages at
 `sachahurley.github.io/scorpion-design-system`) vendors component sources +
 tokens via its own `vendor:ds` script. scorp-protodash (GitHub
@@ -65,12 +65,12 @@ scorp-ds main (GitHub) → ~/Projects/scorp-ds (local main) ─┬→ portfolio 
 
 ## Part B — Scorpion Design System showcase
 
-1. **Branch off main** (repo lives at `~/Desktop/scorpion-ui-v2`; its
+1. **Branch off main** (repo lives at `~/Projects/scorp-showcase`; its
    `vendor:ds` reads scorp-ds `origin/main` via git from `$SCORP_DS_DIR`,
    default `~/Projects/scorp-ds`, and fetches it itself — the checkout's
    current branch does not matter):
    ```bash
-   cd ~/Desktop/scorpion-ui-v2 && git switch main && git pull --ff-only \
+   cd ~/Projects/scorp-showcase && git switch main && git pull --ff-only \
      && git switch -c ds-vendor-<short-desc>
    ```
 
