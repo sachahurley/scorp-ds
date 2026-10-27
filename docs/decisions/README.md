@@ -27,4 +27,5 @@ Start from `0000-template.md`. Number sequentially.
 | [0014](0014-case-studies-are-structured-pages.md) | Case studies are structured pages, not block lists | `CaseStudy`, the portfolio's case studies |
 | [0015](0015-ci-checks-are-required-to-merge.md) | CI checks are required to merge into `main` | The `main` ruleset, every PR |
 | [0016](0016-spec-drift-is-a-ci-gate.md) | Spec drift fails CI | `detect-spec-drift.sh`, CI, every spec |
+| [0016](0016-coverage-is-a-ratchet.md) | Every component has a story and a test, held by a ratchet | `coverage.test.ts`, every new component |
 | [0021](0021-consumers-are-built-before-merge.md) | Consumers are built against a change before it merges | `check-consumers.mjs`, API changes |

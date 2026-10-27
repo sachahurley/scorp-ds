@@ -174,6 +174,8 @@ Rules: `design-system-doc-requirements.md`. Reasoning:
 4. Export from `packages/components/src/index.ts`
 5. Add a Storybook story in `packages/storybook/stories/Components/`
 6. Add a `docs/specs/{component-name}.md` via `/update-spec`
+7. Add a test in `packages/components/src/__tests__/` that imports it. Run `node scripts/generate-api-surface.mjs` so the
+   manifest lists it; `coverage.test.ts` then fails until it has both a story and a test (`docs/decisions/0016`)
 
 ### New Storybook Story
 Follow the structure in `design-system-doc-requirements.md`. Use `/storybook-check` to verify compliance.
