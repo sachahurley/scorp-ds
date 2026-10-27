@@ -846,6 +846,198 @@
       },
       "apiHash": "06b48a68c0922402"
     },
+    "CaseStudyPage": {
+      "layer": "component",
+      "file": "packages/components/src/components/CaseStudyPage.tsx",
+      "spec": "docs/specs/CaseStudyPage.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "CaseStudyItem",
+          "kind": "interface"
+        },
+        {
+          "name": "CaseStudyOutcome",
+          "kind": "interface"
+        },
+        {
+          "name": "CaseStudyFigure",
+          "kind": "interface"
+        },
+        {
+          "name": "CaseStudyContentBlock",
+          "kind": "type"
+        },
+        {
+          "name": "CaseStudySection",
+          "kind": "interface"
+        },
+        {
+          "name": "CaseStudy",
+          "kind": "interface"
+        },
+        {
+          "name": "CaseStudyContent",
+          "kind": "function"
+        },
+        {
+          "name": "CaseStudyHeader",
+          "kind": "function"
+        },
+        {
+          "name": "CaseStudySections",
+          "kind": "function"
+        },
+        {
+          "name": "CaseStudyPage",
+          "kind": "function"
+        }
+      ],
+      "props": {
+        "CaseStudyItem": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "CaseStudyOutcome": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "CaseStudyFigure": [
+          {
+            "name": "src",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "alt",
+            "type": "string",
+            "required": false,
+            "description": "Empty string (the default) marks the image decorative."
+          },
+          {
+            "name": "aspect",
+            "type": "string",
+            "required": false,
+            "description": "CSS aspect-ratio, e.g. \"21 / 9\". Defaults to \"16 / 9\"."
+          },
+          {
+            "name": "caption",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "width",
+            "type": "\"wide\" | \"full\"",
+            "required": false,
+            "values": [
+              "\"wide\"",
+              "\"full\""
+            ]
+          }
+        ],
+        "CaseStudyContentBlock": {
+          "union": [
+            "{ type: \"prose\"; text: string }",
+            "({ type: \"image\" } & CaseStudyFigure)",
+            "{ type: \"imagePair\"; captions?: [string, string]; width?: \"wide\" | \"full\"; srcs?: [string | undefined, string | undefined]; alts?: [string | undefined, string | undefined]; }",
+            "{ /** A box-drawing diagram kept as live text (generate with * @scorp-ds/tui-art). `label` says what it shows, for screen readers. */ type: \"ascii\"; text: string; caption?: string; width?: \"wide\" | \"full\"; label?: string; }",
+            "{ /** A live region filled through the `slots` prop, keyed by `name`. */ type: \"slot\"; name: string; caption?: string; width?: \"wide\" | \"full\"; aspect?: string; }",
+            "{ type: \"list\"; items: CaseStudyItem[] }",
+            "{ type: \"insights\"; items: CaseStudyItem[] }",
+            "{ type: \"callouts\"; items: CaseStudyItem[] }",
+            "{ type: \"quote\"; text: string; name?: string; role?: string; image?: string }",
+            "{ type: \"statement\"; text: string; kicker?: string }",
+            "{ type: \"outcomes\"; items: CaseStudyOutcome[] }"
+          ]
+        },
+        "CaseStudySection": [
+          {
+            "name": "kicker",
+            "type": "string",
+            "required": true,
+            "description": "Short section name shown in the rule: \"the problem\"."
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "intro",
+            "type": "string",
+            "required": false,
+            "description": "Optional lead paragraph under the title."
+          },
+          {
+            "name": "blocks",
+            "type": "CaseStudyContentBlock[]",
+            "required": false
+          },
+          {
+            "name": "hidden",
+            "type": "boolean",
+            "required": false,
+            "description": "Leave the section out of the page (and out of the numbering)."
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "required": false,
+            "description": "Anchor id. Defaults to the kicker, slugified."
+          }
+        ],
+        "CaseStudy": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "summary",
+            "type": "string",
+            "required": true,
+            "description": "One line: what this was and what it achieved."
+          },
+          {
+            "name": "outcomes",
+            "type": "CaseStudyOutcome[]",
+            "required": false
+          },
+          {
+            "name": "meta",
+            "type": "{ label: string; value: string }[]",
+            "required": false
+          },
+          {
+            "name": "cover",
+            "type": "CaseStudyFigure",
+            "required": false
+          },
+          {
+            "name": "sections",
+            "type": "CaseStudySection[]",
+            "required": true
+          }
+        ]
+      },
+      "apiHash": "e356329de498f2f4"
+    },
     "Checkbox": {
       "layer": "component",
       "file": "packages/components/src/components/Checkbox.tsx",

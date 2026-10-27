@@ -60,6 +60,15 @@ export type { DropdownProps, DropdownItem } from './components/Dropdown';
 
 export { CaseStudyBlocks } from './components/CaseStudy';
 export type { CaseStudyBlock, CaseStudySlots } from './components/CaseStudy';
+export { CaseStudyPage, CaseStudyHeader, CaseStudySections, CaseStudyContent } from './components/CaseStudyPage';
+export type {
+  CaseStudy,
+  CaseStudySection,
+  CaseStudyContentBlock,
+  CaseStudyItem,
+  CaseStudyOutcome,
+  CaseStudyFigure,
+} from './components/CaseStudyPage';
 
 export { ListRow } from './components/ListRow';
 export type { ListRowProps } from './components/ListRow';
