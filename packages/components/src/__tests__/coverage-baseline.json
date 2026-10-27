@@ -1,0 +1,12 @@
+{
+  "untested": {
+    "Avatar": "Predates the coverage ratchet (2026-10-27). Backfill.",
+    "CaseStudy": "Predates the coverage ratchet (2026-10-27). Backfill after the CaseStudyPage rework in #79 lands, which replaces this API.",
+    "DescriptionList": "Predates the coverage ratchet (2026-10-27). Backfill.",
+    "Divider": "Predates the coverage ratchet (2026-10-27). Backfill.",
+    "StatusLine": "Predates the coverage ratchet (2026-10-27). Backfill.",
+    "TuiIcon": "Predates the coverage ratchet (2026-10-27). Backfill.",
+    "Window": "Predates the coverage ratchet (2026-10-27). Backfill."
+  },
+  "unstoried": {}
+}
