@@ -161,6 +161,17 @@ const breakClass = (w: BreakWidth) =>
       ? " [--csp-bw:max(100%,calc(100cqw-48px))] w-[var(--csp-bw)] ml-[calc((100%-var(--csp-bw))/2)]"
       : "";
 
+/** Fragment Mono's advance width in em (measured: 0.618), rounded up so a
+ *  shrink-to-fit diagram never lands a fraction too wide. */
+const MONO_ADVANCE = 0.62;
+
+/** The shrink-to-fit font size for an `ascii` diagram: text-xs, or smaller
+ *  when the longest line would not fit the figure. Exported for tests. */
+export const asciiFontSize = (text: string) => {
+  const longest = Math.max(...text.split("\n").map((l) => l.length));
+  return `min(var(--font-size-xs), calc((100cqw - var(--spacing-10)) / ${(longest * MONO_ADVANCE).toFixed(2)}))`;
+};
+
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
 const slugify = (s: string) =>
@@ -282,18 +293,27 @@ function Block({
         </div>
       );
 
-    case "ascii":
+    case "ascii": {
+      // Shrink to fit: the type steps down from text-xs until the longest
+      // line fits the figure (its own inline-size container), so a phone
+      // sees the whole diagram instead of a sideways scroll. Wide screens
+      // keep text-xs. overflow-x-auto stays as the fallback.
+      const fit = asciiFontSize(b.text);
       return (
         <Figure fig={fig} caption={b.caption} width={b.width}>
-          <pre
-            role="img"
-            aria-label={b.label ?? b.caption ?? "diagram"}
-            className={`plate-round m-0 overflow-x-auto p-5 text-xs leading-snug ${BODY_TEXT}`}
-          >
-            {b.text}
-          </pre>
+          <div className="[container-type:inline-size]">
+            <pre
+              role="img"
+              aria-label={b.label ?? b.caption ?? "diagram"}
+              className={`plate-round m-0 overflow-x-auto p-5 leading-snug ${BODY_TEXT}`}
+              style={{ fontSize: fit }}
+            >
+              {b.text}
+            </pre>
+          </div>
         </Figure>
       );
+    }
 
     case "slot": {
       const filled = slots?.[b.name];

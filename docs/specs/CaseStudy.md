@@ -14,7 +14,7 @@
 | Version | `v2` |
 | Status | `draft` |
 | Last updated | 2026-10-27 |
-| API hash | `0507fcdb051366b8` |
+| API hash | `f429192bbc9f083f` |
 
 ---
 
@@ -55,7 +55,7 @@ A hairline rule (`surface-container-stroke`) above; beneath it the two-digit num
 | `prose` | `<p>` `text-base leading-relaxed`, `my-6`. |
 | `image` | `<figure>` on the plate ring, `aspect` (default `"16 / 9"`), numbered caption, optional `width` breakout. `src` renders an `<img>` (`object-fit: cover`); without it, the hatch placeholder. |
 | `imagePair` | Two 4:3 figures, 1 column then 2 from `sm`, each numbered; `srcs` / `alts` / `captions` tuples; optional `width`. |
-| `ascii` | `<pre>` box-drawing diagram inside the figure ring, `text-xs`, `overflow-x-auto`, `role="img"` with `label` (falling back to `caption`). |
+| `ascii` | `<pre>` box-drawing diagram inside the figure ring, `role="img"` with `label` (falling back to `caption`). Type is `text-xs`, stepping down until the longest line fits the figure (shrink to fit, so phones see the whole diagram); `overflow-x-auto` remains the fallback. |
 | `slot` | A live region filled from the `slots` prop by `name`; the hatch placeholder (at `aspect`) when empty. Numbered like a figure. |
 | `list` | Steps, flows or principles. A tree drawn with hairline rules: a trunk from the first branch to the last, each branch on the midline of its title's first line. Title over text at every width. |
 | `insights` | Findings. `<ol>` with ruled rows, a `text-2xl` accent numeral column, `text-lg` title, `text-sm` text. |
@@ -210,6 +210,7 @@ Interactive controls: none (stories pass fixed data).
 
 - Hatch stripe stops `8px` / `16px` (inline `repeating-linear-gradient`).
 - Breakout math `240px` and `48px`.
+- `MONO_ADVANCE` `0.62`: Fragment Mono's measured advance width (0.618em), used to shrink `ascii` diagrams to fit.
 - Label and body colors use secondary scale steps chosen as AA theme pairs rather than semantic text tokens.
 
 <!-- AUTO-END:hardcoded -->
@@ -291,7 +292,7 @@ Interactive controls: none (stories pass fixed data).
 | 2026-09-22 | `image` / `imagePair` have no `src` field | `src` / `srcs` added | resolved |
 | 2026-09-22 | No unit tests | `CaseStudy.test.tsx` | resolved |
 | 2026-09-22 | Off-scale spacing values (`my-11`, `my-7`, `gap-3.5`) | v2 uses scale steps only | resolved |
-| 2026-10-27 | Wide `ascii` diagrams scroll sideways on phones | None yet | open |
+| 2026-10-27 | Wide `ascii` diagrams scroll sideways on phones | Shrink to fit from `text-xs` | resolved |
 
 <!-- AUTO-END:known-gaps -->
 

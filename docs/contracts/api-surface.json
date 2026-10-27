@@ -843,6 +843,10 @@
           "kind": "interface"
         },
         {
+          "name": "asciiFontSize",
+          "kind": "const"
+        },
+        {
           "name": "CaseStudyContent",
           "kind": "function"
         },
@@ -1002,7 +1006,7 @@
           }
         ]
       },
-      "apiHash": "0507fcdb051366b8"
+      "apiHash": "f429192bbc9f083f"
     },
     "Checkbox": {
       "layer": "component",

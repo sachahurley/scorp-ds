@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
-import { CaseStudyContent, CaseStudyPage, type CaseStudy } from "../components/CaseStudy";
+import { asciiFontSize, CaseStudyContent, CaseStudyPage, type CaseStudy } from "../components/CaseStudy";
 
 const study: CaseStudy = {
   title: "Example study",
@@ -70,6 +70,15 @@ describe("CaseStudyContent", () => {
   it("labels box-drawing diagrams for screen readers", () => {
     render(<CaseStudyContent blocks={[{ type: "ascii", text: "┌─┐", label: "A box" }]} />);
     expect(screen.getByRole("img", { name: "A box" })).toBeTruthy();
+  });
+
+  it("shrinks a diagram to fit its longest line, capped at text-xs", () => {
+    // 50 characters at 0.62em each: the figure width (less p-5 padding) / 31em
+    expect(asciiFontSize("ab\n" + "x".repeat(50))).toBe(
+      "min(var(--font-size-xs), calc((100cqw - var(--spacing-10)) / 31.00))",
+    );
+    render(<CaseStudyContent blocks={[{ type: "ascii", text: "┌─┐", label: "small" }]} />);
+    expect(screen.getByRole("img", { name: "small" }).className).not.toContain("text-xs");
   });
 
   it("falls back to the placeholder for an empty slot and renders a filled one", () => {
