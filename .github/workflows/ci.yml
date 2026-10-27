@@ -43,3 +43,9 @@ jobs:
       # against, so a stale one silently disables that check.
       - name: API surface manifest is current
         run: node scripts/generate-api-surface.mjs --check
+
+      # Runs after the manifest check on purpose: it compares each spec's
+      # recorded API hash against the manifest, which is only meaningful once
+      # the manifest is known to be current. See docs/decisions/0015.
+      - name: Specs match the components they describe
+        run: bash scripts/detect-spec-drift.sh
