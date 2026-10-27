@@ -6,7 +6,6 @@ import {
   CaseStudyHeader,
   CaseStudyPage,
   CaseStudySections,
-  type CaseStudySectionStyle,
 } from '@scorp-ds/components';
 
 import { caseStudyTemplateBlocks } from '../../presets/caseStudy';
@@ -93,7 +92,7 @@ export const SectionHeader: Story = {
   name: 'Section header',
   render: () => (
     <Compare
-      note="Each section opens on a numbered rule (counted automatically, so hiding or moving a section renumbers the rest). The title steps up from 20px to 24px."
+      note="Each section opens on a rule, with its number and name beneath it (counted automatically, so hiding or moving a section renumbers the rest). The title steps up from 20px to 24px."
       current={
         <CaseStudyBlocks
           blocks={[
@@ -215,77 +214,19 @@ export const FullPageTemplate: Story = {
   ),
 };
 
-const SECTION_STYLES: { style: CaseStudySectionStyle; name: string; note: string }[] = [
-  { style: 'rule', name: 'A. Rule', note: 'Number, name, then a rule to the edge. The current proposal.' },
-  { style: 'leadIn', name: 'B. Lead-in rule', note: 'A short rule before the number, like a terminal window title.' },
-  { style: 'count', name: 'C. Count', note: 'Rule above; name left, position right, so you know how far in you are.' },
-  { style: 'bracket', name: 'D. Bracket', note: 'A terminal tag. No rule; the quietest option.' },
-  { style: 'numeral', name: 'E. Numeral', note: 'A large accent number over the name. Editorial, no rule.' },
-  { style: 'path', name: 'F. Path', note: 'The section as a file path. No rule.' },
-];
-
-/** Two consecutive sections, so each style is seen with a section break. */
-const PAIR = [scorpionV2.sections[1], scorpionV2.sections[4]];
-
-function SectionStyles() {
-  return (
-    <div className="min-h-screen bg-[var(--surface-page)] px-6 py-12 font-mono">
-      <p className="mx-auto mb-12 mt-0 max-w-5xl text-sm leading-relaxed text-secondary-700 dark:text-secondary-600">
-        Six ways to label a section, each shown on two consecutive sections. Only the label changes; the title
-        and intro are the same in all six. To see one across a whole page, open "Proposed, full width" and pick a
-        sectionStyle in Controls.
-      </p>
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-x-16 gap-y-20 lg:grid-cols-2">
-        {SECTION_STYLES.map(({ style, name, note }) => (
-          <div key={style} className="min-w-0 [container-type:inline-size]">
-            <div className="mb-1 text-sm text-[var(--accent)]">{name}</div>
-            <p className="mb-10 mt-0 text-xs leading-relaxed text-secondary-700 dark:text-secondary-600">{note}</p>
-            <CaseStudySections sections={PAIR} sectionStyle={style} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export const SectionHeaderOptions: Story = {
-  name: 'Section header options',
-  render: () => <SectionStyles />,
-};
-
-export const SectionHeaderOptionsMobile: Story = {
-  name: 'Section header options, mobile',
-  parameters: { viewport: { defaultViewport: 'mobileMed' } },
-  render: () => <SectionStyles />,
-};
-
-type PageArgs = { sectionStyle: CaseStudySectionStyle };
-
-const fullPage = ({ sectionStyle }: PageArgs) => (
+const fullPage = () => (
   <div className="min-h-screen bg-[var(--surface-page)] px-6 py-16 [container-type:inline-size]">
-    <CaseStudyPage study={scorpionV2} sectionStyle={sectionStyle} className="mx-auto max-w-2xl" />
+    <CaseStudyPage study={scorpionV2} className="mx-auto max-w-2xl" />
   </div>
 );
 
-const pageControls = {
-  args: { sectionStyle: 'rule' as CaseStudySectionStyle },
-  argTypes: {
-    sectionStyle: {
-      control: 'select',
-      options: SECTION_STYLES.map((s) => s.style),
-    },
-  },
-};
-
-export const ProposedFullWidth: StoryObj<PageArgs> = {
+export const ProposedFullWidth: Story = {
   name: 'Proposed, full width',
-  ...pageControls,
   render: fullPage,
 };
 
-export const ProposedMobile: StoryObj<PageArgs> = {
+export const ProposedMobile: Story = {
   name: 'Proposed, mobile',
-  ...pageControls,
   parameters: { viewport: { defaultViewport: 'mobileMed' } },
   render: fullPage,
 };

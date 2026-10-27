@@ -10,7 +10,8 @@
  * - Reorder a section by moving it in `sections`; hide one with
  *   `hidden: true`. Section numbers and figure numbers are counted over the
  *   visible sections only, so hiding one renumbers the rest.
- * - Each section draws its own numbered rule header (`02 ─ THE PROBLEM`),
+ * - Each section opens on a rule with its number and name beneath it
+ *   (`02 THE PROBLEM`),
  *   so authors never type numbers or headings as blocks.
  * - Every content block has one silhouette per meaning: steps and
  *   principles (`list`) read as a tree, findings (`insights`) carry large
@@ -471,101 +472,14 @@ export function CaseStudyHeader({
   );
 }
 
-/**
- * Section label styles under review in `Lab/Case study redesign`. One will
- * be kept and this option removed.
- *
- * - `rule`: `01 OVERVIEW ──────────`
- * - `leadIn`: `── 01 · OVERVIEW ───────` (a TUI window title)
- * - `count`: a rule above, `OVERVIEW` left and `01 / 07` right
- * - `bracket`: `[01] overview`, no rule
- * - `numeral`: a large accent `01` over a small label, no rule
- * - `path`: `./01-overview`, no rule
- */
-export type CaseStudySectionStyle = "rule" | "leadIn" | "count" | "bracket" | "numeral" | "path";
-
-function SectionLabel({
-  n,
-  total,
-  kicker,
-  style,
-}: {
-  n: number;
-  total: number;
-  kicker: string;
-  style: CaseStudySectionStyle;
-}) {
-  const num = pad2(n);
-  const line = <span aria-hidden="true" className={`flex-1 border-t-hairline ${RULE}`} />;
-  const caps = "text-xs uppercase tracking-wider";
-  switch (style) {
-    case "rule":
-      return (
-        <div className={`flex items-center gap-3 ${caps}`}>
-          <span className={ACCENT_TEXT}>{num}</span>
-          <span className={LABEL_TEXT}>{kicker}</span>
-          {line}
-        </div>
-      );
-    case "leadIn":
-      return (
-        <div className={`flex items-center gap-3 ${caps}`}>
-          <span aria-hidden="true" className={`w-4 flex-none border-t-hairline ${RULE}`} />
-          <span className={ACCENT_TEXT}>{num}</span>
-          <span aria-hidden="true" className={LABEL_TEXT}>·</span>
-          <span className={LABEL_TEXT}>{kicker}</span>
-          {line}
-        </div>
-      );
-    case "count":
-      return (
-        <div className={`flex items-baseline justify-between gap-3 border-t-hairline pt-3 ${RULE} ${caps}`}>
-          <span className={LABEL_TEXT}>{kicker}</span>
-          <span className={ACCENT_TEXT}>
-            {num}
-            <span className={LABEL_TEXT}> / {pad2(total)}</span>
-          </span>
-        </div>
-      );
-    case "bracket":
-      return (
-        <div className="text-sm">
-          <span className={LABEL_TEXT}>[</span>
-          <span className={ACCENT_TEXT}>{num}</span>
-          <span className={LABEL_TEXT}>] {kicker}</span>
-        </div>
-      );
-    case "numeral":
-      return (
-        <div>
-          <div className={`text-2xl leading-none ${ACCENT_TEXT}`}>{num}</div>
-          <div className={`mt-2 ${caps} ${LABEL_TEXT}`}>{kicker}</div>
-        </div>
-      );
-    case "path":
-      return (
-        <div className={`text-sm ${LABEL_TEXT}`}>
-          ./<span className={ACCENT_TEXT}>{num}</span>-{slugify(kicker)}
-        </div>
-      );
-  }
-}
-
-/** The label and title that open a section. */
-function SectionHeader({
-  n,
-  total,
-  section,
-  style,
-}: {
-  n: number;
-  total: number;
-  section: CaseStudySection;
-  style: CaseStudySectionStyle;
-}) {
+/** Opens a section: a rule above, then number and name, then the title. */
+function SectionHeader({ n, section }: { n: number; section: CaseStudySection }) {
   return (
     <header>
-      <SectionLabel n={n} total={total} kicker={section.kicker} style={style} />
+      <div className={`flex gap-3 border-t-hairline pt-3 text-xs uppercase tracking-wider ${RULE}`}>
+        <span className={ACCENT_TEXT}>{pad2(n)}</span>
+        <span className={LABEL_TEXT}>{section.kicker}</span>
+      </div>
       <h2 className={`m-0 mt-4 text-xl leading-snug sm:text-2xl ${TITLE_TEXT}`}>{section.title}</h2>
       {section.intro && (
         <p className={`m-0 mt-4 text-base leading-relaxed ${BODY_TEXT}`}>{section.intro}</p>
@@ -582,18 +496,14 @@ function SectionHeader({
  * @param sections - Sections in reading order; `hidden` ones are skipped
  *   and do not take a number
  * @param slots - Live content for `slot` blocks
- * @param sectionStyle - Section label style, under review (see
- *   {@link CaseStudySectionStyle}); defaults to `rule`
  */
 export function CaseStudySections({
   sections,
   slots,
-  sectionStyle = "rule",
   className = "",
 }: {
   sections: CaseStudySection[];
   slots?: CaseStudySlots;
-  sectionStyle?: CaseStudySectionStyle;
   className?: string;
 }) {
   const visible = sections.filter((s) => !s.hidden);
@@ -609,7 +519,7 @@ export function CaseStudySections({
             id={s.id ?? slugify(s.kicker)}
             className="mt-16 first:mt-0 sm:mt-20 sm:first:mt-0"
           >
-            <SectionHeader n={i + 1} total={visible.length} section={s} style={sectionStyle} />
+            <SectionHeader n={i + 1} section={s} />
             {s.blocks && s.blocks.length > 0 && (
               <CaseStudyContent blocks={s.blocks} slots={slots} figureStart={start} />
             )}
@@ -624,34 +534,26 @@ export function CaseStudySections({
  * CaseStudyPage Component
  *
  * Renders a whole case study: the header, then each visible section with a
- * numbered rule header and its content blocks.
+ * ruled, numbered header and its content blocks.
  *
  * @param study - The page (see {@link CaseStudy})
  * @param slots - Live content for `slot` blocks; a name with no entry falls
  *   back to the hatch placeholder
- * @param sectionStyle - Section label style, under review; defaults to `rule`
  * @param className - Additional classes on the wrapper (e.g. a column width)
  */
 export function CaseStudyPage({
   study,
   slots,
-  sectionStyle,
   className = "",
 }: {
   study: CaseStudy;
   slots?: CaseStudySlots;
-  sectionStyle?: CaseStudySectionStyle;
   className?: string;
 }) {
   return (
     <article className={`font-mono ${className}`}>
       <CaseStudyHeader study={study} />
-      <CaseStudySections
-        sections={study.sections}
-        slots={slots}
-        sectionStyle={sectionStyle}
-        className="mt-16 sm:mt-20"
-      />
+      <CaseStudySections sections={study.sections} slots={slots} className="mt-16 sm:mt-20" />
     </article>
   );
 }

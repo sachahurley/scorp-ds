@@ -68,7 +68,6 @@ export type {
   CaseStudyItem,
   CaseStudyOutcome,
   CaseStudyFigure,
-  CaseStudySectionStyle,
 } from './components/CaseStudyPage';
 
 export { ListRow } from './components/ListRow';
