@@ -6,6 +6,7 @@ import {
   CaseStudyHeader,
   CaseStudyPage,
   CaseStudySections,
+  type CaseStudySectionStyle,
 } from '@scorp-ds/components';
 
 import { caseStudyTemplateBlocks } from '../../presets/caseStudy';
@@ -25,6 +26,9 @@ import {
  * container, so wide and full breakouts are clamped to their half; the
  * "Proposed, full width" story shows the breakouts at real size.
  *
+ * Below the lg breakpoint the two sides stack, current above proposed, so
+ * every comparison also reads at phone width (pick a Mobile viewport).
+ *
  * The v1 page header is not part of the system yet: the portfolio draws it
  * (`h1.page` at 16px plus the role line), so the left side of "Page header"
  * reproduces that markup.
@@ -39,7 +43,7 @@ type Story = StoryObj;
 
 function Side({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="min-w-0 px-6 [container-type:inline-size]">
+    <div className="min-w-0 px-6 py-10 first:pt-0 lg:py-0 [container-type:inline-size]">
       <div className="mx-auto mb-10 flex max-w-2xl items-center gap-3 text-xs uppercase tracking-wider">
         <span className="text-[var(--accent)]">{label}</span>
         <span aria-hidden="true" className="flex-1 border-t-hairline border-[var(--surface-container-stroke)]" />
@@ -55,7 +59,7 @@ function Compare({ note, current, proposed }: { note: string; current: ReactNode
       <p className="mx-auto mb-12 mt-0 max-w-5xl px-6 text-sm leading-relaxed text-secondary-700 dark:text-secondary-600">
         {note}
       </p>
-      <div className="grid grid-cols-2 divide-x-hairline divide-[var(--surface-container-stroke)]">
+      <div className="grid grid-cols-1 divide-y-hairline divide-[var(--surface-container-stroke)] lg:grid-cols-2 lg:divide-x-hairline lg:divide-y-0">
         <Side label="current">{current}</Side>
         <Side label="proposed">{proposed}</Side>
       </div>
@@ -211,13 +215,79 @@ export const FullPageTemplate: Story = {
   ),
 };
 
-export const ProposedFullWidth: Story = {
-  name: 'Proposed, full width',
-  render: () => (
-    <div className="min-h-screen bg-[var(--surface-page)] px-6 py-16 [container-type:inline-size]">
-      <CaseStudyPage study={scorpionV2} className="mx-auto max-w-2xl" />
+const SECTION_STYLES: { style: CaseStudySectionStyle; name: string; note: string }[] = [
+  { style: 'rule', name: 'A. Rule', note: 'Number, name, then a rule to the edge. The current proposal.' },
+  { style: 'leadIn', name: 'B. Lead-in rule', note: 'A short rule before the number, like a terminal window title.' },
+  { style: 'count', name: 'C. Count', note: 'Rule above; name left, position right, so you know how far in you are.' },
+  { style: 'bracket', name: 'D. Bracket', note: 'A terminal tag. No rule; the quietest option.' },
+  { style: 'numeral', name: 'E. Numeral', note: 'A large accent number over the name. Editorial, no rule.' },
+  { style: 'path', name: 'F. Path', note: 'The section as a file path. No rule.' },
+];
+
+/** Two consecutive sections, so each style is seen with a section break. */
+const PAIR = [scorpionV2.sections[1], scorpionV2.sections[4]];
+
+function SectionStyles() {
+  return (
+    <div className="min-h-screen bg-[var(--surface-page)] px-6 py-12 font-mono">
+      <p className="mx-auto mb-12 mt-0 max-w-5xl text-sm leading-relaxed text-secondary-700 dark:text-secondary-600">
+        Six ways to label a section, each shown on two consecutive sections. Only the label changes; the title
+        and intro are the same in all six. To see one across a whole page, open "Proposed, full width" and pick a
+        sectionStyle in Controls.
+      </p>
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-x-16 gap-y-20 lg:grid-cols-2">
+        {SECTION_STYLES.map(({ style, name, note }) => (
+          <div key={style} className="min-w-0 [container-type:inline-size]">
+            <div className="mb-1 text-sm text-[var(--accent)]">{name}</div>
+            <p className="mb-10 mt-0 text-xs leading-relaxed text-secondary-700 dark:text-secondary-600">{note}</p>
+            <CaseStudySections sections={PAIR} sectionStyle={style} />
+          </div>
+        ))}
+      </div>
     </div>
-  ),
+  );
+}
+
+export const SectionHeaderOptions: Story = {
+  name: 'Section header options',
+  render: () => <SectionStyles />,
+};
+
+export const SectionHeaderOptionsMobile: Story = {
+  name: 'Section header options, mobile',
+  parameters: { viewport: { defaultViewport: 'mobileMed' } },
+  render: () => <SectionStyles />,
+};
+
+type PageArgs = { sectionStyle: CaseStudySectionStyle };
+
+const fullPage = ({ sectionStyle }: PageArgs) => (
+  <div className="min-h-screen bg-[var(--surface-page)] px-6 py-16 [container-type:inline-size]">
+    <CaseStudyPage study={scorpionV2} sectionStyle={sectionStyle} className="mx-auto max-w-2xl" />
+  </div>
+);
+
+const pageControls = {
+  args: { sectionStyle: 'rule' as CaseStudySectionStyle },
+  argTypes: {
+    sectionStyle: {
+      control: 'select',
+      options: SECTION_STYLES.map((s) => s.style),
+    },
+  },
+};
+
+export const ProposedFullWidth: StoryObj<PageArgs> = {
+  name: 'Proposed, full width',
+  ...pageControls,
+  render: fullPage,
+};
+
+export const ProposedMobile: StoryObj<PageArgs> = {
+  name: 'Proposed, mobile',
+  ...pageControls,
+  parameters: { viewport: { defaultViewport: 'mobileMed' } },
+  render: fullPage,
 };
 
 export const ReorderAndHide: Story = {

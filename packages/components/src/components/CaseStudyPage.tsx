@@ -227,9 +227,12 @@ function Outcomes({ items }: { items: CaseStudyOutcome[] }) {
   return (
     <dl className={`m-0 grid grid-cols-2 gap-x-8 gap-y-6 ${cols}`}>
       {items.map((it) => (
-        <div key={it.label} className="flex flex-col-reverse">
+        // dt stays first for screen readers; the figure is moved above it
+        // visually, so every figure hangs from the top of its cell however
+        // its label wraps.
+        <div key={it.label} className="flex flex-col">
           <dt className={`mt-2 text-xs ${LABEL_TEXT}`}>{it.label}</dt>
-          <dd className={`m-0 text-2xl leading-none ${ACCENT_TEXT}`}>{it.value}</dd>
+          <dd className={`order-first m-0 text-2xl leading-none ${ACCENT_TEXT}`}>{it.value}</dd>
         </div>
       ))}
     </dl>
@@ -297,23 +300,24 @@ function Block({
     }
 
     case "list":
-      // A tree: ├─ on every item but the last (└─), with the trunk drawn as
-      // a rule so it runs the full height of a wrapped item. Title over text
-      // at every width: side by side, long titles wrapped to three lines.
+      // A tree drawn with rules rather than box glyphs, so trunk and branches
+      // meet exactly. The trunk runs from the first branch to the last; each
+      // branch sits on the midline of its title's first line (top-3 of a
+      // leading-6 line). Title over text at every width.
       return (
         <ul className="my-10 list-none p-0">
           {b.items.map((it, i) => {
+            const first = i === 0;
             const last = i === b.items.length - 1;
+            const trunk = `${first ? "top-3" : "top-0"} ${last ? "h-3" : "bottom-0"}`;
             return (
-              <li key={it.title} className="grid grid-cols-[auto_1fr] gap-x-3">
-                <div aria-hidden="true" className={`flex flex-col text-sm leading-6 ${LABEL_TEXT}`}>
-                  <span>{last ? "└─" : "├─"}</span>
-                  {!last && <span className="ml-[0.5ch] flex-1 border-l-hairline border-current" />}
-                </div>
-                <div className={last ? "" : "pb-6"}>
-                  <div className={`text-sm leading-6 ${TITLE_TEXT}`}>{it.title}</div>
-                  <p className={`m-0 mt-1 text-sm leading-6 ${BODY_TEXT}`}>{it.text}</p>
-                </div>
+              <li key={it.title} className={`relative pl-8 ${last ? "" : "pb-6"}`}>
+                {!(first && last) && (
+                  <span aria-hidden="true" className={`absolute left-1 border-l-hairline ${RULE} ${trunk}`} />
+                )}
+                <span aria-hidden="true" className={`absolute left-1 top-3 w-4 border-t-hairline ${RULE}`} />
+                <div className={`text-sm leading-6 ${TITLE_TEXT}`}>{it.title}</div>
+                <p className={`m-0 mt-1 text-sm leading-6 ${BODY_TEXT}`}>{it.text}</p>
               </li>
             );
           })}
@@ -467,15 +471,101 @@ export function CaseStudyHeader({
   );
 }
 
-/** The numbered rule that opens a section: `02 ─ THE PROBLEM ──────`. */
-function SectionHeader({ n, section }: { n: number; section: CaseStudySection }) {
+/**
+ * Section label styles under review in `Lab/Case study redesign`. One will
+ * be kept and this option removed.
+ *
+ * - `rule`: `01 OVERVIEW ──────────`
+ * - `leadIn`: `── 01 · OVERVIEW ───────` (a TUI window title)
+ * - `count`: a rule above, `OVERVIEW` left and `01 / 07` right
+ * - `bracket`: `[01] overview`, no rule
+ * - `numeral`: a large accent `01` over a small label, no rule
+ * - `path`: `./01-overview`, no rule
+ */
+export type CaseStudySectionStyle = "rule" | "leadIn" | "count" | "bracket" | "numeral" | "path";
+
+function SectionLabel({
+  n,
+  total,
+  kicker,
+  style,
+}: {
+  n: number;
+  total: number;
+  kicker: string;
+  style: CaseStudySectionStyle;
+}) {
+  const num = pad2(n);
+  const line = <span aria-hidden="true" className={`flex-1 border-t-hairline ${RULE}`} />;
+  const caps = "text-xs uppercase tracking-wider";
+  switch (style) {
+    case "rule":
+      return (
+        <div className={`flex items-center gap-3 ${caps}`}>
+          <span className={ACCENT_TEXT}>{num}</span>
+          <span className={LABEL_TEXT}>{kicker}</span>
+          {line}
+        </div>
+      );
+    case "leadIn":
+      return (
+        <div className={`flex items-center gap-3 ${caps}`}>
+          <span aria-hidden="true" className={`w-4 flex-none border-t-hairline ${RULE}`} />
+          <span className={ACCENT_TEXT}>{num}</span>
+          <span aria-hidden="true" className={LABEL_TEXT}>·</span>
+          <span className={LABEL_TEXT}>{kicker}</span>
+          {line}
+        </div>
+      );
+    case "count":
+      return (
+        <div className={`flex items-baseline justify-between gap-3 border-t-hairline pt-3 ${RULE} ${caps}`}>
+          <span className={LABEL_TEXT}>{kicker}</span>
+          <span className={ACCENT_TEXT}>
+            {num}
+            <span className={LABEL_TEXT}> / {pad2(total)}</span>
+          </span>
+        </div>
+      );
+    case "bracket":
+      return (
+        <div className="text-sm">
+          <span className={LABEL_TEXT}>[</span>
+          <span className={ACCENT_TEXT}>{num}</span>
+          <span className={LABEL_TEXT}>] {kicker}</span>
+        </div>
+      );
+    case "numeral":
+      return (
+        <div>
+          <div className={`text-2xl leading-none ${ACCENT_TEXT}`}>{num}</div>
+          <div className={`mt-2 ${caps} ${LABEL_TEXT}`}>{kicker}</div>
+        </div>
+      );
+    case "path":
+      return (
+        <div className={`text-sm ${LABEL_TEXT}`}>
+          ./<span className={ACCENT_TEXT}>{num}</span>-{slugify(kicker)}
+        </div>
+      );
+  }
+}
+
+/** The label and title that open a section. */
+function SectionHeader({
+  n,
+  total,
+  section,
+  style,
+}: {
+  n: number;
+  total: number;
+  section: CaseStudySection;
+  style: CaseStudySectionStyle;
+}) {
   return (
     <header>
-      <div className="flex items-center gap-3 text-xs uppercase tracking-wider">
-        <span className={ACCENT_TEXT}>{pad2(n)}</span>
-        <span className={LABEL_TEXT}>{section.kicker}</span>
-        <span aria-hidden="true" className={`flex-1 border-t-hairline ${RULE}`} />
-      </div>
+      <SectionLabel n={n} total={total} kicker={section.kicker} style={style} />
       <h2 className={`m-0 mt-4 text-xl leading-snug sm:text-2xl ${TITLE_TEXT}`}>{section.title}</h2>
       {section.intro && (
         <p className={`m-0 mt-4 text-base leading-relaxed ${BODY_TEXT}`}>{section.intro}</p>
@@ -492,14 +582,18 @@ function SectionHeader({ n, section }: { n: number; section: CaseStudySection })
  * @param sections - Sections in reading order; `hidden` ones are skipped
  *   and do not take a number
  * @param slots - Live content for `slot` blocks
+ * @param sectionStyle - Section label style, under review (see
+ *   {@link CaseStudySectionStyle}); defaults to `rule`
  */
 export function CaseStudySections({
   sections,
   slots,
+  sectionStyle = "rule",
   className = "",
 }: {
   sections: CaseStudySection[];
   slots?: CaseStudySlots;
+  sectionStyle?: CaseStudySectionStyle;
   className?: string;
 }) {
   const visible = sections.filter((s) => !s.hidden);
@@ -515,7 +609,7 @@ export function CaseStudySections({
             id={s.id ?? slugify(s.kicker)}
             className="mt-16 first:mt-0 sm:mt-20 sm:first:mt-0"
           >
-            <SectionHeader n={i + 1} section={s} />
+            <SectionHeader n={i + 1} total={visible.length} section={s} style={sectionStyle} />
             {s.blocks && s.blocks.length > 0 && (
               <CaseStudyContent blocks={s.blocks} slots={slots} figureStart={start} />
             )}
@@ -535,21 +629,29 @@ export function CaseStudySections({
  * @param study - The page (see {@link CaseStudy})
  * @param slots - Live content for `slot` blocks; a name with no entry falls
  *   back to the hatch placeholder
+ * @param sectionStyle - Section label style, under review; defaults to `rule`
  * @param className - Additional classes on the wrapper (e.g. a column width)
  */
 export function CaseStudyPage({
   study,
   slots,
+  sectionStyle,
   className = "",
 }: {
   study: CaseStudy;
   slots?: CaseStudySlots;
+  sectionStyle?: CaseStudySectionStyle;
   className?: string;
 }) {
   return (
     <article className={`font-mono ${className}`}>
       <CaseStudyHeader study={study} />
-      <CaseStudySections sections={study.sections} slots={slots} className="mt-16 sm:mt-20" />
+      <CaseStudySections
+        sections={study.sections}
+        slots={slots}
+        sectionStyle={sectionStyle}
+        className="mt-16 sm:mt-20"
+      />
     </article>
   );
 }

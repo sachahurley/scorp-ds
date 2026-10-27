@@ -885,6 +885,10 @@
           "kind": "function"
         },
         {
+          "name": "CaseStudySectionStyle",
+          "kind": "type"
+        },
+        {
           "name": "CaseStudySections",
           "kind": "function"
         },
@@ -1034,9 +1038,19 @@
             "type": "CaseStudySection[]",
             "required": true
           }
-        ]
+        ],
+        "CaseStudySectionStyle": {
+          "union": [
+            "\"rule\"",
+            "\"leadIn\"",
+            "\"count\"",
+            "\"bracket\"",
+            "\"numeral\"",
+            "\"path\""
+          ]
+        }
       },
-      "apiHash": "e356329de498f2f4"
+      "apiHash": "5594b7c4eff2b563"
     },
     "Checkbox": {
       "layer": "component",
