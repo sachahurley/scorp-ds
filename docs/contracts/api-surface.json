@@ -815,43 +815,9 @@
       "import": "@scorp-ds/components",
       "exports": [
         {
-          "name": "CaseStudyBlock",
-          "kind": "type"
-        },
-        {
           "name": "CaseStudySlots",
           "kind": "type"
         },
-        {
-          "name": "CaseStudyBlocks",
-          "kind": "function"
-        }
-      ],
-      "props": {
-        "CaseStudyBlock": {
-          "union": [
-            "{ type: \"meta\"; items: { label: string; value: string }[] }",
-            "{ type: \"headline\"; kicker?: string; title: string; text?: string }",
-            "{ type: \"prose\"; text: string }",
-            "{ type: \"image\"; aspect?: string; caption?: string; width?: \"wide\" | \"full\"; /** Real artwork. Omit for the hatch placeholder. */ src?: string; /** Alt text. Empty string marks the image decorative (the default when * a caption already describes it). */ alt?: string; }",
-            "{ type: \"imagePair\"; captions?: [string, string]; width?: \"wide\" | \"full\"; /** Real artwork per side; either entry may be omitted for the placeholder. */ srcs?: [string | undefined, string | undefined]; alts?: [string | undefined, string | undefined]; }",
-            "{ /** A box-drawing / monospace diagram, rendered as preformatted text * rather than an image so it stays selectable and retints with the * theme. Pair with @scorp-ds/tui-art to generate the string. */ type: \"ascii\"; text: string; caption?: string; width?: \"wide\" | \"full\"; /** What the diagram says, for screen readers, which cannot read box * characters. Falls back to the caption. */ label?: string; }",
-            "{ /** A live region the page fills via the `slots` prop — a component * specimen, a chart, an embed. Renders the hatch placeholder when the * named slot is empty. */ type: \"slot\"; name: string; caption?: string; width?: \"wide\" | \"full\"; /** Reserve space at the placeholder stage; omit once the slot is filled * and should size to its content. */ aspect?: string; }",
-            "{ type: \"callouts\"; items: { title: string; text: string }[] }",
-            "{ type: \"insights\"; items: { title: string; text: string }[] }",
-            "{ type: \"quote\"; text: string; name?: string; role?: string; image?: string }",
-            "{ type: \"list\"; items: { title: string; text: string }[] }"
-          ]
-        }
-      },
-      "apiHash": "06b48a68c0922402"
-    },
-    "CaseStudyPage": {
-      "layer": "component",
-      "file": "packages/components/src/components/CaseStudyPage.tsx",
-      "spec": "docs/specs/CaseStudyPage.md",
-      "import": "@scorp-ds/components",
-      "exports": [
         {
           "name": "CaseStudyItem",
           "kind": "interface"
@@ -1036,7 +1002,7 @@
           }
         ]
       },
-      "apiHash": "e356329de498f2f4"
+      "apiHash": "0507fcdb051366b8"
     },
     "Checkbox": {
       "layer": "component",

@@ -54,8 +54,8 @@ function buildStoryMap(storiesDir) {
       };
       // Key by BOTH the file name and the `component:` the meta points at. A
       // component's stories are not always in a file named after its source:
-      // CaseStudy.tsx exports CaseStudyBlocks, whose stories live in
-      // CaseStudyBlocks.stories.tsx and CaseStudyTemplate.stories.tsx. Keying on
+      // CaseStudy.tsx exports CaseStudyPage, whose stories live in
+      // CaseStudy.stories.tsx and CaseStudyTemplate.stories.tsx. Keying on
       // the file name alone reported it as having no story at all.
       byComponent[entry.name.replace(/\.stories\.tsx$/, "")] ??= record;
       const component = src.match(/\bcomponent:\s*([A-Za-z0-9_]+)/)?.[1];
