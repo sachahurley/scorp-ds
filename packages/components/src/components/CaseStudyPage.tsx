@@ -28,6 +28,8 @@
  *   800/500 body), surface.muted (cards), surface.container-stroke (rules)
  * - plate.round + border.hairline (figure ring), surface.subtle/muted (hatch)
  * - border.width.hairline (the one rule weight)
+ * - font.size.pageTitle (the h1 at sm and up); outcome figures stay at 2xl
+ *   so the title is always the largest type on the page
  * - Avatar component (quote attribution)
  *
  * Breakout figures (`width: "wide" | "full"`) size against the nearest
@@ -227,7 +229,7 @@ function Outcomes({ items }: { items: CaseStudyOutcome[] }) {
       {items.map((it) => (
         <div key={it.label} className="flex flex-col-reverse">
           <dt className={`mt-2 text-xs ${LABEL_TEXT}`}>{it.label}</dt>
-          <dd className={`m-0 text-2xl leading-none sm:text-3xl ${ACCENT_TEXT}`}>{it.value}</dd>
+          <dd className={`m-0 text-2xl leading-none ${ACCENT_TEXT}`}>{it.value}</dd>
         </div>
       ))}
     </dl>
@@ -434,7 +436,7 @@ export function CaseStudyHeader({
   const { title, summary, outcomes, meta, cover } = study;
   return (
     <header className={`font-mono ${className}`}>
-      <h1 className={`m-0 text-2xl leading-tight sm:text-3xl ${TITLE_TEXT}`}>{title}</h1>
+      <h1 className={`m-0 text-2xl leading-tight sm:text-page-title ${TITLE_TEXT}`}>{title}</h1>
       <p className={`m-0 mt-5 text-base leading-relaxed sm:text-lg ${BODY_TEXT}`}>{summary}</p>
       {outcomes && outcomes.length > 0 && (
         <div className="mt-10">

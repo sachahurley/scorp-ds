@@ -14,6 +14,7 @@ const SIZES = [
   { token: 'lg', cls: 'text-lg', varName: '--font-size-lg' },
   { token: 'xl', cls: 'text-xl', varName: '--font-size-xl' },
   { token: '2xl', cls: 'text-2xl', varName: '--font-size-2xl' },
+  { token: 'pageTitle', cls: 'text-page-title', varName: '--font-size-page-title' },
 ];
 
 function TypographyPage() {
