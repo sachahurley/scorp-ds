@@ -25,3 +25,4 @@ Start from `0000-template.md`. Number sequentially.
 | [0012](0012-stories-drive-their-own-interactions.md) | Stories drive their own interactions via `play` | Visual regression, story authoring |
 | [0013](0013-update-writes-only-changed-baselines.md) | `--update` writes only the baselines that changed | Visual regression, baseline refreshes |
 | [0017](0017-pin-actions-and-let-dependabot-move-them.md) | Pin actions to commits; Dependabot moves them | Every workflow, dependencies |
+| [0019](0019-baselines-refresh-by-commit-tag.md) | Visual baselines are refreshed by a commit tag | Visual regression, every rendered change |
