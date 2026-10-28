@@ -457,7 +457,7 @@ export function CaseStudyContent({
 
 /**
  * CaseStudyHeader: the page's `<h1>`, one-line summary, outcomes strip,
- * label/value meta rows and optional wide cover. The largest type on the
+ * meta facts (label and value on a dotted leader) and optional wide cover. The largest type on the
  * page, so it always outranks the section titles below it.
  */
 export function CaseStudyHeader({
@@ -478,13 +478,17 @@ export function CaseStudyHeader({
         </div>
       )}
       {meta && meta.length > 0 && (
-        <dl
-          className={`m-0 mt-10 grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 border-t-hairline pt-6 sm:grid-cols-[auto_1fr_auto_1fr] ${RULE}`}
-        >
+        // One fact a line: label and value joined by a dotted leader, like a
+        // contents page. A long value wraps and stays flush right.
+        <dl className="m-0 mt-10 flex flex-col gap-2">
           {meta.map((it) => (
-            <div key={it.label} className="contents">
-              <dt className={`text-xs uppercase leading-5 tracking-wider ${LABEL_TEXT}`}>{it.label}</dt>
-              <dd className={`m-0 text-sm leading-5 ${BODY_TEXT}`}>{it.value}</dd>
+            <div key={it.label} className="flex items-baseline gap-3 text-sm">
+              <dt className={`flex-none text-xs uppercase tracking-wider ${LABEL_TEXT}`}>{it.label}</dt>
+              <span
+                aria-hidden="true"
+                className={`min-w-4 flex-1 border-b-hairline border-dotted ${RULE}`}
+              />
+              <dd className={`m-0 text-right leading-relaxed ${TITLE_TEXT}`}>{it.value}</dd>
             </div>
           ))}
         </dl>

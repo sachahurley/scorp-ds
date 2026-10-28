@@ -58,6 +58,10 @@ portfolio is the only consumer and migrates in the same change.
   was chosen; a `01 / 07` position count on the right was tried and dropped. Later
   (2026-10-28) the rule itself was dropped too: sections are now set apart by space
   alone (96px, 128px from `sm`), which read calmer than a rule every screen.
+- **Six meta layouts were tried** (2026-10-28: ruled label/value pairs, centred
+  columns, a byline, plates, a column beside the summary, dotted leaders). Dotted
+  leaders were chosen: one fact a line, label joined to value like a contents page,
+  replacing the ruled two-up grid.
 - **Add 36px as a t-shirt step.** It falls between `2xl` (24px) and `3xl` (48px) and
   renaming the scale would break every consumer, so the token is role-named.
 
