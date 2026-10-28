@@ -2,7 +2,6 @@
 
 > Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
 
-> **Proposed, not built yet.** Written ahead of the story so the composition can be reviewed with the component specs it depends on: [Composer](Composer.md), [Message](Message.md), [Transcript](Transcript.md), [CodeBlock](CodeBlock.md).
 
 ## Status
 
@@ -11,8 +10,8 @@
 | Pattern | `Patterns/ChatComposer` (story-only, not an exported component) |
 | Layer | `pattern` |
 | Category | `Patterns` |
-| File | `packages/storybook/stories/Patterns/ChatComposer.stories.tsx` (planned) |
-| Story | `Patterns/ChatComposer` (planned) |
+| File | `packages/storybook/stories/Patterns/ChatComposer.stories.tsx` |
+| Story | `Patterns/ChatComposer` |
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
@@ -37,16 +36,18 @@ The first consumer runs in **replay mode**: recorded sessions played back, with 
 
 | Building block | Role |
 |----------------|------|
-| Outer grid | Desktop (`lg`): two columns, chat pane `lg:w-96` fixed, canvas pane fills. Below `lg`: one pane at a time, switched by `Tabs` (Chat, Canvas). |
-| `Window` (chat pane) | `title="chat"`, `variant="active"` while the Composer has focus, `scroll={false}`. Body is a flex column. |
-| `Transcript` | `flex-1 min-h-0`, `width="full"` inside the narrow pane. Empty state is an `EmptyState` with starter prompts. |
-| `Message` | One per turn. Assistant turns hold text plus a short summary of what changed on the canvas. |
-| `Composer` | Pinned under the Transcript. In replay mode the field is filled by the replay and `helperText` says "Replaying a recorded session". |
-| `Window` (canvas pane) | `title` = the generated screen's name, `status` = node count. Body holds `Tabs`: Preview, Code, Spec. |
-| Preview tab | The rendered layout. |
-| Code tab | One `CodeBlock` per generated file, `framed={false}`. |
-| Spec tab | `DescriptionList` of the components used, and any system gaps the generation ran into. |
-| `StatusLine` | Under both panes. Left: mode segment (`REPLAY`, tone `info`). Center: session name. Right: components used, gaps found (tone `warning` when non-zero). |
+| Frame | `flex h-screen flex-col gap-3 p-4` on `--surface-page`: the panes above, the StatusLine below. |
+| Desktop (`Desktop` story, 1280) | The chat pane `w-96 shrink-0` beside the canvas pane `min-w-0 flex-1`, `gap-3`. |
+| Below `lg` (`Mobile` story, 375) | One pane at a time: `Tabs` with Chat and Canvas triggers above the panes. |
+| `Window` (chat pane) | `title="chat"`, `status="replay"`, `scroll={false}`, body `flex flex-col p-0`. |
+| `Transcript` | `width="full"`, `min-h-0 flex-1`, so only the transcript scrolls. |
+| `Message` | One per turn: a system "Replaying a recorded session.", the user prompt, the assistant reply with `meta="replayed"`. |
+| `Composer` | Pinned under the Transcript (`p-3 pt-0`). In replay it is `disabled`, with `helperText` "Replaying a recorded session. Typing is off." |
+| `Window` (canvas pane) | `title` = the generated screen's name, `status` = node count, `scroll={false}`. Body holds `Tabs`: Preview, Code, Spec. |
+| Preview tab | The rendered layout (here two `Card`s with `Switch`es and a destructive `Button`), centered `max-w-md`. |
+| Code tab | `CodeBlock`, `framed={false}`, with line numbers, titled with the file name. |
+| Spec tab | `DescriptionList`: components used, node count, gaps (a `Badge`). |
+| `StatusLine` | Left: `REPLAY` (tone `info`, `Play` icon). Center: the session name. Right: components used, and gaps (tone `success` at zero, `warning` above). |
 
 ---
 
@@ -109,5 +110,6 @@ Also needed: a `Stop` glyph in TuiIcon (with Composer), and syntax color roles a
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-10-28 | docs | Proposed pattern, written with the four Phase 1 component specs |
+| v1 | 2026-10-28 | added | `Patterns/ChatComposer` story: `Desktop` (1280) and `Mobile` (375), since the layout changes structure at `lg` |
 
 <!-- AUTO-END:changelog -->
