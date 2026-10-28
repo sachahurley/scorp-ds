@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "@scorp-ds/components": ["../components/src/index.ts"],
+      "@scorp-ds/tokens": ["../tokens/src/index.ts"],
+      "@scorp-ds/tui-art": ["../tui-art/src/index.ts"]
+    }
+  },
+  "include": ["stories/**/*.ts", "stories/**/*.tsx", "presets/**/*.ts", "presets/**/*.tsx", ".storybook/**/*.ts", ".storybook/**/*.tsx"]
+}

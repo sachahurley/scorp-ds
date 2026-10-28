@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-09-22 |
-| API hash | `9652c4fdf1980804` |
+| API hash | `7be2676b62244c82` |
 
 ---
 
@@ -68,6 +68,7 @@ Not applicable: the element is always the 1px clipped box.
 | `children` | `ReactNode` | none | Yes | Text or markup to announce. Keep it short and literal. |
 | `focusable` | `boolean` | `false` | No | Whether the content reveals itself when something inside it takes focus (skip links). |
 | `as` | `VisuallyHiddenElement` (`"span" \| "div" \| "p" \| "label" \| "legend" \| "li"`) | `"span"` | No | Element to render. |
+| `htmlFor` | `string` | none | No | With `as="label"`, the `id` of the control it labels. |
 | `className` | `string` | none | No | Extra classes, merged with `cn()` (tailwind-merge); mainly placement for the focusable variant. |
 | `ref` | `Ref<HTMLElement>` | none | No | Forwarded to the underlying element. |
 | `...rest` | native attributes of the chosen element | | No | Spread onto the element (`id` for `aria-labelledby` / `aria-describedby`, `htmlFor` on a `label`, `data-*`). |
@@ -109,7 +110,7 @@ Not applicable: the element is always the 1px clipped box.
 |----------------|---------|--------------|-------|
 | Hidden text | Yes | Yes | `Default` (a hidden line between two rules) |
 | Accessible name for an icon control | Yes | Yes | `IconButtonLabel` |
-| `focusable` skip link | Yes | Yes | `FocusableSkipLink` (tab into the frame to reveal it) |
+| `focusable` skip link | Yes | Yes | `FocusableSkipLink` (its play function tabs to the link, so the frame shows it revealed) |
 | `as="label"` | Yes | Yes | `AsLabel` (hidden label wired to a search field) |
 | Realistic composition | Yes | Yes | `TableActions` (repeated "Rerun" buttons disambiguated by hidden text) |
 

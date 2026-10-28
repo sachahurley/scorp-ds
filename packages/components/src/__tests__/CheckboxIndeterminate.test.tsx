@@ -18,7 +18,7 @@ describe("Checkbox indeterminate", () => {
 
   it("supports callback refs", () => {
     let node: HTMLInputElement | null = null;
-    render(<Checkbox aria-label="Row" indeterminate ref={(n) => (node = n)} />);
+    render(<Checkbox aria-label="Row" indeterminate ref={(n) => { node = n; }} />);
     expect(node).toBe(screen.getByRole("checkbox"));
   });
 

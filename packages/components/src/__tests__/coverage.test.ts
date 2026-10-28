@@ -6,10 +6,12 @@
  * list of what counts, so this test needs no registry of its own, and CI
  * already fails when the manifest is stale.
  *
- * "Shown" and "exercised" mean the file imports one of the entry's runtime
- * exports (a function or const, not a type): a story from
- * `@scorp-ds/components`, a test from anywhere. Matching on imports rather than
- * file names is what lets `Toast.test.tsx` cover `Toaster` and
+ * "Shown" means a story imports one of the entry's runtime exports (a function
+ * or const, not a type) from `@scorp-ds/components`. "Exercised" is stricter: a
+ * test must import the export **and** use it, rendering it as JSX (`<Name`) or
+ * calling it (`Name(`). An import alone proved nothing; a test could import a
+ * component for a type and never render it. Matching on use rather than file
+ * names is what lets `Toast.test.tsx` cover `Toaster` and
  * `FieldFocusStates.test.tsx` cover `Textarea`.
  *
  * Gaps that predate the rule are listed in `coverage-baseline.json`, each with
@@ -96,7 +98,20 @@ const storyImports = importedByAny(
   listFiles(resolve(root, 'packages/storybook/stories'), '.stories.tsx'),
   '@scorp-ds/components',
 );
-const testImports = importedByAny(
+/** Names a test both imports and uses: rendered as `<Name` or called as `Name(`. */
+function exercisedByAny(files: string[]): Set<string> {
+  const names = new Set<string>();
+  for (const file of files) {
+    const source = readFileSync(file, 'utf8');
+    for (const name of importedNames(source)) {
+      const escaped = name.replace(/[$]/g, '\\$');
+      if (new RegExp(`<${escaped}[\\s/>.]|\\b${escaped}\\(`).test(source)) names.add(name);
+    }
+  }
+  return names;
+}
+
+const testImports = exercisedByAny(
   readdirSync(resolve(root, 'packages/components/src/__tests__'))
     .filter((name) => /\.test\.tsx?$/.test(name))
     .map((name) => resolve(root, 'packages/components/src/__tests__', name)),

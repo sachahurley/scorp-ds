@@ -57,6 +57,7 @@ export const Default: Story = {
 export const Sticky: Story = {
   args: { brand, navigation: nav, actions: <ThemeToggle />, sticky: true },
   render: (args) => (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the scrolling canvas must be keyboard-focusable to demonstrate the sticky header
     <div className="h-96 overflow-auto bg-[var(--surface-page)]" tabIndex={0} aria-label="Scrolling page">
       <AppHeader {...args} />
       <div className="space-y-3 p-6 font-mono text-sm text-[var(--text-primary)]">

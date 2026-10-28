@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent } from '@storybook/test';
 import { Box, Button, Inline, Input, Stack, VisuallyHidden } from '@scorp-ds/components';
 
 const meta: Meta<typeof VisuallyHidden> = {
@@ -62,9 +63,15 @@ export const IconButtonLabel: Story = {
 
 /**
  * `focusable` reveals the content once something inside it takes focus, the
- * behaviour a skip link needs. Tab into the frame to see the link appear.
+ * behaviour a skip link needs. The play function tabs to it, so the frame shows
+ * the revealed link: without that it captured the hidden state, which looks
+ * like every other frame on this page.
  */
 export const FocusableSkipLink: Story = {
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
   render: () => (
     <Box border="hairline" padding="4" className="relative">
       <VisuallyHidden focusable className="focus-within:absolute focus-within:left-4 focus-within:top-4">

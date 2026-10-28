@@ -225,6 +225,7 @@ None.
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | Circle (`rounded-full`) broke the sharp-corner shape language | Plate ring recipe (stepped --plate-round), inset focus ring, square checked dot | Resolved |
+| 2026-10-28 | `aria-invalid` sits on each radio `<input>`. ARIA 1.2 does not support it on `role="radio"`; it belongs on the group (`radiogroup`, or the `fieldset`). Found by `jsx-a11y/role-supports-aria-props` | Line-level lint exception with this reason until a group component carries the invalid state | Open |
 | 2026-09-21 | 16px small circle below the 44px target; unlabeled radios ignored mouse clicks | 44px pseudo-element hit area at every size; control always wrapped in a label | Resolved |
 | 2026-09-22 | No `helperText` / `errorMessage` (unlike Checkbox) and no RadioGroup wrapper, so group errors are color only unless the consumer adds text; `label`, `error` and `onCheckedChange` lack JSDoc | Added `helperText` / `errorMessage` through `lib/field.tsx` (same plumbing as Checkbox) and JSDoc on every public prop | Resolved |
 | 2026-09-22 | Still no RadioGroup wrapper: a group-level error has to be rendered by the consumer under the fieldset | None yet | Open |

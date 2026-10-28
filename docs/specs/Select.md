@@ -237,6 +237,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | `error` was boolean only; no helper or error text | Added `helperText` and `errorMessage` on the trigger via aria-describedby and aria-invalid | Resolved |
+| 2026-10-28 | The custom trigger is a `<button>`, and ARIA 1.2 does not support `aria-invalid` on `role="button"`. The APG pattern for this control is a select-only combobox (`role="combobox"`), which does support it. Found by `jsx-a11y/role-supports-aria-props` | Line-level lint exception with this reason until the trigger moves to the combobox pattern | Open |
 | 2026-09-22 | Keyboard highlight is visual only (no `aria-activedescendant`, no `aria-controls`/labelled listbox) and `--surface-subtle` is nearly invisible against `--surface-card` in light mode | Option ids plus `aria-activedescendant` and `aria-controls` on the trigger, a labelled listbox, and the highlight moved to `--surface-muted` + `--accent` text | Resolved |
 | 2026-09-22 | Options are only parsed from direct `<option>` children: `<optgroup>`, fragments, or a static option mixed with a mapped array are dropped | Children are flattened through `Children.forEach` with fragments unwrapped and `<optgroup>` read (label and `disabled` inherited); groups render as labelled `role="group"` sections | Resolved |
 | 2026-09-22 | The hidden native `<select>` is still flat: it mirrors values, not `<optgroup>` structure. Submission is unaffected | None yet | Open |

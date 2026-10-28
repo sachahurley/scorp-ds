@@ -488,6 +488,72 @@ module.exports = {
       },
     },
 
+    "story-skip-visual-reason": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "A `skip-visual` tag removes a story from visual regression, so it must say why in a comment (decision 0012). Usually a timer or randomness.",
+        },
+        schema: [],
+        messages: {
+          reason:
+            "'skip-visual' needs a comment directly above or beside it saying why this story cannot render a stable frame (docs/decisions/0012). It is not a fix for a red visual run.",
+        },
+      },
+      create(context) {
+        const source = context.sourceCode || context.getSourceCode();
+        return {
+          Literal(node) {
+            if (node.value !== "skip-visual") return;
+            // The tags property: `tags: ['skip-visual']`. Look for a comment on it or the array.
+            const array = node.parent && node.parent.type === "ArrayExpression" ? node.parent : null;
+            const prop = array && array.parent && array.parent.type === "Property" ? array.parent : null;
+            const anchors = [node, array, prop].filter(Boolean);
+            const hasComment = anchors.some(
+              (n) => source.getCommentsBefore(n).length > 0 || source.getCommentsAfter(n).length > 0
+            );
+            if (!hasComment) context.report({ node, messageId: "reason" });
+          },
+        };
+      },
+    },
+
+    "story-interaction-needs-play": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "A story named for a state no prop can set (focus, hover, press, drag) must drive itself there with a play function, or visual regression captures the resting state (decision 0012).",
+        },
+        schema: [],
+        messages: {
+          play:
+            "Story '{{name}}' is named for an interaction state but has no `play` function, so its frame shows the resting state. Drive it there (focus: `await userEvent.tab()`), or rename it (docs/decisions/0012).",
+        },
+      },
+      create(context) {
+        const STATE = /(?:Focus|Focused|Hover|Hovered|Pressed|Dragging)(?:[A-Z]|$)/;
+        return {
+          ExportNamedDeclaration(node) {
+            const decl = node.declaration;
+            if (!decl || decl.type !== "VariableDeclaration") return;
+            for (const d of decl.declarations) {
+              if (!d.id || d.id.type !== "Identifier" || !STATE.test(d.id.name)) continue;
+              const init = d.init && (d.init.type === "TSSatisfiesExpression" || d.init.type === "TSAsExpression") ? d.init.expression : d.init;
+              if (!init || init.type !== "ObjectExpression") continue;
+              // A play function inherited through a spread (`...Primary`) does not count:
+              // the story that is about the state should say so itself.
+              const hasPlay = init.properties.some(
+                (p) => p.type === "Property" && p.key && (p.key.name || p.key.value) === "play"
+              );
+              if (!hasPlay) context.report({ node: d.id, messageId: "play", data: { name: d.id.name } });
+            }
+          },
+        };
+      },
+    },
+
     "no-element-focus-in-story": {
       meta: {
         type: "problem",
