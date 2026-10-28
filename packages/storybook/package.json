@@ -13,26 +13,26 @@
     "@scorp-ds/tui-art": "*"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "8.6.18",
-    "@storybook/addon-essentials": "8.6.18",
-    "@storybook/addon-interactions": "8.6.18",
-    "@storybook/addon-viewport": "8.6.18",
-    "@storybook/react": "8.6.18",
-    "@storybook/react-vite": "8.6.18",
-    "@storybook/test": "8.6.18",
-    "@storybook/test-runner": "^0.19.1",
+    "@storybook/addon-a11y": "8.6.19",
+    "@storybook/addon-essentials": "8.6.19",
+    "@storybook/addon-interactions": "8.6.19",
+    "@storybook/addon-viewport": "8.6.19",
+    "@storybook/react": "8.6.19",
+    "@storybook/react-vite": "8.6.19",
+    "@storybook/test": "8.6.19",
+    "@storybook/test-runner": "^0.26.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
-    "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.6.1",
     "axe-playwright": "^2.2.2",
-    "playwright": "^1.59.1",
-    "postcss": "^8.5.6",
+    "playwright": "^1.64.1",
+    "postcss": "^8.5.31",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "storybook": "8.6.18",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.9.3",
-    "vite": "^6.3.5"
+    "vite": "^6.4.5"
   }
 }
