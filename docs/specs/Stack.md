@@ -182,7 +182,7 @@ None.
 
 - Used by `Patterns/SettingsPanel` (nested `gap="6"` / `"3"` / `"4"`), `Patterns/WorkbenchSplit`, `Patterns/DenseListRow`, `Patterns/MusicPlayer` (queue, `gap="1"`) and the `Tabs` form-field story (`gap="3"`).
 - Inside `Card` bodies, Stack provides the vertical rhythm; the card provides the padding.
-- Components that own their margins (`CaseStudyBlocks`) should not be placed in a Stack with a gap.
+- Components that own their margins (`CaseStudyPage`, `CaseStudyContent`) should not be placed in a Stack with a gap.
 
 <!-- /HUMAN-SECTION:composition -->
 

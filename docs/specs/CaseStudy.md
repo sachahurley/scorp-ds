@@ -6,15 +6,15 @@
 
 | Field | Value |
 |-------|-------|
-| Component | `CaseStudyBlocks` (import from `@scorp-ds/components`) |
+| Component | `CaseStudyPage` (also `CaseStudyHeader`, `CaseStudySections`, `CaseStudyContent`; import from `@scorp-ds/components`) |
 | Layer | `component` |
 | Category | `Patterns` |
 | File | `packages/components/src/components/CaseStudy.tsx` |
-| Story | `Patterns/CaseStudyBlocks` (full page: `Screens/CaseStudyTemplate`) |
-| Version | `v1` |
+| Story | `Patterns/CaseStudy` (full pages: `Screens/CaseStudyTemplate`) |
+| Version | `v2` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `06b48a68c0922402` |
+| Last updated | 2026-10-27 |
+| API hash | `f429192bbc9f083f` |
 
 ---
 
@@ -22,7 +22,7 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-CaseStudyBlocks is the long-form section library upstreamed from the portfolio's case-study pages: you author a page as a typed `CaseStudyBlock[]` array and one renderer draws every section with consistent rhythm and tokens. It covers eleven block types (meta grid, headline, prose, image, image pair, box-drawing diagram, live slot, callouts, numbered insights, pull quote, titled list), with wide and full-bleed breakouts for figures. Every figure block renders the hatch placeholder until it is given real content, so a page can be laid out before its art exists and swapped one figure at a time. Use it for editorial, narrative pages such as case studies, write-ups and project pages. Don't use it for app UI or dashboards; compose those from components.
+CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. A page is a structured `CaseStudy`: a header every page must fill (a title and a one-line summary, plus outcomes, meta and a cover when there are any), then an ordered list of sections. Sections can be moved by moving them in the array and dropped with `hidden: true`; section and figure numbers are counted, never authored, so they close up on their own. Each content block has one shape per meaning, so a reader can tell steps from findings from pillars at a glance. Every figure renders the hatch placeholder until it has real content, so a page can be laid out before its art exists. Use it for editorial pages. Don't use it for app UI or dashboards; compose those from components.
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -32,31 +32,45 @@ CaseStudyBlocks is the long-form section library upstreamed from the portfolio's
 
 <!-- AUTO-START:anatomy -->
 
-`div.font-mono` wrapper (plus `className`) rendering each block in order. Block keys are array indexes.
+`CaseStudyPage` renders an `<article>`: `CaseStudyHeader`, then `CaseStudySections` (`mt-16`, `sm:mt-20`). Each visible section is a `<section id>` holding a header and a `CaseStudyContent`.
 
-### Variants (block `type`)
+### Header (`CaseStudyHeader`)
+
+| Part | Description |
+|------|-------------|
+| Title | `<h1>`, `text-2xl`, `sm:text-page-title` (36px), `text-primary`. Always the largest type on the page. |
+| Summary | `<p>`, `text-base`, `sm:text-lg`, body pair. Required. |
+| Outcomes | `<dl>` grid, 2 columns, then 2, 3 or 4 from `sm` by item count. Figure `text-2xl` accent, label `text-xs` label pair. The figure is visually first but the `dt` stays first in the DOM; figures hang from a shared top line. |
+| Meta | `<dl>` label / value rows (`text-xs` uppercase / `text-sm`), one pair per row, two pairs per row from `sm`, under a hairline rule. |
+| Cover | Optional figure, `wide` by default, no figure number. |
+
+### Section header
+
+A hairline rule (`surface-container-stroke`) above; beneath it the two-digit number (accent) and the kicker (uppercase, `text-xs`, label pair); then the `<h2>` title (`text-xl`, `sm:text-2xl`) and an optional intro (`text-base`). Sections are spaced `mt-16` (`sm:mt-20`).
+
+### Content blocks (`type`)
 
 | Enum Value | Description |
 |-----------|-------------|
-| `meta` | `<dl>` auto-fit grid (min 130px columns) of label / value pairs. Labels `text-xs uppercase` tracked; values `text-sm`. `mb-11`. |
-| `headline` | `<header>` with optional `kicker` (`text-xs`, first letter uppercased), `<h2>` `title` (`text-xl`), optional `text` (`text-base`). `mt-16` (`sm:mt-24`), none when first. |
-| `prose` | `<p>` `text-base leading-relaxed`, `my-7`. |
-| `image` | `<figure>` on the plate ring, `aspect` (default `"16 / 9"`), optional `caption`, optional `width` breakout. Renders `src` as an `<img>` (`object-fit: cover`) when given one, the hatch placeholder otherwise. |
-| `imagePair` | Two 4:3 figures, 1 column then 2 from `sm`, optional `captions` tuple, `srcs` / `alts` tuples and `width` breakout. Either side falls back to the placeholder independently. |
-| `ascii` | `<pre>` box-drawing diagram inside the figure ring, `text-xs`, `overflow-x-auto`. Stays live text rather than an image, so it is selectable and retints with the theme. `role="img"` with `label` (falling back to `caption`) carries the meaning. Generate the string with `@scorp-ds/tui-art`. |
-| `slot` | A live region the page fills via the `slots` prop, keyed by `name`: a component specimen, a chart, an embed. Falls back to the hatch placeholder (at `aspect`) when the name has no entry. |
-| `callouts` | Auto-fit grid (min 160px) of title + blurb; `grid-template-rows: subgrid` keeps every body on one line however titles wrap. |
-| `insights` | `<ol>` of title + blurb with accent two-digit numerals (`01`, `02`, ...). |
-| `quote` | `<figure>` with an accent `“` glyph (`text-3xl`, `aria-hidden`), `<blockquote>` (`text-lg`), optional `<figcaption>` with `Avatar` (`md`), `name` and `role`. |
-| `list` | `<ul>` of stacked title + blurb items. |
+| `prose` | `<p>` `text-base leading-relaxed`, `my-6`. |
+| `image` | `<figure>` on the plate ring, `aspect` (default `"16 / 9"`), numbered caption, optional `width` breakout. `src` renders an `<img>` (`object-fit: cover`); without it, the hatch placeholder. |
+| `imagePair` | Two 4:3 figures, 1 column then 2 from `sm`, each numbered; `srcs` / `alts` / `captions` tuples; optional `width`. |
+| `ascii` | `<pre>` box-drawing diagram inside the figure ring, `role="img"` with `label` (falling back to `caption`). Type is `text-xs`, stepping down until the longest line fits the figure (shrink to fit, so phones see the whole diagram); `overflow-x-auto` remains the fallback. |
+| `slot` | A live region filled from the `slots` prop by `name`; the hatch placeholder (at `aspect`) when empty. Numbered like a figure. |
+| `list` | Steps, flows or principles. A tree drawn with hairline rules: a trunk from the first branch to the last, each branch on the midline of its title's first line. Title over text at every width. |
+| `insights` | Findings. `<ol>` with ruled rows, a `text-2xl` accent numeral column, `text-lg` title, `text-sm` text. |
+| `callouts` | Pillars or options. Cards on `surface-muted` (`plate-round`, `p-5`). Three items break out `wide` and sit three up from `sm`; any other count sits two up in the column. |
+| `quote` | A testimonial. `<blockquote>` `text-lg` on a hairline accent rule (`pl-6`); optional `Avatar` (`md`), `name`, `role`. |
+| `statement` | A thesis or challenge. `text-2xl` between hairline rules, `py-10`, broken out `wide`; optional accent kicker. |
+| `outcomes` | Result figures inside a section, the same layout as the header's outcomes. |
 
 ### Sizes (figure `width`)
 
 | Enum Value | Description |
 |-----------|-------------|
 | (unset) | Column width. |
-| `wide` | `min(100% + 240px, 100cqw - 48px)`, centered: about 120px past the column on each side. |
-| `full` | `100cqw - 48px`, centered: runs to the container margins. |
+| `wide` | `max(100%, min(100% + 240px, 100cqw - 48px))`, centred: about 120px past the column each side, never narrower than the column. |
+| `full` | `max(100%, 100cqw - 48px)`, centred: runs to the container margins. |
 
 Breakouts size against the nearest `container-type: inline-size` ancestor (`100cqw`), falling back to the viewport.
 
@@ -68,30 +82,53 @@ Breakouts size against the nearest `container-type: inline-size` ancestor (`100c
 
 <!-- AUTO-START:properties -->
 
+### `CaseStudyPage`
+
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `blocks` | `CaseStudyBlock[]` | none | Yes | The page's sections in order. |
-| `className` | `string` | `""` | No | Classes on the wrapper (for example a column width). |
+| `study` | `CaseStudy` | none | Yes | The page. |
+| `slots` | `CaseStudySlots` | none | No | Live content for `slot` blocks, keyed by name. |
+| `className` | `string` | `""` | No | Classes on the `<article>` (for example a column width). |
 
-### `CaseStudyBlock` union
+`CaseStudyHeader` takes `study` (the header fields only) and `className`. `CaseStudySections` takes `sections`, `slots` and `className`. `CaseStudyContent` takes `blocks`, `slots`, `figureStart` (default `1`) and `className`.
+
+### `CaseStudy`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `title` | `string` | Yes | The page's `h1`. |
+| `summary` | `string` | Yes | One line: what this was and what it achieved. |
+| `outcomes` | `CaseStudyOutcome[]` | No | `{ value, label }` result figures. |
+| `meta` | `{ label: string; value: string }[]` | No | Role, timeline, stack and similar. |
+| `cover` | `CaseStudyFigure` | No | A figure under the header. |
+| `sections` | `CaseStudySection[]` | Yes | In reading order. |
+
+### `CaseStudySection`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `kicker` | `string` | Yes | Short name shown under the rule. |
+| `title` | `string` | Yes | The section's `h2`. |
+| `intro` | `string` | No | Lead paragraph under the title. |
+| `blocks` | `CaseStudyContentBlock[]` | No | Content, in order. |
+| `hidden` | `boolean` | No | Leaves the section out, and out of the numbering. |
+| `id` | `string` | No | Anchor id; defaults to the kicker, slugified. |
+
+### `CaseStudyContentBlock` union
 
 | `type` | Fields |
 |--------|--------|
-| `meta` | `items: { label: string; value: string }[]` |
-| `headline` | `kicker?: string; title: string; text?: string` |
 | `prose` | `text: string` |
-| `image` | `aspect?: string; caption?: string; width?: "wide" \| "full"; src?: string; alt?: string` |
-| `imagePair` | `captions?: [string, string]; width?: "wide" \| "full"; srcs?: [string \| undefined, string \| undefined]; alts?: [string \| undefined, string \| undefined]` |
-| `ascii` | `text: string; caption?: string; width?: "wide" \| "full"; label?: string` |
-| `slot` | `name: string; caption?: string; width?: "wide" \| "full"; aspect?: string` |
-| `callouts` | `items: { title: string; text: string }[]` |
-| `insights` | `items: { title: string; text: string }[]` |
-| `quote` | `text: string; name?: string; role?: string; image?: string` |
-| `list` | `items: { title: string; text: string }[]` |
+| `image` | `src?; alt?; aspect?; caption?; width?: "wide" \| "full"` |
+| `imagePair` | `captions?: [string, string]; width?; srcs?: [string \| undefined, string \| undefined]; alts?: [...]` |
+| `ascii` | `text: string; caption?; width?; label?` |
+| `slot` | `name: string; caption?; width?; aspect?` |
+| `list` / `insights` / `callouts` | `items: { title: string; text: string }[]` |
+| `quote` | `text: string; name?; role?; image?` |
+| `statement` | `text: string; kicker?` |
+| `outcomes` | `items: { value: string; label: string }[]` |
 
-All text fields are plain strings (no inline markup). Item keys use `label` / `title`, so they must be unique within a block.
-
-`CaseStudyBlocks` itself takes `blocks`, an optional `className`, and an optional `slots: CaseStudySlots` (`Record<string, ReactNode>`) supplying content for `slot` blocks. `slots` is the escape hatch for pages that need a live component inside the narrative; this library stays editorial and does not take on app-UI concerns.
+All text fields are plain strings (no inline markup). Item `title` / `label` values are React keys, so they must be unique within a block; section kickers (or `id`s) must be unique within a page.
 
 <!-- AUTO-END:properties -->
 
@@ -103,14 +140,18 @@ All text fields are plain strings (no inline markup). Item keys use `label` / `t
 
 | Token | Category | Resolved Value | Usage |
 |-------|----------|---------------|-------|
-| `--plate-round` (`plate-round`) | Shape | stepped 6px corner polygon | Placeholder ring and fill |
-| `--border-hairline` | Color | light `#F0EBE4`, dark `#2B2718` | Placeholder ring (outer layer, `p-px`) |
-| `--surface-subtle` / `--surface-muted` | Color | light `#FCFBFA` / `#F7F5F2`, dark `#1A150F` / `#221E13` | 45deg hatch stripes |
-| `--accent` | Color | light `#B45309`, dark `#E0A26A` | Insight numerals, quote glyph |
-| `--text-primary` | Color | light `#2B2718`, dark `#FDFCFB` | Titles, quote text, attribution name |
-| `secondary-700` / `secondary-600` | Color | `#695F4D` light / `#968A75` dark | Labels, kickers, captions, role |
+| `--font-size-page-title` (`text-page-title`) | Typography | `36px` | Page title from `sm` |
+| `text-xs` to `text-2xl` | Typography | `12px` to `24px` | Block type scale |
+| `--text-primary` | Color | light `#2B2718`, dark `#FDFCFB` | Titles, quote and statement text |
+| `--accent` | Color | light `#B45309`, dark `#E0A26A` | Section numbers, figure numbers, numerals, outcome figures, quote rule, statement kicker |
+| `secondary-700` / `secondary-600` | Color | `#695F4D` light / `#968A75` dark | Labels, kickers, captions, roles |
 | `secondary-800` / `secondary-500` | Color | `#474030` light / `#BFB4A3` dark | Body text |
-| `text-xs` to `text-3xl` | Typography | `12px` to `48px` | Block type scale |
+| `--surface-container-stroke` | Color | light `#BFB4A3`, dark `#474030` | Section, meta, insight and statement rules; list tree |
+| `--surface-muted` | Color | light `#F7F5F2`, dark `#221E13` | Callout cards, hatch stripes |
+| `--surface-subtle` | Color | light `#FCFBFA`, dark `#1A150F` | Hatch stripes |
+| `--border-hairline` | Color | light `#F0EBE4`, dark `#2B2718` | Figure ring |
+| `--border-width-hairline` (`border-*-hairline`) | Border | `1px` | Every rule |
+| `--plate-round` (`plate-round`) | Shape | stepped corner polygon | Figures, cards |
 
 <!-- AUTO-END:tokens -->
 
@@ -122,11 +163,12 @@ All text fields are plain strings (no inline markup). Item keys use `label` / `t
 
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Block type | `type` | See Variants |
-| Breakout | `width` on `image` / `imagePair` / `ascii` / `slot` | Layout only |
-| Figure content | `src` on `image` / `imagePair`, a filled `slots` entry for `slot` | Real content replaces the hatch |
-| First headline | `:first-child` | Top margin removed |
+| Block type | `type` | See Anatomy |
+| Breakout | `width` on `image` / `imagePair` / `ascii` / `slot`; automatic on three `callouts` and on `statement` | Layout only |
+| Figure content | `src`, `srcs`, or a filled `slots` entry | Real content replaces the hatch |
+| Hidden section | `hidden: true` | Section and its figures removed; numbering closes up |
 | Quote attribution | `name` present | Adds `Avatar` + name / role |
+| Viewport below `sm` | Media query | Title `2xl`, section titles `xl`, summary `base`, outcomes two up, meta one pair per row, image pairs stacked |
 
 <!-- AUTO-END:states -->
 
@@ -138,22 +180,25 @@ All text fields are plain strings (no inline markup). Item keys use `label` / `t
 
 | State / Variant | In Code | In Storybook | Notes |
 |----------------|---------|--------------|-------|
-| meta | Yes | Yes | `MetaGrid` |
-| headline + prose | Yes | Yes | `Headline` |
-| image + imagePair (placeholder) | Yes | Yes | `Figures` |
-| image + imagePair (real `src`) | Yes | Yes | `RealArtwork`, using an inline data URI so the test-runner needs no network |
+| Header | Yes | Yes | `Header`, `HeaderMobile` |
+| Section headers | Yes | Yes | `Sections` |
+| Reorder and hide | Yes | Yes | `ReorderAndHide` |
+| prose | Yes | Yes | `Prose` |
+| image + imagePair (placeholder) | Yes | Yes | `Figures`, `FiguresStacked` |
+| image + imagePair (real `src`) | Yes | Yes | `RealArtwork`, inline data URI art |
 | ascii | Yes | Yes | `AsciiDiagram` |
 | slot (filled and empty) | Yes | Yes | `Slots` |
-| callouts | Yes | Yes | `Callouts` |
+| list | Yes | Yes | `List` |
 | insights | Yes | Yes | `Insights` |
+| callouts (three wide, two in column) | Yes | Yes | `Callouts` |
 | quote (bare and attributed) | Yes | Yes | `Quote` |
-| list | Yes | Yes | `DefinitionList` |
-| `wide` / `full` breakouts | Yes | Yes | `Screens/CaseStudyTemplate` only (page-level `container-type: inline-size`); not in the Patterns stories |
-| Full page composition | n/a | Yes | `Screens/CaseStudyTemplate`, blocks from `packages/storybook/presets/caseStudy.ts` |
+| statement | Yes | Yes | `Statement` |
+| outcomes | Yes | Yes | `Outcomes` |
+| Full pages | n/a | Yes | `Screens/CaseStudyTemplate`: `Case study template`, `Scorp DS`, from `packages/storybook/presets/caseStudy.ts` |
 
-Interactive controls: none (stories pass fixed `blocks` arrays).
+Interactive controls: none (stories pass fixed data).
 
-**Coverage:** 100% (8/8)
+**Coverage:** 100% (14/14)
 
 <!-- AUTO-END:storybook -->
 
@@ -164,9 +209,8 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 <!-- AUTO-START:hardcoded -->
 
 - Hatch stripe stops `8px` / `16px` (inline `repeating-linear-gradient`).
-- Breakout math `240px` and `48px`; grid minimums `130px` (meta) and `160px` (callouts).
-- `tracking-[0.08em]` on meta labels.
-- Off-scale spacing steps `my-11` (44px), `mb-7` / `my-7` / `gap-y-7` (28px), `gap-3.5` (14px), `gap-y-1.5` (6px): Tailwind values not in the spacing token scale.
+- Breakout math `240px` and `48px`.
+- `MONO_ADVANCE` `0.62`: Fragment Mono's measured advance width (0.618em), used to shrink `ascii` diagrams to fit.
 - Label and body colors use secondary scale steps chosen as AA theme pairs rather than semantic text tokens.
 
 <!-- AUTO-END:hardcoded -->
@@ -183,8 +227,8 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 
 ### Foundation Files Referenced
 
-- `packages/tokens/src/styles/tokens.css` (plate, border, surface, accent, text tokens)
-- `packages/tokens/tailwind.preset.js` (`plate-round` utility)
+- `packages/tokens/src/styles/tokens.css` (plate, border, surface, accent, text, font-size tokens)
+- `packages/tokens/tailwind.preset.js` (`plate-round`, `border-*-hairline`, `text-page-title`)
 
 <!-- AUTO-END:dependencies -->
 
@@ -194,14 +238,13 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic role: real document structure: `<dl>` (meta), `<header>` + `<h2>` (headline), `<ol>` (insights), `<ul>` (list), `<figure>` / `<figcaption>` / `<blockquote>` (figures, quotes).
-- Required labels: none. Headline titles are `<h2>`, so the page needs its own `<h1>` above the blocks.
+- Semantic structure: `<article>`; the title is the page's `<h1>`; each section is a `<section id>` with an `<h2>`; `<dl>` (outcomes, meta), `<ol>` (insights), `<ul>` (list), `<figure>` / `<figcaption>` / `<blockquote>`.
+- Outcomes keep `dt` before `dd` in the DOM and reorder visually, so screen readers hear the label with its figure.
 - Focus order: no interactive elements.
-- Touch target minimum: n/a.
-- Color independence: accent numerals are paired with their titles; placeholders are decorative (no alt text, since there is no image).
-- Images: `alt` defaults to `""`, marking the image decorative, because a captioned figure already names itself. Pass `alt` only when the picture carries meaning the caption does not.
-- Diagrams: `ascii` blocks are `role="img"` with an `aria-label`, because box-drawing characters read as noise when announced one by one.
-- Decorative content: the quote glyph is `aria-hidden`; the attribution `Avatar` has `alt=""` because the name is adjacent text.
+- Color independence: numbers and accent rules are paired with text; rules are decorative (`aria-hidden` where they are separate elements).
+- Images: `alt` defaults to `""` (decorative), because a captioned figure already names itself. Pass `alt` only when the picture carries meaning the caption does not.
+- Diagrams: `ascii` blocks are `role="img"` with an `aria-label`, because box-drawing characters read as noise.
+- The page renders its own `<h1>`; do not add another above it.
 
 <!-- AUTO-END:accessibility -->
 
@@ -211,13 +254,16 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 
 <!-- HUMAN-SECTION:do-dont (preserved across auto-updates) -->
 
-- Do author content as data (`CaseStudyBlock[]`) and keep layout decisions in the renderer.
-- Do put `container-type: inline-size` on the page-width ancestor, outside the text column, when you use `wide` or `full` breakouts (as `Screens/CaseStudyTemplate` does).
-- Do start the page with your own `<h1>`; blocks begin at `<h2>`.
-- Do constrain the wrapper to a reading column (the stories use `max-w-2xl`).
+- Do author pages as data (`CaseStudy`) and keep layout decisions in the renderer.
+- Do write the summary as the one sentence a reader keeps if they stop there.
+- Do pick blocks by meaning: `list` for steps and principles, `insights` for findings, `callouts` for pillars or options, `quote` for something a person said, `statement` for the thesis, `outcomes` for results.
+- Do put `container-type: inline-size` on a page-width ancestor, outside the reading column, when you use breakouts.
+- Do constrain the page to a reading column (the stories use `max-w-2xl`).
+- Don't type section or figure numbers into titles or captions; they are counted.
+- Don't delete a section you may want back; set `hidden: true`.
+- Don't add a second `<h1>` above `CaseStudyPage`.
 - Don't use these blocks for app screens, settings or dashboards.
-- Don't repeat titles inside one `callouts`, `insights` or `list` block; they are used as React keys.
-- Don't expect real images yet: `image` and `imagePair` render hatched placeholders only.
+- Don't repeat item titles inside one block, or kickers inside one page; they are keys and anchors.
 
 <!-- /HUMAN-SECTION:do-dont -->
 
@@ -227,9 +273,11 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 
 <!-- HUMAN-SECTION:composition (preserved across auto-updates) -->
 
-- Typical order: `meta` first, then repeating `headline` sections, each followed by one supporting block (`callouts`, an `image`, a `list`, an `imagePair`, `insights` or a `quote`). `Screens/CaseStudyTemplate` (blocks in `packages/storybook/presets/caseStudy.ts`) is the canonical page.
+- Typical order: overview (intro and a hero figure), the problem, the approach or system, research or exploration, insights, decisions, outcomes, reflection. `Screens/CaseStudyTemplate` is the canonical page.
+- One or two supporting blocks per section; a section can be title and intro alone.
+- Keep callout and list blurbs to about 25 words, and item titles to about four words.
 - Blocks own their vertical margins; do not wrap them in a `Stack` with a gap.
-- Place the renderer inside the page shell; it has no background and inherits `surface-page`.
+- Place the page inside the app shell; it has no background and inherits `surface-page`.
 
 <!-- /HUMAN-SECTION:composition -->
 
@@ -241,9 +289,10 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | `image` / `imagePair` have no `src` field: they only render placeholders | None yet | open |
-| 2026-09-22 | The `list` block is described as a definition list but renders a `<ul>`; several off-scale spacing values and raw px in breakout math | None yet | open |
-| 2026-09-22 | No unit tests for CaseStudyBlocks | None yet | open |
+| 2026-09-22 | `image` / `imagePair` have no `src` field | `src` / `srcs` added | resolved |
+| 2026-09-22 | No unit tests | `CaseStudy.test.tsx` | resolved |
+| 2026-09-22 | Off-scale spacing values (`my-11`, `my-7`, `gap-3.5`) | v2 uses scale steps only | resolved |
+| 2026-10-27 | Wide `ascii` diagrams scroll sideways on phones | Shrink to fit from `text-xs` | resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -255,6 +304,7 @@ Interactive controls: none (stories pass fixed `blocks` arrays).
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| v2 | 2026-10-27 | breaking | `CaseStudyBlocks` replaced by `CaseStudyPage`: structured header and ordered, hideable sections; counted section and figure numbers; new `statement` and `outcomes` blocks; redesigned list, insights, callouts and quote; `font.size.pageTitle`. See decision 0014. |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 
 <!-- AUTO-END:changelog -->
