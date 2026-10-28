@@ -3,29 +3,35 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { Input } from "../components/Input";
 import { Textarea } from "../components/Textarea";
 
-const INSET_RING = "focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-primary)]";
-const INSET_RING_ERROR = "focus-visible:[box-shadow:inset_0_0_0_var(--focus-ring-width)_var(--focus-ring-error)]";
+// Field focus is a colour change on the 1px ring only (docs/decisions/0022).
+// No inset ring, so the field does not read as thicker when focused.
+const FOCUS_RING = "focus-within:!bg-[var(--field-border-focus)]";
 
 describe("Input and Textarea focus and disabled states", () => {
   afterEach(() => cleanup());
 
-  it("Input draws the system's 2px inset focus ring", () => {
+  it("Input shows focus as a ring colour change, with no inset ring", () => {
     render(<Input aria-label="Email" />);
-    expect(screen.getByRole("textbox").className).toContain(INSET_RING);
+    const el = screen.getByRole("textbox");
+    expect(el.parentElement?.className).toContain(FOCUS_RING);
+    expect(el.className).not.toContain("box-shadow");
   });
 
-  it("Input keeps a visible focus ring in the error state", () => {
+  it("Input still shows focus in the error state: focus wins over error", () => {
     render(<Input aria-label="Email" error />);
     const el = screen.getByRole("textbox");
-    expect(el.className).toContain(INSET_RING_ERROR);
     expect(el.parentElement?.className).toContain("--field-border-error");
+    expect(el.parentElement?.className).toContain(FOCUS_RING);
+    expect(el.className).not.toContain("box-shadow");
   });
 
-  it("Textarea draws the same inset ring, error included", () => {
+  it("Textarea uses the same colour-only focus, error included", () => {
     const { rerender } = render(<Textarea aria-label="Notes" />);
-    expect(screen.getByRole("textbox").className).toContain(INSET_RING);
+    expect(screen.getByRole("textbox").parentElement?.className).toContain(FOCUS_RING);
+    expect(screen.getByRole("textbox").className).not.toContain("box-shadow");
     rerender(<Textarea aria-label="Notes" error />);
-    expect(screen.getByRole("textbox").className).toContain(INSET_RING_ERROR);
+    expect(screen.getByRole("textbox").parentElement?.className).toContain(FOCUS_RING);
+    expect(screen.getByRole("textbox").className).not.toContain("box-shadow");
   });
 
   it("Input dims the ring wrapper when disabled, not just the fill", () => {
@@ -42,9 +48,11 @@ describe("Input and Textarea focus and disabled states", () => {
     expect(el.className).not.toContain("disabled:opacity-50");
   });
 
-  it("the quiet Input thickens its underline on focus instead of the plate ring", () => {
-    render(<Input variant="quiet" aria-label="Passphrase" />);
-    const el = screen.getByRole("textbox");
-    expect(el.className).toContain("focus-visible:[box-shadow:inset_0_calc(-1*var(--focus-ring-width))_0_0_var(--focus-ring-primary)]");
+  it("the quiet Input recolours its underline on focus without thickening it", () => {
+    const { rerender } = render(<Input variant="quiet" aria-label="Passphrase" />);
+    expect(screen.getByRole("textbox").className).toContain("focus:!border-[var(--field-border-focus)]");
+    expect(screen.getByRole("textbox").className).not.toContain("box-shadow");
+    rerender(<Input variant="quiet" aria-label="Passphrase" error />);
+    expect(screen.getByRole("textbox").className).toContain("focus:!border-[var(--field-border-focus)]");
   });
 });

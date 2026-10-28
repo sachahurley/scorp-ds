@@ -32,3 +32,4 @@ Start from `0000-template.md`. Number sequentially.
 | [0019](0019-main-health-is-one-issue.md) | The health of `main` is one GitHub issue | `main-health.yml`, issues |
 | [0020](0020-baselines-refresh-by-commit-tag.md) | Visual baselines are refreshed by a commit tag | Visual regression, every rendered change |
 | [0021](0021-consumers-are-built-before-merge.md) | Consumers are built against a change before it merges | `check-consumers.mjs`, API changes |
+| [0022](0022-field-focus-is-a-colour-change.md) | Text-field focus is a colour change, not an inset ring | `Input`, `Textarea` |
