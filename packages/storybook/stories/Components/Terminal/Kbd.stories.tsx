@@ -25,7 +25,7 @@ type Story = StoryObj<typeof Kbd>;
 
 /** A single key. */
 export const Default: Story = {
-  args: { children: 'Esc' },
+  args: { children: 'Tab' },
 };
 
 /** A key combo with the visible separator. */
