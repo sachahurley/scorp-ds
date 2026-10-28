@@ -2,8 +2,16 @@
 #
 # Baselines are platform-specific: font rasterisation differs between macOS and
 # Linux, so a baseline captured on a laptop will never match here. They are
-# generated and compared ONLY in this container. To (re)create them, run this
-# workflow manually with `update` set to true and commit the result.
+# generated and compared ONLY in this container.
+#
+# Two ways to refresh them (decision 0020):
+# - Put [update-baselines] in the message of a pull request's latest commit.
+#   This job then rewrites the frames that changed, commits them to the branch,
+#   and re-runs the required checks on that commit. Review the PNGs in the
+#   pull request's "Files changed" tab; GitHub shows before and after.
+# - Run this workflow by hand with `update` (and `force` for a Chromium or
+#   runner upgrade). That uploads the baselines as an artifact to commit by
+#   hand, which is the only route for a branch with no pull request.
 name: Visual regression
 
 on:
@@ -23,10 +31,36 @@ jobs:
   visual:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # write: only for a refresh, to push the new baselines and dispatch the
+    # checks. A pull request from a fork gets a read-only token regardless,
+    # and the refresh step skips it.
+    permissions:
+      contents: write
+      actions: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Is this a baseline refresh?
+        id: mode
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          SAME_REPO: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        run: |
+          refresh=false
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ "$SAME_REPO" = "true" ]; then
+            message=$(gh api "repos/$GITHUB_REPOSITORY/commits/$HEAD_SHA" --jq .commit.message)
+            case "$message" in *"[update-baselines]"*) refresh=true ;; esac
+          fi
+          echo "refresh=$refresh" >> "$GITHUB_OUTPUT"
+          echo "Baseline refresh: $refresh"
 
-      - uses: actions/setup-node@v4
+      # A refresh renders the branch itself, not the merge with main that a
+      # pull_request run checks out by default, so the baselines it commits
+      # are the branch's own frames.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ steps.mode.outputs.refresh == 'true' && github.head_ref || '' }}
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '20'
           cache: 'npm'
@@ -41,12 +75,12 @@ jobs:
         run: npm run build-storybook --workspace=@scorp-ds/storybook
 
       - name: Compare against baselines
-        if: ${{ github.event.inputs.update != 'true' }}
+        if: ${{ github.event.inputs.update != 'true' && steps.mode.outputs.refresh != 'true' }}
         run: node scripts/visual-regression.mjs
 
       - name: Upload diffs
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: visual-diffs
           path: packages/storybook/visual-diffs/
@@ -61,7 +95,40 @@ jobs:
 
       - name: Upload new baselines
         if: ${{ github.event.inputs.update == 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: visual-baselines
           path: packages/storybook/visual-baselines/
+
+      # [update-baselines]: rewrite what changed, commit it to the branch, then
+      # run the required checks on the new commit. A push made with the default
+      # token starts no workflows, which would leave the pull request waiting on
+      # checks that never report; a workflow_dispatch is the one event that
+      # token is allowed to start. Aura DS's goldens bot skipped this step and
+      # needed a hand-made empty commit after every refresh.
+      - name: Refresh baselines and commit them
+        if: ${{ steps.mode.outputs.refresh == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          node scripts/visual-regression.mjs --update
+          git add packages/storybook/visual-baselines
+          if git diff --cached --quiet; then
+            echo "Every frame already matches its baseline; nothing to commit." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          changed=$(git diff --cached --name-only | wc -l | tr -d ' ')
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Refresh $changed visual baseline(s) on Linux" \
+            -m "Written by the Visual regression workflow on request from the commit before this one. Review the images before merging."
+          git push origin "HEAD:$BRANCH"
+          for workflow in ci.yml storybook-a11y.yml visual-regression.yml; do
+            gh workflow run "$workflow" --ref "$BRANCH"
+          done
+          {
+            echo "Committed $changed baseline(s) to \`$BRANCH\` and re-ran the required checks on it:"
+            echo
+            git show --name-only --format= HEAD | sed 's/^/- /'
+          } >> "$GITHUB_STEP_SUMMARY"

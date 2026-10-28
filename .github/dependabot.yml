@@ -1,0 +1,45 @@
+# Keeps dependencies and the pinned GitHub Actions current. See
+# docs/decisions/0018-pin-actions-and-let-dependabot-move-them.md.
+#
+# Every update arrives as a pull request and has to pass the three required
+# checks (decision 0015), so nothing here can land a change on its own.
+version: 2
+
+updates:
+  # Workflows pin each action to a commit SHA with the tag in a comment.
+  # Dependabot updates both, which is what makes pinning cheap to keep.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: 'chore(actions)'
+
+  # One lockfile at the root covers every workspace package.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # Storybook packages move together: @storybook/test-runner must match the
+      # Storybook major (CLAUDE.md), and mixed minors break the build.
+      storybook:
+        patterns: ['storybook', '@storybook/*']
+      runtime:
+        dependency-type: production
+      tooling:
+        dependency-type: development
+    # Majors are migrations, not maintenance: Storybook 8 to 9 or React 18 to 19
+    # changes code, and each gets its own deliberate PR. A vulnerability whose
+    # only fix is a major still shows up as a Dependabot alert.
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+    commit-message:
+      prefix: 'chore(deps)'
