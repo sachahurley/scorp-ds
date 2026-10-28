@@ -61,11 +61,11 @@ export const AllSizes: Story = {
 };
 
 /**
- * Keyboard focus. Covers the plate-ring mechanism on a multi-line field.
+ * Keyboard focus. Covers the plate-ring mechanism on a multi-line field: the ring
+ * turns --field-border-focus and nothing else (docs/decisions/0022).
  *
- * Tab rather than `.focus()`: the recipe is `focus-visible`, which does not match
- * programmatic focus, so a story focusing the control in JS would render no ring
- * at all and still look like passing coverage.
+ * Tab rather than `.focus()`, as every focus story does: it is the path a keyboard
+ * user takes, and it keeps the story honest if the recipe moves to `focus-visible`.
  */
 export const Focus: Story = {
   ...Default,
