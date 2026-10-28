@@ -24,6 +24,8 @@
 
 Shows task progress. Determinate with `value` / `max`, indeterminate when `value` is omitted. TUI rendering: a hairline-ringed sharp track filled with discrete blocks on the 2px grid (20 blocks = 5% steps, filled with floor so the bar is only full at completion). Indeterminate is a 4-block run that hops one block per duration.fast tick; under prefers-reduced-motion it holds still as a dimmed full track.
 
+Don't use this for: a measured value in a known range that is not heading toward completion, such as disk used or a quota (use Meter instead), or a short wait inline or inside a button (use Spinner, or `<Button loading>`, instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

@@ -47,3 +47,11 @@ the other fails the test **and names the offender**.
 - The comments in `tokens.css` are **part of the system's memory**, not decoration. They
   should be extended, not stripped.
 - Any future "let's just generate this" proposal should be answered with this record.
+
+## Amendment 2026-10-28
+
+`tokens.css` does contain one generated block: the `Scorp Symbols` `@font-face` between
+`/* SCORP-SYMBOLS:START ... */` and `/* SCORP-SYMBOLS:END */`, written by
+`packages/tokens/scripts/build-scorp-symbols.py`. It is a glyph font, not tokens, and is not
+derived from `tokens.json`, so the decision above is unchanged: every token is still written
+by hand in both files.

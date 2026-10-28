@@ -24,6 +24,8 @@
 
 Avatar is a square plate that represents a person or entity in profiles, comments, identity headers, and team lists. It shows an image when one loads, otherwise initials, otherwise a custom icon, and finally an `@` glyph, so it always renders something. An optional status dot marks presence (online, offline, away). It is display only; wrap it in a link or button when it should navigate.
 
+Don't use this for: a generic icon (use TuiIcon instead) or a status shown on its own (use Badge instead, which pairs the colour with text).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

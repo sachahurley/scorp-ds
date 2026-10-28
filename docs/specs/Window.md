@@ -33,6 +33,8 @@ are CSS only (no tui-art import, per the dependency layering).
 ChevronRight marker before the title, so focus is never shown by color alone.
 Set `scroll={false}` when the child scrolls itself (an unframed LogView).
 
+Don't use this for: a general content container on a page (use Card instead) or a plain surface with padding (use Box instead). Window is for terminal-style panes, as in Patterns/WorkbenchSplit.
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

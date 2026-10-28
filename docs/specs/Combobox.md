@@ -28,6 +28,8 @@ Keyboard: ArrowDown/ArrowUp open and move (wrapping, skipping disabled), Alt+Arr
 
 Use Select for short lists (under about 10 options).
 
+Don't use this for: a short list the user can scan at a glance (use Select instead), free text with no fixed set of options (use Input instead), or a menu of commands (use Dropdown instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

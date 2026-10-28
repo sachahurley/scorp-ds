@@ -24,6 +24,8 @@
 
 Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. It is supplementary only: the interface must make sense without it, because touch users rarely see it and its content is plain text. Never put the only copy of essential information, or anything interactive, in a tooltip. Use helper text on the field, an inline note, or an Alert when the information matters.
 
+Don't use this for: content with a link, a button or more than a sentence (use Popover instead) or a hint that must always be visible (use helper text on the field instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

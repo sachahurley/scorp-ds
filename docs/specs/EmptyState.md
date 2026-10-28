@@ -24,6 +24,8 @@
 
 What a view shows when it has nothing to show: a 1-bit icon on a subtle plate, a plain title, a short description, and at most one primary and one secondary Button. `sm` for inline use in cards and tables, `md` for a page or panel. Blocking errors belong in Alert.
 
+Don't use this for: content that is still loading (use Skeleton instead, or Spinner for a short wait), or a failure the user has to act on (use Alert instead). Show it only once the result is known to be empty.
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

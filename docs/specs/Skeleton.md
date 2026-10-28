@@ -26,6 +26,8 @@ Placeholder blocks that hold the layout while content loads. Shapes: text lines 
 
 Every Skeleton is aria-hidden. Mark the loading region instead: `aria-busy="true"` plus a visually hidden "Loading ..." line, then flip aria-busy off when content renders.
 
+Don't use this for: a wait where the shape of the coming content is unknown, or a short local wait (use Spinner instead), or a view that has finished loading with nothing to show (use EmptyState instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---
