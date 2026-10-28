@@ -13,7 +13,7 @@
 | Story | `Components/Terminal/LogView` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `b94a2e1b2b6718fa` |
 
 ---
@@ -148,6 +148,7 @@ No hardcoded values found.
 
 - Button
 - TuiIcon
+- `useFollowScroll` (`lib/use-follow-scroll.ts`, internal): follow, pause, unseen count and resume, shared with the planned Transcript
 
 ### Foundation Files Referenced
 
@@ -211,6 +212,7 @@ No hardcoded values found.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
+| Unreleased | 2026-10-28 | refactor | Follow logic moved into the shared `useFollowScroll` hook; no behavior change (existing tests unchanged and passing) |
 
 <!-- AUTO-END:changelog -->
 
