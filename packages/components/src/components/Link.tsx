@@ -69,7 +69,7 @@ export type LinkProps = CommonProps &
   );
 
 /**
- * Link Component
+ * Text navigation, inline in prose or quiet in chrome; external links open a new tab and say so.
  *
  * Renders an `<a href>` by default, or a custom component via `as`/`asProps`
  * (mirrors the `ListRow` polymorphism, so router links work the same way in

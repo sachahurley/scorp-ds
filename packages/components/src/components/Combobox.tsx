@@ -105,7 +105,7 @@ const defaultFilter = (option: ComboboxOption, query: string) =>
   option.label.toLowerCase().includes(query.trim().toLowerCase());
 
 /**
- * Combobox Component
+ * A text input that filters a list of options as the user types, for choosing one value from a list too long to scan.
  *
  * @example
  * <Combobox
