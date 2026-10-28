@@ -104,7 +104,7 @@ export const Testimonial: Story = {
           The token-based approach means we can iterate quickly while keeping
           every surface consistent. Exactly what we needed.
         </blockquote>
-        <figcaption className="mt-6 flex items-center gap-4 border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] pt-4">
+        <figcaption className="mt-6 flex items-center gap-4 border-t-hairline border-solid border-[var(--surface-container-stroke)] pt-4">
           <Avatar initials="MC" size="md" />
           <div className="min-w-0">
             <p className="font-mono text-sm font-bold text-[var(--text-primary)]">Michael Chen</p>

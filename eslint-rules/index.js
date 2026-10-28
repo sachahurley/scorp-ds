@@ -5,9 +5,11 @@
  * Every rule here exists because the repo already complies with it. They are
  * ratchets that keep a clean baseline clean, not a cleanup backlog.
  *
- * Scope: these are applied to packages/components/src in eslint.config.mjs.
+ * Scope is set in eslint.config.mjs: the full set on packages/components/src,
+ * the colour, shape, type and token-name rules on stories, presets and the site.
  * They deliberately do NOT run against packages/tokens, which is the one place
- * raw values are allowed to live.
+ * raw values are allowed to live. eslint-rules/index.test.ts pins each rule's
+ * valid and invalid cases.
  */
 
 "use strict";
@@ -37,6 +39,84 @@ function matchAll(re, text) {
   return out;
 }
 
+const fs = require("node:fs");
+const path = require("node:path");
+
+const REPO_ROOT = path.resolve(__dirname, "..");
+
+/**
+ * Stylesheets whose custom properties count as declared. tokens.css is the token
+ * contract; the others declare a handful of app-level variables of their own.
+ */
+const DECLARING_STYLESHEETS = [
+  "packages/tokens/src/styles/tokens.css",
+  "packages/components/src/styles.css",
+  "packages/storybook/styles/global.css",
+  "packages/site/src/index.css",
+];
+
+let declaredCache = null;
+/** Every custom property declared in the stylesheets above, read once per lint run. */
+function declaredVariables() {
+  if (declaredCache) return declaredCache;
+  declaredCache = new Set();
+  for (const rel of DECLARING_STYLESHEETS) {
+    let css = "";
+    try {
+      css = fs.readFileSync(path.join(REPO_ROOT, rel), "utf8");
+    } catch {
+      continue;
+    }
+    for (const m of matchAll(/(--[a-zA-Z0-9-]+)\s*:/, css)) declaredCache.add(m[1]);
+  }
+  return declaredCache;
+}
+
+/**
+ * Variables a file declares for itself: `[--name:…]` arbitrary properties, and
+ * `"--name"` keys in style objects. These are component-local plumbing, not tokens.
+ */
+function locallyDeclared(sourceText) {
+  const out = new Set();
+  for (const m of matchAll(/(?:\[|["'`])(--[a-zA-Z0-9-]+)(?=["'`]|\s*:)/, sourceText)) out.add(m[1]);
+  return out;
+}
+
+/**
+ * True when a string sits under a Storybook `docs` / `description` key: that is
+ * prose about the system ("a drop-shadow filter on a wrapper"), not class names.
+ */
+function isDocsProse(node) {
+  for (let p = node.parent; p; p = p.parent) {
+    if (p.type === "Property") {
+      const key = p.key && (p.key.name || p.key.value);
+      if (key === "docs" || key === "description") return true;
+    }
+  }
+  return false;
+}
+
+/** Splits a string into Tailwind-looking tokens, stripping variants (`hover:`, `dark:`) and `!`. */
+function classTokens(text) {
+  const out = [];
+  for (const raw of text.split(/\s+/)) {
+    if (!raw) continue;
+    // Variant prefixes are everything up to the last top-level colon (not inside brackets).
+    let depth = 0;
+    let cut = -1;
+    for (let i = 0; i < raw.length; i++) {
+      const c = raw[i];
+      if (c === "[") depth++;
+      else if (c === "]") depth--;
+      else if (c === ":" && depth === 0) cut = i;
+    }
+    let token = cut >= 0 ? raw.slice(cut + 1) : raw;
+    token = token.replace(/^!/, "").replace(/^-/, "");
+    out.push(token);
+  }
+  return out;
+}
+
 const HEX = /#[0-9a-fA-F]{3,8}\b/;
 const COLOR_FN = /\b(?:rgba?|hsla?)\(/;
 const RAW_SCALE =
@@ -50,7 +130,7 @@ const SANS = /\bfont-(?:sans|serif)\b/;
  * keyword is left alone: those are legitimate and make up the large majority.
  */
 const ARBITRARY = /\b[a-z][a-z0-9-]*-\[([^\]]+)\]/;
-const BARE_NUMBER = /^-?\d*\.?\d+(px|rem|em|%)?$/;
+const BARE_NUMBER = /^-?\d*\.?\d+(px|rem|em|%|ms|s)?$/;
 
 module.exports = {
   rules: {
@@ -162,6 +242,228 @@ module.exports = {
       },
     },
 
+    "no-undefined-css-var": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "Every var(--name) must be a custom property that exists: declared in tokens.css (or one of the app stylesheets), or declared by the same file. Decision 0023.",
+        },
+        schema: [
+          {
+            type: "object",
+            properties: { allow: { type: "array", items: { type: "string" } } },
+            additionalProperties: false,
+          },
+        ],
+        messages: {
+          undefined:
+            "'{{name}}' is not declared in tokens.css or in this file. Copy the exact name from packages/tokens/src/styles/tokens.css; if the token you need does not exist, add it to tokens.json and tokens.css first (docs/decisions/0023).",
+        },
+      },
+      create(context) {
+        const allow = new Set((context.options[0] && context.options[0].allow) || []);
+        const source = context.sourceCode || context.getSourceCode();
+        const declared = declaredVariables();
+        const local = locallyDeclared(source.getText());
+        const known = (name) => declared.has(name) || local.has(name) || allow.has(name);
+
+        return {
+          Literal(node) {
+            if (typeof node.value === "string") checkText(node, node.value, false);
+          },
+          TemplateElement(node) {
+            const raw = node.value && node.value.raw;
+            // A chunk followed by an interpolation may end in a name prefix: `var(--elevation-${level})`.
+            if (raw) checkText(node, raw, !node.tail);
+          },
+        };
+
+        function checkText(node, text, endsAtInterpolation) {
+          for (const m of matchAll(/var\(\s*(--[a-zA-Z0-9-]+)/, text)) {
+            const name = m[1];
+            const atEnd = m.index + m[0].length === text.length;
+            if (endsAtInterpolation && atEnd && name.endsWith("-")) {
+              // Dynamic suffix: at least one declared variable must start with the prefix.
+              if ([...declared].some((d) => d.startsWith(name)) || [...local].some((d) => d.startsWith(name))) continue;
+            } else if (known(name)) {
+              continue;
+            }
+            context.report({ node, messageId: "undefined", data: { name } });
+          }
+        }
+      },
+    },
+
+    "no-default-tailwind": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "The preset extends Tailwind rather than replacing it, so Tailwind's own palette, shadows, radii, durations and fonts still compile. None of them are tokens.",
+        },
+        schema: [],
+        messages: {
+          palette: "'{{value}}' is Tailwind's default palette, not a token. Use a semantic variable (text-[var(--text-primary)]) or a semantic alias scale (bg-secondary-900).",
+          shadow: "'{{value}}' is a Tailwind default shadow. Depth is carried by borders; use an --elevation-* variable if a shadow is genuinely needed.",
+          rounded: "'{{value}}' is a border radius. Use rounded-none, or plate-round / plate-round-lg.",
+          motion: "'{{value}}' is a raw duration, delay or easing. Use the motion tokens: duration-[var(--duration-fast)], ease-[var(--easing-ease-out)] (docs/decisions/0025).",
+          font: "'{{value}}' sets a font outside the system. Scorp DS is Fragment Mono throughout: use font-mono.",
+        },
+      },
+      create(context) {
+        const PALETTE =
+          /^(?:bg|text|border(?:-[trblxy])?|ring|ring-offset|fill|stroke|from|via|to|divide|outline|decoration|placeholder|caret|accent|shadow)-(?:white|black|slate|gray|zinc|neutral|stone|orange|yellow|lime|emerald|teal|cyan|sky|indigo|violet|fuchsia|pink|rose)(?:-\d{2,3})?(?:\/\d+)?$/;
+        const SHADOW = /^(?:drop-)?shadow(?:-(?:sm|md|lg|xl|2xl|inner))?$/;
+        const ROUNDED = /^rounded(?:-(?:t|r|b|l|tl|tr|br|bl|s|e|ss|se|es|ee))?$/;
+        const MOTION = /^(?:duration|delay)-\d+$|^(?:duration|delay|ease)-\[(?!var\(--)[^\]]+\]$/;
+        const FONT = /^font-\[(?!var\(--)[^\]]+\]$/;
+        return stringVisitors((node, text) => {
+          if (isDocsProse(node)) return;
+          for (const token of classTokens(text)) {
+            let id = null;
+            if (PALETTE.test(token)) id = "palette";
+            else if (SHADOW.test(token)) id = "shadow";
+            else if (ROUNDED.test(token)) id = "rounded";
+            else if (MOTION.test(token)) id = "motion";
+            else if (FONT.test(token)) id = "font";
+            if (id) context.report({ node, messageId: id, data: { value: token } });
+          }
+        });
+      },
+    },
+
+    "no-slow-motion": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "Interactive states animate in at most --duration-normal (200ms). --duration-slow and --duration-slower are for overlays entering or leaving, in allowlisted files. Decision 0025.",
+        },
+        schema: [
+          {
+            type: "object",
+            properties: { overlayFiles: { type: "array", items: { type: "string" } } },
+            additionalProperties: false,
+          },
+        ],
+        messages: {
+          slow:
+            "'{{name}}' is longer than the 200ms cap for interactive states. Use --duration-fast or --duration-normal. An overlay entering or leaving may use --duration-slow: add the file to overlayFiles in eslint.config.mjs (docs/decisions/0025).",
+          raw: "'{{value}}' is a raw duration. Use a --duration-* token (docs/decisions/0025).",
+        },
+      },
+      create(context) {
+        const overlayFiles = (context.options[0] && context.options[0].overlayFiles) || [];
+        const filename = (context.filename || context.getFilename()).split(path.sep).join("/");
+        const isOverlay = overlayFiles.some((f) => filename.endsWith(f));
+        const check = (node, text) => {
+          for (const m of matchAll(/--duration-(slow|slower)\b/, text)) {
+            if (m[1] === "slow" && isOverlay) continue;
+            context.report({ node, messageId: "slow", data: { name: m[0] } });
+          }
+          for (const m of matchAll(/(?:^|[\s(,:])(\d*\.?\d+m?s)(?=[\s),;]|$)/, text)) {
+            if (/^0m?s$/.test(m[1])) continue;
+            context.report({ node, messageId: "raw", data: { value: m[1] } });
+          }
+        };
+        return {
+          ...stringVisitors(check),
+          // Style objects: `{ transitionDuration: 300 }` or `{ animationDelay: "1s" }`.
+          Property(node) {
+            const key = node.key && (node.key.name || node.key.value);
+            if (typeof key !== "string" || !/^(transition|animation)/.test(key)) return;
+            if (node.value.type === "Literal" && typeof node.value.value === "number" && node.value.value !== 0) {
+              context.report({ node: node.value, messageId: "raw", data: { value: String(node.value.value) } });
+            }
+          },
+        };
+      },
+    },
+
+    "no-style-literals": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "No raw sizes, colours, durations or fonts in inline style objects. Class rules cannot see style={{}}; values there go through var(--token) too.",
+        },
+        schema: [],
+        messages: {
+          number:
+            "Inline style '{{key}}: {{value}}' hardcodes a number. Use a class, or var(--token) in the style value.",
+          string:
+            "Inline style '{{key}}: \"{{value}}\"' hardcodes a raw value. Use var(--token), or compute it from a token.",
+        },
+      },
+      create(context) {
+        // Unitless properties where a number is the honest value, not a hardcoded size.
+        const UNITLESS = new Set(["flex", "flexGrow", "flexShrink", "order", "gridRow", "gridColumn", "aspectRatio", "columnCount"]);
+        const RAW_STRING = /\d(?:px|rem|em|ms|s)\b|#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\(|\b(?:Arial|Helvetica|Inter|sans-serif|serif|system-ui)\b/;
+
+        function isStyleObject(obj) {
+          const parent = obj.parent;
+          return (
+            parent &&
+            parent.type === "JSXExpressionContainer" &&
+            parent.parent &&
+            parent.parent.type === "JSXAttribute" &&
+            parent.parent.name &&
+            parent.parent.name.name === "style"
+          );
+        }
+
+        return {
+          ObjectExpression(obj) {
+            if (!isStyleObject(obj)) return;
+            for (const prop of obj.properties) {
+              if (prop.type !== "Property") continue;
+              const key = prop.key && (prop.key.name || prop.key.value);
+              if (typeof key !== "string" || key.startsWith("--")) continue;
+              const v = prop.value;
+              if (v.type === "Literal" && typeof v.value === "number") {
+                if (v.value === 0 || UNITLESS.has(key)) continue;
+                context.report({ node: v, messageId: "number", data: { key, value: String(v.value) } });
+              } else if (v.type === "Literal" && typeof v.value === "string" && RAW_STRING.test(v.value)) {
+                context.report({ node: v, messageId: "string", data: { key, value: v.value } });
+              }
+            }
+          },
+        };
+      },
+    },
+
+    "no-deep-import": {
+      meta: {
+        type: "problem",
+        docs: { description: "Import other packages through their public barrel, never from their src/ internals." },
+        schema: [],
+        messages: {
+          deep: "'{{name}}' reaches into another package's internals. Import from the package barrel ('@scorp-ds/components', '@scorp-ds/tokens').",
+        },
+      },
+      create(context) {
+        // Public entry points other than the barrel, from each package.json `exports`.
+        const PUBLIC_SUBPATHS = new Set([
+          "@scorp-ds/tokens/tailwind.preset",
+          "@scorp-ds/tokens/styles/tokens.css",
+          "@scorp-ds/components/styles",
+        ]);
+        const check = (node, name) => {
+          if (typeof name !== "string" || !name.startsWith("@scorp-ds/")) return;
+          const parts = name.split("/");
+          if (parts.length <= 2 || PUBLIC_SUBPATHS.has(name)) return;
+          context.report({ node, messageId: "deep", data: { name } });
+        };
+        return {
+          ImportDeclaration: (node) => check(node, node.source.value),
+          ImportExpression: (node) => node.source.type === "Literal" && check(node, node.source.value),
+          ExportNamedDeclaration: (node) => node.source && check(node, node.source.value),
+          ExportAllDeclaration: (node) => node.source && check(node, node.source.value),
+        };
+      },
+    },
+
     "no-legacy-package": {
       meta: {
         type: "problem",
@@ -179,6 +481,7 @@ module.exports = {
         };
         return {
           ImportDeclaration: (node) => check(node, node.source.value),
+          ImportExpression: (node) => node.source.type === "Literal" && check(node, node.source.value),
           ExportNamedDeclaration: (node) => node.source && check(node, node.source.value),
           ExportAllDeclaration: (node) => node.source && check(node, node.source.value),
         };

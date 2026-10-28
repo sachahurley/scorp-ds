@@ -28,7 +28,7 @@ function RowShell({ children }: { children: ReactNode }) {
   return (
     <div
       className="
-        flex flex-wrap items-center gap-3 border-[0.5px] border-solid border-[var(--surface-container-stroke)]
+        flex flex-wrap items-center gap-3 border-hairline border-solid border-[var(--surface-container-stroke)]
         bg-[var(--surface-card)] px-3 py-2 font-mono text-sm text-[var(--text-primary)]
       "
     >

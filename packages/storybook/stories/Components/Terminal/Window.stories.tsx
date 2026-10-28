@@ -47,6 +47,7 @@ export const Active: Story = {
 /** Title bar actions (keep them small). */
 export const WithActions: Story = {
   args: {
+    // eslint-disable-next-line scorp/no-raw-color -- a build number, not a colour
     title: 'build #4821',
     status: <Badge size="sm" variant="success">passed</Badge>,
     actions: (
