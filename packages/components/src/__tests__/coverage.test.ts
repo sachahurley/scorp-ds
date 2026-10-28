@@ -17,7 +17,7 @@
  * gap that has since been closed, so the list can only shrink. Specs are not
  * checked here; `scripts/detect-spec-drift.sh` owns them in CI.
  *
- * Reasoning: docs/decisions/0016-coverage-is-a-ratchet.md.
+ * Reasoning: docs/decisions/0017-coverage-is-a-ratchet.md.
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';

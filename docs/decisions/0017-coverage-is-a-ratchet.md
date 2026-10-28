@@ -1,4 +1,4 @@
-# 16. Every component has a story and a test, held by a ratchet
+# 17. Every component has a story and a test, held by a ratchet
 
 - **Status:** accepted
 - **Date:** 2026-10-27
@@ -12,7 +12,8 @@ checked any of them. On 2026-10-27, of the 50 entries in `docs/contracts/api-sur
 
 - every one was imported by at least one story;
 - 7 were imported by no unit test: Avatar, CaseStudy, DescriptionList, Divider, StatusLine,
-  TuiIcon, Window.
+  TuiIcon, Window. CaseStudy gained tests in #79 before this landed; the ratchet's "remove it
+  from the baseline" failure on the rebase is how that was noticed.
 
 Matching by file name instead overstated the gap at 10: `Link` is covered by
 `ListRowLink.test.tsx`, `Skeleton` by `EmptyState.test.tsx`, `Textarea` by
@@ -37,7 +38,7 @@ ways**: a gap not in the baseline fails, and a baseline entry that is now covere
 it is removed. The story list starts empty, so stories are zero-debt from day one.
 
 Specs are not checked here: `scripts/detect-spec-drift.sh` already fails CI on a missing spec
-(decision 0015).
+(decision 0016).
 
 ## Options rejected
 
@@ -46,7 +47,7 @@ Specs are not checked here: `scripts/detect-spec-drift.sh` already fails CI on a
 - **A one-way baseline, like Aura's.** It lets the list go stale, since nothing makes anyone
   delete a fixed entry, and a stale list hides the next gap behind a name that looks handled.
 - **Write the seven tests first, then add the rule with no baseline.** Cleaner, but it holds the
-  rule hostage to seven unrelated PRs. CaseStudy is also mid-rework in #79.
+  rule hostage to six unrelated PRs.
 - **Measure line coverage instead.** A percentage says how much ran, not whether each component
   was looked at. The question here is per component.
 
