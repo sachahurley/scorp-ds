@@ -33,3 +33,8 @@ Start from `0000-template.md`. Number sequentially.
 | [0020](0020-baselines-refresh-by-commit-tag.md) | Visual baselines are refreshed by a commit tag | Visual regression, every rendered change |
 | [0021](0021-consumers-are-built-before-merge.md) | Consumers are built against a change before it merges | `check-consumers.mjs`, API changes |
 | [0022](0022-field-focus-is-a-colour-change.md) | Text-field focus is a colour change, not an inset ring | `Input`, `Textarea` |
+| [0023](0023-semantic-tokens-are-referenced-by-variable.md) | Semantic tokens are referenced by variable; every variable is checked | Components, stories, presets, the preset |
+| [0024](0024-one-prop-vocabulary.md) | One prop vocabulary, and one way to deprecate a name | Every component's public props |
+| [0025](0025-motion-cap-is-for-interactive-states.md) | The 200ms cap is for interactive states; overlays may take longer | Transitions, `global.duration` |
+| [0026](0026-a-spec-is-stable-when-it-meets-the-bar.md) | A spec is `stable` when it meets a checkable bar | `docs/specs/`, the catalog |
+| [0027](0027-half-step-spacing-is-tokenised.md) | Half-step spacing gets tokens; off-scale steps are errors | `global.spacing`, the preset |
