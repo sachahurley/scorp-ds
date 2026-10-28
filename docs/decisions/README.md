@@ -28,5 +28,5 @@ Start from `0000-template.md`. Number sequentially.
 | [0015](0015-ci-checks-are-required-to-merge.md) | CI checks are required to merge into `main` | The `main` ruleset, every PR |
 | [0016](0016-spec-drift-is-a-ci-gate.md) | Spec drift fails CI | `detect-spec-drift.sh`, CI, every spec |
 | [0017](0017-coverage-is-a-ratchet.md) | Every component has a story and a test, held by a ratchet | `coverage.test.ts`, every new component |
-| [0017](0017-pin-actions-and-let-dependabot-move-them.md) | Pin actions to commits; Dependabot moves them | Every workflow, dependencies |
+| [0018](0018-pin-actions-and-let-dependabot-move-them.md) | Pin actions to commits; Dependabot moves them | Every workflow, dependencies |
 | [0021](0021-consumers-are-built-before-merge.md) | Consumers are built against a change before it merges | `check-consumers.mjs`, API changes |

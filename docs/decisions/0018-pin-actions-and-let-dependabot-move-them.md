@@ -1,4 +1,4 @@
-# 17. Pin actions to commits, and let Dependabot move them
+# 18. Pin actions to commits, and let Dependabot move them
 
 - **Status:** accepted
 - **Date:** 2026-10-27
@@ -24,7 +24,7 @@ are not dev-only: esbuild, nanoid, postcss, postcss-selector-parser and source-m
   ignored; a major is a migration and gets its own PR.
 - Dependabot alerts and Dependabot security updates are enabled in the repo settings.
 - `npm audit` is **not** a CI gate yet. It would be red on day one, and a gate that starts red
-  gets bypassed (decision 0014). The weekly health run (decision 0018) reports it; once the
+  gets bypassed (decision 0015). The weekly health run (decision 0019) reports it; once the
   findings outside dev dependencies are cleared, `npm audit --omit=dev --audit-level=high`
   joins the `checks` job.
 
