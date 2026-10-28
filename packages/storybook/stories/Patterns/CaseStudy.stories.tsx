@@ -69,8 +69,8 @@ export const HeaderMobile: Story = {
   ),
 };
 
-/** Each section opens on a rule with its number and name beneath it, then the
- *  title and an optional intro. Numbers are counted, never authored. */
+/** Each section opens on its number and name, then the title and an optional
+ *  intro. Sections are set apart by space, not rules. Numbers are counted, never authored. */
 export const Sections: Story = {
   render: () => (
     <Column>

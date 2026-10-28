@@ -35,8 +35,8 @@ A case study is a `CaseStudy` object, rendered by `CaseStudyPage`:
   up, `2xl` below. Outcome figures stay at `2xl` so they never outrank it.
 - **Sections are an ordered array.** Move a section by moving it; drop one with
   `hidden: true`. Sections own their headings, so `headline` is no longer a block.
-- **Numbers are counted, never authored.** Each section opens on a rule with its
-  number and name beneath it (`02 THE PROBLEM`). Figures are numbered across the page
+- **Numbers are counted, never authored.** Each section opens on its number and
+  name (`02 THE PROBLEM`). Figures are numbered across the page
   (`fig. 03`). Both count visible sections only.
 - **One shape per meaning.** `list` is a tree drawn with rules (not box glyphs, which
   never met the trunk exactly), `insights` has large numerals and ruled rows,
@@ -55,7 +55,13 @@ portfolio is the only consumer and migrates in the same change.
   how the sizes drifted before `0011`; with one consumer there is nothing to protect.
 - **Six section-label styles were tried** (rule after the name, lead-in rule, count,
   bracket, large numeral, file path). The rule above with the number and name beneath
-  was chosen; a `01 / 07` position count on the right was tried and dropped.
+  was chosen; a `01 / 07` position count on the right was tried and dropped. Later
+  (2026-10-28) the rule itself was dropped too: sections are now set apart by space
+  alone (96px, 128px from `sm`), which read calmer than a rule every screen.
+- **Six meta layouts were tried** (2026-10-28: ruled label/value pairs, centred
+  columns, a byline, plates, a column beside the summary, dotted leaders). Dotted
+  leaders were chosen: one fact a line, label joined to value like a contents page,
+  replacing the ruled two-up grid.
 - **Add 36px as a t-shirt step.** It falls between `2xl` (24px) and `3xl` (48px) and
   renaming the scale would break every consumer, so the token is role-named.
 
