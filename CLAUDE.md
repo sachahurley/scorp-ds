@@ -186,6 +186,13 @@ Follow the structure in `design-system-doc-requirements.md`. Use `/storybook-che
 - **CI / fresh index:** `npm run test-storybook:ci` builds `storybook-static`, serves it on the first free port in `6006–6015` via `scripts/test-storybook-ci.mjs`, runs the test-runner **twice** (`STORYBOOK_TEST_THEME=light` then `dark`, set in `test-runner.ts` `preVisit`), then stops the server. **Dark is the default theme**; use the Storybook **Theme** toolbar (sun/moon) in `preview.tsx` to preview **light mode**. **Docs** uses `parameters.docs.container` so autodocs match Canvas tokens.
 - **Skip:** Stories tagged `skip-test` are excluded from the runner (e.g. raw pigment atlas, semantic text-token swatches, and graphical elevation/focus specimens where axe is not meaningful). Prefer fixing real product stories first; use the tag only when the page’s purpose is to display tokens that intentionally break contrast rules.
 
+## Before merging an API change: build the consumers
+
+If a PR changes `docs/contracts/api-surface.json`, run `npm run consumers:check` before it merges
+and say in the PR that it passed. It vendors this checkout into a throwaway worktree of each
+consumer and runs that consumer's own checks, so a break is caught here, not in a vendor PR
+after the merge (`docs/decisions/0021`). It never commits or pushes.
+
 ## After ANY merge to main — vendor all three consumers
 
 Three sites consume this DS as committed vendored copies; merging here does
