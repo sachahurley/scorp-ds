@@ -1,8 +1,8 @@
 # Keeps dependencies and the pinned GitHub Actions current. See
-# docs/decisions/0017-pin-actions-and-let-dependabot-move-them.md.
+# docs/decisions/0018-pin-actions-and-let-dependabot-move-them.md.
 #
 # Every update arrives as a pull request and has to pass the three required
-# checks (decision 0014), so nothing here can land a change on its own.
+# checks (decision 0015), so nothing here can land a change on its own.
 version: 2
 
 updates:
