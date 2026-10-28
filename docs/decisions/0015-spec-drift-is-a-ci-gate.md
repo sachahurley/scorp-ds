@@ -22,6 +22,12 @@ Two things kept that from catching anything:
 
 `ds-health.sh` printed `✓ Spec drift check complete` regardless of the result.
 
+A third problem surfaced the first time CI ran it: the hash was read with a `sed` capture
+around backticks (`\``), which macOS sed treats as a literal backtick and GNU sed as "start of
+buffer". On Linux nothing matched, so all 50 specs read as stale. And a spec with no hash row
+aborted the script under `pipefail` instead of being reported. The check had never worked
+anywhere but a Mac. It now reads the hash with `grep -oE`.
+
 ## Decision
 
 `detect-spec-drift.sh` exits 1 when any source file has no spec, any component spec has no

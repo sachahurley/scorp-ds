@@ -104,7 +104,11 @@ print(c['apiHash'] if c else '')
 " 2>/dev/null)
     [ -z "$live" ] && continue
 
-    recorded=$(grep -m1 '^| API hash |' "$spec_file" | sed -E 's/.*\`([0-9a-f]{16})\`.*/\1/')
+    # grep -o, not a sed capture around backticks: GNU sed reads \` as "start of
+    # buffer", so the old capture matched nothing on Linux and every spec read as
+    # stale in CI. `|| true` keeps a spec with no hash row from aborting the run
+    # under pipefail; it is reported as NO HASH below.
+    recorded=$(grep -m1 '^| API hash |' "$spec_file" | grep -oE '[0-9a-f]{16}' | head -n 1 || true)
 
     if [ -z "$recorded" ]; then
       echo "  NO HASH        $layer/$filename  (spec has no API hash row; run stamp-spec-api-hash.mjs)"
