@@ -88,8 +88,12 @@ echo ""
 echo -e "${BOLD}1. Spec Drift${RESET}"
 
 if [ -f "$PROJECT_ROOT/scripts/detect-spec-drift.sh" ]; then
-  bash "$PROJECT_ROOT/scripts/detect-spec-drift.sh" 2>&1 | grep -E "MISSING SPEC|SPEC OUTDATED|SKIPPED|✓|⚠" | head -10
-  pass "Spec drift check complete"
+  if DRIFT_OUT=$(bash "$PROJECT_ROOT/scripts/detect-spec-drift.sh" 2>&1); then
+    pass "No spec drift"
+  else
+    fail "Spec drift"
+  fi
+  echo "$DRIFT_OUT" | grep -E "MISSING SPEC|SPEC OUTDATED|NO HASH|SKIPPED|ERROR|✓|✗" | head -10
 else
   warn "detect-spec-drift.sh not found"
 fi

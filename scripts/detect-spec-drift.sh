@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 # detect-spec-drift.sh — Find source files changed without a spec update
 #
-# Compares modification times of source files against their spec counterparts
-# and prints anything that has drifted (source newer than spec, or no spec).
+# Every source file needs a spec in docs/specs/. For a component or primitive,
+# the spec's `API hash` row must match the apiHash recorded for it in
+# docs/contracts/api-surface.json, so a spec is stale exactly when a consumer
+# would notice the change. Foundation files and specs with no component behind
+# them (patterns, the changelog) have no hash and are checked for presence only.
 #
-# NOTE: mtime is not a reliable drift signal across environments — a fresh
-# clone or worktree checkout stamps every file with the same time, so drift
-# reads as clean. Replacing this with a hash of each component's public API
-# surface is tracked as part of the contracts work.
+# CI runs this after `generate-api-surface.mjs --check`, so the manifest it
+# compares against is known to be current. See docs/decisions/0016.
 #
 # Usage: bash scripts/detect-spec-drift.sh
+#
+# Exit codes:
+#   0  no drift
+#   1  a missing spec, a missing hash, a stale hash, or a setup error
 
 set -euo pipefail
 
@@ -99,7 +104,11 @@ print(c['apiHash'] if c else '')
 " 2>/dev/null)
     [ -z "$live" ] && continue
 
-    recorded=$(grep -m1 '^| API hash |' "$spec_file" | sed -E 's/.*\`([0-9a-f]{16})\`.*/\1/')
+    # grep -o, not a sed capture around backticks: GNU sed reads \` as "start of
+    # buffer", so the old capture matched nothing on Linux and every spec read as
+    # stale in CI. `|| true` keeps a spec with no hash row from aborting the run
+    # under pipefail; it is reported as NO HASH below.
+    recorded=$(grep -m1 '^| API hash |' "$spec_file" | grep -oE '[0-9a-f]{16}' | head -n 1 || true)
 
     if [ -z "$recorded" ]; then
       echo "  NO HASH        $layer/$filename  (spec has no API hash row; run stamp-spec-api-hash.mjs)"
@@ -131,8 +140,9 @@ echo ""
 if [ "$DRIFT_COUNT" -eq 0 ]; then
   echo "  ✓ No spec drift detected — all specs are up to date."
 else
-  echo "  ⚠ $DRIFT_COUNT file(s) with spec drift detected."
-  echo "    Run /update-spec <name> to update each spec."
+  echo "  ✗ $DRIFT_COUNT file(s) with spec drift detected."
+  echo "    Run /update-spec <name> to update each spec, then"
+  echo "    node scripts/stamp-spec-api-hash.mjs <name> to record its API hash."
 fi
 
 echo ""
@@ -169,3 +179,6 @@ else
 fi
 
 echo ""
+
+# Upgrade candidates are advice for a person; only drift fails the run.
+[ "$DRIFT_COUNT" -eq 0 ]

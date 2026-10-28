@@ -25,4 +25,6 @@ Start from `0000-template.md`. Number sequentially.
 | [0012](0012-stories-drive-their-own-interactions.md) | Stories drive their own interactions via `play` | Visual regression, story authoring |
 | [0013](0013-update-writes-only-changed-baselines.md) | `--update` writes only the baselines that changed | Visual regression, baseline refreshes |
 | [0014](0014-case-studies-are-structured-pages.md) | Case studies are structured pages, not block lists | `CaseStudy`, the portfolio's case studies |
+| [0015](0015-ci-checks-are-required-to-merge.md) | CI checks are required to merge into `main` | The `main` ruleset, every PR |
+| [0016](0016-spec-drift-is-a-ci-gate.md) | Spec drift fails CI | `detect-spec-drift.sh`, CI, every spec |
 | [0021](0021-consumers-are-built-before-merge.md) | Consumers are built against a change before it merges | `check-consumers.mjs`, API changes |
