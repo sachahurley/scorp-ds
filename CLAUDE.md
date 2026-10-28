@@ -191,7 +191,7 @@ Follow the structure in `design-system-doc-requirements.md`. Use `/storybook-che
 If a PR changes `docs/contracts/api-surface.json`, run `npm run consumers:check` before it merges
 and say in the PR that it passed. It vendors this checkout into a throwaway worktree of each
 consumer and runs that consumer's own checks, so a break is caught here, not in a vendor PR
-after the merge (`docs/decisions/0020`). It never commits or pushes.
+after the merge (`docs/decisions/0021`). It never commits or pushes.
 
 ## After ANY merge to main — vendor all three consumers
 

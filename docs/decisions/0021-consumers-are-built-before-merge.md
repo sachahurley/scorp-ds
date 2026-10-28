@@ -1,4 +1,4 @@
-# 20. Consumers are built against a change before it merges
+# 21. Consumers are built against a change before it merges
 
 - **Status:** accepted
 - **Date:** 2026-10-27
