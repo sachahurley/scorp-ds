@@ -226,6 +226,10 @@ narrower row.
 Merges to `main` are always human-approved. A change that alters rendered output needs a
 screenshot in both themes before it is approved.
 
+To refresh visual baselines for an intended rendered change, put `[update-baselines]` in
+the message of the PR's latest commit and push. CI commits the changed frames to the branch and
+re-runs the required checks (`docs/decisions/0020`). Never commit baselines captured on a Mac.
+
 ## PR Checklist
 
 - [ ] No hardcoded color, font, spacing, or radius values in components
