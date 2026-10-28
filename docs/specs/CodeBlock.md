@@ -2,7 +2,6 @@
 
 > Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
 
-> **Proposed, not built yet.** This spec is written ahead of the code so the API can be reviewed before anything renders. The AUTO sections describe the intended build; `/update-spec` rewrites them from source once `CodeBlock.tsx` exists, and the API hash row is added then.
 
 ## Status
 
@@ -11,11 +10,12 @@
 | Component | `CodeBlock` (import from `@scorp-ds/components`) |
 | Layer | `component` |
 | Category | `Terminal` |
-| File | `packages/components/src/components/CodeBlock.tsx` (planned) |
-| Story | `Components/Terminal/CodeBlock` (planned) |
+| File | `packages/components/src/components/CodeBlock.tsx` |
+| Story | `Components/Terminal/CodeBlock` |
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
+| API hash | `73b52fa2da0040b9` |
 
 ---
 
@@ -35,16 +35,19 @@ There is no syntax highlighting in v1. Scorp DS has no syntax color roles yet, a
 
 <!-- AUTO-START:anatomy -->
 
-A `<figure>` with the plate ring (`plate-round-lg p-px`, `--surface-container-stroke`) holding:
+A `<figure>` named by `aria-label` (the title when it is text, else the language, else "Code"). Framed, it draws the plate ring (`plate-round-lg p-px`, `--surface-container-stroke`) around a `--surface-page` fill. Inside:
 
-1. **Title bar**: `title` (or `language` when no title) in `text-xs` `--text-secondary`, a hairline rule filling the gap (as Window's title bar), and the copy button on the right. Hidden when there is no title, no language and `copyable` is false.
-2. **Code**: a `<pre><code>` on `--surface-page`, `text-xs leading-relaxed`, scrolling horizontally unless `wrap`. Optional line-number gutter, sized in `ch` to the widest number.
+1. **Title bar** (`<figcaption>`, `min-h-control-sm`, hairline bottom border): `title` (or `language`) in `text-xs` `--text-secondary`, a hairline rule filling the gap (as Window's title bar), and the copy button. Shown when there is a heading or a working copy button.
+2. **Code**: a focusable `<pre><code>`, `text-xs leading-relaxed`, one row per line. Each row is optional highlight marker, optional line number (sized in `ch` to the widest), then the line. Rows are `w-max min-w-full` when not wrapping, so a highlight spans the scroll width.
+3. **Status region**: visually hidden, announces "Copied to clipboard" or "Copy failed".
+
+A trailing newline in `code` does not make an empty last row.
 
 ```
-+- settings-screen.tsx -----------------[ copy ]-+
++- settings-screen.tsx -----------------[ Copy ]-+
 |  1  <Card title="Danger zone">                 |
-|  2    <Button variant="destructive">           |
-|  3      Delete account                         |
+|> 2    <Button variant="destructive">           |
+|  3  </Card>                                    |
 +------------------------------------------------+
 ```
 
@@ -52,7 +55,7 @@ A `<figure>` with the plate ring (`plate-round-lg p-px`, `--surface-container-st
 
 | Enum Value | Description |
 |-----------|-------------|
-| (none) | One frame. `framed={false}` drops the ring for use inside a Window body, as LogView. |
+| (none) | One frame. `framed={false}` drops the ring and fill for use inside a Window body, as LogView. |
 
 <!-- AUTO-END:anatomy -->
 
@@ -108,12 +111,13 @@ No new tokens.
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
 | Default | none | Frame, title bar, code |
-| Line numbers | `showLineNumbers` | Gutter in `--text-secondary`, `select-none` |
-| Highlighted lines | `highlightLines` | Row on `--surface-muted`, marker in the gutter |
-| Wrapped | `wrap` | `whitespace-pre-wrap`, no horizontal scroll |
-| Copied | copy succeeded | Button shows `Check` and "Copied" for 2s, then returns to `Copy` |
+| Line numbers | `showLineNumbers` | Gutter in `--text-secondary`, `select-none`, `aria-hidden` |
+| Highlighted lines | `highlightLines` | Row on `--surface-muted`, `ChevronRight` marker in `--accent` |
+| Wrapped | `wrap` | `whitespace-pre-wrap break-words`, no horizontal scroll |
+| Copied | copy succeeded | Button shows `Check` and "Copied" for 2s, then returns to "Copy" |
 | Copy failed | Clipboard rejected | Button shows "Copy failed" for 2s |
-| Unframed | `framed={false}` | No ring; fill inherits the parent |
+| No Clipboard API | `navigator.clipboard` missing | No copy button |
+| Unframed | `framed={false}` | No ring or fill |
 | Focus | `:focus-visible` on the `<pre>` | Inset focus ring |
 
 <!-- AUTO-END:states -->
@@ -124,18 +128,19 @@ No new tokens.
 
 <!-- AUTO-START:storybook -->
 
-Planned stories under `Components/Terminal/CodeBlock`:
+| State / Variant | In Code | In Storybook | Notes |
+|----------------|---------|--------------|-------|
+| Title, code, copy | Yes | Yes | `Default` |
+| Line numbers | Yes | Yes | `Line numbers` |
+| Highlighted lines | Yes | Yes | `Highlighted` |
+| Horizontal scroll and wrap | Yes | Yes | `Long lines` |
+| Unframed in a Window | Yes | Yes | `Unframed` |
+| Keyboard focus on the code | Yes | Yes | `Focused` (`play` tabs past the copy button) |
+| Copied / failed | Yes | Interactive only | Click Copy in any story |
 
-| Story | Shows |
-|-------|-------|
-| `Default` | Title, code, copy |
-| `LineNumbers` | Gutter |
-| `Highlighted` | Marked lines |
-| `LongLines` | Horizontal scroll and `wrap` side by side |
-| `Unframed` | Inside a Window body |
-| `Focused` | `play` tabs into the code region |
+Interactive controls: `showLineNumbers`, `wrap`, `copyable`, `framed`.
 
-**Coverage:** 0% (not built)
+**Coverage:** 86% (6/7)
 
 <!-- AUTO-END:storybook -->
 
@@ -145,7 +150,8 @@ Planned stories under `Components/Terminal/CodeBlock`:
 
 <!-- AUTO-START:hardcoded -->
 
-Expected: the gutter width in `ch`, derived from the line count (as LogView), and the 2s copied-state timer. Nothing else.
+- The line-number gutter's `min-width` is an inline style in `ch`, derived from the line count (as LogView).
+- `COPY_RESULT_MS = 2000`: how long the copy result stays on the button.
 
 <!-- AUTO-END:hardcoded -->
 
@@ -173,10 +179,10 @@ Expected: the gutter width in `ch`, derived from the line count (as LogView), an
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic structure: `<figure>` named by its title (`aria-labelledby`), or by `aria-label`. The code is `<pre><code>`.
-- Keyboard: the `<pre>` is focusable (`tabIndex=0`) so overflowing code can be scrolled without a mouse (axe scrollable-region-focusable).
+- Semantic structure: `<figure>` named by `aria-label`; the code is `<pre><code>`.
+- Keyboard: the `<pre>` is focusable (`tabIndex=0`), after the copy button, so overflowing code can be scrolled without a mouse (axe scrollable-region-focusable).
 - Line numbers and highlight markers are `aria-hidden` and `select-none`, so a screen reader reads only the code and a manual copy gives clean code.
-- Copy: the button's name is "Copy code"; the result ("Copied", "Copy failed") is announced through a polite live region, not only shown.
+- Copy: the button's name is "Copy code" (visible "Copy" plus hidden " code"), then "Copied" or "Copy failed", which is also announced through a polite status region.
 - Color independence: highlighted lines carry a gutter marker as well as a fill.
 
 <!-- AUTO-END:accessibility -->
@@ -227,6 +233,7 @@ Expected: the gutter width in `ch`, derived from the line count (as LogView), an
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
+| v1 | 2026-10-28 | added | Built to the reviewed spec. The figure is named with `aria-label`; the copy button keeps its visible text in its name |
 
 <!-- AUTO-END:changelog -->
 
@@ -234,4 +241,4 @@ Expected: the gutter width in `ch`, derived from the line count (as LogView), an
 
 ## Reference Implementation
 
-`packages/components/src/components/CodeBlock.tsx` (planned)
+`packages/components/src/components/CodeBlock.tsx`

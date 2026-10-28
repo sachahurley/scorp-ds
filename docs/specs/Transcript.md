@@ -2,7 +2,6 @@
 
 > Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
 
-> **Proposed, not built yet.** This spec is written ahead of the code so the API can be reviewed before anything renders. The AUTO sections describe the intended build; `/update-spec` rewrites them from source once `Transcript.tsx` exists, and the API hash row is added then.
 
 ## Status
 
@@ -11,11 +10,12 @@
 | Component | `Transcript` (import from `@scorp-ds/components`) |
 | Layer | `component` |
 | Category | `Chat` |
-| File | `packages/components/src/components/Transcript.tsx` (planned) |
-| Story | `Components/Chat/Transcript` (planned) |
+| File | `packages/components/src/components/Transcript.tsx` |
+| Story | `Components/Chat/Transcript` |
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
+| API hash | `3b2800f4536a62c0` |
 
 ---
 
@@ -37,13 +37,12 @@ The follow logic is pulled out of LogView into one shared hook, so the two regio
 
 <!-- AUTO-START:anatomy -->
 
-A relative, full-height wrapper holding:
+A relative wrapper (`flex min-h-0 flex-col`) holding:
 
 1. **Scroll region**: `role="log"`, focusable, `overflow-y-auto`.
-2. **Content column**: centered, `max-w-screen-md` by default, with `gap-6` between turns. Children are `Message`s and optional day or session separators (`Divider` with a label).
-3. **Empty state**: `emptyState` when there are no children, centered in the region.
-4. **Jump button**: `Button variant="secondary" size="sm"` with `ChevronDown`, floating at the bottom center while following is paused. Same control and copy as LogView.
-5. **Status region**: a visually hidden `role="status"` that announces "Responding" and "Response complete".
+2. **Content column**: centered, `max-w-screen-md` by default (`width`), `p-4`, `gap-6` between turns. It is always rendered, even when empty, so the size observer is attached before the first turn arrives. With no children it centers `emptyState`.
+3. **Jump button**: `Button variant="secondary" size="sm"` with `ChevronDown`, floating at the bottom center while following is paused. Same control and copy as LogView.
+4. **Status region**: a visually hidden `role="status"` that says "Responding" and "Response complete" as `busy` changes.
 
 <!-- AUTO-END:anatomy -->
 
@@ -109,18 +108,16 @@ No new tokens.
 
 <!-- AUTO-START:storybook -->
 
-Planned stories under `Components/Chat/Transcript`:
+| State / Variant | In Code | In Storybook | Notes |
+|----------------|---------|--------------|-------|
+| Exchange | Yes | Yes | `Default` |
+| Empty state | Yes | Yes | `Empty` (EmptyState with starter prompts) |
+| Framed | Yes | Yes | `Framed` |
+| Paused, with a count | Yes | Yes | `Paused` (`play` scrolls up and appends a turn) |
+| Streaming | Yes | Yes | `Streaming`, `skip-visual` (grows on a timer); stays in the a11y pass |
+| Widths | Yes | Controls only | `width` |
 
-| Story | Shows |
-|-------|-------|
-| `Default` | A short exchange |
-| `Empty` | EmptyState with starter prompts |
-| `Streaming` | A reply that grows on a timer; `tags: ['skip-visual']` with the reason |
-| `Paused` | `play` scrolls up, then a turn is appended, so the Jump button shows a count (decision 0012) |
-| `Framed` | `framed` |
-| `Widths` | `sm`, `md`, `full` |
-
-**Coverage:** 0% (not built)
+**Coverage:** 83% (5/6)
 
 <!-- AUTO-END:storybook -->
 
@@ -145,7 +142,7 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 - `Message` (expected children)
 - `Button`, `TuiIcon` (Jump button)
 - `VisuallyHidden` (status region)
-- A new internal `useFollowScroll` hook (`lib/use-follow-scroll.ts`), extracted from LogView. It follows on item count and on content height (`ResizeObserver` on the content column)
+- `useFollowScroll` (`lib/use-follow-scroll.ts`), shared with LogView: follows on turn count and on content height (`ResizeObserver` on the content column)
 
 ### Foundation Files Referenced
 
@@ -200,7 +197,7 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-10-28 | LogView's follow logic is local to LogView | Extract `useFollowScroll`; LogView adopts it in the same PR with no behavior change, covered by its existing tests | Open |
+| 2026-10-28 | LogView's follow logic was local to LogView | Extracted as `useFollowScroll` (#97); both use it | Resolved |
 | 2026-10-28 | Long conversations render every turn | Fine for replay sessions (tens of turns). Revisit virtualization only if live sessions get long | Open |
 
 <!-- AUTO-END:known-gaps -->
@@ -214,6 +211,7 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
+| v1 | 2026-10-28 | added | Built to the reviewed spec. The content column is always rendered so streaming growth is followed from the first turn |
 
 <!-- AUTO-END:changelog -->
 
@@ -221,4 +219,4 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 
 ## Reference Implementation
 
-`packages/components/src/components/Transcript.tsx` (planned)
+`packages/components/src/components/Transcript.tsx`

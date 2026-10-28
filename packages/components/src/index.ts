@@ -164,6 +164,9 @@ export type { WindowProps } from './components/Window';
 export { LogView } from './components/LogView';
 export type { LogViewProps, LogLine, LogLevel } from './components/LogView';
 
+export { CodeBlock } from './components/CodeBlock';
+export type { CodeBlockProps } from './components/CodeBlock';
+
 export { StatusLine, StatusLineSegment } from './components/StatusLine';
 export type { StatusLineProps, StatusLineSegmentProps, StatusLineTone } from './components/StatusLine';
 
@@ -178,6 +181,16 @@ export type { TreeViewProps, TreeNode } from './components/TreeView';
 
 export { Kbd } from './components/Kbd';
 export type { KbdProps } from './components/Kbd';
+
+// Chat
+export { Composer } from './components/Composer';
+export type { ComposerProps, ComposerSubmitKey } from './components/Composer';
+
+export { Message } from './components/Message';
+export type { MessageProps, MessageAuthor, MessageStatus } from './components/Message';
+
+export { Transcript } from './components/Transcript';
+export type { TranscriptProps, TranscriptWidth } from './components/Transcript';
 // --- end navigation + terminal components ---
 
 export { Fieldset } from './components/Fieldset';
