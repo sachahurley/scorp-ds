@@ -8,7 +8,7 @@
 # them (patterns, the changelog) have no hash and are checked for presence only.
 #
 # CI runs this after `generate-api-surface.mjs --check`, so the manifest it
-# compares against is known to be current. See docs/decisions/0015.
+# compares against is known to be current. See docs/decisions/0016.
 #
 # Usage: bash scripts/detect-spec-drift.sh
 #

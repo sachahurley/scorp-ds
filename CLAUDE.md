@@ -234,7 +234,7 @@ screenshot in both themes before it is approved.
 - [ ] Storybook story added; interaction-gated stories carry a `play` function
 - [ ] `npm run lint`, `npm run type-check` and `npm test` pass (CI runs all three)
 - [ ] A changed public API has its spec updated and re-stamped (`node scripts/stamp-spec-api-hash.mjs <Name>`); CI fails on spec drift
-- [ ] The three required checks pass: `checks`, `storybook-test-runner`, `visual`. A red check blocks the merge (`docs/decisions/0014`)
+- [ ] The three required checks pass: `checks`, `storybook-test-runner`, `visual`. A red check blocks the merge (`docs/decisions/0015`)
 - [ ] No imports from `@sachahurley/scorpion-ui` (old package — forbidden)
 
 ## What NOT to Do

@@ -1,4 +1,4 @@
-# 15. Spec drift fails CI
+# 16. Spec drift fails CI
 
 - **Status:** accepted
 - **Date:** 2026-10-27

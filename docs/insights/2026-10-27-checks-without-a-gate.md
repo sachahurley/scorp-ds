@@ -26,5 +26,5 @@ A check is only as strong as the thing that acts on its result. Before adding a 
 something fails when it does: the script's exit code, the workflow that runs it, and the
 branch rule that requires that workflow. Each of the three was missing somewhere here.
 
-Decisions that followed: `../decisions/0014-ci-checks-are-required-to-merge.md`,
-`../decisions/0015-spec-drift-is-a-ci-gate.md`.
+Decisions that followed: `../decisions/0015-ci-checks-are-required-to-merge.md`,
+`../decisions/0016-spec-drift-is-a-ci-gate.md`.

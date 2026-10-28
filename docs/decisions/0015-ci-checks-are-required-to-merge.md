@@ -1,4 +1,4 @@
-# 14. CI checks are required to merge into `main`
+# 15. CI checks are required to merge into `main`
 
 - **Status:** accepted
 - **Date:** 2026-10-27
