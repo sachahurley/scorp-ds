@@ -34,6 +34,9 @@
 
 import { forwardRef, useEffect, type ButtonHTMLAttributes, type CSSProperties, type MouseEvent } from "react";
 import { resolveSize, type ControlSizeProp } from "../lib/size";
+
+/** @deprecated Icon-only buttons are squared automatically at every size: use `md`. */
+type DeprecatedButtonSize = "icon";
 import { Spinner } from "./Spinner";
 
 // Define the props interface for the Button component
@@ -49,7 +52,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * tokens. Legacy small/medium/large still work (deprecated). Icon-only buttons
    * are squared automatically. `"icon"` is deprecated: use "md".
    */
-  size?: ControlSizeProp | "icon";
+  size?: ControlSizeProp | DeprecatedButtonSize;
   /** Disables the button (anchors drop `href` and set `aria-disabled`). */
   disabled?: boolean;
   /**

@@ -28,7 +28,7 @@ import { describe, expect, it } from 'vitest';
 
 interface ManifestExport {
   name: string;
-  kind: 'function' | 'const' | 'interface' | 'type';
+  kind: 'component' | 'function' | 'const' | 'interface' | 'type';
 }
 
 interface ManifestEntry {
@@ -118,7 +118,9 @@ const testImports = exercisedByAny(
 );
 
 function runtimeExports(entry: ManifestEntry): string[] {
-  return entry.exports.filter((e) => e.kind === 'function' || e.kind === 'const').map((e) => e.name);
+  return entry.exports
+    .filter((e) => e.kind === 'component' || e.kind === 'function' || e.kind === 'const')
+    .map((e) => e.name);
 }
 
 function uncovered(imported: Set<string>): string[] {
