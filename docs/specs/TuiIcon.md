@@ -13,7 +13,7 @@
 | Story | `Components/Display/TuiIcon` |
 | Version | `v3` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `06f99e011e97cbbe` |
 
 ---
@@ -22,7 +22,7 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-TuiIcon is the system's only icon component: 51 names drawn as 1-bit pixel art on a 7x7 grid. Use it for every glyph inside interactive UI (button icons, close marks, chevrons, status markers); use the `TUI_ICON_GLYPHS` text forms only in plain-text contexts such as tui-art frames and terminal strings. Icons are always decorative (`aria-hidden`), so the surrounding control or text must carry the meaning.
+TuiIcon is the system's only icon component: 52 names drawn as 1-bit pixel art on a 7x7 grid. Use it for every glyph inside interactive UI (button icons, close marks, chevrons, status markers); use the `TUI_ICON_GLYPHS` text forms only in plain-text contexts such as tui-art frames and terminal strings. Icons are always decorative (`aria-hidden`), so the surrounding control or text must carry the meaning.
 
 Every icon renders identically on every OS. Three layers, decided by Sacha on 2026-09-21:
 
@@ -40,7 +40,7 @@ Every icon renders identically on every OS. Three layers, decided by Sacha on 20
 
 `<span aria-hidden="true">` (`inline-flex`, centered, `font-mono leading-none select-none`, box size from `size`) containing one `<svg viewBox="0 0 7 7" fill="currentColor" shape-rendering="crispEdges">` with a single `<path>`. The path is precomputed once per icon at module load (`ICON_PATHS`): each horizontal run of `#` in a bitmap row becomes one rect subpath. The art is drawn at `7 x pixel` px and centered in the box, never stretched. An unknown `name` renders a text `?` instead of the SVG.
 
-### Icon set (51 names, keys of `TUI_ICON_GLYPHS`)
+### Icon set (52 names, keys of `TUI_ICON_GLYPHS`)
 
 Keys are Lucide-compatible component names.
 
@@ -51,7 +51,7 @@ Keys are Lucide-compatible component names.
 | Actions | `Copy`, `Download`, `Edit`, `Minus`, `Plus`, `Save`, `Search`, `Send`, `Share2`, `Trash2`, `Upload` |
 | Objects | `Archive`, `Bell`, `FileText`, `Globe`, `Lock`, `Mail`, `Settings`, `Shield`, `Star`, `Tag`, `User` |
 | Visibility / theme | `Eye`, `EyeOff`, `Moon`, `Sun` |
-| Media | `Music2`, `Pause`, `Play`, `Repeat`, `Shuffle`, `SkipBack`, `SkipForward`, `Volume2`, `VolumeX` |
+| Media | `Music2`, `Pause`, `Play`, `Repeat`, `Shuffle`, `SkipBack`, `SkipForward`, `Stop`, `Volume2`, `VolumeX` |
 
 `Minus` (U+2212, a full-width 7px horizontal bar on the center row) is the most recent addition, used by Checkbox's indeterminate mark; `Menu` (U+2630) came just before it. Several names share a text form (for example `AlertCircle` / `AlertTriangle` both map to U+26A0, `Download` / `Save` to U+2913), but each has its own bitmap except `ChevronRight` and `Play`, which are identical.
 
@@ -139,7 +139,7 @@ Each size also sets a text size (`text-xs` to `text-2xl`) that only applies to t
 | Single icon | Yes | Yes | `Check` (size 4), `ChevronDown` (size 5) |
 | Sizes 3 / 4 / 5 / 6 / 8 | Yes | Yes | `Size scale` |
 | Common set | Yes | Yes | `Common glyphs` (7 names) |
-| Full catalog (all 51 names, glyphs, code points) | Yes | Yes | `Foundation/1-bit icons` > `Catalog` |
+| Full catalog (all 52 names, glyphs, code points) | Yes | Yes | `Foundation/1-bit icons` > `Catalog` |
 | Unknown-name fallback `?` | Yes | No | |
 
 Interactive controls: `name` (text), `size` (select) on the arg-driven stories.
@@ -255,6 +255,7 @@ Imported by `Alert`, `Badge`, `Checkbox` (`Check`, `Minus`), `Dropdown`, `Link`,
 | v2 | 2026-09-21 | feat | All 49 icons drawn as SVG (`TUI_ICON_DRAWINGS`); text forms render via the Scorp Symbols face; glyph audit in CI. |
 | v1.1 | 2026-09-21 | fix | `X` renders as a drawn SVG close mark instead of the fallback-font ✗ glyph. |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-10-28 | feat | Added `Stop` (5x5 filled square, text form U+23F9) for Composer's stop button; Scorp Symbols rebuilt, glyph audit passes. 52 icons |
 
 <!-- AUTO-END:changelog -->
 
