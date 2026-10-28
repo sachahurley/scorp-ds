@@ -74,7 +74,7 @@ export const InspectorLayout: Story = {
               <Stack gap="3" className="h-full">
                 <div className="flex flex-wrap items-center gap-2">
                   <Input
-                    className="min-w-[12rem] flex-1"
+                    className="min-w-48 flex-1"
                     placeholder="Filter…"
                     aria-label="Filter log lines"
                     size="sm"

@@ -277,10 +277,10 @@ function MusicPlayerCard({
 
   return (
     // Elevation: the plate clip-path slices box shadows off, so the shadow is a
-    // drop-shadow filter on a wrapper (same recipe and values as the docked Modal).
+    // drop-shadow filter on a wrapper: the docked Modal's --elevation-docked-filter.
     <div
       className="w-full max-w-md"
-      style={{ filter: 'drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))' }}
+      style={{ filter: 'var(--elevation-docked-filter)' }}
     >
       <Card className="relative w-full">
         {/* Screen reader parity with the visual track change. */}
@@ -470,7 +470,7 @@ function MusicPlayerBar({
   return (
     <div
       className="w-full max-w-md"
-      style={{ filter: 'drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))' }}
+      style={{ filter: 'var(--elevation-docked-filter)' }}
     >
       {/* Compact plate ring: Card's recipe at bar density (Card's fixed
           content padding is too deep for a mini bar). */}

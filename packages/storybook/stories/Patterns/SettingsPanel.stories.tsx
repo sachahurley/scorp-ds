@@ -63,7 +63,7 @@ export const AccountPreferences: Story = {
                 <option value="fr">Français</option>
               </Select>
             </Stack>
-            <div className="border-t-[0.5px] border-solid border-[var(--surface-container-stroke)] pt-4">
+            <div className="border-t-hairline border-solid border-[var(--surface-container-stroke)] pt-4">
               <p className="mb-3 font-mono text-xs uppercase tracking-wider text-[var(--text-primary)]">
                 Notifications
               </p>

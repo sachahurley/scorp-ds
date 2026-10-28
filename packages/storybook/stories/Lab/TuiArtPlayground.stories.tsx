@@ -73,7 +73,7 @@ function TuiArtPlaygroundPage() {
           </label>
           <input
             id="tui-art-title"
-            className="w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+            className="w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             type="text"
@@ -83,7 +83,7 @@ function TuiArtPlaygroundPage() {
           </label>
           <textarea
             id="tui-art-body"
-            className="h-32 w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+            className="h-32 w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
             value={bodyText}
             onChange={(e) => setBodyText(e.target.value)}
           />
@@ -92,7 +92,7 @@ function TuiArtPlaygroundPage() {
           </label>
           <input
             id="tui-art-width"
-            className="w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+            className="w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
             value={widthStr}
             onChange={(e) => setWidthStr(e.target.value)}
             inputMode="numeric"
@@ -104,7 +104,7 @@ function TuiArtPlaygroundPage() {
           </label>
           <select
             id="tui-art-style"
-            className="w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+            className="w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
             value={style}
             onChange={(e) => setStyle(e.target.value as BoxStyle)}
           >
@@ -139,7 +139,7 @@ function TuiArtPlaygroundPage() {
             <span className="font-bold text-secondary-800 dark:text-secondary-400">Cell 0</span>
             <input
               id="tui-row-c0"
-              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
               value={c0}
               onChange={(e) => setC0(e.target.value)}
               type="text"
@@ -149,7 +149,7 @@ function TuiArtPlaygroundPage() {
             <span className="font-bold text-secondary-800 dark:text-secondary-400">Cell 1</span>
             <input
               id="tui-row-c1"
-              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
               value={c1}
               onChange={(e) => setC1(e.target.value)}
               type="text"
@@ -159,7 +159,7 @@ function TuiArtPlaygroundPage() {
             <span className="font-bold text-secondary-800 dark:text-secondary-400">Cell 2</span>
             <input
               id="tui-row-c2"
-              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
               value={c2}
               onChange={(e) => setC2(e.target.value)}
               type="text"
@@ -171,7 +171,7 @@ function TuiArtPlaygroundPage() {
             <span className="font-bold text-secondary-800 dark:text-secondary-400">Width 0</span>
             <input
               id="tui-row-w0"
-              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
               value={w0}
               onChange={(e) => setW0(e.target.value)}
               type="text"
@@ -181,7 +181,7 @@ function TuiArtPlaygroundPage() {
             <span className="font-bold text-secondary-800 dark:text-secondary-400">Width 1</span>
             <input
               id="tui-row-w1"
-              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
               value={w1}
               onChange={(e) => setW1(e.target.value)}
               type="text"
@@ -191,7 +191,7 @@ function TuiArtPlaygroundPage() {
             <span className="font-bold text-secondary-800 dark:text-secondary-400">Width 2</span>
             <input
               id="tui-row-w2"
-              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-default)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
+              className="mt-1 w-full border border-secondary-400 bg-[var(--surface-page)] px-2 py-1 text-secondary-900 dark:border-secondary-600 dark:text-secondary-100"
               value={w2}
               onChange={(e) => setW2(e.target.value)}
               type="text"

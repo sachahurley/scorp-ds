@@ -91,7 +91,7 @@ function OneBitIconsPage() {
               {ICON_ROWS.map(({ name, glyph, codePoints }) => (
                 <tr
                   key={name}
-                  className="border-b border-secondary-200 odd:bg-[var(--surface-default)] even:bg-secondary-50 dark:border-secondary-800 dark:even:bg-secondary-950"
+                  className="border-b border-secondary-200 odd:bg-[var(--surface-page)] even:bg-secondary-50 dark:border-secondary-800 dark:even:bg-secondary-950"
                 >
                   <td className="p-2 align-middle">
                     <TuiIcon name={name} size="5" className="text-primary-700 dark:text-primary-400" />

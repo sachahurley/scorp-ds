@@ -40,6 +40,16 @@ export default tseslint.config(
       "scorp/no-sans": "error",
       "scorp/no-legacy-package": "error",
       "scorp/public-jsdoc": "error",
+      "scorp/no-default-tailwind": "error",
+      "scorp/no-style-literals": "error",
+      "scorp/no-slow-motion": [
+        "error",
+        {
+          // Overlays entering or leaving the viewport may use --duration-slow
+          // (docs/decisions/0025). Add a file here only for that reason.
+          overlayFiles: ["packages/components/src/components/BottomSheet.tsx"],
+        },
+      ],
       "scorp/no-arbitrary-values": [
         "error",
         {
@@ -78,6 +88,69 @@ export default tseslint.config(
       "scorp/no-rounded": "error",
       "scorp/no-sans": "error",
       "scorp/no-legacy-package": "error",
+      "scorp/no-raw-color": "error",
+      "scorp/no-raw-scale": "error",
+      "scorp/no-default-tailwind": "error",
+      "scorp/no-arbitrary-values": [
+        "error",
+        {
+          // Story canvases, not component geometry. Each one sizes the frame so
+          // the subject (an open panel, a dragged thumb, a wide table) fits in
+          // the captured screenshot. They never reach a consumer.
+          allow: [
+            // Popover stories: room for the open panel on each side.
+            "min-w-[420px]",
+            "min-h-[360px]",
+            "min-h-[420px]",
+            // Slider: a track long enough to show step marks.
+            "w-[32rem]",
+            // Token doc tables: wide enough that values do not wrap.
+            "min-w-[720px]",
+          ],
+        },
+      ],
+    },
+  },
+  // Every var(--name), everywhere outside packages/tokens, must name a custom
+  // property that exists (docs/decisions/0023). The token stories are included:
+  // a typo there documents a token that is not real. Deep imports into another
+  // package's src/ are banned for the same audience: the barrel is the contract.
+  {
+    files: [
+      "packages/components/src/**/*.{ts,tsx}",
+      "packages/storybook/stories/**/*.{ts,tsx}",
+      "packages/storybook/presets/**/*.{ts,tsx}",
+      "packages/storybook/.storybook/**/*.{ts,tsx}",
+      "packages/site/src/**/*.{ts,tsx}",
+    ],
+    ignores: ["packages/components/src/__tests__/**"],
+    plugins: { scorp },
+    rules: {
+      "scorp/no-undefined-css-var": [
+        "error",
+        {
+          allow: [
+            // Set inline by Popover on its panel, read with a fallback by the
+            // Combobox list it anchors. Runtime geometry, not a token.
+            "--popover-available-height",
+          ],
+        },
+      ],
+      "scorp/no-deep-import": "error",
+      "scorp/no-legacy-package": "error",
+    },
+  },
+  // The site is a consumer of the system and gets the consumer rules.
+  {
+    files: ["packages/site/src/**/*.{ts,tsx}"],
+    plugins: { scorp },
+    rules: {
+      "scorp/no-raw-color": "error",
+      "scorp/no-raw-scale": "error",
+      "scorp/no-rounded": "error",
+      "scorp/no-sans": "error",
+      "scorp/no-default-tailwind": "error",
+      "scorp/no-arbitrary-values": ["error", { allow: [] }],
     },
   },
   // Story files only. A `play` function that focuses an element in JS captures a
