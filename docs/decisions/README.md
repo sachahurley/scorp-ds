@@ -29,6 +29,6 @@ Start from `0000-template.md`. Number sequentially.
 | [0016](0016-spec-drift-is-a-ci-gate.md) | Spec drift fails CI | `detect-spec-drift.sh`, CI, every spec |
 | [0017](0017-coverage-is-a-ratchet.md) | Every component has a story and a test, held by a ratchet | `coverage.test.ts`, every new component |
 | [0018](0018-pin-actions-and-let-dependabot-move-them.md) | Pin actions to commits; Dependabot moves them | Every workflow, dependencies |
-| [0018](0018-main-health-is-one-issue.md) | The health of `main` is one GitHub issue | `main-health.yml`, issues |
+| [0019](0019-main-health-is-one-issue.md) | The health of `main` is one GitHub issue | `main-health.yml`, issues |
 | [0020](0020-baselines-refresh-by-commit-tag.md) | Visual baselines are refreshed by a commit tag | Visual regression, every rendered change |
 | [0021](0021-consumers-are-built-before-merge.md) | Consumers are built against a change before it merges | `check-consumers.mjs`, API changes |

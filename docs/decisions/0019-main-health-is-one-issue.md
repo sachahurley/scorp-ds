@@ -1,4 +1,4 @@
-# 18. The health of `main` is one GitHub issue
+# 19. The health of `main` is one GitHub issue
 
 - **Status:** accepted
 - **Date:** 2026-10-27
@@ -6,7 +6,7 @@
 
 ## Context
 
-With checks required on pull requests (decision 0014), `main` can still go red: a Pages deploy
+With checks required on pull requests (decision 0015), `main` can still go red: a Pages deploy
 fails, a check is bypassed, or a dependency advisory is published after the last merge. Before
 this, a red run on `main` surfaced only on the Actions page and in a GitHub email, and
 `ds-health.sh` ran only when someone remembered to.
@@ -26,7 +26,7 @@ because GitHub only runs schedules from the default branch and Aura's trunk is n
   triggered it, so a green CI cannot close an issue that a red deploy opened. A `cancelled` run
   (a deploy superseded by a newer push) counts as green.
 - The weekly and manual runs also run the full `ds-health.sh`. A failure there counts.
-- `npm audit` is written to the run summary and **does not** open the issue (decision 0017).
+- `npm audit` is written to the run summary and **does not** open the issue (decision 0018).
 - Any failure opens the issue or comments on it; all green closes it with a comment.
 
 It is report-only: no push, no code change, default token, `issues: write` and nothing more.

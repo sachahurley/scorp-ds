@@ -1,6 +1,6 @@
 # Keeps one GitHub issue honest about the state of main: opened (or commented
 # on) when a check on main fails, closed when everything is green again. You
-# only hear about main when it is broken. See docs/decisions/0018.
+# only hear about main when it is broken. See docs/decisions/0019.
 #
 # Report only: this workflow never pushes, never edits code, and needs no
 # secrets beyond the default token.
@@ -10,7 +10,7 @@
 # - Weekly, and by hand: the full ds-health.sh plus an npm audit report, which
 #   catch what a push cannot (a dependency advisory published since the last
 #   merge). The audit is reported in the run summary and does not open the
-#   issue until decision 0017's gate is in place.
+#   issue until decision 0018's gate is in place.
 name: main health
 
 on:
