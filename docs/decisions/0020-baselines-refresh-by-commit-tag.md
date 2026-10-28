@@ -1,4 +1,4 @@
-# 19. Visual baselines are refreshed by a commit tag
+# 20. Visual baselines are refreshed by a commit tag
 
 - **Status:** accepted
 - **Date:** 2026-10-27
@@ -9,7 +9,7 @@
 A PR that changed how anything renders needed new baselines, and the only route was: dispatch
 Visual regression with `update`, wait, download the `visual-baselines` artifact, unzip it over
 `packages/storybook/visual-baselines/`, commit, push. With `visual` now a required check
-(decision 0014), that round trip sits in front of every rendered change.
+(decision 0015), that round trip sits in front of every rendered change.
 
 Aura DS replaced the same round trip with a commit tag: `[update-goldens]` makes a workflow
 regenerate the goldens on Linux and commit them back. Its bot pushes with the default

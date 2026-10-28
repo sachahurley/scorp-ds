@@ -4,7 +4,7 @@
 # Linux, so a baseline captured on a laptop will never match here. They are
 # generated and compared ONLY in this container.
 #
-# Two ways to refresh them (decision 0019):
+# Two ways to refresh them (decision 0020):
 # - Put [update-baselines] in the message of a pull request's latest commit.
 #   This job then rewrites the frames that changed, commits them to the branch,
 #   and re-runs the required checks on that commit. Review the PNGs in the
