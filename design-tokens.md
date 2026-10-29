@@ -5,6 +5,8 @@
 
 **Last updated:** Sep 2026 (portfolio merge: gold accent, fire ramp, hairline border, plate silhouettes, dark re-pins)
 
+> **Generated tables.** Every table between `<!-- AUTO-START:tokens-<group> -->` and `<!-- AUTO-END:tokens-<group> -->` is written by `npm run tokens-doc` (`scripts/generate-token-docs.mjs`) from `tokens.json`: name, CSS variable, value (light and dark for a semantic group) and the token's `$description` as the "Use for" text. To change a row, edit the token's `$description` and re-run; an edit inside the markers is overwritten, and CI fails while a table is stale (`npm run tokens-doc:check`). Everything outside the markers is hand-written.
+
 ## How Tokens Work
 
 Scorp DS uses a three-layer token architecture:
@@ -99,14 +101,16 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 
 ### Border
 
-| Token | Use For |
-|-------|---------|
-| `border.default` | Default dividers, controls |
-| `border.muted` | Soft separators |
-| `border.strong` | Emphasized outlines |
-| `border.hairline` | Quiet chrome hairline just off the page surface (dark: near-black sepia-900) |
-| `border.error` | Validation |
-| `border.focus` | Focus outline color (pair with global ring width) |
+<!-- AUTO-START:tokens-border -->
+| Token | CSS variable | Light | Dark | Use for |
+|-------|--------------|-------|------|---------|
+| `border.default` | `--border-default` | `secondary.300` (#F0EBE4) | `secondary.700` (#695F4D) | Default dividers and control outlines. |
+| `border.muted` | `--border-muted` | `secondary.200` (#F7F5F2) | `secondary.800` (#474030) | Soft separators. |
+| `border.strong` | `--border-strong` | `secondary.600` (#968A75) | `secondary.500` (#BFB4A3) | Emphasised outlines. |
+| `border.hairline` | `--border-hairline` | `secondary.300` (#F0EBE4) | `secondary.900` (#2B2718) | Quiet chrome hairline sitting just off the page surface. Dark theme resolves near-black (sepia-900). |
+| `border.error` | `--border-error` | `error.500` (#EF4444) | same | Validation: the outline of an invalid control. |
+| `border.focus` | `--border-focus` | `primary.400` (#FBBF24) | same | Focus outline colour. Pair with the global focus.ring.width. |
+<!-- AUTO-END:tokens-border -->
 
 **Tailwind:** `border-line-default`, `border-line-muted`, …
 
@@ -134,21 +138,25 @@ The named foundation step `amber.gold` (`--color-amber-gold`, #E0A26A) sits betw
 
 ### Focus
 
-| Token | Use For |
-|-------|---------|
-| `focus.ring.primary` | Default focus ring |
-| `focus.ring.secondary` | Neutral focus |
-| `focus.ring.error` | Invalid field |
-| `focus.ring.destructive` | Destructive control |
-| `focus.ring.icon` | Icon / square button focus ring |
-| `focus.offset-color` | Ring offset gap fill |
+<!-- AUTO-START:tokens-focus -->
+| Token | CSS variable | Light | Dark | Use for |
+|-------|--------------|-------|------|---------|
+| `focus.ring.primary` | `--focus-ring-primary` | `primary.400` (#FBBF24) | same | Default focus ring. |
+| `focus.ring.secondary` | `--focus-ring-secondary` | `secondary.700` (#695F4D) | same | Neutral focus ring. |
+| `focus.ring.error` | `--focus-ring-error` | `error.600` (#DC2626) | `error.500` (#EF4444) | Focus ring on an invalid field. |
+| `focus.ring.destructive` | `--focus-ring-destructive` | `error.600` (#DC2626) | `error.500` (#EF4444) | Focus ring on a destructive control. |
+| `focus.ring.icon` | `--focus-ring-icon` | `primary.400` (#FBBF24) | same | Focus ring on an icon or square button. |
+| `focus.offset-color` | `--focus-offset-color` | `secondary.50` (#FDFCFB) | `secondary.1000` (#0A0704) | Fill of the gap between a control and its focus ring. |
+<!-- AUTO-END:tokens-focus -->
 
 **Global (foundation) — pair with semantic ring colors:**
 
-| CSS variable | Role |
-|--------------|------|
-| `--focus-ring-width` | Ring thickness |
-| `--focus-ring-offset` | Gap between control and ring |
+<!-- AUTO-START:tokens-focus-geometry -->
+| Token | CSS variable | Value | Use for |
+|-------|--------------|-------|---------|
+| `focus.ring.width` | `--focus-ring-width` | `2px` | Focus ring thickness. Pair with a semantic focus.ring colour. |
+| `focus.ring.offset` | `--focus-ring-offset` | `2px` | Gap between the control and its focus ring. |
+<!-- AUTO-END:tokens-focus-geometry -->
 
 **Storybook:** **Semantic / Focus** — live ring previews, light/dark tables, and `:focus-visible` example.
 
@@ -185,20 +193,22 @@ Theme-aware depth for cards and raised surfaces. Each level defines a **shadow**
 
 Global alpha steps (`global.opacity` in `tokens.json`). Same numeric values in light and dark.
 
-| Step (suffix) | CSS variable | Resolved (0–1) |
-|---------------|--------------|----------------|
-| `0` | `--opacity-0` | 0 |
-| `5` | `--opacity-5` | 0.05 |
-| `10` | `--opacity-10` | 0.1 |
-| `20` | `--opacity-20` | 0.2 |
-| `30` | `--opacity-30` | 0.3 |
-| `40` | `--opacity-40` | 0.4 |
-| `50` | `--opacity-50` | 0.5 |
-| `60` | `--opacity-60` | 0.6 |
-| `70` | `--opacity-70` | 0.7 |
-| `80` | `--opacity-80` | 0.8 |
-| `90` | `--opacity-90` | 0.9 |
-| `100` | `--opacity-100` | 1 |
+<!-- AUTO-START:tokens-opacity -->
+| Token | CSS variable | Value |
+|-------|--------------|-------|
+| `opacity.0` | `--opacity-0` | `0` |
+| `opacity.5` | `--opacity-5` | `0.05` |
+| `opacity.10` | `--opacity-10` | `0.1` |
+| `opacity.20` | `--opacity-20` | `0.2` |
+| `opacity.30` | `--opacity-30` | `0.3` |
+| `opacity.40` | `--opacity-40` | `0.4` |
+| `opacity.50` | `--opacity-50` | `0.5` |
+| `opacity.60` | `--opacity-60` | `0.6` |
+| `opacity.70` | `--opacity-70` | `0.7` |
+| `opacity.80` | `--opacity-80` | `0.8` |
+| `opacity.90` | `--opacity-90` | `0.9` |
+| `opacity.100` | `--opacity-100` | `1` |
+<!-- AUTO-END:tokens-opacity -->
 
 **Use for:** scrims, disabled washes, subtle overlays — combine with semantic colors (e.g. `surface.overlay`), not raw hex.
 
@@ -208,56 +218,70 @@ Global alpha steps (`global.opacity` in `tokens.json`). Same numeric values in l
 
 Global stacking scale (`global.zIndex`). Theme-independent — same numbers in light and dark.
 
-| Token (JSON path) | CSS variable | Value |
-|-------------------|--------------|-------|
-| `zIndex.base` | `--z-index-base` | 0 |
-| `zIndex.dropdown` | `--z-index-dropdown` | 1000 |
-| `zIndex.sticky` | `--z-index-sticky` | 1020 |
-| `zIndex.overlay` | `--z-index-overlay` | 1030 |
-| `zIndex.modal` | `--z-index-modal` | 1040 |
-| `zIndex.popover` | `--z-index-popover` | 1050 |
-| `zIndex.tooltip` | `--z-index-tooltip` | 1060 |
+<!-- AUTO-START:tokens-z-index -->
+| Token | CSS variable | Value |
+|-------|--------------|-------|
+| `zIndex.base` | `--z-index-base` | `0` |
+| `zIndex.dropdown` | `--z-index-dropdown` | `1000` |
+| `zIndex.sticky` | `--z-index-sticky` | `1020` |
+| `zIndex.overlay` | `--z-index-overlay` | `1030` |
+| `zIndex.modal` | `--z-index-modal` | `1040` |
+| `zIndex.popover` | `--z-index-popover` | `1050` |
+| `zIndex.tooltip` | `--z-index-tooltip` | `1060` |
+<!-- AUTO-END:tokens-z-index -->
 
-**Storybook:** **Foundation / Z-index** — stacking demo with leader lines and full token table.
+**Storybook:** **Foundation / ZIndex**: stacking demo with leader lines and full token table.
 
 ## Typography Tokens
 
 | Token | CSS variable | Value | Use For |
 |-------|--------------|-------|---------|
-| `font.family.mono` | `--font-family-mono` | `'Fragment Mono', 'Scorp Symbols', ui-monospace, monospace` | All text — Scorp DS is monospace everywhere. Scorp Symbols (inlined in tokens.css) paints only glyphs Fragment Mono lacks, width-matched to its cell; see `packages/tokens/src/fonts/README.md` |
-| `font.size.3xs` | `--font-size-3xs` | 10px | Dense game chrome; use sparingly |
-| `font.size.2xs` | `--font-size-2xs` | 11px | Tooltips, meta captions |
-| `font.size.xs` | `--font-size-xs` | 12px | Labels, captions |
-| `font.size.sm` | `--font-size-sm` | 14px | Body text, buttons |
-| `font.size.base` | `--font-size-base` | 16px | Default body |
-| `font.size.lg` | `--font-size-lg` | 18px | Lead text |
-| `font.size.xl` | `--font-size-xl` | 20px | Section headings |
-| `font.size.2xl` | `--font-size-2xl` | 24px | Page subheadings |
-| `font.size.3xl` | `--font-size-3xl` | 48px | Page headings |
-| `font.size.4xl` | `--font-size-4xl` | 64px | Display / marketing |
-| `font.size.5xl` | `--font-size-5xl` | 80px | Display / marketing |
-| `font.size.6xl` | `--font-size-6xl` | 96px | Display / marketing |
+| `font.family.mono` | `--font-family-mono` | `'Fragment Mono', 'Scorp Symbols', ui-monospace, monospace` | All text: Scorp DS is monospace everywhere. Scorp Symbols (inlined in tokens.css) paints only glyphs Fragment Mono lacks, width-matched to its cell; see `packages/tokens/src/fonts/README.md` |
+
+### Font size (`global.font.size`)
+
+<!-- AUTO-START:tokens-font-size -->
+| Token | CSS variable | Value | Use for |
+|-------|--------------|-------|---------|
+| `font.size.3xs` | `--font-size-3xs` | `10px` | Dense game chrome (character sheet, tile browser). Use sparingly; below a11y body-text sizes. |
+| `font.size.2xs` | `--font-size-2xs` | `11px` | Tooltips, meta captions. Adopted from the portfolio scale. |
+| `font.size.xs` | `--font-size-xs` | `12px` | Labels, captions. |
+| `font.size.sm` | `--font-size-sm` | `14px` | Body text, buttons. |
+| `font.size.base` | `--font-size-base` | `16px` | Default body. |
+| `font.size.lg` | `--font-size-lg` | `18px` | Lead text. |
+| `font.size.xl` | `--font-size-xl` | `20px` | Section headings. |
+| `font.size.2xl` | `--font-size-2xl` | `24px` | Page subheadings. |
+| `font.size.pageTitle` | `--font-size-page-title` | `36px` | The h1 of a long-form page (CaseStudyHeader at sm and up). Role-named because it sits between 2xl (24px) and 3xl (48px), where the t-shirt scale has no step. |
+| `font.size.3xl` | `--font-size-3xl` | `48px` | Page headings. |
+| `font.size.4xl` | `--font-size-4xl` | `64px` | Display and marketing. |
+| `font.size.5xl` | `--font-size-5xl` | `80px` | Display and marketing. |
+| `font.size.6xl` | `--font-size-6xl` | `96px` | Display and marketing. |
+<!-- AUTO-END:tokens-font-size -->
 
 **Tailwind (preset):** `font-mono`, `text-xs` through `text-6xl` map to the variables above (`@scorp-ds/tokens/tailwind.preset.js`).
 
 ### Line height (`global.font.lineHeight`)
 
+<!-- AUTO-START:tokens-line-height -->
 | Token | CSS variable | Value |
 |-------|--------------|-------|
-| `lineHeight.none` | `--line-height-none` | 1 |
-| `lineHeight.tight` | `--line-height-tight` | 1.25 |
-| `lineHeight.snug` | `--line-height-snug` | 1.375 |
-| `lineHeight.normal` | `--line-height-normal` | 1.5 |
-| `lineHeight.relaxed` | `--line-height-relaxed` | 1.625 |
-| `lineHeight.loose` | `--line-height-loose` | 2 |
+| `font.lineHeight.none` | `--line-height-none` | `1` |
+| `font.lineHeight.tight` | `--line-height-tight` | `1.25` |
+| `font.lineHeight.snug` | `--line-height-snug` | `1.375` |
+| `font.lineHeight.normal` | `--line-height-normal` | `1.5` |
+| `font.lineHeight.relaxed` | `--line-height-relaxed` | `1.625` |
+| `font.lineHeight.loose` | `--line-height-loose` | `2` |
+<!-- AUTO-END:tokens-line-height -->
 
 ### Font weight (`global.font.weight`)
 
+<!-- AUTO-START:tokens-font-weight -->
 | Token | CSS variable | Value |
 |-------|--------------|-------|
-| `weight.regular` | `--font-weight-regular` | 400 |
-| `weight.medium` | `--font-weight-medium` | 500 |
-| `weight.bold` | `--font-weight-bold` | 700 |
+| `font.weight.regular` | `--font-weight-regular` | `400` |
+| `font.weight.medium` | `--font-weight-medium` | `500` |
+| `font.weight.bold` | `--font-weight-bold` | `700` |
+<!-- AUTO-END:tokens-font-weight -->
 
 There is no 600 step, so `font-semibold` is off-token: use `font-medium` or `font-bold`. The Tailwind preset repoints `font-normal` / `font-medium` / `font-bold` at these variables.
 
@@ -269,25 +293,27 @@ Base unit: **4px** per step (see `global.spacing` in `tokens.json`, `--spacing-*
 
 The Tailwind preset maps every step, whole and half, onto its variable: `p-4` is `var(--spacing-4)`, `py-1.5` is `var(--spacing-1-5)`. The values equal Tailwind's defaults, so the classes render as they always did, but a token edit now reaches every `p-*`, `m-*` and `gap-*` class. Half steps are hyphenated in the token name because DTCG names cannot hold a dot. Padding, margin, gap and space utilities in components must use a step from this table: `p-7`, `gap-9` and the like fail `scorp/no-off-scale-spacing`, and the four derived exceptions are allowlisted with reasons in `eslint.config.mjs` ([decision 0027](docs/decisions/0027-half-step-spacing-is-tokenised.md)). Width, height and position utilities stay on Tailwind's scale.
 
-| Token | Value | Use For |
-|-------|-------|---------|
-| `spacing.0` | 0 | Flush layouts |
-| `spacing.0-5` | 2px | Half step (`0.5`): dense chrome, badge and key insets |
-| `spacing.1` | 4px | Tight gaps |
-| `spacing.1-5` | 6px | Half step (`1.5`): tight row padding |
-| `spacing.2` | 8px | Small padding, icon gaps |
-| `spacing.2-5` | 10px | Half step (`2.5`): compact control padding |
-| `spacing.3` | 12px | Input padding, compact items |
-| `spacing.3-5` | 14px | Half step (`3.5`): dense list row padding |
-| `spacing.4` | 16px | Standard padding |
-| `spacing.5` | 20px | Comfortable inline spacing |
-| `spacing.6` | 24px | Card padding, section gaps |
-| `spacing.8` | 32px | Large section spacing |
-| `spacing.10` | 40px | Hero / section padding |
-| `spacing.12` | 48px | Major section breaks |
-| `spacing.16` | 64px | Page-level rhythm |
-| `spacing.20` | 80px | Marketing / landing blocks |
-| `spacing.24` | 96px | Maximum layout rhythm |
+<!-- AUTO-START:tokens-spacing -->
+| Token | CSS variable | Value | Use for |
+|-------|--------------|-------|---------|
+| `spacing.0` | `--spacing-0` | `0` | Flush layouts. |
+| `spacing.0-5` | `--spacing-0-5` | `2px` | Half step for dense chrome (badge and key insets). Tailwind class: 0.5. Decision 0027. |
+| `spacing.1` | `--spacing-1` | `4px` | Tight gaps. |
+| `spacing.1-5` | `--spacing-1-5` | `6px` | Half step: tight row padding. Tailwind class: 1.5. |
+| `spacing.2` | `--spacing-2` | `8px` | Small padding, icon gaps. |
+| `spacing.2-5` | `--spacing-2-5` | `10px` | Half step: compact control padding. Tailwind class: 2.5. |
+| `spacing.3` | `--spacing-3` | `12px` | Input padding, compact items. |
+| `spacing.3-5` | `--spacing-3-5` | `14px` | Half step: dense list row padding. Tailwind class: 3.5. |
+| `spacing.4` | `--spacing-4` | `16px` | Standard padding. |
+| `spacing.5` | `--spacing-5` | `20px` | Comfortable inline spacing. |
+| `spacing.6` | `--spacing-6` | `24px` | Card padding, section gaps. |
+| `spacing.8` | `--spacing-8` | `32px` | Large section spacing. |
+| `spacing.10` | `--spacing-10` | `40px` | Hero and section padding. |
+| `spacing.12` | `--spacing-12` | `48px` | Major section breaks. |
+| `spacing.16` | `--spacing-16` | `64px` | Page-level rhythm. |
+| `spacing.20` | `--spacing-20` | `80px` | Marketing and landing blocks. |
+| `spacing.24` | `--spacing-24` | `96px` | Maximum layout rhythm. |
+<!-- AUTO-END:tokens-spacing -->
 
 **Storybook:** **Foundation / Spacing** — visual spacing scale.
 
@@ -295,13 +321,25 @@ The Tailwind preset maps every step, whole and half, onto its variable: `p-4` is
 
 The widths at which the interface is allowed to change (`global.breakpoint`). `sm | md | lg | xl` carry Tailwind's default pixel values, so every existing responsive class keeps behaving exactly as before; the Tailwind preset declares its `screens` as literal values (`tailwind.preset.js`, top of file) rather than reading `tokens.json`, on purpose: consumer sites vendor the preset as one standalone file with no `src/` beside it. The token-parser drift test asserts the literals match `tokens.json` and `tokens.css`, so the utilities and the custom properties cannot drift apart. Media queries cannot read custom properties, which is why the `--breakpoint-*` variables exist only for JavaScript that has to make the same decision.
 
-| Token | CSS variable | Value | Tailwind | Used by |
-|-------|--------------|-------|----------|---------|
-| `breakpoint.sm` | `--breakpoint-sm` | 640px | `sm:` | CaseStudy (`sm:mt-24`, `sm:grid-cols-2`) |
-| `breakpoint.md` | `--breakpoint-md` | 768px | `md:` | AppHeader (`md:block` desktop nav, `md:hidden` menu button) |
-| `breakpoint.docked` | `--breakpoint-docked` | 960px | none | Modal `docked` variant (read from JS; a component breakpoint, not a layout step) |
-| `breakpoint.lg` | `--breakpoint-lg` | 1024px | `lg:` | Card (`lg:p-6`) |
-| `breakpoint.xl` | `--breakpoint-xl` | 1280px | `xl:` | Nothing yet |
+<!-- AUTO-START:tokens-breakpoint -->
+| Token | CSS variable | Value | Use for |
+|-------|--------------|-------|---------|
+| `breakpoint.sm` | `--breakpoint-sm` | `640px` | Small: the first responsive step (sm: utilities). Matches Tailwind's default so existing responsive classes keep their behaviour. |
+| `breakpoint.md` | `--breakpoint-md` | `768px` | Medium: tablet portrait (md: utilities). |
+| `breakpoint.docked` | `--breakpoint-docked` | `960px` | Component breakpoint, not a layout step: Modal's docked variant pins bottom-center at or above this width and falls back to the centered modal below it. Read at runtime from --breakpoint-docked. |
+| `breakpoint.lg` | `--breakpoint-lg` | `1024px` | Large: tablet landscape and small laptops (lg: utilities). |
+| `breakpoint.xl` | `--breakpoint-xl` | `1280px` | Extra large: desktop (xl: utilities). |
+<!-- AUTO-END:tokens-breakpoint -->
+
+Where each step is used (hand-written: tokens.json does not record call sites):
+
+| Token | Tailwind | Used by |
+|-------|----------|---------|
+| `breakpoint.sm` | `sm:` | CaseStudy (`sm:mt-24`, `sm:grid-cols-2`) |
+| `breakpoint.md` | `md:` | AppHeader (`md:block` desktop nav, `md:hidden` menu button) |
+| `breakpoint.docked` | none | Modal `docked` variant (read from JS; a component breakpoint, not a layout step) |
+| `breakpoint.lg` | `lg:` | Card (`lg:p-6`) |
+| `breakpoint.xl` | `xl:` | Nothing yet |
 
 Tailwind's `2xl:` default (1536px) survives because the preset declares `screens` under `theme.extend`; it is deliberately not a token, so prefer `xl:` unless a composition genuinely needs it.
 
@@ -323,12 +361,17 @@ One size scale for sized components: `sm | md | lg` ([decision 0011](docs/decisi
 | Table | `density` | `compact \| comfortable \| spacious` (no `size` prop) |
 | Divider | `spacing` | `none \| sm \| md \| lg` (margin around the rule, not a size) |
 
-| Token | CSS variable | Value | Tailwind | Used by |
-|-------|--------------|-------|----------|---------|
-| `control.height.sm` | `--control-height-sm` | 32px | `h-control-sm`, `min-h-control-sm`, `size-control-sm` | Button, Input, Select, Dropdown trigger, Textarea min-height |
-| `control.height.md` | `--control-height-md` | 40px | `h-control-md` … | Default for the same set |
-| `control.height.lg` | `--control-height-lg` | 48px | `h-control-lg` … | Large variants |
-| `touch.target` | `--touch-target` | 44px | `w-touch`, `h-touch` | Hit areas on small controls (Checkbox, Radio, Switch); the Slider row is `h-touch` tall |
+<!-- AUTO-START:tokens-control-size -->
+| Token | CSS variable | Value | Use for |
+|-------|--------------|-------|---------|
+| `control.height.sm` | `--control-height-sm` | `32px` | Small control height: Button, Input, Select, Dropdown trigger, and the Textarea min-height. |
+| `control.height.md` | `--control-height-md` | `40px` | Default control height for the same set. |
+| `control.height.lg` | `--control-height-lg` | `48px` | Large control height: the large variants. |
+| `control.menuMaxHeight` | `--control-menu-max-height` | `300px` | Fallback maximum height for a floating menu list (combobox, dropdown, select) before the popover has measured available viewport space. |
+| `touch.target` | `--touch-target` | `44px` | Minimum tap target: hit areas on small controls (Checkbox, Radio, Switch) expand to this, and the Slider row is this tall. |
+<!-- AUTO-END:tokens-control-size -->
+
+**Tailwind (preset):** `h-control-{sm,md,lg}`, `min-h-control-*`, `size-control-*` for the heights; `w-touch`, `h-touch`, `size-touch` for the touch target.
 
 ## Switch Geometry Tokens
 
@@ -352,17 +395,28 @@ The system draws exactly one rule weight. It replaces the ad hoc `0.5px` rules, 
 
 **Source of truth in `tokens.json`** (`global.duration`):
 
-| Token | Duration (JSON) | Use For |
-|-------|-----------------|--------|
-| `duration.instant` | 0ms | No animation |
-| `duration.fast` | 120ms | Hover, color transitions (plate hovers; was 150ms pre-merge) |
-| `duration.normal` | 200ms | Show/hide, expand/collapse |
-| `duration.slow` | 300ms | Modal enter/exit |
-| `duration.slower` | 500ms | Full-page transitions |
+<!-- AUTO-START:tokens-duration -->
+| Token | CSS variable | Value | Use for |
+|-------|--------------|-------|---------|
+| `duration.instant` | `--duration-instant` | `0ms` | No animation. |
+| `duration.fast` | `--duration-fast` | `120ms` | Hover and colour transitions: the workhorse interactive duration (plate hovers). Was 150ms pre-merge. |
+| `duration.normal` | `--duration-normal` | `200ms` | Show and hide, expand and collapse. The cap for an interactive state change (decision 0025). |
+| `duration.slow` | `--duration-slow` | `300ms` | An overlay entering or leaving the viewport (modal, sheet, toast, drawer). Never an interactive state change (decision 0025). |
+| `duration.slower` | `--duration-slower` | `500ms` | Full-page transitions. Reserved (decision 0025). |
+<!-- AUTO-END:tokens-duration -->
 
 **Runtime CSS:** `--duration-*` in `packages/tokens/src/styles/tokens.css` matches the table above (kept in sync with `tokens.json`). Use the variable, `duration-[var(--duration-fast)]`; a raw duration (`duration-200`, `duration-[250ms]`) is off-token. Interactive state changes use `instant`, `fast` or `normal` (200ms at most); `slow` is for an overlay entering or leaving the viewport, and `slower` is reserved ([decision 0025](docs/decisions/0025-motion-cap-is-for-interactive-states.md)).
 
-Easing curves live in `global.easing` as `--easing-linear`, `--easing-ease-in`, `--easing-ease-out`, `--easing-ease-in-out`.
+Easing curves live in `global.easing`:
+
+<!-- AUTO-START:tokens-easing -->
+| Token | CSS variable | Value |
+|-------|--------------|-------|
+| `easing.linear` | `--easing-linear` | `linear` |
+| `easing.easeIn` | `--easing-ease-in` | `cubic-bezier(0.4, 0, 1, 1)` |
+| `easing.easeOut` | `--easing-ease-out` | `cubic-bezier(0, 0, 0.2, 1)` |
+| `easing.easeInOut` | `--easing-ease-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` |
+<!-- AUTO-END:tokens-easing -->
 
 **Storybook:** **Foundation / Motion** — interactive duration demos and easing variable list.
 
@@ -390,7 +444,7 @@ The radius tokens are **retired**. Corners are stepped one-bit "plate" silhouett
 | Spacing steps | **Foundation / Spacing** |
 | Responsive breakpoints | **Foundation / Breakpoints** |
 | Duration + easing | **Foundation / Motion** |
-| Z-index scale | **Foundation / Z-index** |
+| Z-index scale | **Foundation / ZIndex** |
 | Semantic color roles | **Semantic / Colors** |
 | Elevation | **Semantic / Elevation** |
 | Focus rings + geometry | **Semantic / Focus** |

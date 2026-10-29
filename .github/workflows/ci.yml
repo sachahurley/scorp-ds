@@ -57,3 +57,9 @@ jobs:
       # be stale if someone forgot to regenerate it after changing either.
       - name: Component catalog is current
         run: node scripts/generate-catalog.mjs --check
+
+      # The token tables in design-tokens.md between AUTO-START:tokens-* markers
+      # are generated from tokens.json; a table edited by hand, or a token changed
+      # without regenerating, fails here. Prose outside the markers is not checked.
+      - name: Token tables in design-tokens.md are current
+        run: node scripts/generate-token-docs.mjs --check
