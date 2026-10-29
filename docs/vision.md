@@ -61,6 +61,7 @@ Scorp DS is TUI-inspired, and the stance is deliberate rather than decorative:
 |---|---|
 | What are the rules? | `CLAUDE.md` |
 | Why is it that way? | `docs/decisions/` |
+| Which component, which props? | `docs/component-references/catalog.md` (generated) |
 | What does this component do? | `docs/specs/{Component}.md` |
 | What tokens exist? | `design-tokens.md`, `packages/tokens/src/tokens.json` |
 | What did we learn? | `docs/insights/` |

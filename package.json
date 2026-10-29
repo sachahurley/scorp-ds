@@ -14,6 +14,8 @@
     "build:components": "npm run build --workspace=packages/components",
     "build:site": "npm run build --workspace=@scorp-ds/site",
     "build:tokens": "npm run build --workspace=packages/tokens",
+    "catalog": "node scripts/generate-catalog.mjs",
+    "catalog:check": "node scripts/generate-catalog.mjs --check",
     "consumers:check": "node scripts/check-consumers.mjs",
     "dev": "npm run --workspace=packages/storybook storybook",
     "ds-health": "bash scripts/ds-health.sh",

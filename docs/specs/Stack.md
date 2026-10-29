@@ -24,6 +24,8 @@
 
 Stack is the layout primitive for spacing a group of elements along one axis with a gap from the spacing scale. Use it inside screens, patterns and compound components instead of one-off `flex` plus arbitrary gap values: vertical for form fields and sections, horizontal for toolbars and button groups. It only lays children out; it has no visual styling, semantics or padding of its own. For two-dimensional layouts use CSS grid directly.
 
+Don't use this for: a row of items that should wrap (use Inline instead) or a two-dimensional layout (use Grid instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

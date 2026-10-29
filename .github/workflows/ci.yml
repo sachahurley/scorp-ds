@@ -52,3 +52,8 @@ jobs:
       # the manifest is known to be current. See docs/decisions/0016.
       - name: Specs match the components they describe
         run: bash scripts/detect-spec-drift.sh
+
+      # The catalog is generated from the manifest and the specs, so it can only
+      # be stale if someone forgot to regenerate it after changing either.
+      - name: Component catalog is current
+        run: node scripts/generate-catalog.mjs --check
