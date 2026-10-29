@@ -1456,6 +1456,8 @@ Status: draft · Spec: [`docs/specs/TreeView.md`](../../docs/specs/TreeView.md) 
 | `onSelectedChange` | `(id: string) => void` |  | Fires when the selection changes. |
 | `onActivate` | `(id: string) => void` |  | Fires when a node is activated with Enter or a click (open the file, go to the route). |
 | `typeahead` | `boolean` | `true` | Type-ahead on printable keys (default true). |
+| `loading` | `boolean` | `false` | Set while the nodes are on their way: three Skeleton rows replace the nodes and the tree gets `aria-busy` until it is false again. |
+| `emptyState` | `ReactNode` |  | What to show when `nodes` is empty: a sentence, or an `EmptyState size="sm"` with `titleAs="p"`. |
 | `className` | `string` |  | Extra classes for the tree root. |
 
 ### Window

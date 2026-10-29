@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { TreeView, type TreeNode } from '@scorp-ds/components';
+import { EmptyState, TreeView, type TreeNode } from '@scorp-ds/components';
 
 const meta: Meta<typeof TreeView> = {
   title: 'Components/Terminal/TreeView',
@@ -10,7 +10,7 @@ const meta: Meta<typeof TreeView> = {
     docs: {
       description: {
         component:
-          'WAI-ARIA tree: `role="tree"` / `treeitem` / `group`, `aria-expanded`, `aria-level`, `aria-setsize`, `aria-posinset`, `aria-selected`. One tab stop with roving focus. Keys: Up/Down move, Right expands or enters a branch, Left collapses or goes to the parent, Home/End, Enter selects and activates, Space selects, printable keys type-ahead. Disclosure icons are the 1-bit ChevronRight / ChevronDown. `expanded` and `selected` are each controlled or uncontrolled.',
+          'WAI-ARIA tree: `role="tree"` / `treeitem` / `group`, `aria-expanded`, `aria-level`, `aria-setsize`, `aria-posinset`, `aria-selected`. One tab stop with roving focus. Keys: Up/Down move, Right expands or enters a branch, Left collapses or goes to the parent, Home/End, Enter selects and activates, Space selects, printable keys type-ahead. Disclosure icons are the 1-bit ChevronRight / ChevronDown. `expanded` and `selected` are each controlled or uncontrolled. `loading` shows Skeleton rows under `aria-busy`; `emptyState` renders in place of the tree when `nodes` is empty.',
       },
     },
   },
@@ -115,5 +115,35 @@ export const Controlled: Story = {
       );
     };
     return <Demo />;
+  },
+};
+
+/**
+ * `loading`: three Skeleton rows replace the nodes, and the tree carries `aria-busy`
+ * until the real nodes render.
+ */
+export const Loading: Story = {
+  args: { nodes: [], 'aria-label': 'Files', loading: true, className: 'w-72' },
+};
+
+/**
+ * `emptyState`: no nodes, so the empty content renders in place of the tree, in a
+ * group that keeps the tree's name. Compose `EmptyState size="sm"` with `titleAs="p"`.
+ */
+export const Empty: Story = {
+  args: {
+    nodes: [],
+    'aria-label': 'Files',
+    className: 'w-72',
+    emptyState: (
+      <EmptyState
+        size="sm"
+        icon="Archive"
+        titleAs="p"
+        title="No files yet"
+        description="Files you add to this project appear here."
+        primaryAction={{ label: 'Add a file' }}
+      />
+    ),
   },
 };
