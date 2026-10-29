@@ -6555,6 +6555,12 @@
               "description": "Title bar actions (icon Buttons, a Badge). Keep them small (`size=\"sm\"`)."
             },
             {
+              "name": "active",
+              "type": "boolean",
+              "required": false,
+              "description": "Marks the focused pane: the accent ring, a muted title bar and a ChevronRight marker, so focus never relies on colour alone. Set it on the one pane the user is working in."
+            },
+            {
               "name": "variant",
               "type": "\"default\" | \"active\"",
               "required": false,
@@ -6562,8 +6568,8 @@
                 "\"default\"",
                 "\"active\""
               ],
-              "default": "\"default\"",
-              "description": "`active` marks the focused pane (accent ring + marker); default is `default`."
+              "deprecated": "Use `active`. A focused pane is a state, not a visual treatment (decision 0024).",
+              "description": "The focused-pane marker under its old name: `\"active\"` is `active`. When both are passed, `active` wins."
             },
             {
               "name": "titleAs",
@@ -6609,7 +6615,7 @@
           ]
         }
       },
-      "apiHash": "07bec1ad59b8a9ac"
+      "apiHash": "5562be9448fafd10"
     },
     "Box": {
       "layer": "primitive",

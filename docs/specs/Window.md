@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `stable` |
 | Last updated | 2026-10-29 |
-| API hash | `07bec1ad59b8a9ac` |
+| API hash | `5562be9448fafd10` |
 
 ---
 
@@ -27,7 +27,7 @@ a TUI title bar (title, a hairline rule filling the gap, optional `status` text
 and `actions`), and a keyboard-focusable scroll body named by the title. Frames
 are CSS only (no tui-art import, per the dependency layering).
 
-`variant="active"` marks the focused pane: accent ring, muted title bar, and a
+`active` marks the focused pane: accent ring, muted title bar, and a
 ChevronRight marker before the title, so focus is never shown by color alone.
 Set `scroll={false}` when the child scrolls itself (an unframed LogView).
 
@@ -67,7 +67,8 @@ Don't use this for: a general content container on a page (use Card instead) or 
 | `title` | `ReactNode` | - | Yes | Title; names the section and scroll body. |
 | `status` | `ReactNode` | - | No | Right-side status text. |
 | `actions` | `ReactNode` | - | No | Title bar actions (small buttons). |
-| `variant` | `"default" \| "active"` | `"default"` | No | Focused pane treatment. |
+| `active` | `boolean` | `false` | No | Marks the focused pane: accent ring, muted title bar, ChevronRight marker. |
+| `variant` | `"default" \| "active"` | | No | **Deprecated**, use `active`. `"active"` still marks the pane and warns once in development; `active` wins when both are passed (decision 0024). |
 | `titleAs` | `"h1".."h6" \| "span"` | `"h2"` | No | Title element. |
 | `scroll` | `boolean` | `true` | No | Scrollable, focusable body. |
 | `className` / `bodyClassName` | `string` | - | No | Frame / body classes. |
@@ -99,8 +100,8 @@ Don't use this for: a general content container on a page (use Card instead) or 
 
 | State / Variant | Controlled By | Tokens Affected |
 |-----------------|---------------|-----------------|
-| Default | `variant` | Stroke ring |
-| Active | `variant="active"` | Accent ring + marker |
+| Default | `active` unset | Stroke ring |
+| Active | `active` | Accent ring + marker |
 | Body focus | keyboard | Inset ring |
 
 <!-- AUTO-END:states -->
@@ -205,6 +206,7 @@ No hardcoded values found.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | change | `active?: boolean` replaces `variant="active"`: a focused pane is a state, not a treatment (0024 amendment). `variant` stays as a deprecated alias that warns once. Rendering unchanged |
 | Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 
