@@ -35,7 +35,7 @@ All of it is `SignInCard` in `presets/authCard.tsx`; the story only adds the pag
 
 | Building block | Role |
 |----------------|------|
-| `Card` | `title="Sign in"`, `subtitle="Enter your credentials to continue"`, `className="flex w-full flex-col"`. The form is the body; the actions are `footerContent`. |
+| `Card` | `title="Sign in"`, `subtitle="Enter your credentials to continue"`, `layout="flex"`, `className="flex w-full flex-col"`. The form is the body; the actions are `footerContent`. |
 | `<form>` | `space-y-4` (`spacing.4`) between the two fields: one group in the card. It has an `id` from `useId()` so the footer's submit button can name it. |
 | `Input` | "Email" (`type="email"`) and "Password" (`type` switches between `password` and `text`), both `size="md"`; the password input takes `pr-10` to clear the toggle. |
 | Password toggle | A native `<button type="button">` in a `relative` wrapper around the password Input, placed `absolute bottom-2.5 right-3`, holding a `TuiIcon` (`Eye` / `EyeOff`, size 5) in `secondary-700` / `secondary-400` that turns `--text-primary` on hover. |

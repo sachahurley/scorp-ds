@@ -23,6 +23,7 @@ import { Button, Card, Checkbox, Divider, Inline, Input, Select, Stack, Switch }
 export function WorkspaceSettingsPanel() {
   return (
     <Card
+      layout="flex"
       className="flex w-full flex-col"
       title="Workspace"
       subtitle="Profile, locale, and alert defaults"

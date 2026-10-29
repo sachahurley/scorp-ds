@@ -33,6 +33,7 @@ export function SignInCard() {
 
   return (
     <Card
+      layout="flex"
       className="flex w-full flex-col"
       title="Sign in"
       subtitle="Enter your credentials to continue"

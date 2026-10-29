@@ -35,7 +35,7 @@ All of it is `WorkspaceSettingsPanel` in `presets/settingsPanel.tsx`; the story 
 
 | Building block | Role |
 |----------------|------|
-| `Card` | `title="Workspace"`, `subtitle="Profile, locale, and alert defaults"`, body, and `footerContent` with the actions. `className="flex w-full flex-col"`. Card supplies all padding. |
+| `Card` | `title="Workspace"`, `subtitle="Profile, locale, and alert defaults"`, body, and `footerContent` with the actions. `layout="flex"`, `className="flex w-full flex-col"`. Card supplies all padding. |
 | `Stack` | Outer `gap="6"` between the two groups; `gap="3"` between the profile fields; `gap="4"` between the Divider and the notifications fieldset, and between the notifications controls. |
 | `Input` | "Display name" and "Workspace slug", both `size="md"` with `defaultValue`. |
 | `Select` | "Locale", `size="md"`, native `<option>` children (English, Français). |
