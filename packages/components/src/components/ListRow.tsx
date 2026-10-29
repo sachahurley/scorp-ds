@@ -56,14 +56,29 @@ type CommonProps = {
 
 export type ListRowProps = CommonProps &
   (
-    | ({ href: string; onClick?: never; as?: never } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "className" | "title">)
-    | ({ href?: never; onClick: () => void; as?: never } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "className" | "title">)
-    /**
-     * Custom link component (e.g. a router <Link>): the row renders it with
-     * interactive styling and spreads `asProps` onto it (`to`, `state`,
-     * ...), so client-side navigation works without a full page load.
-     */
-    | ({ as: ElementType; asProps?: Record<string, unknown>; href?: never; onClick?: never } & Omit<
+    | ({
+        /** Destination URL: the row renders as an `<a>` and navigates. */
+        href: string;
+        onClick?: never;
+        as?: never;
+      } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "className" | "title">)
+    | ({
+        /** In-place action: the row renders as a `<button>`. Use `href` instead to navigate. */
+        onClick: () => void;
+        href?: never;
+        as?: never;
+      } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "className" | "title">)
+    | ({
+        /**
+         * Custom link component (e.g. a router `<Link>`): the row renders it with
+         * interactive styling, so client-side navigation works without a full page load.
+         */
+        as: ElementType;
+        /** Props for the `as` component (`to`, `state`, ...), spread onto it as-is. */
+        asProps?: Record<string, unknown>;
+        href?: never;
+        onClick?: never;
+      } & Omit<
         HTMLAttributes<HTMLElement>,
         "className" | "title"
       >)
