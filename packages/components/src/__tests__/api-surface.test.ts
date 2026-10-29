@@ -37,8 +37,9 @@ describe('api-surface.json', () => {
     expect(prop('Kbd', 'KbdProps', 'size')?.values).toEqual(['"sm"', '"md"']);
   });
 
-  it('marks a @deprecated prop, and lists no deprecated values once an alias is removed', () => {
-    expect(prop('Modal', 'ModalProps', 'width')?.deprecated).toBeTruthy();
+  it('lists no deprecated props or values once the 0024 aliases are removed (0031)', () => {
+    // Modal width was the last alias; it is gone, and size carries no deprecation.
+    expect(prop('Modal', 'ModalProps', 'width')).toBeUndefined();
     expect(prop('Modal', 'ModalProps', 'size')?.deprecated).toBeUndefined();
     // The 0024 aliases are gone (0031): the size scale carries no deprecated values.
     expect(prop('Button', 'ButtonProps', 'size')?.deprecatedValues).toBeUndefined();
