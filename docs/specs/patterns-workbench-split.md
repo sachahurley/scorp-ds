@@ -11,7 +11,7 @@
 | Category | `Patterns` |
 | File | `packages/storybook/presets/workbenchSplit.tsx` (story shell: `packages/storybook/stories/Patterns/WorkbenchSplit.stories.tsx`) |
 | Story | `Patterns/WorkbenchSplit` |
-| Version | `v2` |
+| Version | `v3` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
 
@@ -35,11 +35,11 @@ All of it is `LogInspectorSplit` in `presets/workbenchSplit.tsx`; the story only
 
 | Building block | Role |
 |----------------|------|
-| Split | `flex min-h-[70vh] flex-col gap-4 md:flex-row`: the panes stack below `md` and sit side by side from `md`, `spacing.4` apart either way. Plain flex, because no primitive changes axis at a breakpoint. |
+| `Stack` (split) | `axis={{ base: 'vertical', md: 'horizontal' }}`, `align="stretch"`, `gap="4"`, `className="min-h-[70vh]"`: the panes stack below `md` and sit side by side from `md`, `spacing.4` apart either way, one height when side by side (decision 0032). |
 | `Window` (index) | `title="~/var/log"`, `titleAs="h3"`, `className="w-full shrink-0 md:w-60"`, `bodyClassName="p-2"`. |
 | `SideNav` + `SideNavItem` | The buffer list, `aria-label="Open buffers"`. The SideNav drops its own frame inside the Window (`className="w-full border-0 bg-transparent p-0"`). One `FileText` row per buffer (`workbenchBuffers`); rows are buttons (`onClick`, no `href`), and the active one holds the hover fill and `aria-current="page"`. |
 | `Window` (inspector) | `title` = the active buffer's name, `status="tail · last 200 lines"`, `variant="active"` (accent ring and ChevronRight marker), `scroll={false}` because the LogView scrolls itself, `className="min-w-0 flex-1"`. |
-| `Stack` | `gap="3"` (`h-full`) around the toolbar, the log and the footnote. |
+| `Stack` (inspector) | `gap="3"` (`h-full`) around the toolbar, the log and the footnote. |
 | `Inline` | Toolbar, `gap="2"`: the field first, then secondary, then primary. |
 | `Input` | Filter field, `size="sm"`, `placeholder="Filter…"`, `aria-label="Filter log lines"`, `min-w-48 flex-1` so it takes the spare width. |
 | `Button` | `variant="secondary"` "Pause" then `variant="primary"` "Export", both `size="sm"`, `type="button"`. |
@@ -49,7 +49,8 @@ All of it is `LogInspectorSplit` in `presets/workbenchSplit.tsx`; the story only
 
 ## Storybook
 
-- **InspectorLayout** ("Log inspector"): fullscreen split on `--surface-page`.
+- **InspectorLayout** ("Log inspector"): fullscreen split on `--surface-page` at the harness width (900), above `md`: panes side by side.
+- **InspectorLayoutStacked** ("Log inspector: stacked"): the same shell at `mobileSmall` (375), below `md`: the index pane above the inspector. The axis change is structural, so each side of the breakpoint has a frame (decision 0012).
 - **Theme:** Storybook **Theme** toolbar for light/dark.
 - **Test-runner:** covered by `npm run test-storybook:ci`.
 
@@ -73,7 +74,7 @@ All of it is `LogInspectorSplit` in `presets/workbenchSplit.tsx`; the story only
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-22 | Active sidebar item has no `aria-current`; the story footnote says the main pane is "a Card without extra borders", but `Card` draws a plate ring next to the square-bordered `aside`; sidebar rows could use `ListRow` with `selected` | Superseded by the move to `Window`, `SideNav` and `LogView`: rows are `SideNavItem` with `aria-current`, both panes are Windows | closed |
-| 2026-10-29 | The split is plain flex in the preset: `Stack` has no responsive `axis`, so a layout that stacks below `md` and sits side by side above it has no primitive | None yet; a responsive axis on Stack is a component change | open |
+| 2026-10-29 | The split is plain flex in the preset: `Stack` has no responsive `axis`, so a layout that stacks below `md` and sits side by side above it has no primitive | `Stack` takes `axis={{ base: 'vertical', md: 'horizontal' }}` and `align="stretch"` (decision 0032); the preset uses it, rendering pixel for pixel as before, and a stacked frame at 375 was added | closed |
 | 2026-10-29 | Selecting a buffer retitles the inspector but keeps the same specimen lines | Specimen only; product code swaps the lines | open |
 
 <!-- AUTO-END:known-gaps -->
@@ -88,6 +89,7 @@ All of it is `LogInspectorSplit` in `presets/workbenchSplit.tsx`; the story only
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | v2 | 2026-10-29 | changed | Moved to the `LogInspectorSplit` preset; the toolbar is `Inline`; Composition rewritten for the Window, SideNav and LogView build; no rendered change (decision 0028) |
+| v3 | 2026-10-29 | changed | The split is a `Stack` with a responsive `axis` and `align="stretch"` instead of hand-written flex; no rendered change; new `Log inspector: stacked` story at 375 (decision 0032) |
 
 <!-- AUTO-END:changelog -->
 

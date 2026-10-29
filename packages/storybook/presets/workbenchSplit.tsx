@@ -30,7 +30,9 @@ export const workbenchLogLines: LogLine[] = [
  * buffer); the focused `Window` (`variant="active"`) holds a toolbar (filter Input,
  * secondary then primary action) over a `LogView` tail.
  *
- * The panes stack below `md` and sit side by side from `md` (`gap-4` either way). The
+ * The split is a `Stack` with a responsive axis (`{ base: 'vertical', md: 'horizontal' }`,
+ * decision 0032): the panes stack below `md` and sit side by side from `md` (`gap="4"`
+ * either way), and `align="stretch"` keeps them one height once they share a row. The
  * index pane is `md:w-60` and does not shrink; the inspector takes the rest
  * (`min-w-0 flex-1`). The inspector sets `scroll={false}` because its LogView scrolls
  * itself. Selecting a buffer retitles the inspector; product code also swaps the lines.
@@ -46,7 +48,7 @@ export const workbenchLogLines: LogLine[] = [
 export function LogInspectorSplit() {
   const [active, setActive] = useState('sessions');
   return (
-    <div className="flex min-h-[70vh] flex-col gap-4 md:flex-row">
+    <Stack axis={{ base: 'vertical', md: 'horizontal' }} align="stretch" gap="4" className="min-h-[70vh]">
       {/* Pane: index / file list */}
       <Window title="~/var/log" titleAs="h3" className="w-full shrink-0 md:w-60" bodyClassName="p-2">
         <SideNav aria-label="Open buffers" className="w-full border-0 bg-transparent p-0">
@@ -86,6 +88,6 @@ export function LogInspectorSplit() {
           </p>
         </Stack>
       </Window>
-    </div>
+    </Stack>
   );
 }

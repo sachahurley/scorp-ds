@@ -187,9 +187,10 @@ exception today is AuthCard, whose primary is `md` beside a `sm` link.
 `Stack axis="horizontal"` still works for a button group (MarketingHero uses it), but
 `Inline` is the row primitive for new work: it wraps on narrow screens and takes `justify`.
 
-Two things have no primitive yet and are written as plain flex in the presets: a split
-whose axis changes at a breakpoint (`flex-col md:flex-row`, WorkbenchSplit), and the
-chrome of a dense list row (`DenseRowShell`). Each is a Known Gap in its pattern spec.
+A split whose axis changes at a breakpoint is a `Stack` with a breakpoint map:
+`axis={{ base: "vertical", md: "horizontal" }}` (WorkbenchSplit; decision 0032). One thing
+still has no primitive and is written as plain flex in its preset: the chrome of a dense
+list row (`DenseRowShell`), a Known Gap in its pattern spec.
 
 ## Current presets
 
