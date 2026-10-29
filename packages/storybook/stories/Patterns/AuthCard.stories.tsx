@@ -4,10 +4,10 @@ import { SignInCard } from '../../presets/authCard';
 /**
  * Pattern: authentication card, Card + Input composed into a sign-in surface.
  * Upstreamed from the showcase's Cards page (2026-09-20), which shipped it
- * before the DS documented it. Two recipes had no upstream home: the
- * password-visibility toggle riding inside the field, and the auth footer
- * (quiet link left, primary action right). The card lives in
- * `presets/authCard.tsx`; this story is the page shell.
+ * before the DS documented it. The password-visibility toggle is Input's
+ * `trailingAction`; the auth footer (quiet link left, primary action right)
+ * has no component of its own. The card lives in `presets/authCard.tsx`; this
+ * story is the page shell.
  */
 const meta: Meta = {
   title: 'Patterns/AuthCard',
@@ -16,7 +16,7 @@ const meta: Meta = {
     docs: {
       description: {
         component:
-          '**Pattern** — composed product UI built from existing components. The password toggle is a positioned button inside the field wrapper with an `aria-label` that names the action; the footer splits a quiet link from the single primary action. Sign-up is this same recipe plus a confirm field, so only sign-in is documented.\n\n**Theme:** use the Storybook **Theme** toolbar (sun/moon) to preview light and dark.',
+          '**Pattern**: composed product UI built from existing components. The password toggle is Input\'s `trailingAction`: a toggle button named "Show password" whose state is `aria-pressed`; the footer splits a quiet link from the single primary action. Sign-up is this same recipe plus a confirm field, so only sign-in is documented.\n\n**Theme:** use the Storybook **Theme** toolbar (sun/moon) to preview light and dark.',
       },
     },
   },
@@ -38,7 +38,7 @@ function SignInDemo() {
         <SignInCard />
 
         <p className="font-mono text-xs text-secondary-900 dark:text-secondary-200">
-          Composes: Card, Input, Button, TuiIcon. Labels come from Input&apos;s label prop; the
+          Composes: Card, Input, Button. Labels come from Input&apos;s label prop; the
           footer holds the actions so the form body stays fields-only; one primary action per card.
         </p>
       </div>

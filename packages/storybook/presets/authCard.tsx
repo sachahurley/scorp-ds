@@ -1,17 +1,17 @@
 import { useId, useState } from 'react';
-import { Button, Card, Inline, Input, TuiIcon } from '@scorp-ds/components';
+import { Button, Card, Inline, Input } from '@scorp-ds/components';
 
 /**
- * Auth card preset: a sign-in surface built from Card, Input, Button and
- * TuiIcon. Sign-up is the same recipe plus a confirm field, so only sign-in is
- * a preset.
+ * Auth card preset: a sign-in surface built from Card, Input and Button.
+ * Sign-up is the same recipe plus a confirm field, so only sign-in is a preset.
  *
- * Two recipes have no component of their own and live here:
- * - **Password visibility toggle:** a native button positioned inside the field
- *   wrapper, cleared by `pr-10` on the input, with an `aria-label` that names the
- *   action ("Show password" / "Hide password").
+ * - **Password visibility toggle:** Input's `trailingAction`, a toggle button with
+ *   a fixed label ("Show password") whose state rides on `pressed` (`aria-pressed`)
+ *   and whose icon swaps between `Eye` and `EyeOff`. Input owns its size, hit area,
+ *   focus ring and the padding that keeps text clear of it.
  * - **Auth footer:** a quiet `link` action on the left, the single primary action on
- *   the right (`Inline justify="between"`), in Card's `footerContent`.
+ *   the right (`Inline justify="between"`), in Card's `footerContent`. This recipe
+ *   has no component of its own and lives here.
  *
  * The form sits in the Card body and the actions in the footer, so the primary
  * action is outside the `<form>` element. It is still the form's submit button:
@@ -51,25 +51,20 @@ export function SignInCard() {
       <form id={formId} className="space-y-4" onSubmit={(e) => e.preventDefault()}>
         <Input label="Email" type="email" placeholder="you@example.com" size="md" />
 
-        {/* Password toggle recipe: the button rides inside the field wrapper,
-            cleared by pr-10 on the input, and names its action for AT. */}
-        <div className="relative">
-          <Input
-            label="Password"
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Enter your password"
-            size="md"
-            className="pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
-            className="absolute bottom-2.5 right-3 text-secondary-700 hover:text-[var(--text-primary)] dark:text-secondary-400 dark:hover:text-[var(--text-primary)]"
-          >
-            <TuiIcon name={showPassword ? 'EyeOff' : 'Eye'} size="5" />
-          </button>
-        </div>
+        {/* Password toggle: a toggle button with a fixed name, its state on
+            aria-pressed. Input sizes it, pads the text clear and draws focus. */}
+        <Input
+          label="Password"
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Enter your password"
+          size="md"
+          trailingAction={{
+            icon: showPassword ? 'EyeOff' : 'Eye',
+            label: 'Show password',
+            pressed: showPassword,
+            onClick: () => setShowPassword((shown) => !shown),
+          }}
+        />
       </form>
     </Card>
   );

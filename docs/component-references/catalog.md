@@ -632,16 +632,26 @@ Input is the single-line text field for short free-form values: names, emails, s
 
 Status: draft · Spec: [`docs/specs/Input.md`](../../docs/specs/Input.md) · Story: `Components/Inputs/Input`
 
+**`InputTrailingAction`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `icon` (required) | `IconSlot` |  | The icon: a TuiIcon name (`"Eye"`) or an element. |
+| `label` (required) | `string` |  | Accessible name of the button, read by screen readers and required: the button shows only an icon. |
+| `onClick` (required) | `(event: MouseEvent<HTMLButtonElement>) => void` |  | Called when the button is clicked or activated with Enter or Space. |
+| `pressed` | `boolean` |  | Makes the action a toggle button: sets `aria-pressed`, so assistive tech announces "pressed" or "not pressed". |
+
 **`InputProps`**
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
+| `label` | `ReactNode` |  | Optional visible label. |
 | `size` | `"sm"` `"md"` `"lg"` | `"md"` | Field height: sm 32px, md 40px (default), lg 48px. |
-| `variant` | `"box"` `"quiet"` | `"box"` | Visual variant. "box" (default) is the plate field; "quiet" is the underline recipe — transparent, bottom hairline only, the site's voice for inline fields (passwords, rename-in-place). |
+| `variant` | `"box"` `"quiet"` | `"box"` | Visual variant. "box" (default) is the plate field; "quiet" is the underline recipe: transparent, bottom hairline only, the site's voice for inline fields (passwords, rename-in-place). |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Hint shown under the field (format, constraints). |
 | `errorMessage` | `ReactNode` |  | Validation message shown under the field. |
-| `label` | `ReactNode` |  | Optional visible label. |
+| `trailingAction` | `InputTrailingAction` |  | One icon button inside the end of the field, such as a password reveal (`{ icon: visible ? "EyeOff" : "Eye", label: "Show password", pressed: visible, onClick: toggle }`). |
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`, `InputHTMLAttributes`.
 

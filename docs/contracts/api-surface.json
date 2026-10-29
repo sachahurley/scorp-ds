@@ -474,6 +474,11 @@
       "from": "packages/components/src/components/Input.tsx"
     },
     {
+      "name": "InputTrailingAction",
+      "kind": "interface",
+      "from": "packages/components/src/components/Input.tsx"
+    },
+    {
       "name": "Kbd",
       "kind": "component",
       "from": "packages/components/src/components/Kbd.tsx"
@@ -3036,6 +3041,10 @@
       "import": "@scorp-ds/components",
       "exports": [
         {
+          "name": "InputTrailingAction",
+          "kind": "interface"
+        },
+        {
           "name": "InputProps",
           "kind": "interface"
         },
@@ -3045,8 +3054,42 @@
         }
       ],
       "props": {
+        "InputTrailingAction": {
+          "props": [
+            {
+              "name": "icon",
+              "type": "IconSlot",
+              "required": true,
+              "description": "The icon: a TuiIcon name (`\"Eye\"`) or an element. A name is sized to the field (16px at sm, 20px at md, 24px at lg). Swap it with state if the action toggles (`\"Eye\"` / `\"EyeOff\"`)."
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "required": true,
+              "description": "Accessible name of the button, read by screen readers and required: the button shows only an icon. Name the action (\"Show password\", \"Clear search\"). For a toggle, keep the label fixed and use `pressed` for the state."
+            },
+            {
+              "name": "onClick",
+              "type": "(event: MouseEvent<HTMLButtonElement>) => void",
+              "required": true,
+              "description": "Called when the button is clicked or activated with Enter or Space."
+            },
+            {
+              "name": "pressed",
+              "type": "boolean",
+              "required": false,
+              "description": "Makes the action a toggle button: sets `aria-pressed`, so assistive tech announces \"pressed\" or \"not pressed\". Use it for a password reveal (`pressed={visible}`). Leave it undefined for a one-shot action (clear, copy), which then carries no `aria-pressed`."
+            }
+          ]
+        },
         "InputProps": {
           "props": [
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Optional visible label. When set, renders a `<label>` associated with the input via `htmlFor` / `id`. Prefer this or `aria-label` so the field is announced correctly by screen readers."
+            },
             {
               "name": "size",
               "type": "ControlSize",
@@ -3068,7 +3111,7 @@
                 "\"quiet\""
               ],
               "default": "\"box\"",
-              "description": "Visual variant. \"box\" (default) is the plate field; \"quiet\" is the underline recipe — transparent, bottom hairline only, the site's voice for inline fields (passwords, rename-in-place). Same border ramp: idle hairline → hover mut → focus accent."
+              "description": "Visual variant. \"box\" (default) is the plate field; \"quiet\" is the underline recipe: transparent, bottom hairline only, the site's voice for inline fields (passwords, rename-in-place). Same border ramp: idle hairline → hover mut → focus accent."
             },
             {
               "name": "error",
@@ -3090,10 +3133,10 @@
               "description": "Validation message shown under the field. Sets the error state and `aria-invalid`, and replaces `helperText` while present."
             },
             {
-              "name": "label",
-              "type": "ReactNode",
+              "name": "trailingAction",
+              "type": "InputTrailingAction",
               "required": false,
-              "description": "Optional visible label. When set, renders a `<label>` associated with the input via `htmlFor` / `id`. Prefer this or `aria-label` so the field is announced correctly by screen readers."
+              "description": "One icon button inside the end of the field, such as a password reveal (`{ icon: visible ? \"EyeOff\" : \"Eye\", label: \"Show password\", pressed: visible, onClick: toggle }`). Renders a real `<button type=\"button\">` after the input in the tab order, with a 44px hit area and the system focus ring; the input is padded so text never runs under it. `disabled` disables it too."
             }
           ],
           "inherits": [
@@ -3104,7 +3147,7 @@
           ]
         }
       },
-      "apiHash": "467d55214352a268"
+      "apiHash": "75bde1cc62ee1974"
     },
     "Kbd": {
       "layer": "component",
