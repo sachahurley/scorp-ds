@@ -37,6 +37,7 @@ import { type ReactNode } from "react";
 import { TuiIcon } from "./TuiIcon";
 import { resolveSize, type ControlSizeProp } from "../lib/size";
 import { warnDeprecated } from "../lib/deprecate";
+import { renderIconSlot, type IconSlot } from "../lib/icon-slot";
 
 /**
  * Colour role of a Badge: the five semantic roles plus Badge's own `primary`
@@ -65,8 +66,8 @@ export interface BadgeProps {
   dashed?: boolean;
   /** The label: a word, a short phrase or a number. Keep it to one line. */
   children: ReactNode;
-  /** Icon before the label, usually a `TuiIcon`, to reinforce the meaning of a status badge. */
-  iconLeft?: ReactNode;
+  /** Icon before the label, to reinforce the meaning of a status badge. Takes a TuiIcon name (`"Check"`) or an element. */
+  iconLeft?: IconSlot | ReactNode;
   /** Adds a remove (x) button that calls this when pressed. Use it for filter chips and tags the user can clear. */
   onDismiss?: () => void;
   /**
@@ -207,7 +208,7 @@ export function Badge({
       {/* Left Icon */}
       {iconLeft && (
         <span className={`inline-flex items-center justify-center ${iconSizes[size]} flex-shrink-0`}>
-          {iconLeft}
+          {renderIconSlot(iconLeft)}
         </span>
       )}
       

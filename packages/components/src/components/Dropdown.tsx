@@ -20,6 +20,7 @@ import { useState, useRef, useEffect, cloneElement, isValidElement, type MouseEv
 import { TuiIcon } from "./TuiIcon";
 import { resolveSize, type ControlSizeProp } from "../lib/size";
 import { warnDeprecated } from "../lib/deprecate";
+import { renderIconSlot, type IconSlot } from "../lib/icon-slot";
 
 // Menu item interface
 export interface DropdownItem {
@@ -27,10 +28,10 @@ export interface DropdownItem {
   label: string;
   /** Called on activation; the menu then closes. */
   onClick: () => void;
-  /** Left icon grouped with the label (use a `TuiIcon`). */
-  icon?: ReactNode;
-  /** Right-aligned icon, for a shortcut hint or an external-link marker. */
-  iconRight?: ReactNode;
+  /** Left icon grouped with the label. Takes a TuiIcon name (`"Check"`) or an element. */
+  icon?: IconSlot | ReactNode;
+  /** Right-aligned icon, for a shortcut hint or an external-link marker. Takes a TuiIcon name (`"Check"`) or an element. */
+  iconRight?: IconSlot | ReactNode;
   /** `destructive` colors the item red for irreversible actions. */
   variant?: "default" | "destructive";
   /** Dims the item, blocks activation, and skips it during arrow-key navigation. */
@@ -363,7 +364,7 @@ export function Dropdown({
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   {item.icon && (
                     <span className={`inline-flex items-center justify-center ${currentSizeStyles.icon} flex-shrink-0`}>
-                      {item.icon}
+                      {renderIconSlot(item.icon)}
                     </span>
                   )}
                   <span className="truncate">{item.label}</span>
@@ -372,7 +373,7 @@ export function Dropdown({
                 {/* Right icon aligned to right edge */}
                 {item.iconRight && (
                   <span className={`inline-flex items-center justify-center ${currentSizeStyles.icon} flex-shrink-0 ml-auto`}>
-                    {item.iconRight}
+                    {renderIconSlot(item.iconRight)}
                   </span>
                 )}
               </button>

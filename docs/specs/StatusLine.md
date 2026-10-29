@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-09-22 |
-| API hash | `4c0cf0c5d10631aa` |
+| API hash | `eaa56a0d335e029e` |
 
 ---
 
@@ -69,7 +69,7 @@ Don't use this for: a message the user must read in full or act on (use Alert in
 | `left` / `center` / `right` | `ReactNode` | - | No | Zone segments. |
 | `live` | `boolean` | `false` | No | `role="status"` + polite live region. |
 | `aria-label` | `string` | `"Status"` | No | Bar name. |
-| `StatusLineSegment.icon` | `TuiIconName` | - | No | 1-bit icon. |
+| `StatusLineSegment.icon` | `IconSlot` | - | No | A TuiIcon name or an element. |
 | `StatusLineSegment.tone` | `StatusLineTone` | `"neutral"` | No | Semantic tone. |
 | `StatusLineSegment.children` | `ReactNode` | - | Yes | Segment text. |
 

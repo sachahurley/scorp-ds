@@ -40,3 +40,11 @@ Intent, so the catalog can leave it out.
 
 - The generated catalog shows the status, so an agent can prefer stable components.
 - Adding a "use instead" line to every spec becomes the main work of promotion.
+
+## Amendment 2026-10-29
+
+`npm run new:component` scaffolds a spec and a source file with `TODO(scaffold)`
+placeholders. `scripts/spec-status.mjs` treats any remaining placeholder in the Intent or in
+the component's JSDoc as short of the bar ("intent written", "source JSDoc written"), so a
+scaffolded component cannot read as promotable before someone has written what it is for.
+The five criteria above are unchanged; this makes criterion 2 checkable for scaffolds.

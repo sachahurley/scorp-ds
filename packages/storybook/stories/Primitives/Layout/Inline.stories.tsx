@@ -108,7 +108,7 @@ export const CardFooter: Story = {
           Layout primitives for Scorp DS
         </span>
         <Inline gap="2" align="baseline">
-          <Badge variant="success">shipped</Badge>
+          <Badge tone="success">shipped</Badge>
           <span className="font-mono text-xs text-[var(--text-secondary)]">six primitives</span>
         </Inline>
         <Inline gap="3" justify="between" className="w-full">

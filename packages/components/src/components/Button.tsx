@@ -38,6 +38,7 @@ import { resolveSize, type ControlSizeProp } from "../lib/size";
 /** @deprecated Icon-only buttons are squared automatically at every size: use `md`. */
 type DeprecatedButtonSize = "icon";
 import { Spinner } from "./Spinner";
+import { renderIconSlot, type IconSlot } from "../lib/icon-slot";
 
 /** Props every Button takes, whether it renders a `<button>` or an `<a>`. */
 // React's HTML attributes carry an RDFa `rel`; it is omitted so the link and
@@ -60,14 +61,14 @@ interface ButtonBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
   /**
    * Icon before the label, usually a `TuiIcon`, to make the action quicker to
    * recognise ("+ New"). For an icon-only button, pass the icon as `children`
-   * instead (the button squares itself) and give it an `aria-label`.
+   * instead (the button squares itself) and give it an `aria-label`. Takes a TuiIcon name (`"Check"`) or an element.
    */
-  iconLeft?: React.ReactNode;
+  iconLeft?: IconSlot | React.ReactNode;
   /**
    * Icon after the label, for direction or destination (an arrow on "Next", an
-   * external-link glyph on a link CTA).
+   * external-link glyph on a link CTA). Takes a TuiIcon name (`"Check"`) or an element.
    */
-  iconRight?: React.ReactNode;
+  iconRight?: IconSlot | React.ReactNode;
   /**
    * Busy state for async actions (submitting, saving). Shows a Spinner over
    * the label, sets `aria-busy` and `aria-disabled`, and ignores clicks. The
@@ -316,8 +317,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Helper function to wrap icons with proper sizing classes
     // This ensures icons are perfectly centered and aligned with text
-    const renderIcon = (icon: React.ReactNode) => {
-      if (!icon) return null;
+    const renderIcon = (slot: React.ReactNode) => {
+      if (!slot) return null;
+      // A TuiIcon name becomes the icon element, then gets the same sizing box.
+      const icon = renderIconSlot(slot);
       
       // If it's a React element, clone it with size classes
       if (typeof icon === 'object' && icon !== null && 'type' in icon) {

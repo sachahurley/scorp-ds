@@ -25,6 +25,7 @@
 
 import { useState, type ReactNode } from "react";
 import { resolveSize, type ControlSizeProp } from "../lib/size";
+import { renderIconSlot, type IconSlot } from "../lib/icon-slot";
 
 export interface AvatarProps {
   /** Image URL. Shown when set and it loads; otherwise the avatar falls back to `initials`, then `icon`, then an `@` glyph. */
@@ -39,8 +40,8 @@ export interface AvatarProps {
   alt: string;
   /** One or two letters shown when there is no image, or the image fails to load. */
   initials?: string;
-  /** Icon shown when there is neither an image nor initials (for a team, a bot, a system account). */
-  icon?: ReactNode;
+  /** Icon shown when there is neither an image nor initials (for a team, a bot, a system account). Takes a TuiIcon name (`"Check"`) or an element. */
+  icon?: IconSlot | ReactNode;
   /** Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. Legacy names are deprecated aliases. */
   size?: ControlSizeProp | "xl";
   /** Presence dot in the corner, announced as "Status: online" and so on. Omit it to show no dot. */
@@ -172,7 +173,7 @@ export function Avatar({
             sized div leaves glyph icons sitting off-position) */}
         {showIcon && (
           <div className={`${currentSize.icon} inline-flex items-center justify-center leading-none text-secondary-700 dark:text-secondary-300`}>
-            {icon}
+            {renderIconSlot(icon)}
           </div>
         )}
 

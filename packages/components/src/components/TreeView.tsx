@@ -39,7 +39,8 @@ import {
   type ReactNode,
 } from "react";
 import { cn } from "../lib/utils";
-import { TuiIcon, type TuiIconName } from "./TuiIcon";
+import { TuiIcon } from "./TuiIcon";
+import { renderIconSlot, type IconSlot } from "../lib/icon-slot";
 
 /** One node of the tree. Nodes with `children` are branches. */
 export interface TreeNode {
@@ -49,8 +50,8 @@ export interface TreeNode {
   label: ReactNode;
   /** Plain-text label for type-ahead when `label` is not a string. */
   textValue?: string;
-  /** Optional 1-bit icon before the label. */
-  icon?: TuiIconName;
+  /** Optional icon before the label: a TuiIcon name or an element. */
+  icon?: IconSlot;
   /** Child nodes. An empty array still renders a (childless) branch. */
   children?: TreeNode[];
   /** Skip this node for selection and activation (it stays focusable). */
@@ -322,7 +323,7 @@ export function TreeView({
             <span className="inline-flex w-4 shrink-0 justify-center text-[var(--text-secondary)]">
               {isBranch && <TuiIcon name={open ? "ChevronDown" : "ChevronRight"} size="3" />}
             </span>
-            {node.icon && <TuiIcon name={node.icon} className="shrink-0" />}
+            {node.icon && renderIconSlot(node.icon, { className: "shrink-0" })}
             <span className="min-w-0 truncate">{node.label}</span>
           </div>
           {isBranch && open && node.children!.length > 0 && (

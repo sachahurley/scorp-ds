@@ -16,7 +16,7 @@ Visual example first, token/prop name second, one code snippet third.
 3. **The five laws** — tokens only (no raw values) · plates are the shape language · mono 400 everywhere · dark is the default theme · 44px minimum touch targets.
 4. **Map** — one line each for where tokens, components, and patterns live.
 
-### Foundation pages (Colors, Typography, Spacing, Motion, Z-index)
+### Foundation pages (Colors, Typography, Spacing, Motion, ZIndex)
 
 1. **Header** — title + 1-2 sentences + last-updated date. No status badges: if it is not stable it does not ship.
 2. **Specimens** — the visual grid, large enough to judge at a glance.

@@ -40,6 +40,7 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { resolveSize, type ControlSize, type ControlSizeProp } from "../lib/size";
 import { useControllableState } from "../lib/use-controllable-state";
+import { renderIconSlot, type IconSlot } from "../lib/icon-slot";
 
 /** Every Switch prop except the requirement that one accessible name is set. */
 interface SwitchOwnProps
@@ -66,8 +67,8 @@ interface SwitchOwnProps
   hideLabel?: boolean;
   /** Blocks interaction and dims the switch. Prefer explaining nearby why a setting is unavailable. */
   disabled?: boolean;
-  /** Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle). */
-  icon?: ReactNode;
+  /** Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle). Takes a TuiIcon name (`"Check"`) or an element. */
+  icon?: IconSlot | ReactNode;
 }
 
 /**
@@ -209,7 +210,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             {/* Optional icon inside knob */}
             {icon && (
               <span className={geometry.iconSize}>
-                {icon}
+                {renderIconSlot(icon)}
               </span>
             )}
           </span>

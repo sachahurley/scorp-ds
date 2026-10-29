@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
-| API hash | `85e7090cf6a1b413` |
+| API hash | `1c0b0142028f0d69` |
 
 ---
 
@@ -72,8 +72,8 @@ While `loading`, that content is wrapped in an `opacity-0` span that stays in th
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large" \| "icon"` | `"md"` | No | Height from the control-height tokens. Legacy names and `"icon"` are deprecated. |
 | `disabled` | `boolean` | `false` | No | Disables the button (50% opacity, `not-allowed` cursor). On an anchor it removes `href`, sets `aria-disabled`, and blocks pointer events. Wins over `loading`. |
 | `loading` | `boolean` | `false` | No | Busy state for async actions. Shows a Spinner over the hidden label, sets `aria-busy` and `aria-disabled`, and swallows clicks (`preventDefault`, so a submit button does not resubmit its form; `onClick` is not called). No native `disabled`, so the button stays focusable, and the width does not change. Works on icon-only buttons and the `href` anchor form. |
-| `iconLeft` | `ReactNode` | none | No | Icon before the label, typically a `TuiIcon`. React elements are wrapped in a size-matched box. |
-| `iconRight` | `ReactNode` | none | No | Icon after the label (for example `ExternalLink` or `ChevronRight`). |
+| `iconLeft` | `IconSlot \| ReactNode` | none | No | Icon before the label: a TuiIcon name (`"Plus"`) or an element. React elements are wrapped in a size-matched box. |
+| `iconRight` | `IconSlot \| ReactNode` | none | No | Icon after the label, a TuiIcon name or an element (for example `ExternalLink` or `ChevronRight`). |
 | `href` | `string` | none | No | Renders an `<a>` with identical plate styling instead of a `<button>`. Use for plate-styled navigation CTAs. |
 | `target` | `string` | none | No | Anchor target (for example `"_blank"`). Type-checks only alongside a string `href`: `ButtonProps` is a union of a link form (`href: string; target?; rel?`) and a button form (`target?: never; rel?: never`). |
 | `rel` | `string` | none | No | Anchor rel. Pair `target="_blank"` with `"noopener noreferrer"`. Type-checks only alongside a string `href`, like `target`. |

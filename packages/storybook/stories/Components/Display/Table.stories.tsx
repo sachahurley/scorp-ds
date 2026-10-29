@@ -34,7 +34,7 @@ const rows = [
   { job: 'e2e', branch: 'main', sha: 'a1b2c3d', status: 'queued' as const, duration: null as string | null },
 ];
 
-function statusVariant(s: (typeof rows)[number]['status']) {
+function statusTone(s: (typeof rows)[number]['status']) {
   if (s === 'passed') return 'success' as const;
   if (s === 'failed') return 'error' as const;
   return 'warning' as const;
@@ -60,7 +60,7 @@ export const Default: Story = {
               <TableCell>{r.branch}</TableCell>
               <TableCell className="text-secondary-700 dark:text-secondary-300">{r.sha}</TableCell>
               <TableCell>
-                <Badge variant={statusVariant(r.status)} size="sm">
+                <Badge tone={statusTone(r.status)} size="sm">
                   {r.status}
                 </Badge>
               </TableCell>

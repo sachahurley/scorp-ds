@@ -5,7 +5,7 @@ import { getToken } from '@scorp-ds/tokens';
 import { TokenDocTable, type TokenDocRow } from '../doc-blocks/TokenDocTable';
 
 /**
- * Foundation / Z-index
+ * Foundation / ZIndex
  *
  * Global stacking scale from tokens.json → `--z-index-*` in tokens.css (not theme-specific).
  */
@@ -174,7 +174,7 @@ function Note({ children, className = '' }: { children: ReactNode; className?: s
 function ZIndexPage() {
   return (
     <div className="min-h-screen bg-surface-page p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
-      <h1 className="mb-2 text-xl font-bold text-secondary-900 dark:text-secondary-50">Foundation / Z-index</h1>
+      <h1 className="mb-2 text-xl font-bold text-secondary-900 dark:text-secondary-50">Foundation / ZIndex</h1>
       <p className="mb-2 text-secondary-800 dark:text-secondary-300">[Stable] · Last updated Apr 2026</p>
       <p className="mb-4 max-w-3xl text-secondary-800 dark:text-secondary-300">
         Use the numbered scale so overlays, modals, and tooltips stay predictable across products. Values are global —

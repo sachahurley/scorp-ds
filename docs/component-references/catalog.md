@@ -73,6 +73,7 @@ Exported from `@scorp-ds/components` but not a component file of their own.
 | `cn` | function | `packages/components/src/lib/utils.ts` |
 | `ControlSize` | type | `packages/components/src/lib/size.ts` |
 | `ControlSizeProp` | type | `packages/components/src/lib/size.ts` |
+| `IconSlot` | type | `packages/components/src/lib/icon-slot.tsx` |
 | `ThemeProvider` | component | `packages/components/src/theme/ThemeProvider.tsx` |
 
 ## Actions
@@ -94,8 +95,8 @@ Status: draft · Spec: [`docs/specs/Button.md`](../../docs/specs/Button.md) · S
 | `variant` | `"primary"` `"secondary"` `"ghost"` `"link"` `"outline"` `"destructive"` `"icon"` | `"primary"` | Visual style (default: "primary"). |
 | `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ ~~`"icon"`~~ | `"md"` | Height: sm 32px, md 40px (default), lg 48px, from the control-height tokens. |
 | `disabled` | `boolean` | `false` | Disables the button (anchors drop `href` and set `aria-disabled`). |
-| `iconLeft` | `React.ReactNode` |  | Icon before the label, usually a `TuiIcon`, to make the action quicker to recognise ("+ New"). |
-| `iconRight` | `React.ReactNode` |  | Icon after the label, for direction or destination (an arrow on "Next", an external-link glyph on a link CTA). |
+| `iconLeft` | `IconSlot \| React.ReactNode` |  | Icon before the label, usually a `TuiIcon`, to make the action quicker to recognise ("+ New"). |
+| `iconRight` | `IconSlot \| React.ReactNode` |  | Icon after the label, for direction or destination (an arrow on "Next", an external-link glyph on a link CTA). |
 | `loading` | `boolean` | `false` | Busy state for async actions (submitting, saving). |
 | `href` | `string` |  | Render as an `<a>` with this destination instead of a `<button>`: same plate styling for link CTAs ("view project ↗"). |
 | `target` | `string` |  | Anchor target, e.g. "_blank". |
@@ -197,7 +198,7 @@ Status: draft · Spec: [`docs/specs/Avatar.md`](../../docs/specs/Avatar.md) · S
 | `src` | `string` |  | Image URL. |
 | `alt` (required) | `string` |  | Who the avatar shows, usually the person's name. |
 | `initials` | `string` |  | One or two letters shown when there is no image, or the image fails to load. |
-| `icon` | `ReactNode` |  | Icon shown when there is neither an image nor initials (for a team, a bot, a system account). |
+| `icon` | `IconSlot \| ReactNode` |  | Icon shown when there is neither an image nor initials (for a team, a bot, a system account). |
 | `size` | `"xl"` `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. |
 | `status` | `"online"` `"offline"` `"away"` |  | Presence dot in the corner, announced as "Status: online" and so on. |
 | `className` | `string` | `""` | Extra classes on the outer wrapper (margin, positioning). |
@@ -343,9 +344,10 @@ Status: draft · Spec: [`docs/specs/Alert.md`](../../docs/specs/Alert.md) · Sto
 | ~~`variant`~~ | `"default"` `"success"` `"warning"` `"error"` `"info"` |  | Severity under its old name; `default` maps to `neutral`. |
 | `title` | `string` |  | Short bold headline, one line. |
 | `description` | `ReactNode` |  | Body copy under the title: what it means and what to do next. |
-| `iconLeft` | `ReactNode` |  | Replaces the tone's severity icon. |
+| `iconLeft` | `IconSlot \| ReactNode` |  | Replaces the tone's severity icon. |
 | `onDismiss` | `() => void` |  | Adds a dismiss control (44px hit area) and is called when it is pressed. |
 | ~~`onClose`~~ | `() => void` |  | Dismiss callback under its old name. |
+| `dismissLabel` | `string` | `"Close alert"` | Accessible name of the dismiss button (default "Close alert"). |
 | `className` | `string` | `""` | Extra classes on the outer ring layer (spacing and width only). |
 
 ### Badge
@@ -368,7 +370,7 @@ Status: draft · Spec: [`docs/specs/Badge.md`](../../docs/specs/Badge.md) · Sto
 | `caps` | `boolean` | `false` | Uppercase eyebrow voice: uppercase text with .08em tracking. |
 | `dashed` | `boolean` | `false` | Not-yet-real voice: transparent fill with a 1px dashed border in the tone's text color, for placeholders, empty slots, and free tiers. |
 | `children` (required) | `ReactNode` |  | The label: a word, a short phrase or a number. |
-| `iconLeft` | `ReactNode` |  | Icon before the label, usually a `TuiIcon`, to reinforce the meaning of a status badge. |
+| `iconLeft` | `IconSlot \| ReactNode` |  | Icon before the label, to reinforce the meaning of a status badge. |
 | `onDismiss` | `() => void` |  | Adds a remove (x) button that calls this when pressed. |
 | ~~`onClose`~~ | `() => void` |  | Remove callback under its old name. |
 | `dismissLabel` | `string` |  | Accessible name for the remove button. |
@@ -392,13 +394,13 @@ Status: draft · Spec: [`docs/specs/EmptyState.md`](../../docs/specs/EmptyState.
 | `label` (required) | `string` |  | Button text; start with a verb ("Create project"). |
 | `onClick` | `() => void` |  | Click handler. |
 | `href` | `string` |  | Renders the button as a link instead. |
-| `icon` | `"AlertCircle"` `"AlertTriangle"` `"Archive"` `"ArrowLeft"` `"ArrowRight"` `"Bell"` `"Check"` `"CheckCircle"` `"ChevronDown"` `"ChevronRight"` `"ChevronUp"` `"Copy"` `"Download"` `"Edit"` `"ExternalLink"` `"Eye"` `"EyeOff"` `"FileText"` `"Globe"` `"HelpCircle"` `"Info"` `"Lock"` `"LogOut"` `"Mail"` `"Menu"` `"Minus"` `"Moon"` `"MoreVertical"` `"Music2"` `"Pause"` `"Play"` `"Plus"` `"Repeat"` `"Save"` `"Search"` `"Send"` `"Settings"` `"Share2"` `"Shield"` `"Shuffle"` `"SkipBack"` `"SkipForward"` `"Star"` `"Stop"` `"Sun"` `"Tag"` `"Trash2"` `"Upload"` `"User"` `"Volume2"` `"VolumeX"` `"X"` | `"Archive"` | Optional 1-bit icon before the label. |
+| `icon` | `IconSlot` | `"Archive"` | Optional icon before the label: a TuiIcon name or an element. |
 
 **`EmptyStateProps`**
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `icon` | `TuiIconName \| null` | `"Archive"` | 1-bit icon shown above the title (default "Archive"). |
+| `icon` | `IconSlot \| null` | `"Archive"` | Icon shown above the title: a TuiIcon name or an element (default "Archive"). |
 | `title` (required) | `ReactNode` |  | Short statement of the situation, e.g. "No results". |
 | `description` | `ReactNode` |  | One or two sentences: why it is empty and what to do. |
 | `primaryAction` | `EmptyStateAction` |  | The main next step, rendered as a primary Button. |
@@ -715,7 +717,7 @@ Status: draft · Spec: [`docs/specs/Switch.md`](../../docs/specs/Switch.md) · S
 | `aria-labelledby` | `string` |  | Id of visible text elsewhere that names the switch, such as a settings row heading. |
 | `hideLabel` | `boolean` | `false` | Keep `label` as the accessible name only (no visible text). |
 | `disabled` | `boolean` | `false` | Blocks interaction and dims the switch. |
-| `icon` | `ReactNode` |  | Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle). |
+| `icon` | `IconSlot \| ReactNode` |  | Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle). |
 
 Also accepts the native attributes of `AriaAttributes`, `ButtonHTMLAttributes`, `DOMAttributes`, `HTMLAttributes`.
 
@@ -1047,7 +1049,7 @@ Status: draft · Spec: [`docs/specs/SideNav.md`](../../docs/specs/SideNav.md) ·
 | `children` | `ReactNode` |  | Nested SideNavItem rows. |
 | `className` | `string` |  | Extra classes for the row element. |
 | `label` (required) | `string` |  | Row text. |
-| `icon` | `"AlertCircle"` `"AlertTriangle"` `"Archive"` `"ArrowLeft"` `"ArrowRight"` `"Bell"` `"Check"` `"CheckCircle"` `"ChevronDown"` `"ChevronRight"` `"ChevronUp"` `"Copy"` `"Download"` `"Edit"` `"ExternalLink"` `"Eye"` `"EyeOff"` `"FileText"` `"Globe"` `"HelpCircle"` `"Info"` `"Lock"` `"LogOut"` `"Mail"` `"Menu"` `"Minus"` `"Moon"` `"MoreVertical"` `"Music2"` `"Pause"` `"Play"` `"Plus"` `"Repeat"` `"Save"` `"Search"` `"Send"` `"Settings"` `"Share2"` `"Shield"` `"Shuffle"` `"SkipBack"` `"SkipForward"` `"Star"` `"Stop"` `"Sun"` `"Tag"` `"Trash2"` `"Upload"` `"User"` `"Volume2"` `"VolumeX"` `"X"` |  | 1-bit icon shown before the label (strongly recommended; required for a useful collapsed rail). |
+| `icon` | `IconSlot` |  | Icon shown before the label, a TuiIcon name or an element (strongly recommended; required for a useful collapsed rail). |
 | `active` | `boolean` | `false` | Marks the current route: holds the hover fill and sets `aria-current="page"`. |
 | `href` | `string` |  | Destination; renders an `<a>`. |
 | `onClick` | `(event: MouseEvent<HTMLElement>) => void` |  | Click handler. |
@@ -1138,8 +1140,8 @@ Status: draft · Spec: [`docs/specs/Dropdown.md`](../../docs/specs/Dropdown.md) 
 |---|---|---|---|
 | `label` (required) | `string` | `"Actions"` | Item text and accessible name. |
 | `onClick` (required) | `() => void` |  | Called on activation; the menu then closes. |
-| `icon` | `ReactNode` |  | Left icon grouped with the label (use a `TuiIcon`). |
-| `iconRight` | `ReactNode` |  | Right-aligned icon, for a shortcut hint or an external-link marker. |
+| `icon` | `IconSlot \| ReactNode` |  | Left icon grouped with the label. |
+| `iconRight` | `IconSlot \| ReactNode` |  | Right-aligned icon, for a shortcut hint or an external-link marker. |
 | `variant` | `"default"` `"destructive"` |  | `destructive` colors the item red for irreversible actions. |
 | `disabled` | `boolean` |  | Dims the item, blocks activation, and skips it during arrow-key navigation. |
 
@@ -1432,7 +1434,7 @@ Status: draft · Spec: [`docs/specs/StatusLine.md`](../../docs/specs/StatusLine.
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `className` | `string` |  | Extra classes for the segment. |
-| `icon` | `"AlertCircle"` `"AlertTriangle"` `"Archive"` `"ArrowLeft"` `"ArrowRight"` `"Bell"` `"Check"` `"CheckCircle"` `"ChevronDown"` `"ChevronRight"` `"ChevronUp"` `"Copy"` `"Download"` `"Edit"` `"ExternalLink"` `"Eye"` `"EyeOff"` `"FileText"` `"Globe"` `"HelpCircle"` `"Info"` `"Lock"` `"LogOut"` `"Mail"` `"Menu"` `"Minus"` `"Moon"` `"MoreVertical"` `"Music2"` `"Pause"` `"Play"` `"Plus"` `"Repeat"` `"Save"` `"Search"` `"Send"` `"Settings"` `"Share2"` `"Shield"` `"Shuffle"` `"SkipBack"` `"SkipForward"` `"Star"` `"Stop"` `"Sun"` `"Tag"` `"Trash2"` `"Upload"` `"User"` `"Volume2"` `"VolumeX"` `"X"` |  | 1-bit icon before the text. |
+| `icon` | `IconSlot` |  | Icon before the text, a TuiIcon name or an element. |
 | `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` | `"neutral"` | Semantic tone (default "neutral"). |
 | `children` (required) | `ReactNode` |  | Segment text. |
 
@@ -1453,7 +1455,7 @@ Status: draft · Spec: [`docs/specs/TreeView.md`](../../docs/specs/TreeView.md) 
 | `id` (required) | `string` |  | Unique, stable id across the whole tree. |
 | `label` (required) | `ReactNode` |  | Row content. |
 | `textValue` | `string` |  | Plain-text label for type-ahead when `label` is not a string. |
-| `icon` | `"AlertCircle"` `"AlertTriangle"` `"Archive"` `"ArrowLeft"` `"ArrowRight"` `"Bell"` `"Check"` `"CheckCircle"` `"ChevronDown"` `"ChevronRight"` `"ChevronUp"` `"Copy"` `"Download"` `"Edit"` `"ExternalLink"` `"Eye"` `"EyeOff"` `"FileText"` `"Globe"` `"HelpCircle"` `"Info"` `"Lock"` `"LogOut"` `"Mail"` `"Menu"` `"Minus"` `"Moon"` `"MoreVertical"` `"Music2"` `"Pause"` `"Play"` `"Plus"` `"Repeat"` `"Save"` `"Search"` `"Send"` `"Settings"` `"Share2"` `"Shield"` `"Shuffle"` `"SkipBack"` `"SkipForward"` `"Star"` `"Stop"` `"Sun"` `"Tag"` `"Trash2"` `"Upload"` `"User"` `"Volume2"` `"VolumeX"` `"X"` |  | Optional 1-bit icon before the label. |
+| `icon` | `IconSlot` |  | Optional icon before the label: a TuiIcon name or an element. |
 | `children` | `TreeNode[]` |  | Child nodes. |
 | `disabled` | `boolean` |  | Skip this node for selection and activation (it stays focusable). |
 

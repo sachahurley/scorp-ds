@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `77099a1d0796b170` |
+| API hash | `67f97c72b58c2206` |
 
 ---
 
@@ -70,7 +70,7 @@ Content priority: image, initials, icon, default glyph. A failed image falls bac
 | `src` | `string` | `undefined` | No | Image URL. Falls back to initials, icon, then `@` if it fails to load. |
 | `alt` | `string` | none | Yes | Who the avatar shows. Names the image, or the box (`role="img"`) when it renders initials, an icon or the `@` glyph, including after a broken image. `""` marks it decorative: the image gets `alt=""` and the fallback box `aria-hidden`. |
 | `initials` | `string` | `undefined` | No | One or two letters shown when there is no usable image. |
-| `icon` | `ReactNode` | `undefined` | No | Custom icon (e.g. `TuiIcon`) shown when there is no image or initials. |
+| `icon` | `IconSlot \| ReactNode` | `undefined` | No | Icon (a TuiIcon name or an element) shown when there is no image or initials. |
 | `size` | `ControlSizeProp \| "xl"` | `"md"` | No | Square size: `sm` 24px, `md` 40px, `lg` 64px, `xl` 96px. Legacy names are deprecated aliases. |
 | `status` | `"online" \| "offline" \| "away"` | `undefined` | No | Presence dot, announced as `Status: {status}`. |
 | `className` | `string` | `""` | No | Extra classes on the wrapper. |
