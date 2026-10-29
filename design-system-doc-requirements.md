@@ -35,6 +35,12 @@ Same four sections as Foundation, with Light/Dark columns (these tokens differ p
 1. **Header** — name + one-sentence purpose + one "don't use this when …" line.
 2. **Live example** — the playground story with controls, first thing on the page.
 3. **Variants and states** — one story per meaningful axis (variant, size, disabled/error). Not every permutation.
+   **Data states are not optional:** if the component's API supports a loading, empty or
+   error state, each one it supports ships its own story (`Table/Loading`, `Table/Empty`,
+   `Combobox/No matches`). These are the states a product hits first and a reviewer sees
+   last, and a story is the only way they reach the visual and a11y runs. A state that
+   only appears after input (a filter with no match) puts itself there with a `play`
+   function, per the next section.
 4. **Props** — auto-generated from TypeScript via autodocs. JSDoc comments on the interface ARE the prop documentation; never hand-write a props table.
 5. **Accessibility** — 2-4 concrete bullets: keyboard behavior, what carries the label, where focus goes.
 6. **Code** — one realistic snippet.
@@ -121,6 +127,7 @@ Full reasoning: `docs/decisions/0012-stories-drive-their-own-interactions.md`.
 - [ ] Exactly one code snippet per page (component pages: one per section max)
 - [ ] Component pages: props are autodocs-generated, a11y bullets present
 - [ ] Nothing on the page duplicates a fact that lives in another file
+- [ ] Component pages: every loading, empty and error state the API supports has its own story
 - [ ] Interaction-gated stories carry a `play` function; focus states use `userEvent.tab()`
 - [ ] Any `skip-visual` tag says, in a comment, why the frame cannot be stable
 - [ ] Stories whose subject depends on width declare a viewport, or are split per breakpoint

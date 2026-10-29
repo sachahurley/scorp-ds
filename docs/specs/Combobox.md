@@ -126,11 +126,12 @@ Don't use this for: a short list the user can scan at a glance (use Select inste
 | Error | Yes | Yes |  |
 | Disabled | Yes | Yes |  |
 | Custom filter | Yes | Yes |  |
+| No matches (`emptyText`) | Yes | Yes | `No matches`: the `play` function opens the list and types a query nothing matches |
 | Aria label only | Yes | Yes |  |
 
 Interactive controls: Yes (autodocs argTypes)
 
-**Coverage:** 100% (7/7)
+**Coverage:** 100% (8/8)
 
 <!-- AUTO-END:storybook -->
 

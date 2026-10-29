@@ -114,6 +114,21 @@ export const CustomFilter: Story = {
   },
 };
 
+/** The empty state: the list is open and `emptyText` says nothing matched. */
+export const NoMatches: Story = {
+  name: 'No matches',
+  // Opens the list and types a query no country contains, because `emptyText`
+  // only renders while the list is open with nothing left in it.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole('combobox');
+    await userEvent.click(field);
+    await userEvent.type(field, 'qq');
+  },
+  render: Default.render,
+  args: { label: 'Country', placeholder: 'Search countries', emptyText: 'No country matches that search' },
+};
+
 /** When a visible label is not possible, name the field with `aria-label`. */
 export const AriaLabelOnly: Story = {
   name: 'Aria label only',
