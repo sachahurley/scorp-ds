@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TuiIcon } from '@scorp-ds/components';
+import { TUI_ICON_GLYPHS, TuiIcon, type TuiIconName } from '@scorp-ds/components';
+
+const ICON_NAMES = Object.keys(TUI_ICON_GLYPHS) as TuiIconName[];
+const COMMON: TuiIconName[] = ['Check', 'X', 'ArrowRight', 'Settings', 'Search', 'Trash2', 'AlertTriangle'];
 
 const meta: Meta<typeof TuiIcon> = {
   title: 'Components/Display/TuiIcon',
   component: TuiIcon,
   tags: ['autodocs'],
   argTypes: {
-    name: { control: 'text' },
+    name: { control: 'select', options: ICON_NAMES },
     size: { control: 'select', options: ['3', '4', '5', '6', '8'] },
   },
   parameters: { layout: 'centered' },
@@ -40,7 +43,7 @@ export const CommonSet: Story = {
   name: 'Common glyphs',
   render: () => (
     <div className="flex flex-wrap gap-4 font-mono text-sm text-secondary-800 dark:text-secondary-200">
-      {['Check', 'X', 'ArrowRight', 'Settings', 'Search', 'Trash2', 'AlertTriangle'].map((name) => (
+      {COMMON.map((name) => (
         <span key={name} className="flex items-center gap-2 border border-secondary-300 px-2 py-1 dark:border-secondary-700">
           <TuiIcon name={name} size="4" />
           {name}

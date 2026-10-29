@@ -13,7 +13,7 @@
 | Story | `Components/Display/Card` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `94c2c8f3fbb456ea` |
 
 ---
@@ -39,7 +39,7 @@ Outer ring plate (`plate-round-lg`, `--surface-container-stroke`, 1px padding) a
 | Enum Value | Description |
 |-----------|-------------|
 | Block (default) | Sections stack in normal flow. |
-| Flex column | `layout="flex"`: the ring and fill become flex columns and the content area grows (`flex-1 min-h-0`), so a fixed-height card pins its footer to the bottom. With no `layout` the old `className` sniff still applies, but only for a standalone `flex` class. |
+| Flex column | `layout="flex"`: the ring and fill become flex columns and the content area grows (`flex-1 min-h-0`), so a fixed-height card pins its footer to the bottom. With no `layout` the old `className` sniff still applies, but only for a standalone `flex` class, and it logs a one-time development warning asking for `layout="flex"`. |
 
 ### Sizes
 
@@ -58,11 +58,11 @@ Outer ring plate (`plate-round-lg`, `--surface-container-stroke`, 1px padding) a
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `children` | `ReactNode` | | Yes | Main content. |
-| `title` | `string` | `undefined` | No | Header title, rendered as an `h3` in `text-base` bold. |
-| `subtitle` | `string` | `undefined` | No | Secondary line under the title, `text-sm`. |
-| `headerContent` | `ReactNode` | `undefined` | No | Custom header; replaces `title` and `subtitle` entirely when set. |
+| `title` | `string` | `undefined` | No | Header title, rendered as an `h3` in `text-base` bold. Ignored when `headerContent` is set. |
+| `subtitle` | `string` | `undefined` | No | Secondary line under the title, `text-sm`. Ignored when `headerContent` is set. |
+| `headerContent` | `ReactNode` | `undefined` | No | Custom header. Wins over `title` and `subtitle`: when it is set they are not rendered, so put any heading you need inside it. |
 | `footerContent` | `ReactNode` | `undefined` | No | Footer band for actions or metadata. |
-| `layout` | `CardLayout` (`"block" \| "flex"`) | `undefined` (falls back to the legacy sniff) | No | Section layout. `"block"` grows with the content; `"flex"` makes the card a flex column so the content section fills a fixed height and the footer pins to the bottom. |
+| `layout` | `CardLayout` (`"block" \| "flex"`) | `undefined` (falls back to the legacy sniff) | No | Section layout. `"block"` grows with the content; `"flex"` makes the card a flex column so the content section fills a fixed height and the footer pins to the bottom. Pass it explicitly: inferring `flex` from `className` is deprecated and warns once in development. |
 | `className` | `string` | `""` | No | Extra classes on the outer ring (width, height). With no `layout`, a standalone `flex` class still switches on the flex column for backward compatibility. |
 
 Exported types: `CardProps`, `CardLayout`.
@@ -220,6 +220,7 @@ None.
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | Explicit `layout="block" \| "flex"` prop; the legacy `className` sniff now matches only a standalone `flex` class |
 | Unreleased | 2026-09-22 | fix | Header and footer rules use `--border-width-hairline` instead of 0.5px |
+| Unreleased | 2026-10-28 | docs | Documented that `headerContent` wins over `title` / `subtitle`; inferring `layout` from a `flex` class in `className` now logs a one-time dev warning (behaviour unchanged) |
 
 <!-- AUTO-END:changelog -->
 

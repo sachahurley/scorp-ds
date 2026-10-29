@@ -13,8 +13,8 @@
 | Story | `Patterns/CaseStudy` (full pages: `Screens/CaseStudyTemplate`) |
 | Version | `v2` |
 | Status | `draft` |
-| Last updated | 2026-10-27 |
-| API hash | `a23234c129ed5e19` |
+| Last updated | 2026-10-28 |
+| API hash | `f9442dd1b0b4f2f3` |
 
 ---
 
@@ -55,7 +55,7 @@ A hairline rule (`surface-container-stroke`) above; beneath it the two-digit num
 | Enum Value | Description |
 |-----------|-------------|
 | `prose` | `<p>` `text-base leading-relaxed`, `my-6`. |
-| `image` | `<figure>` on the plate ring, `aspect` (default `"16 / 9"`), numbered caption, optional `width` breakout. `src` renders an `<img>` (`object-fit: cover`); without it, the hatch placeholder. |
+| `image` | `<figure>` on the plate ring, `aspect` (`"16 / 9"` default, `"21 / 9"`, `"4 / 3"`), numbered caption, optional `width` breakout. `src` renders an `<img>` (`object-fit: cover`); without it, the hatch placeholder. |
 | `imagePair` | Two 4:3 figures, 1 column then 2 from `sm`, each numbered; `srcs` / `alts` / `captions` tuples; optional `width`. |
 | `ascii` | `<pre>` box-drawing diagram inside the figure ring, `role="img"` with `label` (falling back to `caption`). Type is `text-xs`, stepping down until the longest line fits the figure (shrink to fit, so phones see the whole diagram); `overflow-x-auto` remains the fallback. |
 | `slot` | A live region filled from the `slots` prop by `name`; the hatch placeholder (at `aspect`) when empty. Numbered like a figure. |
@@ -121,10 +121,10 @@ Breakouts size against the nearest `container-type: inline-size` ancestor (`100c
 | `type` | Fields |
 |--------|--------|
 | `prose` | `text: string` |
-| `image` | `src?; alt?; aspect?; caption?; width?: "wide" \| "full"` |
+| `image` | `src?; alt?; aspect?: "16 / 9" \| "21 / 9" \| "4 / 3"; caption?; width?: "wide" \| "full"` |
 | `imagePair` | `captions?: [string, string]; width?; srcs?: [string \| undefined, string \| undefined]; alts?: [...]` |
 | `ascii` | `text: string; caption?; width?; label?` |
-| `slot` | `name: string; caption?; width?; aspect?` |
+| `slot` | `name: string; caption?; width?; aspect?` (same ratios as `image`) |
 | `list` / `insights` / `callouts` | `items: { title: string; text: string }[]` |
 | `quote` | `text: string; name?; role?; image?` |
 | `statement` | `text: string; kicker?` |
@@ -308,6 +308,7 @@ Interactive controls: none (stories pass fixed data).
 |---------|------|------|---------|
 | v2 | 2026-10-27 | breaking | `CaseStudyBlocks` replaced by `CaseStudyPage`: structured header and ordered, hideable sections; counted section and figure numbers; new `statement` and `outcomes` blocks; redesigned list, insights, callouts and quote; `font.size.pageTitle`. See decision 0014. |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-10-28 | feat | `aspect` on image and slot blocks is the union of the ratios in use (`"16 / 9" \| "21 / 9" \| "4 / 3"`) instead of `string`. Type your own block data with `CaseStudyFigure["aspect"]` |
 
 <!-- AUTO-END:changelog -->
 

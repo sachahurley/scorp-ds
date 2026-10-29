@@ -13,7 +13,7 @@
 | Story | `Components/Terminal/Kbd` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `6658e73daaac639a` |
 
 ---
@@ -64,8 +64,8 @@ Don't use this for: code, file names or command text (use a plain `<code>` eleme
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `keys` | `string[]` | - | No | Combo keys in press order. |
-| `children` | `ReactNode` | - | No | Single key label. |
+| `keys` | `string[]` | - | No | Combo keys in press order. Wins over `children`: with at least one entry, `children` is not rendered. A one-entry array renders a single key. |
+| `children` | `ReactNode` | - | No | Single key label. Rendered only when `keys` is absent or empty; ignored when both are passed. |
 | `size` | `"sm" \| "md"` | `"sm"` | No | Key size. |
 | `separator` | `ReactNode` | `"+"` | No | Visible combo separator. |
 | `className` | `string` | - | No | Outer `<kbd>` classes. |
@@ -168,6 +168,7 @@ No hardcoded values found.
 - Do use platform key names your users see (Cmd on macOS).
 - Do keep the separator visible.
 - Don't use Kbd as a button.
+- Don't pass both `keys` and `children`: `keys` wins and `children` is silently dropped. Use `keys` for a combo, `children` for one key.
 
 <!-- /HUMAN-SECTION:do-dont -->
 
@@ -201,6 +202,7 @@ No hardcoded values found.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
+| Unreleased | 2026-10-28 | docs | Documented that `keys` wins over `children` when both are passed |
 
 <!-- AUTO-END:changelog -->
 

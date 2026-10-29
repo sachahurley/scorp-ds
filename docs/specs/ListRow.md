@@ -13,7 +13,7 @@
 | Story | `Components/Display/ListRow` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `efffd965836716d3` |
 
 ---
@@ -75,7 +75,7 @@ Row element (`<a>`, `<button>`, the `as` component, or `<div>`) with `block w-fu
 | `href` | `string` | none | No | Renders an `<a>`. Mutually exclusive with `onClick` and `as`. |
 | `onClick` | `() => void` | none | No | Renders a `<button type="button">`. Mutually exclusive with `href` and `as`. |
 | `as` | `ElementType` | none | No | Custom link component (router `Link`). |
-| `asProps` | `Record<string, unknown>` | none | No | Props spread onto the `as` component (`to`, `state`, `aria-current`, ...). |
+| `asProps` | `Record<string, unknown>` | none | No | Props spread onto the `as` component (`to`, `state`, `aria-current`, ...). Spread untyped: TypeScript does not check them against the `as` component's props. |
 | `className` | `string` | `""` | No | Appended to the row classes (plain concatenation, no tailwind-merge). |
 | `ref` | `Ref<HTMLElement>` | none | No | Forwarded to the rendered element. |
 | `...rest` | native element attributes | | No | Forwarded in every form, including display (`<div>`) and `as` rows (`aria-current`, `id`, `data-*`, `target`, `disabled`, ...). On `as` rows `asProps` is spread last, so it wins. |
@@ -241,6 +241,7 @@ None imported. `titleSuffix` and `thumb` are consumer-provided (typically `TuiIc
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Titles truncate as documented, `meta` docs match the AA-passing colours the code uses, and native attributes are forwarded on display and `as` rows |
+| Unreleased | 2026-10-28 | docs | Documented that `asProps` is spread untyped |
 
 <!-- AUTO-END:changelog -->
 

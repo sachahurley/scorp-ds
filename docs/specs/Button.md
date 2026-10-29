@@ -13,8 +13,8 @@
 | Story | `Components/Actions/Button` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `d6cf34ea17b7f67f` |
+| Last updated | 2026-10-28 |
+| API hash | `85e7090cf6a1b413` |
 
 ---
 
@@ -75,8 +75,8 @@ While `loading`, that content is wrapped in an `opacity-0` span that stays in th
 | `iconLeft` | `ReactNode` | none | No | Icon before the label, typically a `TuiIcon`. React elements are wrapped in a size-matched box. |
 | `iconRight` | `ReactNode` | none | No | Icon after the label (for example `ExternalLink` or `ChevronRight`). |
 | `href` | `string` | none | No | Renders an `<a>` with identical plate styling instead of a `<button>`. Use for plate-styled navigation CTAs. |
-| `target` | `string` | none | No | Anchor target, only with `href` (for example `"_blank"`). |
-| `rel` | `string` | none | No | Anchor rel, only with `href`. Pair `target="_blank"` with `"noopener noreferrer"`. |
+| `target` | `string` | none | No | Anchor target (for example `"_blank"`). Type-checks only alongside a string `href`: `ButtonProps` is a union of a link form (`href: string; target?; rel?`) and a button form (`target?: never; rel?: never`). |
+| `rel` | `string` | none | No | Anchor rel. Pair `target="_blank"` with `"noopener noreferrer"`. Type-checks only alongside a string `href`, like `target`. |
 | `aria-label` | `string` | none | Required for icon-only | Accessible name. A dev warning fires when an icon-only button has neither `aria-label` nor `aria-labelledby`. |
 | `aria-labelledby` | `string` | none | No | Alternative to `aria-label` for icon-only buttons. |
 | `className` | `string` | `""` | No | Extra classes appended to the button or anchor. |
@@ -276,6 +276,7 @@ Icons are passed in by the consumer (typically `TuiIcon`).
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | fix | Deprecated `size="icon"`; documented `variant="link"` |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-10-28 | feat | `ButtonProps` is a type union: `target` and `rel` are accepted only with a string `href`. Every repo and consumer call site already passes them with `href` |
 
 <!-- AUTO-END:changelog -->
 

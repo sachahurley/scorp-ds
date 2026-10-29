@@ -165,7 +165,7 @@
     },
     {
       "name": "ButtonProps",
-      "kind": "interface",
+      "kind": "type",
       "from": "packages/components/src/components/Button.tsx"
     },
     {
@@ -1093,7 +1093,7 @@
               "name": "collapsible",
               "type": "boolean",
               "required": false,
-              "description": "Allow closing the open item so none are open (default false)."
+              "description": "Allow closing the open item so none are open (default false). Without it, the open item's trigger is `aria-disabled` and one item always stays open."
             }
           ]
         },
@@ -1162,7 +1162,7 @@
               "name": "collapsible",
               "type": "boolean",
               "required": false,
-              "description": "Always true for multiple; accepted for API symmetry."
+              "description": "Has no effect with `type=\"multiple\"`: every item can always close, so the accordion behaves as collapsible whatever you pass. Accepted only so a `type` switch does not have to drop the prop."
             }
           ]
         },
@@ -1232,7 +1232,7 @@
               "name": "collapsible",
               "type": "boolean",
               "required": false,
-              "description": "Allow closing the open item so none are open (default false)."
+              "description": "Allow closing the open item so none are open (default false). Without it, the open item's trigger is `aria-disabled` and one item always stays open."
             }
           ]
         },
@@ -1857,7 +1857,7 @@
               "name": "asProps",
               "type": "Record<string, unknown>",
               "required": false,
-              "description": "Props spread onto the `as` component."
+              "description": "Props for the `as` component (`to`, `state`, ...), spread onto it as-is. They are spread untyped: TypeScript does not check them against the `as` component's own props, so a misspelt `to` is not caught at compile time."
             },
             {
               "name": "key",
@@ -1927,7 +1927,7 @@
       "exports": [
         {
           "name": "ButtonProps",
-          "kind": "interface"
+          "kind": "type"
         },
         {
           "name": "Button",
@@ -1995,29 +1995,29 @@
               "description": "Icon after the label, for direction or destination (an arrow on \"Next\", an external-link glyph on a link CTA)."
             },
             {
-              "name": "href",
-              "type": "string",
-              "required": false,
-              "description": "Render as an `<a>` with this destination instead of a `<button>` — same plate styling for link CTAs (\"view project ↗\"). Disabled anchors drop the href and set `aria-disabled`."
-            },
-            {
-              "name": "target",
-              "type": "string",
-              "required": false,
-              "description": "Anchor target (only with `href`), e.g. \"_blank\"."
-            },
-            {
-              "name": "rel",
-              "type": "string",
-              "required": false,
-              "description": "Anchor rel (only with `href`); pair `target=\"_blank\"` with \"noopener noreferrer\"."
-            },
-            {
               "name": "loading",
               "type": "boolean",
               "required": false,
               "default": "false",
               "description": "Busy state for async actions (submitting, saving). Shows a Spinner over the label, sets `aria-busy` and `aria-disabled`, and ignores clicks. The button stays focusable (no native `disabled`, so focus isn't dropped mid-submit) and keeps its width: the label is hidden in place, not removed. Works for icon-only buttons too. `disabled` wins over `loading`."
+            },
+            {
+              "name": "href",
+              "type": "string",
+              "required": false,
+              "description": "Render as an `<a>` with this destination instead of a `<button>`: same plate styling for link CTAs (\"view project ↗\"). Disabled anchors drop the href and set `aria-disabled`."
+            },
+            {
+              "name": "target",
+              "type": "string",
+              "required": false,
+              "description": "Anchor target, e.g. \"_blank\". Only accepted together with `href`."
+            },
+            {
+              "name": "rel",
+              "type": "string",
+              "required": false,
+              "description": "Anchor rel; pair `target=\"_blank\"` with \"noopener noreferrer\". Only accepted together with `href`."
             }
           ],
           "inherits": [
@@ -2028,7 +2028,7 @@
           ]
         }
       },
-      "apiHash": "d6cf34ea17b7f67f"
+      "apiHash": "85e7090cf6a1b413"
     },
     "Card": {
       "layer": "component",
@@ -2062,19 +2062,19 @@
               "name": "title",
               "type": "string",
               "required": false,
-              "description": "Card title, rendered as the header heading."
+              "description": "Card title, rendered as the header heading (an `h3`). Ignored when `headerContent` is set."
             },
             {
               "name": "subtitle",
               "type": "string",
               "required": false,
-              "description": "Supporting line under the title."
+              "description": "Supporting line under the title. Ignored when `headerContent` is set."
             },
             {
               "name": "headerContent",
               "type": "ReactNode",
               "required": false,
-              "description": "Custom header node; replaces `title` / `subtitle` when set."
+              "description": "Custom header node, for a header that needs more than a title and subtitle (a badge, an action). Wins over `title` and `subtitle`: when it is set they are not rendered, so put any heading you need inside it."
             },
             {
               "name": "children",
@@ -2096,7 +2096,7 @@
                 "\"block\"",
                 "\"flex\""
               ],
-              "description": "Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. Prefer this over the legacy `className` sniff below."
+              "description": "Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. Pass it explicitly: when it is omitted, a standalone `flex` class in `className` still switches the card to `flex` (legacy behaviour), and that inference logs a one-time development warning asking for `layout=\"flex\"`."
             },
             {
               "name": "className",
@@ -2214,9 +2214,14 @@
             },
             {
               "name": "aspect",
-              "type": "string",
+              "type": "\"16 / 9\" | \"21 / 9\" | \"4 / 3\"",
               "required": false,
-              "description": "CSS aspect-ratio, e.g. \"21 / 9\". Defaults to \"16 / 9\"."
+              "values": [
+                "\"16 / 9\"",
+                "\"21 / 9\"",
+                "\"4 / 3\""
+              ],
+              "description": "Shape of the frame, as a CSS aspect-ratio: `16 / 9` (default) for most art, `21 / 9` for a wide diagram (pair it with `width=\"wide\"`), `4 / 3` for a screenshot or the shape an image pair uses. To type a field in your own data that feeds this, use `CaseStudyFigure[\"aspect\"]`."
             },
             {
               "name": "caption",
@@ -2317,7 +2322,7 @@
           ]
         }
       },
-      "apiHash": "a23234c129ed5e19"
+      "apiHash": "f9442dd1b0b4f2f3"
     },
     "Checkbox": {
       "layer": "component",
@@ -2670,6 +2675,22 @@
         "DividerProps": {
           "props": [
             {
+              "name": "orientation",
+              "type": "\"horizontal\" | \"vertical\"",
+              "required": false,
+              "values": [
+                "\"horizontal\"",
+                "\"vertical\""
+              ],
+              "description": "`horizontal` (default) for a full-width rule between stacked blocks; `vertical` for a full-height rule between items in a row (the parent needs a height)."
+            },
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Centred label on a horizontal rule (\"or\", a section name), drawn between box-drawing runs. Passing it gives the labelled form; a string label is also the separator's accessible name. Ignored when `orientation` is `vertical`."
+            },
+            {
               "name": "variant",
               "type": "\"horizontal\" | \"vertical\" | \"withText\"",
               "required": false,
@@ -2678,14 +2699,13 @@
                 "\"vertical\"",
                 "\"withText\""
               ],
-              "default": "\"horizontal\"",
-              "description": "`horizontal` (default) for a full-width rule between stacked blocks, `vertical` for a full-height rule between items in a row (the parent needs a height), `withText` for a horizontal rule with a centred label."
+              "deprecated": "Use `orientation`, and `label` for the labelled form (`withText`). `horizontal` and `vertical` map onto `orientation`; `withText` is a horizontal rule that shows `text`. `orientation` and `label` win when both forms are passed."
             },
             {
               "name": "text",
               "type": "ReactNode",
               "required": false,
-              "description": "Label shown in the middle of a `withText` divider (\"or\", a section name); a string label is also its accessible name. Ignored by the other variants, and `withText` without it renders a plain rule."
+              "deprecated": "Use `label`. Shown only with `variant=\"withText\"`; `label` wins when both are passed."
             },
             {
               "name": "spacing",
@@ -2706,7 +2726,7 @@
                 "\"large\""
               ],
               "default": "\"md\"",
-              "description": "Margin around the rule: none, sm 4px, md 16px (default), lg 32px. Legacy names are deprecated aliases."
+              "description": "Margin around the rule: none, sm 4px, md 16px (default), lg 32px. Above and below a horizontal rule (labelled or not), either side of a vertical one. Legacy names are deprecated aliases."
             },
             {
               "name": "className",
@@ -2718,7 +2738,7 @@
           ]
         }
       },
-      "apiHash": "88e78dadd9bd1529"
+      "apiHash": "049bc86a9acdcce7"
     },
     "Dropdown": {
       "layer": "component",
@@ -3132,13 +3152,13 @@
               "name": "keys",
               "type": "string[]",
               "required": false,
-              "description": "Keys of a combo, in press order (`[\"Ctrl\", \"Shift\", \"P\"]`). Takes precedence over `children`."
+              "description": "Keys of a combo, in press order (`[\"Ctrl\", \"Shift\", \"P\"]`). Wins over `children`: when `keys` has at least one entry, `children` is not rendered. A one-entry array renders a single key, the same as passing it as `children`."
             },
             {
               "name": "children",
               "type": "ReactNode",
               "required": false,
-              "description": "A single key label when `keys` is not used."
+              "description": "A single key label (`<Kbd>Esc</Kbd>`). Rendered only when `keys` is absent or empty; if both are passed, `keys` wins and `children` is ignored. Use `keys` for a combo, not children with a typed \"+\"."
             },
             {
               "name": "size",
@@ -4519,7 +4539,7 @@
               "name": "asProps",
               "type": "Record<string, unknown>",
               "required": false,
-              "description": "Props spread onto the `as` component (`to`, `state`, ...)."
+              "description": "Props for the `as` component (`to`, `state`, ...), spread onto it as-is. They are spread untyped: TypeScript does not check them against the `as` component's own props, so a misspelt `to` is not caught at compile time."
             },
             {
               "name": "trailing",
@@ -4605,14 +4625,14 @@
                 "\"large\""
               ],
               "default": "\"md\"",
-              "description": "Avatar square size: sm 32px, md 40px (default), lg 48px (control heights)."
+              "description": "Avatar square size: sm 32px, md 40px (default), lg 48px (control heights). Only the `avatar` variant reads it: `text` and `rect` ignore it, so size those with `lines` and `className`. Legacy small/medium/large are deprecated aliases."
             },
             {
               "name": "animated",
               "type": "boolean",
               "required": false,
               "default": "true",
-              "description": "Turn the pulse off (e.g. many skeletons on one screen). Reduced motion always turns it off."
+              "description": "Whether the stepped pulse runs. Defaults to `true`; pass `false` to hold the placeholder still (e.g. many skeletons on one screen). Reduced motion always stops the pulse, whatever this says."
             },
             {
               "name": "className",
@@ -6115,9 +6135,63 @@
           "props": [
             {
               "name": "name",
-              "type": "string",
+              "type": "TuiIconName",
               "required": true,
-              "description": "Icon name -- must match a key in (same as the Lucide component name)."
+              "values": [
+                "\"AlertCircle\"",
+                "\"AlertTriangle\"",
+                "\"Archive\"",
+                "\"ArrowLeft\"",
+                "\"ArrowRight\"",
+                "\"Bell\"",
+                "\"Check\"",
+                "\"CheckCircle\"",
+                "\"ChevronDown\"",
+                "\"ChevronRight\"",
+                "\"ChevronUp\"",
+                "\"Copy\"",
+                "\"Download\"",
+                "\"Edit\"",
+                "\"ExternalLink\"",
+                "\"Eye\"",
+                "\"EyeOff\"",
+                "\"FileText\"",
+                "\"Globe\"",
+                "\"HelpCircle\"",
+                "\"Info\"",
+                "\"Lock\"",
+                "\"LogOut\"",
+                "\"Mail\"",
+                "\"Menu\"",
+                "\"Minus\"",
+                "\"Moon\"",
+                "\"MoreVertical\"",
+                "\"Music2\"",
+                "\"Pause\"",
+                "\"Play\"",
+                "\"Plus\"",
+                "\"Repeat\"",
+                "\"Save\"",
+                "\"Search\"",
+                "\"Send\"",
+                "\"Settings\"",
+                "\"Share2\"",
+                "\"Shield\"",
+                "\"Shuffle\"",
+                "\"SkipBack\"",
+                "\"SkipForward\"",
+                "\"Star\"",
+                "\"Stop\"",
+                "\"Sun\"",
+                "\"Tag\"",
+                "\"Trash2\"",
+                "\"Upload\"",
+                "\"User\"",
+                "\"Volume2\"",
+                "\"VolumeX\"",
+                "\"X\""
+              ],
+              "description": "Which icon to draw: a (the Lucide component name, e.g. `\"Check\"`, `\"ChevronRight\"`). Names held in data need the type too: annotate the field as `TuiIconName` or the literal with `as const`. A name with no bitmap still renders \"?\" at runtime rather than throwing."
             },
             {
               "name": "size",
@@ -6142,7 +6216,7 @@
           ]
         }
       },
-      "apiHash": "3ac209cd021b2e93"
+      "apiHash": "e6520d5df7394983"
     },
     "Window": {
       "layer": "component",

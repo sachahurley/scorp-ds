@@ -44,8 +44,8 @@ describe("TuiIcon", () => {
     expect(svg).toHaveAttribute("height", String(px));
   });
 
-  it("shows a ? for a name it does not know", () => {
-    const { container } = render(<TuiIcon name="NotAnIcon" />);
+  it("shows a ? for a name it does not know (an untyped caller, e.g. data from JSON)", () => {
+    const { container } = render(<TuiIcon name={"NotAnIcon" as TuiIconName} />);
     expect(container.querySelector("svg")).toBeNull();
     expect(container.firstElementChild).toHaveTextContent("?");
   });
