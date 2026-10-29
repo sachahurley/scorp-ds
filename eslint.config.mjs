@@ -1,6 +1,8 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
+import jsxA11y from "eslint-plugin-jsx-a11y";
+
 import scorp from "./eslint-rules/index.js";
 
 export default tseslint.config(
@@ -162,6 +164,27 @@ export default tseslint.config(
     plugins: { scorp },
     rules: {
       "scorp/no-element-focus-in-story": "error",
+      "scorp/story-skip-visual-reason": "error",
+      "scorp/story-interaction-needs-play": "error",
+    },
+  },
+  // Accessibility in the markup itself, before axe ever renders it: an icon-only
+  // control with no name, a click handler on a div, an image with no alt. Axe
+  // only sees what a story renders; this sees every branch of the source.
+  {
+    files: [
+      "packages/components/src/**/*.tsx",
+      "packages/storybook/stories/**/*.tsx",
+      "packages/storybook/presets/**/*.tsx",
+      "packages/site/src/**/*.tsx",
+    ],
+    ignores: ["packages/components/src/__tests__/**"],
+    ...jsxA11y.flatConfigs.recommended,
+    rules: {
+      ...jsxA11y.flatConfigs.recommended.rules,
+      // `role` and `autoFocus` on our own components (Popover) are props, not DOM attributes.
+      "jsx-a11y/aria-role": ["error", { ignoreNonDOM: true }],
+      "jsx-a11y/no-autofocus": ["error", { ignoreNonDOM: true }],
     },
   }
 );

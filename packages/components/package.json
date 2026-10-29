@@ -21,7 +21,7 @@
     "build:css": "tailwindcss -c tailwind.config.cjs -i ./src/styles.css -o ./dist/styles.css --minify",
     "build": "npm run build:js && npm run build:css && tsc -p tsconfig.build.json",
     "dev": "vite build --watch",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit && tsc -p tsconfig.test.json",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {

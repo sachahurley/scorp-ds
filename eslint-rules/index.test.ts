@@ -123,3 +123,24 @@ tester.run("no-arbitrary-values", rules["no-arbitrary-values"], {
     { code: `const c = "duration-[400ms]";`, errors: [{ messageId: "bare" }] },
   ],
 });
+
+tester.run("story-skip-visual-reason", rules["story-skip-visual-reason"], {
+  valid: [
+    { code: `export const Live = {\n  // Ticks every 400ms, so no two runs match.\n  tags: ['skip-visual'],\n};` },
+    { code: `export const Live = { tags: ['skip-visual'] /* timer-driven */ };` },
+  ],
+  invalid: [{ code: `export const Live = { tags: ['skip-visual'] };`, errors: [{ messageId: "reason" }] }],
+});
+
+tester.run("story-interaction-needs-play", rules["story-interaction-needs-play"], {
+  valid: [
+    { code: `export const Focus = { play: async () => {} };` },
+    // Prop-driven states are fine without play.
+    { code: `export const Open = { args: { defaultOpen: true } };` },
+    { code: `export const FocusableSkipLink = { render: () => null };` },
+  ],
+  invalid: [
+    { code: `export const Focus = { args: {} };`, errors: [{ messageId: "play" }] },
+    { code: `export const HoverState = { ...Primary };`, errors: [{ messageId: "play" }] },
+  ],
+});

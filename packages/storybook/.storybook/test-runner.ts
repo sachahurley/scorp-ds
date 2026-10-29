@@ -16,8 +16,7 @@ const config: TestRunnerConfig = {
     const t = process.env.STORYBOOK_TEST_THEME;
     if (t === 'dark' || t === 'light') {
       await page.evaluate((theme) => {
-        (window as unknown as { __STORYBOOK_TEST_THEME__?: 'light' | 'dark' }).__STORYBOOK_TEST_THEME__ =
-          theme;
+        (window as unknown as { __STORYBOOK_TEST_THEME__?: string }).__STORYBOOK_TEST_THEME__ = theme;
       }, t);
     } else {
       await page.evaluate(() => {

@@ -156,6 +156,7 @@ export function BottomSheet({ isOpen, onClose, ariaLabel, closeLabel = "Close", 
             </button>
           </div>
           {/* Scrollable content region (focusable for keyboard scrolling) */}
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable region must be keyboard-focusable (axe scrollable-region-focusable) */}
           <div className="w-full overflow-y-auto" tabIndex={0}>
             {children}
           </div>

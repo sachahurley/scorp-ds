@@ -4504,6 +4504,12 @@
             "description": "Element to render, when the hidden text is a `label` for a control or a `li` inside a list rather than a generic `span`."
           },
           {
+            "name": "htmlFor",
+            "type": "string",
+            "required": false,
+            "description": "With `as=\"label\"`, the `id` of the control this labels. The JSDoc below has always promised it; the type did not accept it until stories were type-checked."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -4511,7 +4517,7 @@
           }
         ]
       },
-      "apiHash": "9652c4fdf1980804"
+      "apiHash": "7be2676b62244c82"
     }
   }
 }

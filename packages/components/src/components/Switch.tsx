@@ -194,6 +194,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             a <label> (a button is not a labelable element), so the click is
             wired by hand; the accessible name still comes from aria-label. */}
         {label && !hideLabel && (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- the visible label forwards pointer clicks to the switch button, which is the keyboard path
           <span
             onClick={handleClick}
             className={`select-none text-sm font-mono ${

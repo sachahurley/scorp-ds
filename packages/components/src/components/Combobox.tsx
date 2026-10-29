@@ -426,6 +426,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
               const isSelected = option.value === value;
               const isActive = index === activeIndex;
               return (
+                // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- pointer path only; the keyboard selects through the input with aria-activedescendant
                 <li
                   key={option.value}
                   id={optionId(index)}
