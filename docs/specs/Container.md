@@ -12,8 +12,8 @@
 | File | `packages/components/src/primitives/Container.tsx` |
 | Story | `Primitives/Layout/Container` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-09-22 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `a05fc82e0134604f` |
 
 ---
@@ -222,6 +222,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-22 | feat | Primitive created |
 
 <!-- AUTO-END:changelog -->

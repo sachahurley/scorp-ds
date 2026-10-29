@@ -12,8 +12,8 @@
 | File | `packages/components/src/components/TuiIcon.tsx` |
 | Story | `Components/Display/TuiIcon` |
 | Version | `v3` |
-| Status | `draft` |
-| Last updated | 2026-10-28 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `e6520d5df7394983` |
 
 ---
@@ -251,6 +251,7 @@ Imported by `Alert`, `Badge`, `Checkbox` (`Check`, `Minus`), `Dropdown`, `Link`,
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | Added `Minus` (7x7 horizontal bar, text form U+2212); Scorp Symbols rebuilt. 51 icons |
 | Unreleased | 2026-09-21 | feat | Added Menu (three bars, U+2630); Scorp Symbols face rebuilt so the glyph audit passes. 50 icons |
 | Unreleased | 2026-09-21 | fix | `size` typed as `TuiIconSize` |

@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Kbd.tsx` |
 | Story | `Components/Terminal/Kbd` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `455d8d8ede90f344` |
 
@@ -199,6 +199,7 @@ No hardcoded values found.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 | Unreleased | 2026-10-28 | docs | Documented that `keys` wins over `children` when both are passed |
 | Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md` only. Rendering unchanged |

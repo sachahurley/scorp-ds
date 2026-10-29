@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/LogView.tsx` |
 | Story | `Components/Terminal/LogView` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `e52d07cbe79940ba` |
 
@@ -222,6 +222,7 @@ No hardcoded values found.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 | Unreleased | 2026-10-28 | refactor | Follow logic moved into the shared `useFollowScroll` hook; no behavior change (existing tests unchanged and passing) |
 | Unreleased | 2026-10-28 | feat | `LogLevel` takes `warning` (decision 0024); `warn` is a deprecated alias that renders identically and warns once in development |

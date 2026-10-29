@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Skeleton.tsx` |
 | Story | `Components/Feedback/Skeleton` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `f99cf0bdd05a253f` |
 
@@ -194,6 +194,7 @@ None
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial Skeleton component, story, and unit tests |
 | Unreleased | 2026-10-28 | docs | `size` documented as avatar-only; `animated` documented by its default (`true`) |
 | Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |

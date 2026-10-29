@@ -12,8 +12,8 @@
 | File | `packages/components/src/components/Accordion.tsx` |
 | Story | `Components/Display/Accordion` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-10-28 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `2e6c2346a2258516` |
 
 ---
@@ -202,6 +202,7 @@ TuiIcon
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial Accordion component, story, and unit tests |
 | Unreleased | 2026-10-28 | docs | Documented that `collapsible` has no effect in `multiple` mode |
 

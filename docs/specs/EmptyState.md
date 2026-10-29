@@ -12,8 +12,8 @@
 | File | `packages/components/src/components/EmptyState.tsx` |
 | Story | `Components/Feedback/EmptyState` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-09-22 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `95271937df1da53f` |
 
 ---
@@ -194,6 +194,7 @@ Button, TuiIcon
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial EmptyState component, story, and unit tests |
 
 <!-- AUTO-END:changelog -->

@@ -12,8 +12,8 @@
 | File | `packages/components/src/components/Popover.tsx` |
 | Story | `Components/Overlays/Popover` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-10-28 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `7060cf292e4a8f11` |
 
 ---
@@ -209,6 +209,7 @@ lib/position.ts, lib/use-anchored-position.ts, lib/use-controllable-state.ts
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial Popover component, story, and unit tests |
 | Unreleased | 2026-10-28 | change | `PopoverProps` is now a union that requires `aria-label` or `aria-labelledby` when the panel is a dialog (the default role); `role` takes the named ARIA roles or `null` (decision 0024). Runtime unchanged |
 

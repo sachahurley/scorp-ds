@@ -12,8 +12,8 @@
 | File | `packages/components/src/primitives/Inline.tsx` |
 | Story | `Primitives/Layout/Inline` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-09-22 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `72db51066940d3c4` |
 
 ---
@@ -238,6 +238,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-22 | feat | Primitive created |
 
 <!-- AUTO-END:changelog -->

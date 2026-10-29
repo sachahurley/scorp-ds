@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Slider.tsx` |
 | Story | `Components/Inputs/Slider` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `ccba46e40934dd27` |
 
@@ -223,6 +223,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-22 | docs | Spec created from source |
 | Unreleased | 2026-09-22 | fix | Real 44px touch target, `--control-track` rail with an `--accent` fill, full-width layout, and the first unit tests |
 | Unreleased | 2026-10-29 | feat (breaking type) | Accessible name required by the type (`label`, `aria-label` or `aria-labelledby`). `SliderProps` is now a type alias |

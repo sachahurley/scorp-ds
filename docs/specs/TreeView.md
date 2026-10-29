@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/TreeView.tsx` |
 | Story | `Components/Terminal/TreeView` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `e68f0d1f6c81ab7b` |
 
@@ -245,6 +245,7 @@ No hardcoded values found.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 | Unreleased | 2026-10-29 | feat (breaking type) | Accessible name required by the type (`aria-label` or `aria-labelledby`). `TreeViewProps` is now a type alias |
 | Unreleased | 2026-10-29 | feat | `loading` and `emptyState` (additive, same names as `TableBody`). An empty tree no longer renders an empty `role="tree"`: it renders `emptyState` in a named group, or nothing |

@@ -12,8 +12,8 @@
 | File | `packages/components/src/components/Table.tsx` |
 | Story | `Components/Display/Table` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-10-28 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `de2ef791d5102eb4` |
 
 ---
@@ -272,6 +272,7 @@ Rules and the header weight were tokenized on 2026-09-22: `border-*-[length:var(
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-10-28 | feat | `TableBody` gains `loading`, `loadingRows`, `emptyState` and `colSpan` (additive); a loading body sets `aria-busy` on the table |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Column headers use the `font-bold` token and rules use `--border-width-hairline`, replacing the off-token 600 weight and 0.5px rules |

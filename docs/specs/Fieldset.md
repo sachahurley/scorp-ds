@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Fieldset.tsx` |
 | Story | `Components/Inputs/Fieldset` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `5c3759e5fc326e7f` |
 
@@ -238,6 +238,7 @@ No hardcoded values found.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-10-29 | added | New component: native fieldset and legend in the `eyebrow` or `field` voice, `description`, `gap`, `disabled`, `error` / `errorMessage`, `role="radiogroup"`. Adopted by the Forms and SettingsPanel presets with no rendered change |
 
 <!-- AUTO-END:changelog -->

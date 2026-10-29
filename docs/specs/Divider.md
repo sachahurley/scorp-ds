@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Divider.tsx` |
 | Story | `Components/Display/Divider` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `05ac33e012d192f9` |
 
@@ -230,6 +230,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` (a margin scale, not control-height tokens); small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-10-28 | feat | `orientation` and `label` replace `variant` and `text` (decision 0024); the old props are deprecated aliases with a one-time dev warning |

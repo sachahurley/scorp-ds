@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Card.tsx` |
 | Story | `Components/Display/Card` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `49a004d38d2f7a7f` |
 
@@ -217,6 +217,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | Explicit `layout="block" \| "flex"` prop; the legacy `className` sniff now matches only a standalone `flex` class |
 | Unreleased | 2026-09-22 | fix | Header and footer rules use `--border-width-hairline` instead of 0.5px |

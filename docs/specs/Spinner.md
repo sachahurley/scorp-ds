@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Spinner.tsx` |
 | Story | `Components/Feedback/Spinner` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `7e089aa1de2e3839` |
 
@@ -205,6 +205,7 @@ with short text for long waits.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-22 | docs | Spec aligned to the current template (Component and Last updated rows, repo-only header) |
 | Unreleased | 2026-09-21 | feat | New component: 1-bit dot ring spinner, sm/md/lg, visually hidden label, reduced-motion static frame |
 | Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |

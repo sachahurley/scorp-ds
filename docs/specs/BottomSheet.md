@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/BottomSheet.tsx` |
 | Story | `Components/Overlays/BottomSheet` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `a096c3596c999823` |
 
@@ -225,6 +225,7 @@ Interactive controls: N/A (render function story).
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | fix | Focus management on open and close |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | Visible close button (44px target, `closeLabel` prop) in a new header band |

@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Button.tsx` |
 | Story | `Components/Actions/Button` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `a495c5d46fe08c6e` |
 
@@ -268,6 +268,7 @@ Icons are passed in by the consumer (typically `TuiIcon`).
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-22 | fix | Light secondary hover text is now `--button-secondary-text-hover` sepia-950 on the sepia-600 fill (5.3:1, was white at 3.3:1) |
 | Unreleased | 2026-09-21 | feat | `loading` prop: Spinner over the label, `aria-busy` + `aria-disabled`, clicks blocked, stays focusable, width stable (icon-only too) |
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |

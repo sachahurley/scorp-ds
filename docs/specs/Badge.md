@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Badge.tsx` |
 | Story | `Components/Feedback/Badge` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `32b4cf7afd092142` |
 
@@ -247,6 +247,7 @@ Interactive controls: `tone` (select, every role including `bone`), `size` (sele
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` (fixed 20/24/28px heights, not control-height tokens); small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | feat | Remove button text `x` replaced by the 1-bit X icon (12px) |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
