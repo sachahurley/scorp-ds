@@ -8,6 +8,7 @@ export function MarketingHeroScreen() {
   return (
     <div className="w-full max-w-lg p-6">
       <Card
+        layout="flex"
         title="Scorp DS"
         subtitle="Sample screen — preset-driven composition"
         className="flex flex-col"

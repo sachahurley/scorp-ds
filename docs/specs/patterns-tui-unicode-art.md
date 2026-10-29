@@ -15,7 +15,7 @@ String utilities and conventions, not a single React component. Package: `@scorp
 | Story | `Lab/TuiArtPlayground` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-29 |
 
 ---
 
@@ -24,6 +24,8 @@ String utilities and conventions, not a single React component. Package: `@scorp
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
 Scorp DS is TUI-inspired: monospace, borders, and dense status readouts. This pattern defines which characters are acceptable for decorative frames and rows, and how generated strings should behave so they align in the browser and in terminal-style logs. Use `@scorp-ds/tui-art` when you need programmatic frames (`frameBox`, `frameBoxLines`) or aligned table lines (`formatTableRow`) as plain strings, in the browser, a CLI or server logs. Use `TuiIcon` for single-glyph affordances inside interactive UI, and the `Table` component for real tabular data in React.
+
+Don't use this for: an icon on a control (use `TuiIcon` instead), data a reader compares across columns in React (use `Table` instead), a section break between groups (use `Divider` instead), or a framed pane (use `Window` instead).
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -112,6 +114,7 @@ Optional: `npm run tui-art -- frame @path/to/file.txt` reads lines from a file (
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-10-29 | docs | Intent gains a "Don't use this for" line (decision 0028) |
 
 <!-- AUTO-END:changelog -->
 

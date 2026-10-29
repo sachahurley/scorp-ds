@@ -13,7 +13,7 @@
 | Story | `Patterns/MusicPlayer` |
 | Version | `v2` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-29 |
 
 ---
 
@@ -24,6 +24,10 @@
 Compact **now-playing card**: plate-framed album tile, artist + track title, seekable timeline with timestamps, transport controls (shuffle, previous, play/pause, next, repeat), a desktop drag handle, close and collapse affordances, an optional queue list, and a **collapsed mini bar** variant (~56px: thumb, title/artist, previous/play/next, expand, hairline progress).
 
 Ported from the Scorpion UI v2 showcase site (`scorpion-ui-v2/src/components/ui/MusicPlayer.tsx`), rebuilt on Scorp DS components and semantic tokens, then brought up to standard mini-player anatomy (audited against the Spotify and Apple Music compact players). The original's mute toggle was dropped: its glyph read as "music", and volume is meaningless without a real audio element.
+
+Not a preset: the playback hook, drag handle and both layouts are story-local, and this spec's Behavior section is the contract product code re-implements (decision 0028).
+
+Don't use this for: a general seek or volume control (use `Slider` instead), a progress readout with no transport (use `ProgressBar` instead), or a plain list of tracks (use `ListRow` instead).
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -107,6 +111,7 @@ Recipe details:
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-10-29 | docs | Intent says why this is not a preset and what to use instead (decision 0028) |
 
 <!-- AUTO-END:changelog -->
 
