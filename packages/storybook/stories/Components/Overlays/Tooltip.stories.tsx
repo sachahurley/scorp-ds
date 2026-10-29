@@ -3,11 +3,12 @@ import { userEvent, within } from '@storybook/test';
 import { Button, Tooltip } from '@scorp-ds/components';
 
 const meta: Meta<typeof Tooltip> = {
-  title: 'Components/Display/Tooltip',
+  title: 'Components/Overlays/Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
   argTypes: {
-    position: { control: 'select', options: ['top', 'bottom', 'left', 'right'] },
+    side: { control: 'select', options: ['top', 'right', 'bottom', 'left'] },
+    align: { control: 'select', options: ['start', 'center', 'end'] },
     delay: { control: 'number' },
   },
   parameters: { layout: 'centered' },
@@ -25,7 +26,7 @@ export const OnButton: Story = {
   },
   args: {
     content: 'Opens on hover or keyboard focus. Escape closes it.',
-    position: 'top',
+    side: 'top',
     delay: 200,
     children: <Button variant="secondary">Hover or focus me</Button>,
   },
@@ -35,32 +36,34 @@ export const OnButton: Story = {
  * Only one tooltip can be hovered at a time, so a single story can only ever
  * capture one placement. This one covers `top`; {@link PositionLeft} covers the
  * rotated path (`left` and `right` share the rotate-plus-offset recipe, which is
- * the geometry most likely to break). `bottom` is the mirror of `top`.
+ * the geometry most likely to break). `bottom` is the mirror of `top`. Export
+ * names stay `Positions` and `PositionLeft` so the story ids, and the visual
+ * baselines named after them, did not change when `position` became `side`.
  */
 export const Positions: Story = {
-  name: 'Positions',
+  name: 'Sides',
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.hover(canvas.getByRole('button', { name: 'Top' }));
   },
   render: () => (
     <div className="grid grid-cols-2 gap-8 p-8">
-      <Tooltip content="Top" position="top">
+      <Tooltip content="Top" side="top">
         <Button variant="ghost" size="sm">
           Top
         </Button>
       </Tooltip>
-      <Tooltip content="Bottom" position="bottom">
+      <Tooltip content="Bottom" side="bottom">
         <Button variant="ghost" size="sm">
           Bottom
         </Button>
       </Tooltip>
-      <Tooltip content="Left" position="left">
+      <Tooltip content="Left" side="left">
         <Button variant="ghost" size="sm">
           Left
         </Button>
       </Tooltip>
-      <Tooltip content="Right" position="right">
+      <Tooltip content="Right" side="right">
         <Button variant="ghost" size="sm">
           Right
         </Button>
@@ -76,19 +79,19 @@ export const Positions: Story = {
  * story because that offset is the part a token change breaks quietly.
  */
 export const PositionLeft: Story = {
-  name: 'Position: left',
+  name: 'Side: left',
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.hover(canvas.getByRole('button', { name: 'Left' }));
   },
   render: () => (
     <div className="grid grid-cols-2 gap-8 p-8">
-      <Tooltip content="Left" position="left">
+      <Tooltip content="Left" side="left">
         <Button variant="ghost" size="sm">
           Left
         </Button>
       </Tooltip>
-      <Tooltip content="Right" position="right">
+      <Tooltip content="Right" side="right">
         <Button variant="ghost" size="sm">
           Right
         </Button>
@@ -116,28 +119,28 @@ export const ViewportFlip: Story = {
   render: () => (
     <div className="relative h-screen w-full">
       <div className="absolute left-0 top-0">
-        <Tooltip content="Asked for top, flipped below" position="top">
+        <Tooltip content="Asked for top, flipped below" side="top">
           <Button variant="secondary" size="sm">
             Top edge
           </Button>
         </Tooltip>
       </div>
       <div className="absolute bottom-0 right-0">
-        <Tooltip content="Asked for bottom, flipped above" position="bottom">
+        <Tooltip content="Asked for bottom, flipped above" side="bottom">
           <Button variant="secondary" size="sm">
             Bottom edge
           </Button>
         </Tooltip>
       </div>
       <div className="absolute right-0 top-1/2">
-        <Tooltip content="Asked for right, flipped left" position="right">
+        <Tooltip content="Asked for right, flipped left" side="right">
           <Button variant="secondary" size="sm">
             Right edge
           </Button>
         </Tooltip>
       </div>
       <div className="absolute left-0 top-1/2">
-        <Tooltip content="Asked for left, flipped right" position="left">
+        <Tooltip content="Asked for left, flipped right" side="left">
           <Button variant="secondary" size="sm">
             Left edge
           </Button>

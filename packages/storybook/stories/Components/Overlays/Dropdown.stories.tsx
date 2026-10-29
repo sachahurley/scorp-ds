@@ -7,7 +7,7 @@ const meta: Meta<typeof Dropdown> = {
   component: Dropdown,
   tags: ['autodocs'],
   argTypes: {
-    align: { control: 'select', options: ['left', 'right'] },
+    align: { control: 'select', options: ['start', 'end'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
   },
   parameters: { layout: 'centered' },
@@ -38,8 +38,10 @@ export const Default: Story = {
   },
 };
 
+// The export keeps its old name so the story id, and its visual baseline, are unchanged.
 export const AlignRight: Story = {
-  // Right-alignment is only observable against an open menu; the resting frame is
+  name: 'Align: end',
+  // End alignment is only observable against an open menu; the resting frame is
   // a picture of the trigger.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -47,7 +49,7 @@ export const AlignRight: Story = {
   },
   args: {
     label: 'Menu',
-    align: 'right',
+    align: 'end',
     items: [item('Profile'), item('Sign out', 'destructive')],
   },
 };

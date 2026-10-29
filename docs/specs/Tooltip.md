@@ -8,13 +8,13 @@
 |-------|-------|
 | Component | `Tooltip` (import from `@scorp-ds/components`) |
 | Layer | `component` |
-| Category | `Display` |
+| Category | `Overlays` |
 | File | `packages/components/src/components/Tooltip.tsx` |
-| Story | `Components/Display/Tooltip` |
+| Story | `Components/Overlays/Tooltip` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `620dadbe0afcd167` |
+| Last updated | 2026-10-28 |
+| API hash | `605caa2136e4605d` |
 
 ---
 
@@ -36,7 +36,7 @@ Don't use this for: content with a link, a button or more than a sentence (use P
 
 Wrapper (`relative inline-block w-fit`) holding the trigger and, while open, an absolutely positioned balloon: transparent hover bridge, ring plate (`plate-round`, `--surface-container-stroke`, 1px padding) around a `--surface-card` fill, and a 1-bit stepped caret (two stacked clip-path polygons) pointing at the trigger. The balloon carries `data-placement` with the side it actually rendered on (after any flip).
 
-Viewport fit: after the balloon mounts (still at `opacity-0`), a layout effect measures the trigger and balloon rects. If the preferred side lacks room (balloon size plus the 8px gap plus an 8px edge margin), it flips to the opposite side when that side has room; if neither fits it keeps the preferred side. Top and bottom balloons are also clamped horizontally with a `margin-left` nudge so they stay 8px inside the viewport, and the caret gets the opposite nudge (limited to the balloon body, inside the stepped corners) so it keeps pointing at the trigger. Left and right balloons are not clamped vertically. It re-measures when `position`, `content`, or `maxWidth` changes while open.
+Viewport fit: after the balloon mounts (still at `opacity-0`), a layout effect measures the trigger and balloon rects. If the preferred side lacks room (balloon size plus the 8px gap plus an 8px edge margin), it flips to the opposite side when that side has room; if neither fits it keeps the preferred side. Top and bottom balloons are also clamped horizontally with a `margin-left` nudge so they stay 8px inside the viewport, and the caret gets the opposite nudge (limited to the balloon body, inside the stepped corners) so it keeps pointing at the trigger. Left and right balloons are not clamped vertically. It re-measures when `side`, `align`, `content`, or `maxWidth` changes while open. With `align="start"` or `"end"` the balloon lines up with the trigger edge instead of centering, and the caret gets the nudge that keeps it on the trigger center.
 
 ### Variants
 
@@ -65,10 +65,14 @@ Viewport fit: after the balloon mounts (still at `opacity-0`), a layout effect m
 |----------|------|---------|----------|-------------|
 | `content` | `ReactNode` | | Yes | The hint. Plain text only; no links or buttons. |
 | `children` | `ReactNode` | | Yes | The trigger. Pass a single focusable element (Button, link) so it receives `aria-describedby` and keyboard users can open the tooltip. |
-| `position` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` | No | Preferred side of the trigger. Flips to the opposite side when this one would overflow the viewport and the opposite side has room; top/bottom also clamp horizontally. The rendered side is exposed as `data-placement` on the balloon. |
-| `delay` | `number` | `200` | No | Milliseconds before showing on hover or focus. Hiding is immediate. |
-| `maxWidth` | `string` | `"200px"` | No | Balloon max width, any CSS length (inline style). |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | No | Preferred side of the trigger. Flips to the opposite side when this one would overflow the viewport and the opposite side has room; top/bottom also clamp horizontally. The rendered side is exposed as `data-placement` on the balloon. |
+| `align` | `"start" \| "center" \| "end"` | `"center"` | No | Cross-axis alignment along the trigger edge. `start` / `end` line the balloon's leading / trailing edge up with the trigger's; the caret still points at the trigger's center. Exposed as `data-align`. |
+| `position` | `"top" \| "bottom" \| "left" \| "right"` | | No | **Deprecated**, use `side`. Honoured when `side` is not passed; warns once in development. |
+| `delay` | `number` | `200` | No | Delay in milliseconds before showing on hover or focus. Hiding is immediate. |
+| `maxWidth` | `string` | `"200px"` | No | Balloon max width, any CSS length (inline style). Stays a free CSS length: no token describes a reading width (the spacing scale stops at 96px and the breakpoints are page widths). |
 | `className` | `string` | `""` | No | Extra classes on the wrapper, e.g. `w-full` for a full-width trigger. |
+
+When `side` and the deprecated `position` are both passed, `side` wins. Decision 0024.
 
 Exported type: `TooltipProps`.
 
@@ -107,7 +111,8 @@ Exported type: `TooltipProps`.
 | Visible | 50ms later | `opacity-100` over `--duration-fast`; trigger gains `aria-describedby` |
 | Hovering the balloon | Pointer crosses the 8px bridge | Stays open |
 | Dismissed | Mouse leave, focus leaving the wrapper, or Escape | Unmounted immediately |
-| Side | `position`, resolved by the viewport fit | Placement classes, caret rotation, and `data-placement` follow the resolved side |
+| Side | `side`, resolved by the viewport fit | Placement classes, caret rotation, and `data-placement` follow the resolved side |
+| Aligned | `align="start"` or `"end"` | Balloon edge lines up with the trigger edge (`left-0` / `right-0`, or `top-0` / `bottom-0` for left/right); caret nudged by `margin-left` (or `margin-top`) to the trigger center, kept inside the stepped corners |
 | Flipped | Preferred side overflows, opposite side fits | Renders on the opposite side; `data-placement` shows it |
 | Clamped | Top/bottom balloon would cross a horizontal viewport edge | Balloon `margin-left` nudge; caret counter-nudge keeps it on the trigger |
 
@@ -129,11 +134,14 @@ Exported type: `TooltipProps`.
 | Focus open | Yes | Yes | `OnButton` (Tab to the Button) |
 | Escape dismiss | Yes | Yes | `OnButton` |
 | Viewport flip and clamp | Yes | Yes | `Viewport flip` (a trigger against each edge, fullscreen) |
+| `align` start / end | Yes | Yes | `OnButton` `align` control only; no captured frame |
 | Custom `maxWidth` | Yes | No | Not demonstrated; no control |
 
-Interactive controls: `position` (select), `delay` (number).
+Interactive controls: `side` (select), `align` (select), `delay` (number).
 
-**Coverage:** 89% (8/9)
+Story ids keep the export names `Positions` and `PositionLeft` (shown as "Sides" and "Side: left"), so the visual baselines did not change when `position` became `side`.
+
+**Coverage:** 90% (9/10)
 
 <!-- AUTO-END:storybook -->
 
@@ -205,7 +213,7 @@ None (the trigger is supplied by the consumer).
 
 <!-- HUMAN-SECTION:composition (preserved across auto-updates) -->
 
-- The balloon renders inside the wrapper (no portal), so an ancestor with `overflow: hidden` or a plate clip path (Card, Modal body) will still clip it: the viewport flip only knows about the viewport. Choose a `position` that points into open space.
+- The balloon renders inside the wrapper (no portal), so an ancestor with `overflow: hidden` or a plate clip path (Card, Modal body) will still clip it: the viewport flip only knows about the viewport. Choose a `side` that points into open space.
 - In grid or flex layouts the wrapper stays `w-fit`; pass a width class via `className` when the trigger is full width.
 - One tooltip per trigger; do not nest tooltips.
 
@@ -236,6 +244,7 @@ None (the trigger is supplied by the consumer).
 | Unreleased | 2026-09-21 | feat | Viewport flip: measured after open, flips to the opposite side when the preferred one overflows; top/bottom clamp horizontally with the caret kept on the trigger |
 | Unreleased | 2026-09-21 | fix | Added keyboard focus, Escape dismiss, hoverable content, aria-describedby on the trigger |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `side` replaces `position` (deprecated alias, still works, warns once) and a new `align` (`start \| center \| end`, default `center`) lines the balloon up with a trigger edge. Story moved from `Components/Display` to `Components/Overlays`; baselines renamed, not recaptured. Default render unchanged |
 
 <!-- AUTO-END:changelog -->
 

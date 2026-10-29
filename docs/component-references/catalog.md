@@ -20,7 +20,6 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | [Divider](#divider) | Display | draft | Divider is a thin rule that separates groups of content within the same surface: sections of a form, items in a toolbar, blocks inside a Card body. |
 | [ListRow](#listrow) | Display | draft | ListRow is the list and navigation tier of the container system, promoted from the portfolio's plate row: a meta line, a title and an optional description, clipped to the small plate. |
 | [Table](#table) | Display | draft | Table is a set of thin, semantic wrappers over native table elements (`Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`) with token-backed chrome for dense monospace data: build status, hosts, inventories, anything read across columns. |
-| [Tooltip](#tooltip) | Display | draft | Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. |
 | [TuiIcon](#tuiicon) | Display | draft | TuiIcon is the system's only icon component: 52 names drawn as 1-bit pixel art on a 7x7 grid. |
 | [Alert](#alert) | Feedback | draft | Alert is an inline, persistent message that sits in the page flow next to the content it describes: a failed save above a form, a warning at the top of a settings panel, a neutral notice about a changed default. |
 | [Badge](#badge) | Feedback | draft | Badge is a compact inline chip for labelling, categorising, or flagging state: a status next to a row, a count, a filter tag, a tier marker. |
@@ -54,6 +53,7 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | [Dropdown](#dropdown) | Overlays | draft | Dropdown is an action menu: a trigger that opens a short list of commands such as Edit, Duplicate, or Delete. |
 | [Modal](#modal) | Overlays | draft | Modal is a centered dialog over a scrim that interrupts the page for a task or decision the user must finish or dismiss before going back: confirmations, short forms, reward claims. |
 | [Popover](#popover) | Overlays | draft | Anchored, non-modal floating panel for rich interactive content next to a trigger (filters, a small form, a details card). |
+| [Tooltip](#tooltip) | Overlays | draft | Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. |
 | [CaseStudy](#casestudy) | Patterns | draft | CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. |
 | [DescriptionList](#descriptionlist) | Terminal | draft | DESCRIPTION LIST COMPONENT (key / value) |
 | [Kbd](#kbd) | Terminal | draft | KBD COMPONENT |
@@ -302,27 +302,6 @@ Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAt
 | `colSpan` | `number` |  | Columns the loading and empty rows span. |
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`.
-
-### Tooltip
-
-Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label.
-
-**Use instead:** content with a link, a button or more than a sentence (use Popover instead) or a hint that must always be visible (use helper text on the field instead).
-
-`import { Tooltip } from '@scorp-ds/components';`
-
-Status: draft · Spec: [`docs/specs/Tooltip.md`](../../docs/specs/Tooltip.md) · Story: `Components/Display/Tooltip`
-
-**`TooltipProps`**
-
-| Prop | Accepts | Default | Use |
-|---|---|---|---|
-| `content` (required) | `ReactNode` |  | Short supplementary hint. |
-| `children` (required) | `ReactNode` |  | The trigger. |
-| `position` | `"top"` `"bottom"` `"left"` `"right"` | `"top"` | Preferred side of the trigger (default: "top"). |
-| `delay` | `number` | `200` | Milliseconds before showing on hover or focus (default: 200). |
-| `maxWidth` | `string` | `"200px"` | Max width of the balloon, any CSS length (default: "200px"). |
-| `className` | `string` | `""` | Extra classes for the wrapper (e.g. a width class for a full-width trigger). |
 
 ### TuiIcon
 
@@ -1126,11 +1105,15 @@ Status: draft · Spec: [`docs/specs/BottomSheet.md`](../../docs/specs/BottomShee
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `isOpen` (required) | `boolean` |  | Controls whether the sheet is visible. |
-| `onClose` (required) | `() => void` |  | Called when the user dismisses the sheet (close button, scrim click or ESC). |
-| `ariaLabel` (required) | `string` |  | Accessible name for the sheet dialog. |
+| `open` | `boolean` |  | Whether the sheet is shown. |
+| `defaultOpen` | `boolean` | `false` | Initial open state when `open` is not passed (default false). |
+| `onOpenChange` | `(open: boolean) => void` |  | Called with `false` when the user dismisses the sheet (close button, scrim click or Escape). |
+| ~~`isOpen`~~ | `boolean` |  |  |
+| ~~`onClose`~~ | `() => void` |  |  |
 | `closeLabel` | `string` | `"Close"` | Accessible name for the close button. |
 | `children` (required) | `ReactNode` |  | Sheet content. |
+| `aria-label` | `string` |  | Accessible name announced for the sheet dialog, e.g. "Site menu". |
+| ~~`ariaLabel`~~ | `string` |  |  |
 
 ### Dropdown
 
@@ -1160,7 +1143,7 @@ Status: draft · Spec: [`docs/specs/Dropdown.md`](../../docs/specs/Dropdown.md) 
 | `label` | `string` | `"Actions"` | Text (and accessible name) of the default trigger button. |
 | `trigger` | `ReactNode` |  | Custom trigger, replacing the default button. |
 | `items` (required) | `DropdownItem[]` |  | Menu entries, in order. |
-| `align` | `"left"` `"right"` | `"left"` | Which trigger edge the menu aligns to. |
+| `align` | `"start"` `"end"` ~~`"left"`~~ ~~`"right"`~~ | `"start"` | Which trigger edge the menu lines up with (default "start", the leading edge). |
 | `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Trigger height, matching Button/Input: sm, md (default), lg. |
 
 ### Modal
@@ -1177,12 +1160,16 @@ Status: draft · Spec: [`docs/specs/Modal.md`](../../docs/specs/Modal.md) · Sto
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `isOpen` (required) | `boolean` |  | Whether the dialog is shown. |
-| `onClose` (required) | `() => void` |  | Called when the user asks to close (close button, Escape, or a scrim click). |
+| `open` | `boolean` |  | Whether the dialog is shown. |
+| `defaultOpen` | `boolean` | `false` | Initial open state when `open` is not passed (default false). |
+| `onOpenChange` | `(open: boolean) => void` |  | Called with `false` when the user asks to close (close button, Escape, or a scrim click). |
+| ~~`isOpen`~~ | `boolean` |  |  |
+| ~~`onClose`~~ | `() => void` |  |  |
 | `title` (required) | `string` |  | Heading in the fixed header; also the dialog's accessible name, so make it say what the dialog is for. |
 | `children` (required) | `ReactNode` |  | Body content. |
 | `footerContent` | `ReactNode` |  | Optional fixed footer for CTAs. |
-| `width` | `number \| string` | `740` | Panel width (default 740). |
+| `size` | `"sm"` `"md"` `"lg"` `"full"` |  | Panel width: `sm` (360px) for a short confirmation or notice, `md` (640px) for a compare card or a short form, `lg` (740px, the default when neither `size` nor `width` is passed) for a full task, `full` for the whole viewport width. |
+| ~~`width`~~ | `number \| string` |  |  |
 | `docked` | `boolean` | `false` | Dock instead of covering: at or above the `--breakpoint-docked` token (960px) the panel pins bottom-center with no scrim and no scroll lock (a non-modal dialog), keeping the page behind visible and interactive. |
 
 ### Popover
@@ -1207,20 +1194,43 @@ Status: draft · Spec: [`docs/specs/Popover.md`](../../docs/specs/Popover.md) ·
 | `children` (required) | `ReactNode` |  | Panel content. |
 | `side` | `"top"` `"bottom"` `"left"` `"right"` | `"bottom"` | Preferred side of the anchor (default "bottom"). |
 | `align` | `"start"` `"center"` `"end"` | `"start"` | Alignment along the anchor edge (default "start"). |
-| `offset` | `number` | `8` | Gap between anchor and panel in px (default 8, one plate step multiple). |
+| `offset` | `number` | `8` | Gap between anchor and panel, in px (default 8, one plate step multiple). |
 | `closeOnOutsideClick` | `boolean` | `true` | Close when the user presses outside the trigger and panel (default true). |
 | `closeOnEscape` | `boolean` | `true` | Close on Escape (default true). |
 | `autoFocus` | `boolean` | `true` | Move focus into the panel on open: the first focusable element, else the panel itself (default true). |
 | `returnFocus` | `boolean` | `true` | Send focus back to the trigger when closed via Escape or the trigger (default true). |
 | `matchAnchorWidth` | `boolean` | `false` | Make the panel at least as wide as the anchor (default false). |
-| `role` | `AriaRole \| null` | `"dialog"` | ARIA role of the panel (default "dialog", a non-modal dialog). |
-| `aria-label` | `string` |  | Accessible name for the panel. |
-| `aria-labelledby` | `string` |  | Id of a visible heading inside the panel that names it. |
 | `id` | `string` |  | Id for the panel; generated when omitted. |
 | `className` | `string` |  | Extra classes for the outer ring layer (width, max-width). |
 | `contentClassName` | `string` |  | Extra classes for the inner fill (padding, layout). |
 | `portal` | `boolean` | `false` | Render the panel into `document.body` (default false). |
 | `triggerWrapperClassName` | `string` |  | Extra classes for the span that wraps `trigger`. |
+| `role` | `Exclude<NamedRole<AriaRole>, "dialog"> \| null` | `"dialog"` | ARIA role of the panel: "dialog" (the default, a non-modal dialog), any other ARIA role, or `null`. |
+| `aria-label` | `string` |  | Accessible name for the panel. |
+| `aria-labelledby` | `string` |  | Id of a visible heading inside the panel that names it. |
+
+### Tooltip
+
+Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label.
+
+**Use instead:** content with a link, a button or more than a sentence (use Popover instead) or a hint that must always be visible (use helper text on the field instead).
+
+`import { Tooltip } from '@scorp-ds/components';`
+
+Status: draft · Spec: [`docs/specs/Tooltip.md`](../../docs/specs/Tooltip.md) · Story: `Components/Overlays/Tooltip`
+
+**`TooltipProps`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `content` (required) | `ReactNode` |  | Short supplementary hint. |
+| `children` (required) | `ReactNode` |  | The trigger. |
+| `side` | `"top"` `"right"` `"bottom"` `"left"` |  | Preferred side of the trigger (default "top"). |
+| `align` | `"start"` `"center"` `"end"` | `"center"` | Where the balloon sits along the trigger edge (default "center"). `start` and `end` line its leading or trailing edge up with the trigger's, for a trigger at the edge of a row; the caret still points at the trigger. |
+| ~~`position`~~ | `"top"` `"bottom"` `"left"` `"right"` |  |  |
+| `delay` | `number` | `200` | Delay in milliseconds before showing on hover or focus (default 200). |
+| `maxWidth` | `string` | `"200px"` | Max width of the balloon, any CSS length (default "200px"); text wraps inside it. |
+| `className` | `string` | `""` | Extra classes for the wrapper (e.g. a width class for a full-width trigger). |
 
 ## Patterns
 

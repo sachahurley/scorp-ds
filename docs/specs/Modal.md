@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/Modal` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `8f6d820f5b9bf8ac` |
+| Last updated | 2026-10-28 |
+| API hash | `5969ee1c25f84e2d` |
 
 ---
 
@@ -45,8 +45,11 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 
 | Enum Value | Description |
 |-----------|-------------|
-| `width` (number) | Pixels; default `740`. Small celebratory dialogs use about `320`. |
-| `width` (string) | Any CSS length, passed through (e.g. `"min(320px, 90vw)"`). |
+| `sm` | 360px: a short confirmation or a celebratory notice. |
+| `md` | 640px: a compare card (the docked equip card) or a short form. |
+| `lg` (default) | 740px: a full task. The width used when neither `size` nor `width` is passed. |
+| `full` | The whole viewport width (`100vw`), capped by `max-w-full` at the scrim padding, or at the viewport when docked. |
+| `width` (deprecated) | Still honoured when `size` is not passed: numbers are px, strings pass through. Use `size`. |
 
 <!-- AUTO-END:anatomy -->
 
@@ -58,13 +61,19 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `isOpen` | `boolean` | | Yes | Controls visibility. Setting it to `false` plays the fade out before unmounting. |
-| `onClose` | `() => void` | | Yes | Called on Escape, the close button, and (centered only) a scrim click. The parent sets `isOpen` to `false`. |
+| `open` | `boolean` | | No | Controls visibility; pair with `onOpenChange`. Setting it to `false` plays the fade out before unmounting. Omit for uncontrolled use. |
+| `defaultOpen` | `boolean` | `false` | No | Initial state when `open` is not passed; the dialog then closes itself. |
+| `onOpenChange` | `(open: boolean) => void` | | No | Called with `false` on Escape, the close button, and (centered only) a scrim click. A controlled parent sets `open` to `false` here. |
+| `isOpen` | `boolean` | | No | **Deprecated**, use `open`. Still honoured when `open` is not passed; warns once in development. |
+| `onClose` | `() => void` | | No | **Deprecated**, use `onOpenChange`. Still called whenever `onOpenChange(false)` is; warns once in development. |
 | `title` | `string` | | Yes | Header text (truncated on one line) and the dialog's `aria-label`. |
 | `children` | `ReactNode` | | Yes | Body content; scrolls when it exceeds the panel height. The body already has `px-6 py-5` padding. |
 | `footerContent` | `ReactNode` | `undefined` | No | Fixed footer band, actions right-aligned with `gap-3`. Render DS Buttons (secondary cancel, primary confirm). |
-| `width` | `number \| string` | `740` | No | Panel width; numbers are px, strings pass through. Always capped at the viewport by `max-w-full`. |
+| `size` | `"sm" \| "md" \| "lg" \| "full"` | `"lg"` | No | Panel width: 360 / 640 / 740px / viewport. Always capped at the viewport by `max-w-full`. |
+| `width` | `number \| string` | | No | **Deprecated**, use `size`. Honoured when `size` is not passed (numbers are px, strings pass through); warns once in development. |
 | `docked` | `boolean` | `false` | No | Non-modal bottom-center panel on viewports of 960px and up; falls back to the centered modal below. |
+
+When an old and a new name are both passed, the new one wins (`open` over `isOpen`, `size` over `width`). Decision 0024.
 
 Exported type: `ModalProps`.
 
@@ -101,10 +110,10 @@ Exported type: `ModalProps`.
 
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Closed | `isOpen={false}` after exit | Not rendered |
-| Opening | `isOpen` to `true` | `animate-in fade-in` over `--duration-normal`; focus moves to the panel |
-| Open | `isOpen` | Body scroll locked (centered only); Tab and Shift+Tab trapped inside the panel (centered only) |
-| Closing | `isOpen` to `false` | `animate-out fade-out fill-mode-forwards`; unmounts on `animationend`; focus returns to the invoker |
+| Closed | `open={false}` after exit | Not rendered |
+| Opening | `open` to `true` | `animate-in fade-in` over `--duration-normal`; focus moves to the panel |
+| Open | `open` | Body scroll locked (centered only); Tab and Shift+Tab trapped inside the panel (centered only) |
+| Closing | `open` to `false` | `animate-out fade-out fill-mode-forwards`; unmounts on `animationend`; focus returns to the invoker |
 | Docked | `docked` and viewport at least 960px | No scrim, `bottom: 48px`, drop shadow, no `aria-modal`, no scroll lock, no click-away, no focus trap |
 | Docked fallback | `docked` below 960px | Same as centered; updates live on viewport change |
 | With footer | `footerContent` | Footer band with top hairline |
@@ -124,7 +133,7 @@ Exported type: `ModalProps`.
 | Enter and exit fade | Yes | Yes | Every story |
 | Long content scroll | Yes | Yes | `LongContent` (opens by default) |
 | Footer CTAs | Yes | Yes | `WithFooter`, `Docked` |
-| Custom `width` | Yes | Yes | `Docked` (`640`) |
+| `size` other than the default | Yes | Yes | `Docked` (`size="md"`, 640px) |
 | Docked | Yes | Yes | `Docked` |
 | Docked fallback below 960px | Yes | Yes | `Docked`, by resizing the viewport |
 
@@ -140,7 +149,7 @@ Interactive controls: N/A (render function stories).
 
 <!-- AUTO-START:hardcoded -->
 
-- Default `width` of `740` px.
+- Panel widths per `size` (`MODAL_WIDTHS`: 360, 640, 740px, `100vw`). There are no width tokens; 740 is the long-standing default.
 - `max-h-[80vh]` panel height cap.
 - `border-b-[0.5px]` / `border-t-[0.5px]` hairlines.
 - Docked: `bottom: "48px"` and `filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))` (drop shadow follows the clipped silhouette; values track `elevation.high`'s dark blur).
@@ -177,8 +186,8 @@ Interactive controls: N/A (render function stories).
 - Required labels: `title` is required and becomes the accessible name; the close button is labelled `Close modal`
 - Focus order: on open, focus moves to the panel (`tabIndex={-1}`) so the dialog name is announced; on close, focus returns to the element that had it. The body region is `tabIndex={0}` for keyboard scrolling
 - Focus trap: while modal, Tab and Shift+Tab cycle within the panel (`useFocusTrap`, a capture-phase Tab handler). Shift+Tab from the panel itself, or from the first control, wraps to the last; Tab from the last control wraps to the first. The `docked` variant is non-modal by design and never traps, so Tab reaches the live page behind it
-- Keyboard: Escape calls `onClose` (listener on `document` while open, docked included)
-- Touch target minimum: met. The close button is a 32px plate (`size-control-sm`), and because a `clip-path` slices an element's own pseudo-elements the 44x44 hit area hangs off an unclipped wrapper span (the Checkbox pattern). The wrapper forwards only clicks whose target is the wrapper itself, so `onClose` fires once per click
+- Keyboard: Escape calls `onOpenChange(false)` (listener on `document` while open, docked included)
+- Touch target minimum: met. The close button is a 32px plate (`size-control-sm`), and because a `clip-path` slices an element's own pseudo-elements the 44x44 hit area hangs off an unclipped wrapper span (the Checkbox pattern). The wrapper forwards only clicks whose target is the wrapper itself, so `onOpenChange(false)` fires once per click
 - Color independence: no color-coded meaning; the close control is an icon with an accessible name
 
 <!-- AUTO-END:accessibility -->
@@ -239,6 +248,7 @@ Interactive controls: N/A (render function stories).
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Focus trap while modal (docked stays non-modal); 44px close-button hit area; 66vh comment corrected; story double padding removed |
 | Unreleased | 2026-09-22 | change | Docked breakpoint comes from the `--breakpoint-docked` token instead of a hardcoded 960 (same 960px switch point) |
+| Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `open` / `defaultOpen` / `onOpenChange` replace `isOpen` / `onClose`, and `size` (`sm \| md \| lg \| full`) replaces `width`. The old props are deprecated aliases that still work and warn once; the default render is unchanged (740px) |
 
 <!-- AUTO-END:changelog -->
 

@@ -27,7 +27,7 @@ export const Default: Story = {
         <Button type="button" onClick={() => setOpen(true)}>
           Open modal
         </Button>
-        <Modal isOpen={open} onClose={() => setOpen(false)} title="Example dialog">
+        <Modal open={open} onOpenChange={setOpen} title="Example dialog">
           <div className="font-mono text-sm text-secondary-800 dark:text-secondary-200">
             <p className="mb-4">
               Modal content scrolls when it exceeds the max height. Press Esc or click the backdrop to
@@ -52,7 +52,7 @@ export const LongContent: Story = {
         <Button type="button" variant="secondary" size="sm" onClick={() => setOpen(true)}>
           Re-open
         </Button>
-        <Modal isOpen={open} onClose={() => setOpen(false)} title="Scrollable region">
+        <Modal open={open} onOpenChange={setOpen} title="Scrollable region">
           <div className="space-y-3 font-mono text-sm text-secondary-800 dark:text-secondary-200">
             {Array.from({ length: 24 }, (_, i) => (
               <p key={i}>Line {i + 1} — demonstrates scroll inside the modal body.</p>
@@ -84,8 +84,8 @@ export const WithFooter: Story = {
           Open modal with footer
         </Button>
         <Modal
-          isOpen={open}
-          onClose={() => setOpen(false)}
+          open={open}
+          onOpenChange={setOpen}
           title="Claim reward"
           footerContent={
             <>
@@ -138,11 +138,11 @@ export const Docked: Story = {
           Open docked panel
         </Button>
         <Modal
-          isOpen={open}
-          onClose={() => setOpen(false)}
+          open={open}
+          onOpenChange={setOpen}
           title="Compare"
           docked
-          width={640}
+          size="md"
           footerContent={
             <Button variant="primary" size="sm" type="button" onClick={() => setOpen(false)}>
               Equip

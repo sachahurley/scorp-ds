@@ -7,7 +7,7 @@ describe("Modal", () => {
 
   it("renders nothing when closed", () => {
     const { container } = render(
-      <Modal isOpen={false} onClose={() => {}} title="T">
+      <Modal open={false} onOpenChange={() => {}} title="T">
         body
       </Modal>
     );
@@ -16,7 +16,7 @@ describe("Modal", () => {
 
   it("shows title and body when open", () => {
     render(
-      <Modal isOpen onClose={() => {}} title="Hello">
+      <Modal open onOpenChange={() => {}} title="Hello">
         <p>Modal body</p>
       </Modal>
     );
@@ -24,26 +24,28 @@ describe("Modal", () => {
     expect(screen.getByText("Modal body")).toBeVisible();
   });
 
-  it("calls onClose when Escape is pressed", () => {
-    const onClose = vi.fn();
+  it("calls onOpenChange(false) when Escape is pressed", () => {
+    const onOpenChange = vi.fn();
     render(
-      <Modal isOpen onClose={onClose} title="Hi">
+      <Modal open onOpenChange={onOpenChange} title="Hi">
         x
       </Modal>
     );
     fireEvent.keyDown(document, { key: "Escape", code: "Escape" });
-    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("calls onClose when close control is activated", () => {
-    const onClose = vi.fn();
+  it("calls onOpenChange(false) when close control is activated", () => {
+    const onOpenChange = vi.fn();
     render(
-      <Modal isOpen onClose={onClose} title="Hi">
+      <Modal open onOpenChange={onOpenChange} title="Hi">
         x
       </Modal>
     );
     fireEvent.click(screen.getByRole("button", { name: /close modal/i }));
-    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });
 
@@ -77,7 +79,7 @@ describe("Modal focus trap", () => {
     render(
       <>
         <button type="button">outside</button>
-        <Modal isOpen onClose={() => {}} title="Trapped">
+        <Modal open onOpenChange={() => {}} title="Trapped">
           <Body />
         </Modal>
       </>
@@ -93,7 +95,7 @@ describe("Modal focus trap", () => {
     render(
       <>
         <button type="button">outside</button>
-        <Modal isOpen onClose={() => {}} title="Trapped">
+        <Modal open onOpenChange={() => {}} title="Trapped">
           <Body />
         </Modal>
       </>
@@ -107,7 +109,7 @@ describe("Modal focus trap", () => {
 
   it("wraps Shift+Tab from the panel itself (focus on open) to the last control", () => {
     render(
-      <Modal isOpen onClose={() => {}} title="Trapped">
+      <Modal open onOpenChange={() => {}} title="Trapped">
         <Body />
       </Modal>
     );
@@ -123,7 +125,7 @@ describe("Modal focus trap", () => {
     render(
       <>
         <button type="button">outside</button>
-        <Modal isOpen onClose={() => {}} title="Docked" docked>
+        <Modal open onOpenChange={() => {}} title="Docked" docked>
           <Body />
         </Modal>
       </>
@@ -140,7 +142,7 @@ describe("Modal focus trap", () => {
 
   it("gives the close control a 44px pseudo-element hit area", () => {
     render(
-      <Modal isOpen onClose={() => {}} title="Hit area">
+      <Modal open onOpenChange={() => {}} title="Hit area">
         <Body />
       </Modal>
     );
@@ -150,32 +152,34 @@ describe("Modal focus trap", () => {
   });
 
   it("closes when the enlarged hit area around the close button is clicked", () => {
-    const onClose = vi.fn();
+    const onOpenChange = vi.fn();
     render(
-      <Modal isOpen onClose={onClose} title="Hit area">
+      <Modal open onOpenChange={onOpenChange} title="Hit area">
         <Body />
       </Modal>
     );
     const wrapper = screen.getByRole("button", { name: "Close modal" }).parentElement as HTMLElement;
     // A click on the pseudo-element is reported with the wrapper as target.
     fireEvent.click(wrapper);
-    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("fires onClose once when the button itself is clicked", () => {
-    const onClose = vi.fn();
+  it("fires onOpenChange once when the button itself is clicked", () => {
+    const onOpenChange = vi.fn();
     render(
-      <Modal isOpen onClose={onClose} title="Hit area">
+      <Modal open onOpenChange={onOpenChange} title="Hit area">
         <Body />
       </Modal>
     );
     fireEvent.click(screen.getByRole("button", { name: "Close modal" }));
-    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it("rules header and footer with the hairline token, not 0.5px rules", () => {
     render(
-      <Modal isOpen onClose={() => {}} title="T" footerContent={<button>ok</button>}>
+      <Modal open onOpenChange={() => {}} title="T" footerContent={<button>ok</button>}>
         body
       </Modal>
     );
@@ -186,7 +190,7 @@ describe("Modal focus trap", () => {
   });
 });
 
-it("honors the width prop and restores focus on close", async () => {
+it("honors the size prop and restores focus on close", async () => {
   const { render, screen, fireEvent, waitFor } = await import("@testing-library/react");
   const { Modal } = await import("../components/Modal");
   const { useState } = await import("react");
@@ -195,7 +199,7 @@ it("honors the width prop and restores focus on close", async () => {
     return (
       <>
         <button onClick={() => setOpen(true)}>launch</button>
-        <Modal isOpen={open} onClose={() => setOpen(false)} title="Small" width={320}>
+        <Modal open={open} onOpenChange={setOpen} title="Small" size="sm">
           hi
         </Modal>
       </>
@@ -206,9 +210,96 @@ it("honors the width prop and restores focus on close", async () => {
   launch.focus();
   fireEvent.click(launch);
   const dialog = await screen.findByRole("dialog", { name: "Small" });
-  expect(dialog).toHaveStyle({ width: "320px" });
+  expect(dialog).toHaveStyle({ width: "360px" });
   expect(dialog).toHaveFocus();
   fireEvent.click(screen.getByRole("button", { name: "Close modal" }));
   await waitFor(() => expect(launch).toHaveFocus());
 
+});
+
+describe("Modal sizes and uncontrolled use", () => {
+  afterEach(() => cleanup());
+
+  it("defaults to the 740px lg panel", () => {
+    render(
+      <Modal open onOpenChange={() => {}} title="Default">
+        x
+      </Modal>
+    );
+    expect(screen.getByRole("dialog", { name: "Default" })).toHaveStyle({ width: "740px" });
+  });
+
+  it.each([
+    ["sm", "360px"],
+    ["md", "640px"],
+    ["lg", "740px"],
+    ["full", "100vw"],
+  ] as const)("maps size %s to %s", (size, width) => {
+    render(
+      <Modal open onOpenChange={() => {}} title="Sized" size={size}>
+        x
+      </Modal>
+    );
+    expect(screen.getByRole("dialog", { name: "Sized" }).style.width).toBe(width);
+  });
+
+  it("opens from defaultOpen and closes itself", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <Modal defaultOpen onOpenChange={onOpenChange} title="Self">
+        x
+      </Modal>
+    );
+    expect(screen.getByRole("dialog", { name: "Self" })).toBeInTheDocument();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+});
+
+describe("Modal deprecated props", () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  it("still honours isOpen, onClose and width, and warns once for each", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const onClose = vi.fn();
+    const onOpenChange = vi.fn();
+    render(
+      <Modal isOpen onClose={onClose} onOpenChange={onOpenChange} title="Legacy" width={320}>
+        x
+      </Modal>
+    );
+    expect(screen.getByRole("dialog", { name: "Legacy" })).toHaveStyle({ width: "320px" });
+    fireEvent.keyDown(document, { key: "Escape" });
+    // onClose fires exactly when onOpenChange(false) does
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(onClose).toHaveBeenCalledTimes(1);
+    const messages = warn.mock.calls.map((c) => String(c[0]));
+    for (const expected of [
+      "Modal: isOpen is deprecated. Use open.",
+      "Modal: onClose is deprecated. Use onOpenChange.",
+      "Modal: width is deprecated. Use size.",
+    ]) {
+      expect(messages.filter((m) => m.includes(expected))).toHaveLength(1);
+    }
+  });
+
+  it("lets the new names win when both are passed", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(
+      <Modal open={false} isOpen onClose={() => {}} title="Both">
+        x
+      </Modal>
+    );
+    expect(screen.queryByRole("dialog")).toBeNull();
+    cleanup();
+    render(
+      <Modal open onOpenChange={() => {}} title="Sized" size="sm" width={500}>
+        x
+      </Modal>
+    );
+    expect(screen.getByRole("dialog", { name: "Sized" })).toHaveStyle({ width: "360px" });
+  });
 });

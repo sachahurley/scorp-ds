@@ -10,7 +10,7 @@ import { BottomSheet, Button } from '@scorp-ds/components';
  * square bottom edge). Don't use for blocking confirmations (use Modal) or
  * persistent navigation — sheets are for menus and quick actions.
  *
- * Accessibility: `role="dialog"` + `aria-modal` with an `ariaLabel` name;
+ * Accessibility: `role="dialog"` + `aria-modal` with an `aria-label` name;
  * Tab and Shift+Tab are trapped inside the sheet; the close button, ESC and a
  * scrim click all dismiss; the content region is keyboard-scrollable. The
  * grabber is a static seam marker, not a drag handle.
@@ -43,7 +43,7 @@ export const Default: Story = {
         <Button type="button" onClick={() => setOpen(true)}>
           Open menu
         </Button>
-        <BottomSheet isOpen={open} onClose={() => setOpen(false)} ariaLabel="Site menu">
+        <BottomSheet open={open} onOpenChange={setOpen} aria-label="Site menu">
           <nav className="flex flex-col gap-1 font-mono text-sm text-foreground-primary">
             {['Projects', 'Lab', 'Notes', 'Character sheet'].map((item) => (
               <button

@@ -10,7 +10,7 @@ function Demo() {
   return (
     <>
       <button onClick={() => setOpen(true)}>open sheet</button>
-      <BottomSheet isOpen={open} onClose={() => setOpen(false)} ariaLabel="Queue">
+      <BottomSheet open={open} onOpenChange={setOpen} aria-label="Queue">
         <p>tracks</p>
       </BottomSheet>
     </>
@@ -18,9 +18,9 @@ function Demo() {
 }
 
 it("renders a labelled close button that dismisses the sheet", () => {
-  const onClose = vi.fn();
+  const onOpenChange = vi.fn();
   render(
-    <BottomSheet isOpen onClose={onClose} ariaLabel="Queue">
+    <BottomSheet open onOpenChange={onOpenChange} aria-label="Queue">
       <p>tracks</p>
     </BottomSheet>
   );
@@ -29,12 +29,12 @@ it("renders a labelled close button that dismisses the sheet", () => {
   expect(close.className).toContain("w-touch");
   expect(close.className).toContain("h-touch");
   fireEvent.click(close);
-  expect(onClose).toHaveBeenCalledTimes(1);
+  expect(onOpenChange).toHaveBeenCalledWith(false);
 });
 
 it("accepts a custom close button label", () => {
   render(
-    <BottomSheet isOpen onClose={() => {}} ariaLabel="Queue" closeLabel="Close queue">
+    <BottomSheet open onOpenChange={() => {}} aria-label="Queue" closeLabel="Close queue">
       <p>tracks</p>
     </BottomSheet>
   );
@@ -45,7 +45,7 @@ it("traps Tab and Shift+Tab inside the sheet", () => {
   render(
     <>
       <button type="button">outside</button>
-      <BottomSheet isOpen onClose={() => {}} ariaLabel="Queue">
+      <BottomSheet open onOpenChange={() => {}} aria-label="Queue">
         <button type="button">inside last</button>
       </BottomSheet>
     </>
@@ -70,4 +70,59 @@ it("moves focus onto the sheet on open and back to the invoker on close", async 
   expect(sheet).toHaveFocus();
   fireEvent.keyDown(document, { key: "Escape" });
   await waitFor(() => expect(launch).toHaveFocus());
+});
+
+it("opens from defaultOpen and closes itself", () => {
+  const onOpenChange = vi.fn();
+  render(
+    <BottomSheet defaultOpen onOpenChange={onOpenChange} aria-label="Queue">
+      <p>tracks</p>
+    </BottomSheet>
+  );
+  expect(screen.getByRole("dialog", { name: "Queue" })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Close" }));
+  expect(onOpenChange).toHaveBeenCalledWith(false);
+});
+
+it("still honours isOpen, onClose and ariaLabel, and warns once for each", () => {
+  const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+  const onClose = vi.fn();
+  const onOpenChange = vi.fn();
+  render(
+    <BottomSheet isOpen onClose={onClose} onOpenChange={onOpenChange} ariaLabel="Legacy queue">
+      <p>tracks</p>
+    </BottomSheet>
+  );
+  expect(screen.getByRole("dialog", { name: "Legacy queue" })).toBeInTheDocument();
+  fireEvent.keyDown(document, { key: "Escape" });
+  // onClose fires exactly when onOpenChange(false) does
+  expect(onOpenChange).toHaveBeenCalledWith(false);
+  expect(onClose).toHaveBeenCalledTimes(1);
+  const messages = warn.mock.calls.map((c) => String(c[0]));
+  for (const expected of [
+    "BottomSheet: isOpen is deprecated. Use open.",
+    "BottomSheet: onClose is deprecated. Use onOpenChange.",
+    "BottomSheet: ariaLabel is deprecated. Use aria-label.",
+  ]) {
+    expect(messages.filter((m) => m.includes(expected))).toHaveLength(1);
+  }
+  warn.mockRestore();
+});
+
+it("lets aria-label and open win over the deprecated names", () => {
+  const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+  const { rerender } = render(
+    <BottomSheet open isOpen={false} aria-label="New name" ariaLabel="Old name">
+      <p>tracks</p>
+    </BottomSheet>
+  );
+  expect(screen.getByRole("dialog", { name: "New name" })).toBeInTheDocument();
+  rerender(
+    <BottomSheet open={false} isOpen aria-label="New name">
+      <p>tracks</p>
+    </BottomSheet>
+  );
+  // Closing keeps it mounted for the exit animation, which jsdom never ends
+  expect(screen.getByRole("dialog", { hidden: true })).toHaveClass("animate-out");
+  warn.mockRestore();
 });

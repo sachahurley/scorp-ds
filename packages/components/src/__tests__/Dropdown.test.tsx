@@ -146,3 +146,36 @@ describe("Dropdown tokens", () => {
     expect(ring.className).not.toContain("1051");
   });
 });
+
+describe("Dropdown align", () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  const ringClass = () => (screen.getByRole("menu").parentElement as HTMLElement).className;
+
+  it("aligns to the start edge by default and to the end edge with align=end", () => {
+    render(<Dropdown items={[{ label: "One", onClick: vi.fn() }]} />);
+    open();
+    expect(ringClass()).toContain("start-0");
+    cleanup();
+    render(<Dropdown align="end" items={[{ label: "One", onClick: vi.fn() }]} />);
+    open();
+    expect(ringClass()).toContain("end-0");
+  });
+
+  it("still honours the deprecated left/right values and warns once", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(<Dropdown align="right" items={[{ label: "One", onClick: vi.fn() }]} />);
+    open();
+    expect(ringClass()).toContain("end-0");
+    cleanup();
+    render(<Dropdown align="left" items={[{ label: "One", onClick: vi.fn() }]} />);
+    open();
+    expect(ringClass()).toContain("start-0");
+    const messages = warn.mock.calls.map((c) => String(c[0]));
+    expect(messages.filter((m) => m.includes('Dropdown: align="right" is deprecated. Use align="end".'))).toHaveLength(1);
+    expect(messages.filter((m) => m.includes('Dropdown: align="left" is deprecated. Use align="start".'))).toHaveLength(1);
+  });
+});
