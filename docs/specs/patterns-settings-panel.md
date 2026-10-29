@@ -36,11 +36,11 @@ All of it is `WorkspaceSettingsPanel` in `presets/settingsPanel.tsx`; the story 
 | Building block | Role |
 |----------------|------|
 | `Card` | `title="Workspace"`, `subtitle="Profile, locale, and alert defaults"`, body, and `footerContent` with the actions. `layout="flex"`, `className="flex w-full flex-col"`. Card supplies all padding. |
-| `Stack` | Outer `gap="6"` between the two groups; `gap="3"` between the profile fields; `gap="4"` between the Divider and the notifications fieldset, and between the notifications controls. |
+| `Stack` | Outer `gap="6"` between the two groups; `gap="3"` between the profile fields; `gap="4"` between the Divider and the notifications Fieldset. |
 | `Input` | "Display name" and "Workspace slug", both `size="md"` with `defaultValue`. |
 | `Select` | "Locale", `size="md"`, native `<option>` children (English, Français). |
 | `Divider` | Section rule before the notifications group, `spacing="none"` so the surrounding `Stack` gaps own the space. |
-| `fieldset` + `legend` | The notifications group. The legend "Notifications" uses the eyebrow style (`text-xs uppercase tracking-wider`, `--text-primary`, `mb-3`). |
+| `Fieldset` | The notifications group, `legend="Notifications"` in the default `eyebrow` voice (`text-xs uppercase tracking-wider`, `--text-primary`, `mb-3`), `gap="4"` between the controls. |
 | `Switch` | "Email digests" (`defaultChecked`). |
 | `Checkbox` | "Push for deploy failures" (`defaultChecked`) and "Marketing updates". |
 | `Inline` | Footer action row, `justify="end" gap="2"`. |
@@ -59,7 +59,7 @@ All of it is `WorkspaceSettingsPanel` in `presets/settingsPanel.tsx`; the story 
 ## Accessibility notes
 
 - Every field has a visible `label` wired by the component (`Input`, `Select`, `Switch`, `Checkbox`).
-- The notifications controls are a `fieldset` with a `legend`, so a screen reader announces "Notifications" when focus enters the group.
+- The notifications controls are a `Fieldset` (a native `fieldset` with a `legend`), so a screen reader announces "Notifications" when focus enters the group.
 - The Divider is `role="separator"`; it carries no name, because the legend names the group after it.
 - Footer buttons are explicit `type="button"` because the panel is not a form; in product code wrap the Card in a `<form>` and make Save `type="submit"`.
 - Keyboard: Tab moves through the fields in reading order, then Reset, then Save; Space toggles the Switch and the Checkboxes.
@@ -88,6 +88,7 @@ All of it is `WorkspaceSettingsPanel` in `presets/settingsPanel.tsx`; the story 
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | v2 | 2026-10-29 | changed | Moved to the `WorkspaceSettingsPanel` preset; notifications group is a `fieldset` + `legend`; the section rule is `Divider`; the footer row is `Inline` (decision 0028) |
+| v2 | 2026-10-29 | changed | The notifications group is `Fieldset` (eyebrow voice, `gap="4"`) instead of a hand-styled `fieldset` + `legend`. No rendered change |
 
 <!-- AUTO-END:changelog -->
 

@@ -69,9 +69,9 @@ Space grows as the relationship loosens. From tightest to loosest:
 | Between | Step | Where it is set | Seen in |
 |---|---|---|---|
 | A label, its control and its message | owned by the field | the component (`space-y-1` inside Input) | every field |
-| Options in one choice group (radios, checkboxes) | `spacing.2` | `Stack gap="2"` inside the `fieldset` | Forms |
-| A group mixing Switch rows and Checkboxes | `spacing.4` | `Stack gap="4"` inside the `fieldset` | SettingsPanel |
-| A legend and its options | `spacing.2` (field-style legend), `spacing.3` (section-style legend) | `mb-2` / `mb-3` on the `legend` | Forms, SettingsPanel |
+| Options in one choice group (radios, checkboxes) | `spacing.2` | `Fieldset` default `gap="2"` | Forms |
+| A group mixing Switch rows and Checkboxes | `spacing.4` | `Fieldset gap="4"` | SettingsPanel |
+| A legend and its options | `spacing.2` (field-style legend), `spacing.3` (eyebrow legend) | owned by `Fieldset` (`variant="field"` / `"eyebrow"`) | Forms, SettingsPanel |
 | Fields in one group, in a Card holding several groups | `spacing.3` | `Stack gap="3"` | SettingsPanel |
 | Fields in a Card holding a single group | `spacing.4` | `space-y-4` on the `form` | AuthCard |
 | Groups (and, in a page-level form, every field) | `spacing.6` | `Stack gap="6"` / `space-y-6` on the `form` | SettingsPanel, Forms |
@@ -152,12 +152,14 @@ exception today is AuthCard, whose primary is `md` beside a `sm` link.
   placeholder as the label. A field with no room for one (a filter in a toolbar) takes
   `aria-label` instead (WorkbenchSplit). A Switch in a setting row takes `label` plus
   `hideLabel`, with the setting's name and consequence as text beside it (Forms).
-- **A group of radios or checkboxes is a `fieldset` with a `legend`,** so the group's name
-  is announced when focus enters it. The legend is the first child of the fieldset and
-  the options follow in a `Stack`. A legend that asks one question ("Theme") takes the
+- **A group of radios or checkboxes is a `Fieldset`,** a native `fieldset` whose `legend`
+  is announced when focus enters the group. Do not hand-write the `fieldset` and its
+  legend classes. A legend that asks one question ("Theme") takes `variant="field"`, the
   field label style (`text-sm`, `secondary-800` / `secondary-200`); a legend that titles a
-  section of a settings card takes the eyebrow style (`text-xs uppercase tracking-wider`,
-  `--text-primary`).
+  section of a settings card takes the default `variant="eyebrow"`, the eyebrow style
+  (`text-xs uppercase tracking-wider`, `--text-primary`). Radios go in
+  `role="radiogroup"`, and a group-level error goes in the Fieldset's `errorMessage`
+  (`Fieldset.md`, `Radio.md`).
 - **Error messages go in the field's `errorMessage` prop,** which renders under the field
   and links it with `aria-describedby`. Do not render error text yourself. A failed
   submit that is not about one field is an `Alert` above the form.

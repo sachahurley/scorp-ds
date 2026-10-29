@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, Divider, Inline, Input, Select, Stack, Switch } from '@scorp-ds/components';
+import { Button, Card, Checkbox, Divider, Fieldset, Inline, Input, Select, Stack, Switch } from '@scorp-ds/components';
 
 /**
  * Settings panel preset: one Card holding a group of profile fields, a
@@ -7,7 +7,7 @@ import { Button, Card, Checkbox, Divider, Inline, Input, Select, Stack, Switch }
  * `Stack gap="3"` between fields inside a group, `gap="6"` between groups, a
  * `Divider` plus `gap="4"` before a titled group, and Card's own section padding.
  *
- * The notifications group is a `fieldset` with a `legend`, so a screen reader
+ * The notifications group is a `Fieldset` (eyebrow legend), so a screen reader
  * announces "Notifications" when focus enters it. The footer buttons are
  * `type="button"` because nothing here is a form; in product code wrap the Card
  * in a `<form>` and make "Save changes" `type="submit"`.
@@ -49,16 +49,11 @@ export function WorkspaceSettingsPanel() {
         </Stack>
         <Stack gap="4">
           <Divider spacing="none" />
-          <fieldset>
-            <legend className="mb-3 block font-mono text-xs uppercase tracking-wider text-[var(--text-primary)]">
-              Notifications
-            </legend>
-            <Stack gap="4">
-              <Switch label="Email digests" defaultChecked />
-              <Checkbox label="Push for deploy failures" defaultChecked />
-              <Checkbox label="Marketing updates" />
-            </Stack>
-          </fieldset>
+          <Fieldset legend="Notifications" gap="4">
+            <Switch label="Email digests" defaultChecked />
+            <Checkbox label="Push for deploy failures" defaultChecked />
+            <Checkbox label="Marketing updates" />
+          </Fieldset>
         </Stack>
       </Stack>
     </Card>

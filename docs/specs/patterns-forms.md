@@ -38,10 +38,10 @@ All of it is `AccountSettingsForm` in `presets/forms.tsx`; the story only adds t
 | `<form>` | `space-y-6` (`spacing.6`) between every field: on a page-level form each field is its own group. `onSubmit` prevents the default in the specimen. |
 | `Input` | "Display name", controlled, with `errorMessage="Display name is required"` while it is empty; "Email", `type="email"`. Both `size="md"` with a placeholder that shows an example, never the field name. |
 | `Select` | "Timezone", `size="md"`, `defaultValue="pt"`, four native `<option>`s. |
-| `fieldset` + `legend` (Theme) | Radio group. The legend takes the field label style (`mb-2 block font-mono text-sm text-secondary-800 dark:text-secondary-200`). |
-| `Radio` | "Match system" (`defaultChecked`), "Light", "Dark", sharing `name="forms-theme"`, in a `Stack gap="2"`. |
-| `fieldset` + `legend` (Email notifications) | Checkbox group, same legend style. |
-| `Checkbox` | "Product updates" and "Weekly digest" (`defaultChecked`), "Marketing and promotions", in a `Stack gap="2"`. |
+| `Fieldset` (Theme) | Radio group: `variant="field"` (the legend takes the Input label style, `text-sm`, `secondary-800` / `secondary-200`, `mb-2`) and `role="radiogroup"`, so the group can carry an invalid state. |
+| `Radio` | "Match system" (`defaultChecked`), "Light", "Dark", sharing `name="forms-theme"`, at the Fieldset's default `gap="2"`. |
+| `Fieldset` (Email notifications) | Checkbox group, `variant="field"`. |
+| `Checkbox` | "Product updates" and "Weekly digest" (`defaultChecked`), "Marketing and promotions", at the Fieldset's default `gap="2"`. |
 | Setting row | `Inline justify="between" gap="4" wrap={false}`: the setting's name (`text-sm`, `--text-primary`) and consequence (`text-xs`, `secondary-700` / `secondary-600`) on the left, the control on the right. |
 | `Switch` | "Public profile", controlled, `size="md"`, `label` plus `hideLabel` (the visible name is the text beside it). |
 | `Textarea` | "Bio", `rows={4}`, `size="md"`. |
@@ -62,7 +62,7 @@ All of it is `AccountSettingsForm` in `presets/forms.tsx`; the story only adds t
 
 - Every field has a visible label from its own `label` prop; placeholders only show an example.
 - The error message is rendered by Input under the field and linked with `aria-describedby`, and the input carries `aria-invalid`, so a screen reader hears why the field is invalid.
-- Each radio and checkbox group is a `fieldset` whose `legend` is announced when focus enters the group.
+- Each radio and checkbox group is a `Fieldset` (a native `fieldset`) whose legend is announced when focus enters the group. The Theme group is a `radiogroup`, so a group-level error would go in its `errorMessage` with `aria-invalid` on the group.
 - The Switch's accessible name is "Public profile" from `label` (visually hidden by `hideLabel`); the consequence text beside it is not linked to it.
 - Keyboard: Tab moves through the fields in order; arrow keys move within the radio group; Space toggles checkboxes and the switch; Enter in a text field submits through the `type="submit"` button.
 - Checkbox and Radio have 44px hit areas; the `md` fields and buttons are 40px tall.
@@ -75,7 +75,7 @@ All of it is `AccountSettingsForm` in `presets/forms.tsx`; the story only adds t
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-10-29 | The legend style is written out in the preset (`mb-2 block font-mono text-sm ...`): there is no `Fieldset` component or legend style token, so each pattern repeats it | None yet; a `Fieldset` primitive is a component change | open |
+| 2026-10-29 | The legend style is written out in the preset (`mb-2 block font-mono text-sm ...`): there is no `Fieldset` component or legend style token, so each pattern repeats it | 2026-10-29: both groups are `<Fieldset variant="field">`; the legend style lives in the component. No rendered change | closed |
 | 2026-10-29 | The switch's consequence text is not linked to the Switch with `aria-describedby` | None yet | open |
 
 <!-- AUTO-END:known-gaps -->
@@ -89,6 +89,7 @@ All of it is `AccountSettingsForm` in `presets/forms.tsx`; the story only adds t
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-10-29 | added | Spec written from source; the form moved to the `AccountSettingsForm` preset; the setting row and action row are `Inline`; no rendered change (decision 0028) |
+| v1 | 2026-10-29 | changed | The radio and checkbox groups are `Fieldset variant="field"` instead of a hand-styled `fieldset` + `legend`; the Theme group is `role="radiogroup"`. No rendered change |
 
 <!-- AUTO-END:changelog -->
 

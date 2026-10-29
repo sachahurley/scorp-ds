@@ -30,6 +30,7 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | [Toast](#toast) | Feedback | draft | Toast is a brief, non-blocking confirmation that rises from the bottom edge and goes away on its own: "Copied to clipboard", "+40 XP", "Item deleted (Undo)". `Toaster` is the fixed bottom-center region that renders a queue of toasts. |
 | [Checkbox](#checkbox) | Inputs | draft | Checkbox lets users turn an independent option on or off, or pick any number of items from a list, usually as part of a form that is submitted later. |
 | [Combobox](#combobox) | Inputs | draft | Text input with a filtered listbox for choosing one option from a long list. |
+| [Fieldset](#fieldset) | Inputs | draft | Fieldset names a group of related controls: radios that answer one question, a set of checkboxes, or a titled group of settings inside a Card. |
 | [Input](#input) | Inputs | draft | Input is the single-line text field for short free-form values: names, emails, search terms, codes. |
 | [Radio](#radio) | Inputs | draft | Radio lets users choose exactly one option from a small, visible set (roughly two to five). |
 | [Select](#select) | Inputs | draft | Select picks one value from a list of options inside a form. |
@@ -593,6 +594,33 @@ Status: draft · Spec: [`docs/specs/Combobox.md`](../../docs/specs/Combobox.md) 
 | `className` | `string` |  | Extra classes for the outer wrapper (width). |
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`, `InputHTMLAttributes`.
+
+### Fieldset
+
+Fieldset names a group of related controls: radios that answer one question, a set of checkboxes, or a titled group of settings inside a Card.
+
+**Use instead:** a single control (use that control's own `label` instead), a framed group with a header and footer (use Card instead), a heading over content that is not a set of controls (use a heading element, or Divider with a `label`, instead), or spacing between groups of fields (use Stack instead).
+
+`import { Fieldset } from '@scorp-ds/components';`
+
+Status: draft · Spec: [`docs/specs/Fieldset.md`](../../docs/specs/Fieldset.md) · Story: `Components/Inputs/Fieldset`
+
+**`FieldsetProps`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `legend` (required) | `ReactNode` |  | The group's name, rendered as the `<legend>` and announced when focus enters the group. |
+| `children` (required) | `ReactNode` |  | The controls in the group: Radios sharing one `name`, Checkboxes, Switches or fields. |
+| `description` | `ReactNode` |  | One line under the legend that explains the choice. |
+| `variant` | `"eyebrow"` `"field"` | `"eyebrow"` | Legend voice. `eyebrow` (default, `text-xs` uppercase) titles a group inside a settings card; `field` matches the Input label and suits a group that asks one question in a form. |
+| `gap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` | `"2"` | Space between the children, on the Stack gap scale: `2` (default) between the options of one choice group, `4` for a group mixing Switch rows and Checkboxes. |
+| `disabled` | `boolean` | `false` | Disables every control in the group natively (the browser disables each descendant input and button) and dims the controls but not the legend, as Input dims its field but not its label. |
+| `error` | `boolean` | `false` | Group-level error without a message. |
+| `errorMessage` | `ReactNode` |  | Group-level validation message under the controls ("Pick a plan"), linked with `aria-describedby`. |
+| `role` | `"group"` `"radiogroup"` |  | `radiogroup` for a set of Radios: it is the role that can carry the group's invalid state (decision 0029, `Radio.md`). |
+| `className` | `string` |  | Layout classes for the fieldset itself (width, margin). |
+
+Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `FieldsetHTMLAttributes`, `HTMLAttributes`.
 
 ### Input
 
