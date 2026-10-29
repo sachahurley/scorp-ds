@@ -38,3 +38,4 @@ Start from `0000-template.md`. Number sequentially.
 | [0025](0025-motion-cap-is-for-interactive-states.md) | The 200ms cap is for interactive states; overlays may take longer | Transitions, `global.duration` |
 | [0026](0026-a-spec-is-stable-when-it-meets-the-bar.md) | A spec is `stable` when it meets a checkable bar | `docs/specs/`, the catalog |
 | [0027](0027-half-step-spacing-is-tokenised.md) | Half-step spacing gets tokens; off-scale steps are errors | `global.spacing`, the preset |
+| [0028](0028-composition-rules-are-written-down.md) | Composition rules are written down, and every pattern is a preset | `composition-presets-guidelines.md`, `presets/`, pattern specs |

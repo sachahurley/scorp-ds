@@ -1,17 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Input,
-  Select,
-  Stack,
-  Switch,
-} from '@scorp-ds/components';
+import { WorkspaceSettingsPanel } from '../../presets/settingsPanel';
 
 /**
- * Pattern: settings / preferences surface — one card, grouped fields, primary save.
- * Shows how inputs, toggles, and actions compose without new primitives.
+ * Pattern: settings / preferences surface, one card, grouped fields, primary save.
+ * Shows how inputs, toggles, and actions compose without new primitives. The
+ * composition lives in `presets/settingsPanel.tsx`; this story is the page shell.
  */
 const meta: Meta = {
   title: 'Patterns/SettingsPanel',
@@ -39,42 +32,7 @@ export const AccountPreferences: Story = {
         <p className="mb-4 font-mono text-xs uppercase tracking-wider text-[var(--text-primary)]">
           Pattern · Settings panel
         </p>
-        <Card
-          className="flex w-full flex-col"
-          title="Workspace"
-          subtitle="Profile, locale, and alert defaults"
-          footerContent={
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              <Button variant="outline" size="sm" type="button">
-                Reset
-              </Button>
-              <Button variant="primary" size="sm" type="button">
-                Save changes
-              </Button>
-            </div>
-          }
-        >
-          <Stack gap="6">
-            <Stack gap="3">
-              <Input label="Display name" defaultValue="sacha" size="md" />
-              <Input label="Workspace slug" defaultValue="scorp-ds" size="md" />
-              <Select label="Locale" defaultValue="en" size="md">
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-              </Select>
-            </Stack>
-            <div className="border-t-hairline border-solid border-[var(--surface-container-stroke)] pt-4">
-              <p className="mb-3 font-mono text-xs uppercase tracking-wider text-[var(--text-primary)]">
-                Notifications
-              </p>
-              <Stack gap="4">
-                <Switch label="Email digests" defaultChecked />
-                <Checkbox label="Push for deploy failures" defaultChecked />
-                <Checkbox label="Marketing updates" />
-              </Stack>
-            </div>
-          </Stack>
-        </Card>
+        <WorkspaceSettingsPanel />
       </div>
     </div>
   ),

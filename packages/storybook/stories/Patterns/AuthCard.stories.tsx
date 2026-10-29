@@ -1,13 +1,13 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Card, Input, TuiIcon } from '@scorp-ds/components';
+import { SignInCard } from '../../presets/authCard';
 
 /**
- * Pattern: authentication card — Card + Input composed into a sign-in surface.
+ * Pattern: authentication card, Card + Input composed into a sign-in surface.
  * Upstreamed from the showcase's Cards page (2026-09-20), which shipped it
  * before the DS documented it. Two recipes had no upstream home: the
  * password-visibility toggle riding inside the field, and the auth footer
- * (quiet link left, primary action right).
+ * (quiet link left, primary action right). The card lives in
+ * `presets/authCard.tsx`; this story is the page shell.
  */
 const meta: Meta = {
   title: 'Patterns/AuthCard',
@@ -28,9 +28,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function SignInDemo() {
-  // The toggle is the pattern; the credentials are inert specimen state.
-  const [showPassword, setShowPassword] = useState(false);
-
   return (
     <div className="min-h-screen bg-[var(--surface-page)] p-6 md:p-10">
       <div className="mx-auto max-w-md space-y-4">
@@ -38,45 +35,7 @@ function SignInDemo() {
           Pattern · Auth card
         </p>
 
-        <Card
-          className="flex w-full flex-col"
-          title="Sign in"
-          subtitle="Enter your credentials to continue"
-          footerContent={
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <Button variant="link" size="sm" type="button">
-                Forgot password?
-              </Button>
-              <Button variant="primary" size="md" type="button">
-                Sign in
-              </Button>
-            </div>
-          }
-        >
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <Input label="Email" type="email" placeholder="you@example.com" size="md" />
-
-            {/* Password toggle recipe: the button rides inside the field wrapper,
-                cleared by pr-10 on the input, and names its action for AT. */}
-            <div className="relative">
-              <Input
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
-                size="md"
-                className="pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                className="absolute bottom-2.5 right-3 text-secondary-700 hover:text-[var(--text-primary)] dark:text-secondary-400 dark:hover:text-[var(--text-primary)]"
-              >
-                <TuiIcon name={showPassword ? 'EyeOff' : 'Eye'} size="5" />
-              </button>
-            </div>
-          </form>
-        </Card>
+        <SignInCard />
 
         <p className="font-mono text-xs text-secondary-900 dark:text-secondary-200">
           Composes: Card, Input, Button, TuiIcon. Labels come from Input&apos;s label prop; the

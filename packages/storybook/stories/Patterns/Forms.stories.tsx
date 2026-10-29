@@ -1,21 +1,12 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Button,
-  Checkbox,
-  Divider,
-  Input,
-  Radio,
-  Select,
-  Stack,
-  Switch,
-  Textarea,
-} from '@scorp-ds/components';
+import { Divider } from '@scorp-ds/components';
+import { AccountSettingsForm } from '../../presets/forms';
 
 /**
- * Pattern: a complete form — every field component composed on one column.
+ * Pattern: a complete form, every field component composed on one column.
  * Upstreamed from the showcase's Forms pattern page (2026-09-20), which
- * shipped this composition before the DS documented it.
+ * shipped this composition before the DS documented it. The form lives in
+ * `presets/forms.tsx`; this story is the page shell.
  */
 const meta: Meta = {
   title: 'Patterns/Forms',
@@ -36,12 +27,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function AccountSettingsDemo() {
-  // The display-name field stays in error until it has a value; the switch
-  // is controlled. Everything else is uncontrolled — the pattern is the
-  // composition, not the state management.
-  const [displayName, setDisplayName] = useState('');
-  const [publicProfile, setPublicProfile] = useState(true);
-
   return (
     <div className="min-h-screen bg-[var(--surface-page)] p-6 md:p-10">
       <div className="mx-auto max-w-md space-y-4">
@@ -49,80 +34,7 @@ function AccountSettingsDemo() {
           Pattern · Forms
         </p>
 
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-          {/* Error state: errorMessage renders under the field and links it
-              via aria-describedby, so screen readers hear why it's invalid */}
-          <Input
-            label="Display name"
-            placeholder="How you appear to others"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            errorMessage={displayName === '' ? 'Display name is required' : undefined}
-            size="md"
-          />
-
-          <Input label="Email" type="email" placeholder="you@example.com" size="md" />
-
-          <Select label="Timezone" size="md" defaultValue="pt">
-            <option value="pt">Pacific Time (UTC-8)</option>
-            <option value="mt">Mountain Time (UTC-7)</option>
-            <option value="ct">Central Time (UTC-6)</option>
-            <option value="et">Eastern Time (UTC-5)</option>
-          </Select>
-
-          {/* Radio group: fieldset + legend in the label style */}
-          <fieldset>
-            <legend className="mb-2 block font-mono text-sm text-secondary-800 dark:text-secondary-200">
-              Theme
-            </legend>
-            <Stack gap="2">
-              <Radio name="forms-theme" value="system" label="Match system" defaultChecked />
-              <Radio name="forms-theme" value="light" label="Light" />
-              <Radio name="forms-theme" value="dark" label="Dark" />
-            </Stack>
-          </fieldset>
-
-          {/* Checkbox group: same legend treatment */}
-          <fieldset>
-            <legend className="mb-2 block font-mono text-sm text-secondary-800 dark:text-secondary-200">
-              Email notifications
-            </legend>
-            <Stack gap="2">
-              <Checkbox label="Product updates" defaultChecked />
-              <Checkbox label="Weekly digest" defaultChecked />
-              <Checkbox label="Marketing and promotions" />
-            </Stack>
-          </fieldset>
-
-          {/* Switch row: setting name + consequence on the left, control right */}
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="font-mono text-sm text-[var(--text-primary)]">Public profile</p>
-              <p className="font-mono text-xs text-secondary-700 dark:text-secondary-600">
-                Anyone can view your profile page
-              </p>
-            </div>
-            <Switch
-              checked={publicProfile}
-              onCheckedChange={setPublicProfile}
-              size="md"
-              label="Public profile"
-              hideLabel
-            />
-          </div>
-
-          <Textarea label="Bio" placeholder="A short introduction..." rows={4} size="md" />
-
-          {/* Button row: primary at the end, quiet action beside it */}
-          <div className="flex justify-end gap-3 pt-2">
-            <Button variant="ghost" size="md" type="button">
-              Cancel
-            </Button>
-            <Button variant="primary" size="md" type="submit">
-              Save changes
-            </Button>
-          </div>
-        </form>
+        <AccountSettingsForm />
 
         <Divider />
         <p className="font-mono text-xs text-secondary-900 dark:text-secondary-200">

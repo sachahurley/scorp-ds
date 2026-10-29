@@ -6,14 +6,14 @@
 
 | Field | Value |
 |-------|-------|
-| Pattern | `Patterns/SettingsPanel` (story-only, not an exported component) |
+| Pattern | `Patterns/SettingsPanel` (preset `WorkspaceSettingsPanel`, not an exported component) |
 | Layer | `pattern` |
 | Category | `Patterns` |
-| File | `packages/storybook/stories/Patterns/SettingsPanel.stories.tsx` |
+| File | `packages/storybook/presets/settingsPanel.tsx` (story shell: `packages/storybook/stories/Patterns/SettingsPanel.stories.tsx`) |
 | Story | `Patterns/SettingsPanel` |
-| Version | `v1` |
+| Version | `v2` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-29 |
 
 ---
 
@@ -21,7 +21,9 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-A single-card settings surface: a group of profile fields (two text inputs and a select), a notifications subsection with a switch and checkboxes, and footer actions (reset and save). It is the reference for spacing hierarchy with `Stack` (tight within a group, loose between groups) and for building product forms from existing components and semantic tokens without new primitives.
+A single-card settings surface: a group of profile fields (two text inputs and a select), a notifications group with a switch and checkboxes, and footer actions (reset and save). It is the reference for the spacing hierarchy in `composition-presets-guidelines.md` (tight within a group, loose between groups, a `Divider` before a titled group) and for building product forms from existing components and semantic tokens without new primitives.
+
+Don't use this for: a long page-level form with one field per row and no Card (use the Forms pattern instead), a sign-in surface (use the AuthCard pattern instead), or settings split across independent sections (use one Card per section instead, never a Card inside a Card).
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -29,16 +31,20 @@ A single-card settings surface: a group of profile fields (two text inputs and a
 
 ## Composition
 
+All of it is `WorkspaceSettingsPanel` in `presets/settingsPanel.tsx`; the story only adds the page shell (`--surface-page`, `p-6 md:p-10`, a `max-w-xl` column, the eyebrow line).
+
 | Building block | Role |
 |----------------|------|
-| `Card` | `title="Workspace"`, `subtitle="Profile, locale, and alert defaults"`, body, and `footerContent` with the actions. `className="flex w-full flex-col"`. |
-| `Stack` | Outer `gap="6"` between groups; `gap="3"` inside the profile group; `gap="4"` inside notifications. |
+| `Card` | `title="Workspace"`, `subtitle="Profile, locale, and alert defaults"`, body, and `footerContent` with the actions. `className="flex w-full flex-col"`. Card supplies all padding. |
+| `Stack` | Outer `gap="6"` between the two groups; `gap="3"` between the profile fields; `gap="4"` between the Divider and the notifications fieldset, and between the notifications controls. |
 | `Input` | "Display name" and "Workspace slug", both `size="md"` with `defaultValue`. |
 | `Select` | "Locale", `size="md"`, native `<option>` children (English, Français). |
-| Section rule | Story-local `div` with a 0.5px top border in `--surface-container-stroke`, `pt-4`, and a `text-xs uppercase` "Notifications" label. |
+| `Divider` | Section rule before the notifications group, `spacing="none"` so the surrounding `Stack` gaps own the space. |
+| `fieldset` + `legend` | The notifications group. The legend "Notifications" uses the eyebrow style (`text-xs uppercase tracking-wider`, `--text-primary`, `mb-3`). |
 | `Switch` | "Email digests" (`defaultChecked`). |
 | `Checkbox` | "Push for deploy failures" (`defaultChecked`) and "Marketing updates". |
-| `Button` | Footer, right-aligned with `gap-2`: `variant="outline"` "Reset" then `variant="primary"` "Save changes", both `size="sm"`. |
+| `Inline` | Footer action row, `justify="end" gap="2"`. |
+| `Button` | Footer: `variant="outline"` "Reset" then `variant="primary"` "Save changes", both `size="sm"`, `type="button"`. |
 
 ---
 
@@ -53,8 +59,10 @@ A single-card settings surface: a group of profile fields (two text inputs and a
 ## Accessibility notes
 
 - Every field has a visible `label` wired by the component (`Input`, `Select`, `Switch`, `Checkbox`).
-- Footer buttons are explicit `type="button"` so the story does not submit; in product code wrap the body in a `<form>` and make Save `type="submit"`.
-- The "Notifications" label is a styled `<p>`, not a heading or `<legend>`; in product code use a `<fieldset>` with a `<legend>` so the group is announced.
+- The notifications controls are a `fieldset` with a `legend`, so a screen reader announces "Notifications" when focus enters the group.
+- The Divider is `role="separator"`; it carries no name, because the legend names the group after it.
+- Footer buttons are explicit `type="button"` because the panel is not a form; in product code wrap the Card in a `<form>` and make Save `type="submit"`.
+- Keyboard: Tab moves through the fields in reading order, then Reset, then Save; Space toggles the Switch and the Checkboxes.
 - Switch and Checkbox carry 44px hit areas; the `sm` footer buttons (32px) do not.
 
 ---
@@ -65,7 +73,8 @@ A single-card settings surface: a group of profile fields (two text inputs and a
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | The notifications group has no `fieldset` / `legend` or heading semantics, and the section rule is hand-rolled instead of `Divider` | None yet | open |
+| 2026-09-22 | The notifications group has no `fieldset` / `legend` or heading semantics, and the section rule is hand-rolled instead of `Divider` | 2026-10-29: the group is a `fieldset` with a `legend`, and the rule is `<Divider spacing="none" />` (decision 0028) | closed |
+| 2026-10-29 | The footer buttons are `sm` (32px), under the 44px touch target | Accepted for a dense desktop settings card; a touch-first screen uses `md` | open |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -78,6 +87,7 @@ A single-card settings surface: a group of profile fields (two text inputs and a
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| v2 | 2026-10-29 | changed | Moved to the `WorkspaceSettingsPanel` preset; notifications group is a `fieldset` + `legend`; the section rule is `Divider`; the footer row is `Inline` (decision 0028) |
 
 <!-- AUTO-END:changelog -->
 
@@ -85,4 +95,4 @@ A single-card settings surface: a group of profile fields (two text inputs and a
 
 ## Reference
 
-`packages/storybook/stories/Patterns/SettingsPanel.stories.tsx`
+`packages/storybook/presets/settingsPanel.tsx`, `packages/storybook/stories/Patterns/SettingsPanel.stories.tsx`

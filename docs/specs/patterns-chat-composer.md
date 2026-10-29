@@ -29,6 +29,8 @@ It is a terminal workbench, not a chat app. Two framed panes, a status line that
 
 The first consumer runs in **replay mode**: recorded sessions played back, with no model call. The pattern says so on screen (a `REPLAY` segment in the status line, "replayed" in each turn's meta), because the system is honest about state.
 
+Don't use this for: a source list beside a detail view with no conversation (use the WorkbenchSplit pattern instead), machine output with no turns (use `LogView` instead), or a single multi-line text field in a form (use `Textarea` instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---
