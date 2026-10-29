@@ -86,7 +86,7 @@ export const WithActions: Story = {
         <Button variant="ghost" size="lg" aria-label="Search">
           <TuiIcon name="Search" size="5" />
         </Button>
-        <Avatar initials="SH" size="sm" />
+        <Avatar alt="Sacha Hurley" initials="SH" size="sm" />
       </>
     ),
   },

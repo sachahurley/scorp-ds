@@ -60,7 +60,7 @@ export const WithHeaderContent: Story = {
     className: 'w-96',
     headerContent: (
       <div className="flex items-center gap-4">
-        <Avatar initials="AJ" size="md" />
+        <Avatar alt="" initials="AJ" size="md" />
         <div>
           <h3 className="font-mono text-base font-bold text-[var(--text-primary)]">
             Alex Johnson
@@ -105,7 +105,7 @@ export const Testimonial: Story = {
           every surface consistent. Exactly what we needed.
         </blockquote>
         <figcaption className="mt-6 flex items-center gap-4 border-t-hairline border-solid border-[var(--surface-container-stroke)] pt-4">
-          <Avatar initials="MC" size="md" />
+          <Avatar alt="" initials="MC" size="md" />
           <div className="min-w-0">
             <p className="font-mono text-sm font-bold text-[var(--text-primary)]">Michael Chen</p>
             <p className="font-mono text-xs text-secondary-700 dark:text-secondary-400">

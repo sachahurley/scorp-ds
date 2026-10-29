@@ -9,7 +9,7 @@ import { Avatar, Badge, Button, Inline, Stack, TuiIcon, type AvatarProps, type B
  *
  * @example
  * <DenseRowShell>
- *   <Avatar initials="BR" size="sm" />
+ *   <Avatar alt="" initials="BR" size="sm" />
  *   <span className="flex-1">build · main</span>
  * </DenseRowShell>
  */
@@ -68,7 +68,7 @@ export function JobRunListRow({
 }: JobRunRowData) {
   return (
     <DenseRowShell>
-      <Avatar initials={initials} size="sm" status={presence} />
+      <Avatar alt="" initials={initials} size="sm" status={presence} />
       <div className="min-w-0 flex-1">
         <Inline align="baseline" gap="2">
           <span className="truncate font-medium">{title}</span>
