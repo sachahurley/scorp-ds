@@ -664,6 +664,26 @@
       "from": "packages/components/src/primitives/Stack.tsx"
     },
     {
+      "name": "StackAlign",
+      "kind": "type",
+      "from": "packages/components/src/primitives/Stack.tsx"
+    },
+    {
+      "name": "StackAxis",
+      "kind": "type",
+      "from": "packages/components/src/primitives/Stack.tsx"
+    },
+    {
+      "name": "StackAxisValue",
+      "kind": "type",
+      "from": "packages/components/src/primitives/Stack.tsx"
+    },
+    {
+      "name": "StackBreakpoint",
+      "kind": "type",
+      "from": "packages/components/src/primitives/Stack.tsx"
+    },
+    {
       "name": "StackGap",
       "kind": "type",
       "from": "packages/components/src/primitives/Stack.tsx"
@@ -671,6 +691,11 @@
     {
       "name": "StackProps",
       "kind": "interface",
+      "from": "packages/components/src/primitives/Stack.tsx"
+    },
+    {
+      "name": "StackResponsiveAxis",
+      "kind": "type",
       "from": "packages/components/src/primitives/Stack.tsx"
     },
     {
