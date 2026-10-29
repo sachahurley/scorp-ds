@@ -32,7 +32,7 @@ Radio lets users choose exactly one option from a small, visible set (roughly tw
 
 <!-- AUTO-START:anatomy -->
 
-An outer `flex flex-col gap-1` wrapper (receives `className`) holding a `<label>` and, under it, the optional `FieldMessage`. Inside the label: a hit-area span (unclipped, centered 44x44px `::before`), the `sr-only` native `<input type="radio">`, the visual box (outer plate = ring color, inner plate = fill clipped 1px inset, square dot revealed on check), and the optional label text. The message is indented to line up with the label text (`pl-6` / `pl-7` / `pl-8` by size). There is no group component: wrap radios in a `<fieldset>` with a `<legend>` yourself.
+An outer `flex flex-col gap-1` wrapper (receives `className`) holding a `<label>` and, under it, the optional `FieldMessage`. Inside the label: a hit-area span (unclipped, centered 44x44px `::before`), the `sr-only` native `<input type="radio">`, the visual box (outer plate = ring color, inner plate = fill clipped 1px inset, square dot revealed on check), and the optional label text. The message is indented to line up with the label text (`pl-6` / `pl-7` / `pl-8` by size). Group radios with `Fieldset` (`role="radiogroup"`), which renders the `<fieldset>` and `<legend>` and carries the group's error.
 
 ### Variants
 
@@ -178,13 +178,13 @@ None.
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic role: native `radio`; the visual box is `aria-hidden`. Grouping comes from a shared `name`; wrap groups in `<fieldset>` + `<legend>` for a group label.
+- Semantic role: native `radio`; the visual box is `aria-hidden`. Grouping comes from a shared `name`; wrap groups in `Fieldset` for the group label.
 - Required labels: `label` or `aria-label` per radio, plus a legend for the group.
 - Keyboard: native. Tab enters the group at the selected radio; arrow keys move and select within the group.
 - Focus: 2px inset ring on the plate when the native input is focus-visible.
 - Touch target minimum: 44x44px at every size via the `::before` hit area inside the label.
 - Description: `helperText` / `errorMessage` are tied to the input with `aria-describedby`, so each radio's own message is read when it is focused.
-- Invalid state: the group carries it, not the radio. ARIA 1.2 does not support `aria-invalid` on `role="radio"` (nor on `group`), so Radio never sets it. Render the group as `<fieldset role="radiogroup" aria-invalid="true" aria-describedby="<group message id>">` with a `<legend>`, and put the group-level message under it.
+- Invalid state: the group carries it, not the radio. ARIA 1.2 does not support `aria-invalid` on `role="radio"` (nor on `group`), so Radio never sets it. Render the group as `<Fieldset role="radiogroup" error errorMessage="...">`: it sets `aria-invalid` on the radiogroup and links the message.
 - Color independence: selection shows a square dot, not just fill. An `errorMessage` adds the AlertCircle icon and text, so the error state is never color alone; bare `error` still is, so pair it with text.
 
 <!-- AUTO-END:accessibility -->
@@ -196,7 +196,7 @@ None.
 <!-- HUMAN-SECTION:do-dont (preserved across auto-updates) -->
 
 - Do give every radio in a group the same `name` and a distinct `value`.
-- Do wrap the group in a `<fieldset>` with a `<legend>` stating the question.
+- Do wrap the group in `Fieldset` with a `legend` stating the question.
 - Do preselect a sensible default when one exists.
 - Don't use a single Radio on its own; a lone option cannot be deselected. Use `Checkbox`.
 - Don't use Radio for more than about five options; use `Select`.
@@ -212,7 +212,7 @@ None.
 
 - Box sizes and hit areas match `Checkbox`, so the two align in mixed forms.
 - Stack vertically (`flex flex-col gap-2` as in the story); horizontal groups need enough gap that the 44px hit areas do not overlap.
-- For a per-option message use `helperText` / `errorMessage`. For a group-level error, render the message yourself under the fieldset (there is still no RadioGroup), set `error` on each radio for the styling, and give the fieldset `role="radiogroup"`, `aria-invalid="true"` and `aria-describedby` pointing at the message.
+- For a per-option message use `helperText` / `errorMessage`. For a group-level error, use `Fieldset` with `role="radiogroup"`, `error` and `errorMessage`, and set `error` on each radio for the styling.
 
 <!-- /HUMAN-SECTION:composition -->
 
@@ -228,7 +228,7 @@ None.
 | 2026-10-28 | `aria-invalid` sits on each radio `<input>`. ARIA 1.2 does not support it on `role="radio"`; it belongs on the group (`radiogroup`, or the `fieldset`). Found by `jsx-a11y/role-supports-aria-props` | 2026-10-29: `aria-invalid` removed from the radio and the lint exception deleted. The error message stays linked through `aria-describedby`; the caller's `<fieldset role="radiogroup">` carries `aria-invalid` (see Accessibility) | Resolved |
 | 2026-09-21 | 16px small circle below the 44px target; unlabeled radios ignored mouse clicks | 44px pseudo-element hit area at every size; control always wrapped in a label | Resolved |
 | 2026-09-22 | No `helperText` / `errorMessage` (unlike Checkbox) and no RadioGroup wrapper, so group errors are color only unless the consumer adds text; `label`, `error` and `onCheckedChange` lack JSDoc | Added `helperText` / `errorMessage` through `lib/field.tsx` (same plumbing as Checkbox) and JSDoc on every public prop | Resolved |
-| 2026-09-22 | Still no RadioGroup wrapper: a group-level error has to be rendered by the consumer under the fieldset | None yet | Open |
+| 2026-09-22 | Still no RadioGroup wrapper: a group-level error has to be rendered by the consumer under the fieldset | 2026-10-29: `Fieldset` (#123) with `role="radiogroup"` carries the group label and error | Resolved |
 | 2026-09-22 | The selected-error dot was a hardcoded `bg-white` | Replaced with `--button-destructive-text` | Resolved |
 
 <!-- AUTO-END:known-gaps -->
