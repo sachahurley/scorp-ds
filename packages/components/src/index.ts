@@ -182,7 +182,15 @@ export type { KbdProps } from './components/Kbd';
 
 // Primitives
 export { Stack } from './primitives/Stack';
-export type { StackProps, StackGap } from './primitives/Stack';
+export type {
+  StackProps,
+  StackGap,
+  StackAxis,
+  StackAxisValue,
+  StackResponsiveAxis,
+  StackBreakpoint,
+  StackAlign,
+} from './primitives/Stack';
 
 // --- Layout primitives (ds-layout-primitives) ---
 // Box is the base surface (padding, semantic background, plate ring); Inline,
