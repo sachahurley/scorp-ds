@@ -96,10 +96,10 @@ Status: draft · Spec: [`docs/specs/Button.md`](../../docs/specs/Button.md) · S
 | `disabled` | `boolean` | `false` | Disables the button (anchors drop `href` and set `aria-disabled`). |
 | `iconLeft` | `React.ReactNode` |  | Icon before the label, usually a `TuiIcon`, to make the action quicker to recognise ("+ New"). |
 | `iconRight` | `React.ReactNode` |  | Icon after the label, for direction or destination (an arrow on "Next", an external-link glyph on a link CTA). |
-| `href` | `string` |  | Render as an `<a>` with this destination instead of a `<button>` — same plate styling for link CTAs ("view project ↗"). |
-| `target` | `string` |  | Anchor target (only with `href`), e.g. "_blank". |
-| `rel` | `string` |  | Anchor rel (only with `href`); pair `target="_blank"` with "noopener noreferrer". |
 | `loading` | `boolean` | `false` | Busy state for async actions (submitting, saving). |
+| `href` | `string` |  | Render as an `<a>` with this destination instead of a `<button>`: same plate styling for link CTAs ("view project ↗"). |
+| `target` | `string` |  | Anchor target, e.g. "_blank". |
+| `rel` | `string` |  | Anchor rel; pair `target="_blank"` with "noopener noreferrer". |
 
 Also accepts the native attributes of `AriaAttributes`, `ButtonHTMLAttributes`, `DOMAttributes`, `HTMLAttributes`.
 
@@ -141,7 +141,7 @@ Status: draft · Spec: [`docs/specs/Accordion.md`](../../docs/specs/Accordion.md
 | `value` | `string[]` |  | Controlled open item values. |
 | `defaultValue` | `string[]` |  | Initially open items when uncontrolled. |
 | `onValueChange` | `(value: string[]) => void` |  | Called with the open item values. |
-| `collapsible` | `boolean` |  | Always true for multiple; accepted for API symmetry. |
+| `collapsible` | `boolean` |  | Has no effect with `type="multiple"`: every item can always close, so the accordion behaves as collapsible whatever you pass. |
 
 **`AccordionProps`**
 
@@ -217,9 +217,9 @@ Status: draft · Spec: [`docs/specs/Card.md`](../../docs/specs/Card.md) · Story
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `title` | `string` |  | Card title, rendered as the header heading. |
+| `title` | `string` |  | Card title, rendered as the header heading (an `h3`). |
 | `subtitle` | `string` |  | Supporting line under the title. |
-| `headerContent` | `ReactNode` |  | Custom header node; replaces `title` / `subtitle` when set. |
+| `headerContent` | `ReactNode` |  | Custom header node, for a header that needs more than a title and subtitle (a badge, an action). |
 | `children` (required) | `ReactNode` |  | Main card content. |
 | `footerContent` | `ReactNode` |  | Footer node (buttons, links) behind a hairline rule. |
 | `layout` | `"block"` `"flex"` |  | Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. |
@@ -239,8 +239,10 @@ Status: draft · Spec: [`docs/specs/Divider.md`](../../docs/specs/Divider.md) ·
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `variant` | `"horizontal"` `"vertical"` `"withText"` | `"horizontal"` | `horizontal` (default) for a full-width rule between stacked blocks, `vertical` for a full-height rule between items in a row (the parent needs a height), `withText` for a horizontal rule with a centred label. |
-| `text` | `ReactNode` |  | Label shown in the middle of a `withText` divider ("or", a section name); a string label is also its accessible name. |
+| `orientation` | `"horizontal"` `"vertical"` |  | `horizontal` (default) for a full-width rule between stacked blocks; `vertical` for a full-height rule between items in a row (the parent needs a height). |
+| `label` | `ReactNode` |  | Centred label on a horizontal rule ("or", a section name), drawn between box-drawing runs. |
+| ~~`variant`~~ | `"horizontal"` `"vertical"` `"withText"` |  |  |
+| ~~`text`~~ | `ReactNode` |  |  |
 | `spacing` | `"none"` `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Margin around the rule: none, sm 4px, md 16px (default), lg 32px. |
 | `className` | `string` | `""` | Extra classes on the rule (width, colour override, alignment). |
 
@@ -317,7 +319,7 @@ Status: draft · Spec: [`docs/specs/TuiIcon.md`](../../docs/specs/TuiIcon.md) ·
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `name` (required) | `string` |  | Icon name -- must match a key in (same as the Lucide component name). |
+| `name` (required) | `"AlertCircle"` `"AlertTriangle"` `"Archive"` `"ArrowLeft"` `"ArrowRight"` `"Bell"` `"Check"` `"CheckCircle"` `"ChevronDown"` `"ChevronRight"` `"ChevronUp"` `"Copy"` `"Download"` `"Edit"` `"ExternalLink"` `"Eye"` `"EyeOff"` `"FileText"` `"Globe"` `"HelpCircle"` `"Info"` `"Lock"` `"LogOut"` `"Mail"` `"Menu"` `"Minus"` `"Moon"` `"MoreVertical"` `"Music2"` `"Pause"` `"Play"` `"Plus"` `"Repeat"` `"Save"` `"Search"` `"Send"` `"Settings"` `"Share2"` `"Shield"` `"Shuffle"` `"SkipBack"` `"SkipForward"` `"Star"` `"Stop"` `"Sun"` `"Tag"` `"Trash2"` `"Upload"` `"User"` `"Volume2"` `"VolumeX"` `"X"` |  | Which icon to draw: a (the Lucide component name, e.g. `"Check"`, `"ChevronRight"`). |
 | `size` | `"3"` `"4"` `"5"` `"6"` `"8"` | `"4"` | Box size as a Tailwind size number: "3" (12px), "4" (16px, default), "5" (20px), "6" (24px), "8" (32px). |
 | `className` | `string` |  | Additional CSS classes (color, margin, etc.) |
 
@@ -448,7 +450,7 @@ Status: draft · Spec: [`docs/specs/Skeleton.md`](../../docs/specs/Skeleton.md) 
 | `variant` | `"text"` `"rect"` `"avatar"` | `"text"` | Placeholder shape: text lines (default), a rect block, or an avatar square. |
 | `lines` | `number` | `1` | Number of text lines for `variant="text"` (default 1). |
 | `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Avatar square size: sm 32px, md 40px (default), lg 48px (control heights). |
-| `animated` | `boolean` | `true` | Turn the pulse off (e.g. many skeletons on one screen). |
+| `animated` | `boolean` | `true` | Whether the stepped pulse runs. |
 | `className` | `string` |  | Sizing classes. |
 
 ### Spinner
@@ -941,7 +943,7 @@ Status: draft · Spec: [`docs/specs/Breadcrumbs.md`](../../docs/specs/Breadcrumb
 | `label` (required) | `ReactNode` |  | Visible text for this step. |
 | `href` | `string` |  | Destination for ancestor steps. |
 | `as` | `ElementType` |  | Custom link component (e.g. a router `<Link>`) used instead of `<a href>`. |
-| `asProps` | `Record<string, unknown>` |  | Props spread onto the `as` component. |
+| `asProps` | `Record<string, unknown>` |  | Props for the `as` component (`to`, `state`, ...), spread onto it as-is. |
 | `key` | `string` |  | Stable React key. |
 
 **`BreadcrumbsProps`**
@@ -1045,7 +1047,7 @@ Status: draft · Spec: [`docs/specs/SideNav.md`](../../docs/specs/SideNav.md) ·
 | `href` | `string` |  | Destination; renders an `<a>`. |
 | `onClick` | `(event: MouseEvent<HTMLElement>) => void` |  | Click handler. |
 | `as` | `ElementType` |  | Custom link component (e.g. a router `<Link>`); its props go in `asProps`. |
-| `asProps` | `Record<string, unknown>` |  | Props spread onto the `as` component (`to`, `state`, ...). |
+| `asProps` | `Record<string, unknown>` |  | Props for the `as` component (`to`, `state`, ...), spread onto it as-is. |
 | `trailing` | `ReactNode` |  | Trailing content at the row end (a count Badge, a Kbd hint). |
 | `expanded` | `boolean` |  | Group open state (controlled). |
 | `defaultExpanded` | `boolean` |  | Initial group open state. |
@@ -1264,7 +1266,7 @@ Status: draft · Spec: [`docs/specs/CaseStudy.md`](../../docs/specs/CaseStudy.md
 |---|---|---|---|
 | `src` | `string` |  | Image URL. |
 | `alt` | `string` |  | Empty string (the default) marks the image decorative. |
-| `aspect` | `string` |  | CSS aspect-ratio, e.g. "21 / 9". |
+| `aspect` | `"16 / 9"` `"21 / 9"` `"4 / 3"` |  | Shape of the frame, as a CSS aspect-ratio: `16 / 9` (default) for most art, `21 / 9` for a wide diagram (pair it with `width="wide"`), `4 / 3` for a screenshot or the shape an image pair uses. |
 | `caption` | `string` |  | Text under the figure; inside a section it is prefixed with the figure number. |
 | `width` | `"wide"` `"full"` |  | Break out of the text column: `wide` or `full` bleed. |
 
@@ -1334,7 +1336,7 @@ Status: draft · Spec: [`docs/specs/Kbd.md`](../../docs/specs/Kbd.md) · Story: 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `keys` | `string[]` |  | Keys of a combo, in press order (`["Ctrl", "Shift", "P"]`). |
-| `children` | `ReactNode` |  | A single key label when `keys` is not used. |
+| `children` | `ReactNode` |  | A single key label (`<Kbd>Esc</Kbd>`). |
 | `size` | `"sm"` `"md"` ~~`"small"`~~ ~~`"medium"`~~ | `"sm"` | Key size: sm 20px (default) or md 24px. |
 | `separator` | `ReactNode` | `"+"` | Visible separator between combo keys (default "+"). |
 | `className` | `string` |  | Extra classes for the outer `<kbd>`. |

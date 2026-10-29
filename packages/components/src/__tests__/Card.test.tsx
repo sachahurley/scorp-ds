@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { Card } from "../components/Card";
 
@@ -19,7 +19,10 @@ function renderCard(props: Partial<React.ComponentProps<typeof Card>> = {}) {
 }
 
 describe("Card layout", () => {
-  afterEach(() => cleanup());
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
 
   it("is a block card by default", () => {
     const { container } = renderCard();
@@ -38,9 +41,21 @@ describe("Card layout", () => {
     expect((container.firstElementChild as HTMLElement).className).toContain("flex-col");
   });
 
-  it("keeps the legacy standalone `flex` className working", () => {
+  it("keeps the legacy standalone `flex` className working, and warns once to pass layout", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const { container } = renderCard({ className: "h-72 flex flex-col" });
     expect(isFlexLayout(container)).toBe(true);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).toContain('Use layout="flex"');
+    cleanup();
+    renderCard({ className: "flex" });
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not warn when layout is passed", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    renderCard({ layout: "flex", className: "flex" });
+    expect(warn).not.toHaveBeenCalled();
   });
 
   it.each(["inline-flex", "flex-1", "flex-wrap", "md:flex"])(
@@ -61,5 +76,16 @@ describe("Card layout", () => {
     expect(screen.getByText("Production")).toBeVisible();
     expect(screen.getByTestId("body")).toBeVisible();
     expect(screen.getByText("footer")).toBeVisible();
+  });
+
+  it("renders headerContent instead of title and subtitle when both are passed", () => {
+    render(
+      <Card title="Deploy" subtitle="Production" headerContent={<span>Custom header</span>}>
+        <span>body</span>
+      </Card>
+    );
+    expect(screen.getByText("Custom header")).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "Deploy" })).toBeNull();
+    expect(screen.queryByText("Production")).toBeNull();
   });
 });

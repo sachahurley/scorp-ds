@@ -13,7 +13,7 @@
 | Story | `Components/Navigation/Link` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `0a43288a17fe4939` |
 
 ---
@@ -61,7 +61,7 @@ An `<a>` (or the `as` component) containing the children and, when `external` is
 | `external` | `boolean` | `false` | No | Sets `target="_blank"` and `rel="noopener noreferrer"` in both forms, appends the `ExternalLink` glyph and the sr-only "(opens in new tab)" notice. In the anchor form your own `target` / `rel` win; in the `as` form anything in `asProps` wins. |
 | `href` | `string` | none | One of `href` / `as` | Destination; renders an `<a>`. |
 | `as` | `ElementType` | none | One of `href` / `as` | Custom link component (for example a router `Link`), rendered with identical styling. |
-| `asProps` | `Record<string, unknown>` | none | No | Props spread onto the `as` component (`to`, `state`, ...). Only with `as`. |
+| `asProps` | `Record<string, unknown>` | none | No | Props spread onto the `as` component (`to`, `state`, ...). Only with `as`. Spread untyped: TypeScript does not check them against the `as` component's props. |
 | `children` | `ReactNode` | none | Yes | Link text. Describe the destination; avoid bare "here". |
 | `className` | `string` | `""` | No | Extra classes, merged with `cn()` (tailwind-merge), so color or size overrides win. |
 | `ref` | `Ref<HTMLAnchorElement>` | none | No | Forwarded to the `<a>` or the `as` component. |
@@ -225,6 +225,7 @@ modes before nesting links.
 | v1 | 2026-09-20 | added | Initial component: inline/quiet variants, external affordance, router polymorphism |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | `external` sets `target` / `rel` in the `as` form too, so the glyph and the "(opens in new tab)" notice always match the behaviour |
+| Unreleased | 2026-10-28 | docs | Documented that `asProps` is spread untyped |
 
 <!-- AUTO-END:changelog -->
 

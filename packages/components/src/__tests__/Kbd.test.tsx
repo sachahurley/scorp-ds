@@ -31,4 +31,15 @@ describe("Kbd", () => {
     expect(container.querySelectorAll("kbd")).toHaveLength(1);
     expect(container.firstElementChild).toHaveTextContent("Enter");
   });
+
+  it("renders keys and ignores children when both are passed", () => {
+    const { container } = render(<Kbd keys={["Ctrl", "K"]}>Esc</Kbd>);
+    expect(container.firstElementChild).toHaveTextContent("Ctrl+K");
+    expect(container.firstElementChild).not.toHaveTextContent("Esc");
+  });
+
+  it("falls back to children when keys is empty", () => {
+    const { container } = render(<Kbd keys={[]}>Esc</Kbd>);
+    expect(container.firstElementChild).toHaveTextContent("Esc");
+  });
 });

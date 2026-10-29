@@ -22,3 +22,22 @@ it("renders an anchor with the same plate styling when href is set", async () =>
   expect(link.className).toContain("plate-round");
   expect(link.className).toContain("--button-secondary-background");
 });
+
+it("accepts target and rel only alongside href (checked by type-check)", async () => {
+  const { render, screen, cleanup } = await import("@testing-library/react");
+  const { Button } = await import("../components/Button");
+  const maybeHref: string | undefined = undefined;
+  render(
+    <>
+      {/* @ts-expect-error target means nothing on a <button> */}
+      <Button target="_blank">no href target</Button>
+      {/* @ts-expect-error rel means nothing on a <button> */}
+      <Button rel="noopener">no href rel</Button>
+      <Button href={maybeHref}>optional href</Button>
+    </>
+  );
+  // At runtime a <button> never gets the stray target.
+  expect(screen.getByRole("button", { name: "no href target" })).not.toHaveAttribute("target");
+  expect(screen.getByRole("button", { name: "optional href" })).toBeVisible();
+  cleanup();
+});

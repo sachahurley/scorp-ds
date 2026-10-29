@@ -13,7 +13,7 @@
 | Story | `Components/Navigation/Breadcrumbs` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `7b4043178e97ef3b` |
 
 ---
@@ -68,7 +68,7 @@ Don't use this for: step progress (use a stepper) or tabs between sibling views
 |----------|------|---------|----------|-------------|
 | `items` | `BreadcrumbItem[]` | - | Yes | Trail root to current page; the last item is current. |
 | `items[].label` | `ReactNode` | - | Yes | Visible text. |
-| `items[].href` / `as` / `asProps` | `string` / `ElementType` / `object` | - | No | Destination or router link (ignored on the current item). |
+| `items[].href` / `as` / `asProps` | `string` / `ElementType` / `Record<string, unknown>` | - | No | Destination or router link (ignored on the current item). `asProps` is spread untyped: TypeScript does not check it against the `as` component's props. |
 | `maxItems` | `number` | unset | No | Collapse the middle once the trail is longer. |
 | `itemsBeforeCollapse` | `number` | `1` | No | Items kept before the overflow button. |
 | `itemsAfterCollapse` | `number` | `1` | No | Items kept after the overflow button. |
@@ -212,6 +212,7 @@ No hardcoded values found.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (navigation batch, ds-nav-terminal) |
+| Unreleased | 2026-10-28 | docs | Documented that `asProps` is spread untyped |
 
 <!-- AUTO-END:changelog -->
 

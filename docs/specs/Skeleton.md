@@ -13,7 +13,7 @@
 | Story | `Components/Feedback/Skeleton` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `21b3906bc6330462` |
 
 ---
@@ -64,8 +64,8 @@ Don't use this for: a wait where the shape of the coming content is unknown, or 
 |----------|------|---------|----------|-------------|
 | `variant` | `text | rect | avatar` | `"text"` | No | Shape |
 | `lines` | `number` | `1` | No | Text line count |
-| `size` | `sm | md | lg` | `"md"` | No | Avatar size |
-| `animated` | `boolean` | `true` | No | Stepped pulse |
+| `size` | `sm | md | lg` | `"md"` | No | Avatar square size (32 / 40 / 48px). Only `variant="avatar"` reads it; `text` and `rect` ignore it. Legacy small/medium/large are deprecated aliases |
+| `animated` | `boolean` | `true` | No | Whether the stepped pulse runs; `false` holds the placeholder still. Reduced motion always stops it |
 | `className` | `string` |  | No | Sizing |
 
 <!-- AUTO-END:properties -->
@@ -195,6 +195,7 @@ None
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial Skeleton component, story, and unit tests |
+| Unreleased | 2026-10-28 | docs | `size` documented as avatar-only; `animated` documented by its default (`true`) |
 
 <!-- AUTO-END:changelog -->
 

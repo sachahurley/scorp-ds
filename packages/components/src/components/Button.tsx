@@ -39,8 +39,10 @@ import { resolveSize, type ControlSizeProp } from "../lib/size";
 type DeprecatedButtonSize = "icon";
 import { Spinner } from "./Spinner";
 
-// Define the props interface for the Button component
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+/** Props every Button takes, whether it renders a `<button>` or an `<a>`. */
+// React's HTML attributes carry an RDFa `rel`; it is omitted so the link and
+// button forms below own `rel` outright.
+interface ButtonBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "rel"> {
   /**
    * Visual style (default: "primary"). One primary per view; "link" is an
    * action styled as text (navigate with `Link` instead); "icon" is the
@@ -67,16 +69,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    */
   iconRight?: React.ReactNode;
   /**
-   * Render as an `<a>` with this destination instead of a `<button>` — same
-   * plate styling for link CTAs ("view project ↗"). Disabled anchors drop the
-   * href and set `aria-disabled`.
-   */
-  href?: string;
-  /** Anchor target (only with `href`), e.g. "_blank". */
-  target?: string;
-  /** Anchor rel (only with `href`); pair `target="_blank"` with "noopener noreferrer". */
-  rel?: string;
-  /**
    * Busy state for async actions (submitting, saving). Shows a Spinner over
    * the label, sets `aria-busy` and `aria-disabled`, and ignores clicks. The
    * button stays focusable (no native `disabled`, so focus isn't dropped
@@ -85,6 +77,36 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    */
   loading?: boolean;
 }
+
+/** The link form: `href` turns the button into an `<a>`, and only then do `target` and `rel` apply. */
+interface ButtonLinkProps {
+  /**
+   * Render as an `<a>` with this destination instead of a `<button>`: same
+   * plate styling for link CTAs ("view project ↗"). Disabled anchors drop the
+   * href and set `aria-disabled`.
+   */
+  href: string;
+  /** Anchor target, e.g. "_blank". Only accepted together with `href`. */
+  target?: string;
+  /** Anchor rel; pair `target="_blank"` with "noopener noreferrer". Only accepted together with `href`. */
+  rel?: string;
+}
+
+/** The button form: no `target` or `rel`, since they mean nothing without `href`. */
+interface ButtonActionProps {
+  /** A destination that may be undefined: a defined value still renders an `<a>`. To pass `target` or `rel`, `href` must be a definite string. */
+  href?: string;
+  /** Not accepted without `href`: an anchor target means nothing on a `<button>`. */
+  target?: never;
+  /** Not accepted without `href`: an anchor rel means nothing on a `<button>`. */
+  rel?: never;
+}
+
+/**
+ * Button props. `target` and `rel` type-check only alongside a string `href`
+ * (the link form); everything else is shared by both forms.
+ */
+export type ButtonProps = ButtonBaseProps & (ButtonLinkProps | ButtonActionProps);
 
 /**
  * The control for triggering an action, or for navigating when given `href`; pick the `variant` by the action's weight on the page.

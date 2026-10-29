@@ -13,7 +13,7 @@
 | Story | `Components/Navigation/SideNav` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `f95d9b6962c5e2e9` |
 
 ---
@@ -76,7 +76,7 @@ Don't use this for: the app's top bar (use AppHeader instead), switching between
 | `SideNavItem.label` | `string` | - | Yes | Row text; accessible name when collapsed. |
 | `SideNavItem.icon` | `TuiIconName` | - | No | 1-bit icon. |
 | `SideNavItem.active` | `boolean` | `false` | No | Current route: fill + `aria-current`. |
-| `SideNavItem.href` / `onClick` / `as` + `asProps` | - | - | No | Anchor, button, or router link. |
+| `SideNavItem.href` / `onClick` / `as` + `asProps` | - | - | No | Anchor, button, or router link. `asProps` (`Record<string, unknown>`) is spread untyped: TypeScript does not check it against the `as` component's props. |
 | `SideNavItem.trailing` | `ReactNode` | - | No | Row-end slot (Badge, Kbd). |
 | `SideNavItem.children` | `SideNavItem[]` | - | No | Makes the row a collapsible group. |
 | `SideNavItem.expanded` / `defaultExpanded` / `onExpandedChange` | `boolean` / `boolean` / `fn` | open if holds active | No | Group state. |
@@ -219,6 +219,7 @@ No hardcoded values found.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (navigation batch, ds-nav-terminal) |
+| Unreleased | 2026-10-28 | docs | Documented that `asProps` is spread untyped |
 
 <!-- AUTO-END:changelog -->
 

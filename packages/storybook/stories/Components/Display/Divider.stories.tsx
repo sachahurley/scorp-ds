@@ -6,8 +6,12 @@ const meta: Meta<typeof Divider> = {
   component: Divider,
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: 'select', options: ['horizontal', 'vertical', 'withText'] },
+    orientation: { control: 'select', options: ['horizontal', 'vertical'] },
+    label: { control: 'text' },
     spacing: { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
+    // Deprecated aliases for orientation and label (decision 0024): they still work, so keep them out of the controls.
+    variant: { table: { disable: true } },
+    text: { table: { disable: true } },
   },
   parameters: { layout: 'centered' },
 };
@@ -17,15 +21,16 @@ type Story = StoryObj<typeof Divider>;
 
 export const Horizontal: Story = {
   args: {
-    variant: 'horizontal',
+    orientation: 'horizontal',
     className: 'w-80',
   },
 };
 
+/** A `label` gives the labelled form. `spacing` is margin above and below it, as on the plain rule. */
 export const WithText: Story = {
+  name: 'With label',
   args: {
-    variant: 'withText',
-    text: 'Section',
+    label: 'Section',
     className: 'w-96',
   },
 };
@@ -35,7 +40,7 @@ export const Vertical: Story = {
   render: () => (
     <div className="flex h-24 items-stretch gap-4">
       <span className="font-mono text-sm">Left</span>
-      <Divider variant="vertical" spacing="none" className="self-stretch" />
+      <Divider orientation="vertical" spacing="none" className="self-stretch" />
       <span className="font-mono text-sm">Right</span>
     </div>
   ),

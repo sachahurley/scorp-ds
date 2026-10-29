@@ -14,7 +14,7 @@
 | Version | `v3` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
-| API hash | `3ac209cd021b2e93` |
+| API hash | `e6520d5df7394983` |
 
 ---
 
@@ -85,7 +85,7 @@ Each size also sets a text size (`text-xs` to `text-2xl`) that only applies to t
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `name` | `string` | none | Yes | Icon name, a key of `TUI_ICON_GLYPHS`. Typed as `string`, so unknown names compile and render `?`; use `TuiIconName` in your own types. |
+| `name` | `TuiIconName` | none | Yes | Icon name, a key of `TUI_ICON_GLYPHS` (the Lucide component name). An unknown name is a compile error; a name held in data needs the type too (annotate the field as `TuiIconName`, or use `as const`). Untyped callers that pass an unknown name still get the `?` fallback at runtime. |
 | `size` | `TuiIconSize` (`"3" \| "4" \| "5" \| "6" \| "8"`) | `"4"` | No | Box size as a Tailwind size number. An invalid value at runtime falls back to `"4"`. |
 | `className` | `string` | none | No | Merged with `cn()`. Use it for color (`text-*`) and margin. |
 
@@ -125,7 +125,7 @@ Each size also sets a text size (`text-xs` to `text-2xl`) that only applies to t
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
 | Known name | `name` in `TUI_ICON_BITMAPS` | SVG bitmap in `currentColor` |
-| Unknown name | any other string | Text `?` in the mono font |
+| Unknown name | any other string (only reachable from untyped code) | Text `?` in the mono font |
 | Size | `size` | Box size and art pixel (see Sizes) |
 
 <!-- AUTO-END:states -->
@@ -237,7 +237,8 @@ Imported by `Alert`, `Badge`, `Checkbox` (`Check`, `Minus`), `Dropdown`, `Link`,
 | 2026-09-21 | `size` typed as `string`, typos compiled | Typed as `TuiIconSize` ("3" | "4" | "5" | "6" | "8"), exported | Resolved |
 | 2026-09-21 | `X` glyph (U+2717 ✗) is not in Fragment Mono; it fell back to a per-OS system font and rendered as a slanted hand-drawn tick in close buttons. | `X` is now drawn as inline SVG (square-cap strokes, currentColor) via `DRAWN_ICONS`; `TUI_ICON_GLYPHS.X` keeps the in-font `×` as a text-only fallback. | Resolved |
 | 2026-09-21 | 45 of 49 glyphs are not in Fragment Mono and render in fallback system fonts (Menlo, Apple Symbols, STIX Two Math on macOS; different fonts elsewhere), so icon appearance varies by OS. | All three: icons drawn as SVG; Scorp Symbols face for text glyphs; `audit:glyphs` in CI. Root cause also included Google Fonts' subsets dropping glyphs Fragment Mono has (→ ↗ ▼ ▲ ▶ ✓). | Resolved |
-| 2026-09-22 | `name` is still typed `string`, so unknown names compile and render `?`; size `"3"` uses a 1.5px art pixel, which can blur edges on 1x displays | None yet | open |
+| 2026-09-22 | `name` is still typed `string`, so unknown names compile and render `?` | `name` is typed `TuiIconName`; the runtime `?` fallback stays for untyped callers | Resolved 2026-10-28 |
+| 2026-09-22 | Size `"3"` uses a 1.5px art pixel, which can blur edges on 1x displays | None yet | open |
 | 2026-09-22 | `ChevronRight` and `Play` have identical bitmaps; no unit tests for TuiIcon | None yet | open |
 
 <!-- AUTO-END:known-gaps -->
@@ -258,6 +259,7 @@ Imported by `Alert`, `Badge`, `Checkbox` (`Check`, `Minus`), `Dropdown`, `Link`,
 | v1.1 | 2026-09-21 | fix | `X` renders as a drawn SVG close mark instead of the fallback-font ✗ glyph. |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-10-28 | feat | Added `Stop` (5x5 filled square, text form U+23F9) for Composer's stop button; Scorp Symbols rebuilt, glyph audit passes. 52 icons |
+| Unreleased | 2026-10-28 | feat | `name` is typed `TuiIconName` instead of `string`, so an unknown name is a compile error. Callers holding names in `string` fields must type them `TuiIconName` |
 
 <!-- AUTO-END:changelog -->
 

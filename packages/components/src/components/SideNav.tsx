@@ -144,7 +144,9 @@ export interface SideNavItemProps {
   onClick?: (event: MouseEvent<HTMLElement>) => void;
   /** Custom link component (e.g. a router `<Link>`); its props go in `asProps`. */
   as?: ElementType;
-  /** Props spread onto the `as` component (`to`, `state`, ...). */
+  /**
+   * Props for the `as` component (`to`, `state`, ...), spread onto it as-is. They are spread untyped: TypeScript does not check them against the `as` component's own props, so a misspelt `to` is not caught at compile time.
+   */
   asProps?: Record<string, unknown>;
   /** Trailing content at the row end (a count Badge, a Kbd hint). Hidden when collapsed. */
   trailing?: ReactNode;

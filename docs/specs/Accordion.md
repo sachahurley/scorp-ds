@@ -13,7 +13,7 @@
 | Story | `Components/Display/Accordion` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-28 |
 | API hash | `2e6c2346a2258516` |
 
 ---
@@ -22,7 +22,7 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-Stacked sections that expand and collapse under headings. Compound API: Accordion, AccordionItem, AccordionTrigger, AccordionContent. `type="single"` (default) keeps one open; add `collapsible` to allow none (otherwise the open trigger is aria-disabled). `type="multiple"` opens independently. Controlled via value + onValueChange or uncontrolled via defaultValue.
+Stacked sections that expand and collapse under headings. Compound API: Accordion, AccordionItem, AccordionTrigger, AccordionContent. `type="single"` (default) keeps one open; add `collapsible` to allow none (otherwise the open trigger is aria-disabled). `type="multiple"` opens independently, and `collapsible` has no effect there: every item can always close. Controlled via value + onValueChange or uncontrolled via defaultValue.
 
 Motion: grid-rows 0fr to 1fr over duration.normal (200ms) with a rotating 1-bit ChevronRight; both instant under reduced motion. Collapsed bodies are visibility-hidden so they leave the tab order.
 
@@ -64,7 +64,7 @@ Don't use this for: switching between alternative views of the same content (use
 | `value` | `string | string[]` | `undefined` | No | Controlled |
 | `defaultValue` | `string | string[]` |  | No | Uncontrolled |
 | `onValueChange` | `(value) => void` |  | No | Open item(s) |
-| `collapsible` | `boolean` | `false` | No | Single: allow closing |
+| `collapsible` | `boolean` | `false` | No | Single: allow closing the open item so none are open. No effect with `type="multiple"`, where every item can always close; accepted there only so switching `type` does not mean dropping the prop |
 | `headingLevel` | `2-6` | `3` | No | Heading around triggers |
 | `disabled` | `boolean` | `false` | No | Disable all |
 | `AccordionItem.value` | `string` |  | Yes | Item id |
@@ -203,6 +203,7 @@ TuiIcon
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial Accordion component, story, and unit tests |
+| Unreleased | 2026-10-28 | docs | Documented that `collapsible` has no effect in `multiple` mode |
 
 <!-- AUTO-END:changelog -->
 
