@@ -1199,8 +1199,7 @@ Status: draft · Spec: [`docs/specs/Modal.md`](../../docs/specs/Modal.md) · Sto
 | `title` (required) | `string` |  | Heading in the fixed header; also the dialog's accessible name, so make it say what the dialog is for. |
 | `children` (required) | `ReactNode` |  | Body content. |
 | `footerContent` | `ReactNode` |  | Optional fixed footer for CTAs. |
-| `size` | `"xs"` `"sm"` `"md"` `"lg"` `"xl"` `"full"` |  | Panel width: `xs` (320px) for a one-line notice or reward, `sm` (360px) for a confirmation, `md` (440px) for a picker or short form, `lg` (640px) for a compare card or a form with sections, `xl` (740px, the default when neither `size` nor `width` is passed) for a full task, `full` for the whole viewport width. |
-| ~~`width`~~ | `number \| string` |  |  |
+| `size` | `"xs"` `"sm"` `"md"` `"lg"` `"xl"` `"full"` |  | Panel width: `xs` (320px) for a one-line notice or reward, `sm` (360px) for a confirmation, `md` (440px) for a picker or short form, `lg` (640px) for a compare card or a form with sections, `xl` (740px, the default when no `size` is passed) for a full task, `full` for the whole viewport width. |
 | `docked` | `boolean` | `false` | Dock instead of covering: at or above the `--breakpoint-docked` token (960px) the panel pins bottom-center with no scrim and no scroll lock (a non-modal dialog), keeping the page behind visible and interactive. |
 
 ### Popover

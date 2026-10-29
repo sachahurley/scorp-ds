@@ -257,32 +257,3 @@ describe("Modal sizes and uncontrolled use", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });
-
-describe("Modal deprecated width", () => {
-  afterEach(() => {
-    cleanup();
-    vi.restoreAllMocks();
-  });
-
-  it("still honours width, and warns once", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    render(
-      <Modal open onOpenChange={() => {}} title="Legacy" width={320}>
-        x
-      </Modal>
-    );
-    expect(screen.getByRole("dialog", { name: "Legacy" })).toHaveStyle({ width: "320px" });
-    const messages = warn.mock.calls.map((c) => String(c[0]));
-    expect(messages.filter((m) => m.includes("Modal: width is deprecated. Use size."))).toHaveLength(1);
-  });
-
-  it("lets size win over width when both are passed", () => {
-    vi.spyOn(console, "warn").mockImplementation(() => {});
-    render(
-      <Modal open onOpenChange={() => {}} title="Sized" size="sm" width={500}>
-        x
-      </Modal>
-    );
-    expect(screen.getByRole("dialog", { name: "Sized" })).toHaveStyle({ width: "360px" });
-  });
-});

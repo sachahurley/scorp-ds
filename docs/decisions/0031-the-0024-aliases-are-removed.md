@@ -91,3 +91,11 @@ Modal `width` stayed because the portfolio's dialogs used widths no `size` match
 `md` and `lg` were 640 and 740 for one day and no consumer used them, so renaming the steps
 broke nothing. The portfolio moves onto the scale in its vendor PR (its 420px Avatar
 dialog becomes `md`, its 560px WorldStats dialog becomes `lg`), then `width` is removed.
+
+## Amendment 2026-10-29: `width` removed
+
+The portfolio's dialogs moved onto the scale in its vendor PR, leaving no caller of
+`width`, so it is removed and the 0024 aliases are now gone entirely.
+`lib/deprecate.ts` (`warnDeprecated`) stays as the shared tool decision 0024 prescribes for
+the next rename, although nothing calls it today.
+

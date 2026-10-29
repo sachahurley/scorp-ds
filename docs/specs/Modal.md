@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `a95eba2e2bf10048` |
+| API hash | `0e77fe8a461e200c` |
 
 ---
 
@@ -49,9 +49,8 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 | `sm` | 360px: a confirmation ("Are you sure?"). |
 | `md` | 440px: a picker or a short form. |
 | `lg` | 640px: a compare card (the docked equip card) or a form with sections. |
-| `xl` (default) | 740px: a full task. The width used when neither `size` nor `width` is passed. |
+| `xl` (default) | 740px: a full task. The width used when no `size` is passed. |
 | `full` | The whole viewport width (`100vw`), capped by `max-w-full` at the scrim padding, or at the viewport when docked. |
-| `width` (deprecated) | Still honoured when `size` is not passed: numbers are px, strings pass through. Use `size`. |
 
 <!-- AUTO-END:anatomy -->
 
@@ -70,10 +69,9 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 | `children` | `ReactNode` | | Yes | Body content; scrolls when it exceeds the panel height. The body already has `px-6 py-5` padding. |
 | `footerContent` | `ReactNode` | `undefined` | No | Fixed footer band, actions right-aligned with `gap-3`. Render DS Buttons (secondary cancel, primary confirm). |
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| "full"` | `"xl"` | No | Panel width: 320 / 360 / 440 / 640 / 740px / viewport. Always capped at the viewport by `max-w-full`. |
-| `width` | `number \| string` | | No | **Deprecated**, use `size`. Honoured when `size` is not passed (numbers are px, strings pass through); warns once in development. |
 | `docked` | `boolean` | `false` | No | Non-modal bottom-center panel on viewports of 960px and up; falls back to the centered modal below. |
 
-When `size` and the deprecated `width` are both passed, `size` wins (decision 0024). `width` is the one 0024 alias kept: it stays until a size decision covers the widths callers still pass it (decision 0031).
+`size` is the only way to set the panel width; the free-form `width` prop was removed once every caller had a size (decision 0031, amendment).
 
 Exported type: `ModalProps`.
 
@@ -248,6 +246,7 @@ Interactive controls: N/A (render function stories).
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Focus trap while modal (docked stays non-modal); 44px close-button hit area; 66vh comment corrected; story double padding removed |
 | Unreleased | 2026-09-22 | change | Docked breakpoint comes from the `--breakpoint-docked` token instead of a hardcoded 960 (same 960px switch point) |
+| Unreleased | 2026-10-29 | breaking | Removed the deprecated `width` prop and its dev warning: every caller now uses `size` (the portfolio moved in its vendor PR). Rendering unchanged |
 | Unreleased | 2026-10-29 | change | Five-step size scale chosen from the widths consumers use: `xs` 320, `sm` 360, `md` 440, `lg` 640, `xl` 740 (default, unchanged), `full`. `md` and `lg` were 640 and 740; no consumer used them. Prepares removing `width` |
 | Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `open` / `defaultOpen` / `onOpenChange` replace `isOpen` / `onClose`, and `size` (`sm \| md \| lg \| full`) replaces `width`. The old props are deprecated aliases that still work and warn once; the default render is unchanged (740px) |
 | Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `isOpen` and `onClose` props and their dev warnings; use `open` and `onOpenChange`. The deprecated `width` stays, pending a decision on the missing sizes. Rendering unchanged |
