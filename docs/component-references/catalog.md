@@ -292,6 +292,17 @@ Status: draft · Spec: [`docs/specs/Table.md`](../../docs/specs/Table.md) · Sto
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`, `TableHTMLAttributes`.
 
+**`TableBodyProps`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `loading` | `boolean` | `false` | Show placeholder rows instead of the children while the data loads. |
+| `loadingRows` | `number` | `3` | How many Skeleton rows `loading` shows (default 3). |
+| `emptyState` | `ReactNode` |  | What to show when the body has no rows: a sentence, or an `EmptyState size="sm"`. |
+| `colSpan` | `number` |  | Columns the loading and empty rows span. |
+
+Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`.
+
 ### TuiIcon
 
 TuiIcon is the system's only icon component: 52 names drawn as 1-bit pixel art on a 7x7 grid.
