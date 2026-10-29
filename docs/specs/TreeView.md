@@ -146,6 +146,7 @@ TreeView cannot tell "there are no nodes" from "the nodes have not arrived yet",
 | Collapsed | Yes | Yes |  |
 | Without icons | Yes | Yes |  |
 | Controlled | Yes | Yes |  |
+| Disabled node | Yes | Yes | `DisabledNode`: a disabled file in an open branch and at the root |
 | Loading | Yes | Yes | `Loading` (3 Skeleton rows, `aria-busy`) |
 | Empty | Yes | Yes | `Empty` (composes `EmptyState size="sm"`) |
 

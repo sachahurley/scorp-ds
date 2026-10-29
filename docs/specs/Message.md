@@ -13,7 +13,7 @@
 | File | `packages/components/src/components/Message.tsx` |
 | Story | `Components/Chat/Message` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `f9abebafb8d0a867` |
 
@@ -244,6 +244,7 @@ None. The cursor is a text character, so its size comes from the type.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
 | v1 | 2026-10-28 | added | Built to the reviewed spec. Changes from the proposal: actions are full strength rather than dimmed until hover; the cursor is a block character rather than a sized box |
 | v1 | 2026-10-29 | changed | Rebuilt on current main (takeover of #99): the streaming cursor is steady instead of blinking on `--duration-slower` (WCAG 2.2.2, decision 0025), so `Streaming` gets a visual frame; Retry uses `iconLeft="Repeat"` and `type="button"` |

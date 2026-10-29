@@ -89,3 +89,14 @@ The old name keeps working as a deprecated alias.
   are what move callers off the old one.
 - The audit's "naming" score cannot reach 3 until the aliases are removed. That is the
   last step, and it depends on the consumers.
+
+## Amendment 2026-10-29: `destructive` is a treatment
+
+The first monthly audit (issue #136) asked whether Button's and Dropdown item's
+`variant="destructive"` overlaps with `tone`. It does not: a destructive action is a
+distinct treatment (its own fill, hover and focus ring, decided per action), not a colour
+role applied to otherwise identical content, so it stays on `variant`. `tone` remains the
+semantic colour of content that reports state (Alert, Badge, Toast, ProgressBar, Meter).
+A state that is neither a treatment nor a colour role, such as Window's active pane, is a
+boolean prop (`active`), not a `variant` value.
+

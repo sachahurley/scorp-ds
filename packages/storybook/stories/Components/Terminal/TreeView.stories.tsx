@@ -62,6 +62,28 @@ export const Default: Story = {
   },
 };
 
+/**
+ * `disabled` on a node: it stays in the tree and in the arrow-key order (so the
+ * structure reads the same), carries `aria-disabled`, and cannot be selected or
+ * activated. Use it for files the user can see but not open.
+ */
+export const DisabledNode: Story = {
+  name: 'Disabled node',
+  args: {
+    nodes: [
+      { id: 'src', label: 'src', icon: 'Archive', children: [
+        { id: 'app', label: 'App.tsx', icon: 'FileText' },
+        { id: 'env', label: '.env.local', icon: 'Lock', disabled: true },
+      ] },
+      { id: 'lockfile', label: 'package-lock.json', icon: 'Lock', disabled: true },
+    ],
+    'aria-label': 'Files',
+    defaultExpanded: ['src'],
+    defaultSelected: 'app',
+    className: 'w-72',
+  },
+};
+
 /** All collapsed, nothing selected: Tab in, then use the arrow keys. */
 export const Collapsed: Story = {
   args: { nodes: files, 'aria-label': 'Files', className: 'w-72' },

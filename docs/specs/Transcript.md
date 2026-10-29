@@ -13,7 +13,7 @@
 | File | `packages/components/src/components/Transcript.tsx` |
 | Story | `Components/Chat/Transcript` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `84ad744a629e1f7d` |
 
@@ -217,6 +217,7 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
 | v1 | 2026-10-28 | added | Built to the reviewed spec. The content column is always rendered so streaming growth is followed from the first turn |
 | v1 | 2026-10-29 | changed | Rebuilt on current main (takeover of #99): the name is required by type (`aria-label` or `aria-labelledby`, no default "Conversation"); the Jump button takes its icon by name; a still `Responding` story covers the busy state |
