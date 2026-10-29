@@ -1488,19 +1488,20 @@
               "type": "ControlSizeProp | \"xl\"",
               "required": false,
               "values": [
+                "\"xl\"",
                 "\"sm\"",
                 "\"md\"",
                 "\"lg\"",
                 "\"small\"",
                 "\"medium\"",
-                "\"large\"",
-                "\"xl\""
+                "\"large\""
               ],
               "deprecatedValues": [
                 "\"small\"",
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. Legacy names are deprecated aliases."
             },
             {
@@ -1530,7 +1531,7 @@
           ]
         }
       },
-      "apiHash": "eadf295923c7420c"
+      "apiHash": "d50427a1ea5c8199"
     },
     "Badge": {
       "layer": "component",
@@ -1556,11 +1557,11 @@
               "required": false,
               "values": [
                 "\"default\"",
+                "\"primary\"",
                 "\"success\"",
                 "\"warning\"",
                 "\"error\"",
                 "\"info\"",
-                "\"primary\"",
                 "\"bone\""
               ],
               "default": "\"default\"",
@@ -1583,6 +1584,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Badge height: sm 20px, md 24px (default), lg 28px. Legacy names are deprecated aliases."
             },
             {
@@ -1633,7 +1635,7 @@
           ]
         }
       },
-      "apiHash": "6d35ae443bcb4fd8"
+      "apiHash": "c00a3c829d38c342"
     },
     "BottomSheet": {
       "layer": "component",
@@ -1818,13 +1820,13 @@
               "type": "\"primary\" | \"secondary\" | \"ghost\" | \"link\" | \"outline\" | \"destructive\" | \"icon\"",
               "required": false,
               "values": [
-                "\"icon\"",
                 "\"primary\"",
-                "\"link\"",
                 "\"secondary\"",
                 "\"ghost\"",
+                "\"link\"",
                 "\"outline\"",
-                "\"destructive\""
+                "\"destructive\"",
+                "\"icon\""
               ],
               "default": "\"primary\"",
               "description": "Visual style (default: \"primary\"). One primary per view; \"link\" is an action styled as text (navigate with `Link` instead); \"icon\" is the square icon plate, pair it with `aria-label`."
@@ -1848,6 +1850,7 @@
                 "\"large\"",
                 "\"icon\""
               ],
+              "default": "\"md\"",
               "description": "Height: sm 32px, md 40px (default), lg 48px, from the control-height tokens. Legacy small/medium/large still work (deprecated). Icon-only buttons are squared automatically. `\"icon\"` is deprecated: use \"md\"."
             },
             {
@@ -1903,7 +1906,7 @@
           ]
         }
       },
-      "apiHash": "385a8ab4674965d0"
+      "apiHash": "d6cf34ea17b7f67f"
     },
     "Card": {
       "layer": "component",
@@ -2229,6 +2232,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Box size. The tap target is 44×44px at every size."
             },
             {
@@ -2241,6 +2245,7 @@
               "name": "error",
               "type": "boolean",
               "required": false,
+              "default": "false",
               "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
             },
             {
@@ -2277,7 +2282,7 @@
           ]
         }
       },
-      "apiHash": "3ae4eff4d9740159"
+      "apiHash": "e7d0557036a9f901"
     },
     "Combobox": {
       "layer": "component",
@@ -2392,6 +2397,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Field height: sm 32px, md 40px (default), lg 48px."
             },
             {
@@ -2410,6 +2416,7 @@
               "name": "error",
               "type": "boolean",
               "required": false,
+              "default": "false",
               "description": "Error styling without a message. Prefer `errorMessage`."
             },
             {
@@ -2441,7 +2448,7 @@
           ]
         }
       },
-      "apiHash": "733e141acedc3e02"
+      "apiHash": "e136982a2a63a51f"
     },
     "DescriptionList": {
       "layer": "component",
@@ -2563,19 +2570,20 @@
               "type": "\"none\" | ControlSizeProp",
               "required": false,
               "values": [
+                "\"none\"",
                 "\"sm\"",
                 "\"md\"",
                 "\"lg\"",
                 "\"small\"",
                 "\"medium\"",
-                "\"large\"",
-                "\"none\""
+                "\"large\""
               ],
               "deprecatedValues": [
                 "\"small\"",
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Margin around the rule: none, sm 4px, md 16px (default), lg 32px. Legacy names are deprecated aliases."
             },
             {
@@ -2588,7 +2596,7 @@
           ]
         }
       },
-      "apiHash": "3c8607a6b16dac57"
+      "apiHash": "88e78dadd9bd1529"
     },
     "Dropdown": {
       "layer": "component",
@@ -2704,12 +2712,13 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Trigger height, matching Button/Input: sm, md (default), lg. Legacy names are deprecated aliases."
             }
           ]
         }
       },
-      "apiHash": "6be44f39032c6368"
+      "apiHash": "6c28f8e39e4de6e7"
     },
     "EmptyState": {
       "layer": "component",
@@ -2863,11 +2872,12 @@
               "type": "\"h2\" | \"h3\" | \"h4\" | \"p\"",
               "required": false,
               "values": [
-                "\"p\"",
                 "\"h2\"",
                 "\"h3\"",
-                "\"h4\""
+                "\"h4\"",
+                "\"p\""
               ],
+              "default": "\"h2\"",
               "description": "Heading element for the title, to fit the page outline (default \"h2\")."
             },
             {
@@ -2885,7 +2895,7 @@
           ]
         }
       },
-      "apiHash": "23f9cf61e9229c9d"
+      "apiHash": "5f1518e54506f78f"
     },
     "Input": {
       "layer": "component",
@@ -2922,6 +2932,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Field height: sm 32px, md 40px (default), lg 48px. Legacy small/medium/large are deprecated aliases."
             },
             {
@@ -2939,6 +2950,7 @@
               "name": "error",
               "type": "boolean",
               "required": false,
+              "default": "false",
               "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
             },
             {
@@ -2968,7 +2980,7 @@
           ]
         }
       },
-      "apiHash": "73d10aae95f304b6"
+      "apiHash": "7e500be69eee7212"
     },
     "Kbd": {
       "layer": "component",
@@ -3014,6 +3026,7 @@
                 "\"small\"",
                 "\"medium\""
               ],
+              "default": "\"sm\"",
               "description": "Key size: sm 20px (default) or md 24px."
             },
             {
@@ -3032,7 +3045,7 @@
           ]
         }
       },
-      "apiHash": "bab88c60625be4c4"
+      "apiHash": "6658e73daaac639a"
     },
     "Link": {
       "layer": "component",
@@ -3450,6 +3463,7 @@
                 "\"small\"",
                 "\"medium\""
               ],
+              "default": "\"md\"",
               "description": "Block height: sm 8px, md 12px (default)."
             },
             {
@@ -3461,7 +3475,7 @@
           ]
         }
       },
-      "apiHash": "858f7f89f15a9657"
+      "apiHash": "aa2b13b69dd9e18f"
     },
     "Modal": {
       "layer": "component",
@@ -3612,6 +3626,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Plate height from the Button scale: sm 32px, md 40px (default), lg 48px. Hit areas stay 44px or more."
             },
             {
@@ -3657,7 +3672,7 @@
           ]
         }
       },
-      "apiHash": "82ed47bbc0e12267"
+      "apiHash": "e940d7d5c3844f0a"
     },
     "Popover": {
       "layer": "component",
@@ -3927,6 +3942,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Track thickness: sm, md (default), lg."
             },
             {
@@ -3934,10 +3950,10 @@
               "type": "\"primary\" | \"success\" | \"warning\" | \"error\"",
               "required": false,
               "values": [
+                "\"primary\"",
                 "\"success\"",
                 "\"warning\"",
-                "\"error\"",
-                "\"primary\""
+                "\"error\""
               ],
               "default": "\"primary\"",
               "description": "Fill color by meaning: primary (default accent), success, warning, error."
@@ -3958,7 +3974,7 @@
           ]
         }
       },
-      "apiHash": "747be16c3ce447e5"
+      "apiHash": "24ad2e6f620a8d4b"
     },
     "Radio": {
       "layer": "component",
@@ -3995,6 +4011,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Box size: sm 16px, md 20px (default), lg 24px. The tap target is 44×44px at every size."
             },
             {
@@ -4007,6 +4024,7 @@
               "name": "error",
               "type": "boolean",
               "required": false,
+              "default": "false",
               "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
             },
             {
@@ -4036,7 +4054,7 @@
           ]
         }
       },
-      "apiHash": "2754314293d0bc49"
+      "apiHash": "1644dd9933fcf583"
     },
     "Select": {
       "layer": "component",
@@ -4079,12 +4097,14 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Trigger height: sm 32px, md 40px (default), lg 48px. Legacy names are deprecated aliases."
             },
             {
               "name": "error",
               "type": "boolean",
               "required": false,
+              "default": "false",
               "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
             },
             {
@@ -4108,7 +4128,7 @@
           ]
         }
       },
-      "apiHash": "4c1f81383bef8d83"
+      "apiHash": "65dfd5b76166695c"
     },
     "SideNav": {
       "layer": "component",
@@ -4356,8 +4376,8 @@
               "type": "\"text\" | \"rect\" | \"avatar\"",
               "required": false,
               "values": [
-                "\"rect\"",
                 "\"text\"",
+                "\"rect\"",
                 "\"avatar\""
               ],
               "default": "\"text\"",
@@ -4387,6 +4407,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Avatar square size: sm 32px, md 40px (default), lg 48px (control heights)."
             },
             {
@@ -4405,7 +4426,7 @@
           ]
         }
       },
-      "apiHash": "fe3568c224805fc7"
+      "apiHash": "21b3906bc6330462"
     },
     "Slider": {
       "layer": "component",
@@ -4477,6 +4498,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Box size: sm 12px (inline, 32px controls), md 16px (default), lg 24px (48px controls, empty states)."
             },
             {
@@ -4495,7 +4517,7 @@
           ]
         }
       },
-      "apiHash": "6564574098b1dc3c"
+      "apiHash": "58a1eff407e1af12"
     },
     "StatusLine": {
       "layer": "component",
@@ -4718,6 +4740,7 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Track size. The tap target is at least 44px tall at every size."
             },
             {
@@ -4755,7 +4778,7 @@
           ]
         }
       },
-      "apiHash": "0ac94ec021398232"
+      "apiHash": "931d4eae1eb5c0fb"
     },
     "Table": {
       "layer": "component",
@@ -5097,12 +5120,14 @@
                 "\"medium\"",
                 "\"large\""
               ],
+              "default": "\"md\"",
               "description": "Minimum height and padding: sm, md (default), lg, matching Input. Legacy names are deprecated aliases."
             },
             {
               "name": "error",
               "type": "boolean",
               "required": false,
+              "default": "false",
               "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
             },
             {
@@ -5132,7 +5157,7 @@
           ]
         }
       },
-      "apiHash": "7d0d2652cc4ff954"
+      "apiHash": "e6c807a63c893a0d"
     },
     "ThemeToggle": {
       "layer": "component",
@@ -5851,14 +5876,15 @@
               "type": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" | \"span\"",
               "required": false,
               "values": [
-                "\"span\"",
                 "\"h1\"",
                 "\"h2\"",
                 "\"h3\"",
                 "\"h4\"",
                 "\"h5\"",
-                "\"h6\""
+                "\"h6\"",
+                "\"span\""
               ],
+              "default": "\"h2\"",
               "description": "Heading element used for the title (default \"h2\"). Match your page outline."
             },
             {
@@ -5889,7 +5915,7 @@
           ]
         }
       },
-      "apiHash": "6ccfaf15396adcde"
+      "apiHash": "07bec1ad59b8a9ac"
     },
     "Box": {
       "layer": "primitive",
@@ -6675,8 +6701,8 @@
               "type": "\"vertical\" | \"horizontal\"",
               "required": false,
               "values": [
-                "\"horizontal\"",
-                "\"vertical\""
+                "\"vertical\"",
+                "\"horizontal\""
               ],
               "default": "\"vertical\"",
               "description": "Default vertical stack; horizontal for toolbars / button groups."
@@ -6689,7 +6715,7 @@
           ]
         }
       },
-      "apiHash": "b81c1ffc36d2e15e"
+      "apiHash": "9b4f07e14c450d5e"
     },
     "VisuallyHidden": {
       "layer": "primitive",

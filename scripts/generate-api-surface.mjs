@@ -164,6 +164,12 @@ function literalValues(type) {
   return out.length ? out : null;
 }
 
+/** Where a literal first appears in a type's source text; aliases expanded later sort after. */
+function rank(text, literal) {
+  const i = text.indexOf(literal);
+  return i < 0 ? Number.MAX_SAFE_INTEGER : i;
+}
+
 /** The interface or type alias a React DOM prop was declared on, e.g. `ButtonHTMLAttributes`. */
 function inheritedFrom(decl) {
   let n = decl.parent;
@@ -180,9 +186,10 @@ function defaultsFromComponent(sourceFile) {
   const visit = (node) => {
     if (ts.isParameter(node) && node.name && ts.isObjectBindingPattern(node.name)) {
       for (const el of node.name.elements) {
-        if (el.initializer && ts.isIdentifier(el.name)) {
-          defaults[el.name.text] = norm(el.initializer.getText());
-        }
+        if (!el.initializer) continue;
+        // `{ size: sizeProp = "md" }` renames the binding; the prop is the property name.
+        const prop = el.propertyName ?? el.name;
+        if (ts.isIdentifier(prop)) defaults[prop.text] = norm(el.initializer.getText());
       }
     }
     ts.forEachChild(node, visit);
@@ -213,7 +220,13 @@ function propsOf(declNode, defaults) {
       required: !(symbol.flags & ts.SymbolFlags.Optional),
     };
     const values = literalValues(propType);
-    if (values) entry.values = values;
+    if (values) {
+      // The checker orders union members by type id; a reader expects the source
+      // order (`"primary" | "secondary" | …`), so sort by where each first appears.
+      const text = typeNode ? typeNode.getText() : "";
+      values.sort((a, b) => rank(text, a) - rank(text, b));
+      entry.values = values;
+    }
     if (values && typeNode) {
       const deprecatedLiterals = new Set();
       for (const alias of reachableAliases(typeNode)) {
