@@ -2918,14 +2918,14 @@
       "props": {
         "FieldsetGap": {
           "union": [
+            "\"none\"",
+            "\"1\"",
+            "\"2\"",
             "\"3\"",
             "\"4\"",
             "\"5\"",
             "\"6\"",
-            "\"8\"",
-            "\"none\"",
-            "\"1\"",
-            "\"2\""
+            "\"8\""
           ]
         },
         "FieldsetVariant": {
@@ -2970,14 +2970,14 @@
               "type": "FieldsetGap",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "default": "\"2\"",
               "description": "Space between the children, on the Stack gap scale: `2` (default) between the options of one choice group, `4` for a group mixing Switch rows and Checkboxes."
@@ -3027,7 +3027,7 @@
           ]
         }
       },
-      "apiHash": "0bc76f6155d4b5ef"
+      "apiHash": "5c3759e5fc326e7f"
     },
     "Input": {
       "layer": "component",
@@ -3492,12 +3492,12 @@
       "props": {
         "MeterTone": {
           "union": [
+            "\"primary\"",
             "\"neutral\"",
             "\"info\"",
             "\"success\"",
             "\"warning\"",
-            "\"error\"",
-            "\"primary\""
+            "\"error\""
           ]
         },
         "MeterProps": {
@@ -3557,12 +3557,12 @@
               "type": "MeterTone",
               "required": false,
               "values": [
+                "\"primary\"",
                 "\"neutral\"",
                 "\"info\"",
                 "\"success\"",
                 "\"warning\"",
-                "\"error\"",
-                "\"primary\""
+                "\"error\""
               ],
               "description": "Force a tone instead of deriving it from the thresholds."
             },
@@ -3593,7 +3593,7 @@
           ]
         }
       },
-      "apiHash": "f800093b823cf880"
+      "apiHash": "6017f90f30e10400"
     },
     "Modal": {
       "layer": "component",
@@ -4024,12 +4024,12 @@
       "props": {
         "ProgressBarTone": {
           "union": [
+            "\"primary\"",
             "\"neutral\"",
             "\"info\"",
             "\"success\"",
             "\"warning\"",
-            "\"error\"",
-            "\"primary\""
+            "\"error\""
           ]
         },
         "ProgressBarProps": {
@@ -4084,12 +4084,12 @@
               "type": "ProgressBarTone",
               "required": false,
               "values": [
+                "\"primary\"",
                 "\"neutral\"",
                 "\"info\"",
                 "\"success\"",
                 "\"warning\"",
-                "\"error\"",
-                "\"primary\""
+                "\"error\""
               ],
               "default": "\"primary\"",
               "description": "Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error."
@@ -4110,7 +4110,7 @@
           ]
         }
       },
-      "apiHash": "7153a12f4c4c0039"
+      "apiHash": "e2b32a77113b77e5"
     },
     "Radio": {
       "layer": "component",
@@ -4612,11 +4612,11 @@
         "StatusLineTone": {
           "union": [
             "\"neutral\"",
-            "\"info\"",
+            "\"primary\"",
             "\"success\"",
             "\"warning\"",
             "\"error\"",
-            "\"primary\""
+            "\"info\""
           ]
         },
         "StatusLineProps": {
@@ -4680,11 +4680,11 @@
               "required": false,
               "values": [
                 "\"neutral\"",
-                "\"info\"",
+                "\"primary\"",
                 "\"success\"",
                 "\"warning\"",
                 "\"error\"",
-                "\"primary\""
+                "\"info\""
               ],
               "default": "\"neutral\"",
               "description": "Semantic tone (default \"neutral\")."
@@ -4698,7 +4698,7 @@
           ]
         }
       },
-      "apiHash": "eaa56a0d335e029e"
+      "apiHash": "c64e496e7d4260a4"
     },
     "Switch": {
       "layer": "component",
@@ -6013,14 +6013,14 @@
       "props": {
         "BoxSpace": {
           "union": [
+            "\"none\"",
+            "\"1\"",
+            "\"2\"",
             "\"3\"",
             "\"4\"",
             "\"5\"",
             "\"6\"",
-            "\"8\"",
-            "\"none\"",
-            "\"1\"",
-            "\"2\""
+            "\"8\""
           ]
         },
         "BoxBackground": {
@@ -6069,14 +6069,14 @@
               "type": "BoxSpace",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "description": "Padding on all four sides, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px. Omit it for a flush Box."
             },
@@ -6085,14 +6085,14 @@
               "type": "BoxSpace",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "description": "Left/right inset when it differs from the vertical one; replaces `padding` on that axis."
             },
@@ -6101,14 +6101,14 @@
               "type": "BoxSpace",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "description": "Top/bottom inset when it differs from the horizontal one; replaces `padding` on that axis."
             },
@@ -6174,7 +6174,7 @@
           ]
         }
       },
-      "apiHash": "cd1c6515f0ab67b2"
+      "apiHash": "5940dd1b0205a95f"
     },
     "Center": {
       "layer": "primitive",
@@ -6202,13 +6202,13 @@
       "props": {
         "CenterMaxWidth": {
           "union": [
+            "\"xs\"",
             "\"sm\"",
             "\"md\"",
             "\"lg\"",
-            "\"none\"",
             "\"xl\"",
-            "\"xs\"",
-            "\"2xl\""
+            "\"2xl\"",
+            "\"none\""
           ]
         },
         "CenterElement": {
@@ -6233,13 +6233,13 @@
               "type": "CenterMaxWidth",
               "required": false,
               "values": [
+                "\"xs\"",
                 "\"sm\"",
                 "\"md\"",
                 "\"lg\"",
-                "\"none\"",
                 "\"xl\"",
-                "\"xs\"",
-                "\"2xl\""
+                "\"2xl\"",
+                "\"none\""
               ],
               "default": "\"md\"",
               "description": "Width of the centered column: `xs` 320px, `sm` 384px, `md` 448px (default, about the width of a sign-in card), `lg` 512px, `xl` 576px, `2xl` 672px, `none` to center a block that sizes itself."
@@ -6286,7 +6286,7 @@
           ]
         }
       },
-      "apiHash": "8bbb325e372ec7dc"
+      "apiHash": "9d857eaff481de5b"
     },
     "Container": {
       "layer": "primitive",
@@ -6317,20 +6317,20 @@
             "\"sm\"",
             "\"md\"",
             "\"lg\"",
-            "\"full\"",
-            "\"xl\""
+            "\"xl\"",
+            "\"full\""
           ]
         },
         "ContainerElement": {
           "union": [
             "\"div\"",
+            "\"main\"",
             "\"section\"",
             "\"article\"",
-            "\"aside\"",
             "\"header\"",
             "\"footer\"",
-            "\"main\"",
-            "\"nav\""
+            "\"nav\"",
+            "\"aside\""
           ]
         },
         "ContainerProps": {
@@ -6349,8 +6349,8 @@
                 "\"sm\"",
                 "\"md\"",
                 "\"lg\"",
-                "\"full\"",
-                "\"xl\""
+                "\"xl\"",
+                "\"full\""
               ],
               "default": "\"lg\"",
               "description": "Where the content stops growing: `sm` 640px, `md` 768px, `lg` 1024px (default, the reading width for most pages), `xl` 1280px, `full` no limit. The values track the breakpoint scale, so a container never straddles one."
@@ -6368,13 +6368,13 @@
               "required": false,
               "values": [
                 "\"div\"",
+                "\"main\"",
                 "\"section\"",
                 "\"article\"",
-                "\"aside\"",
                 "\"header\"",
                 "\"footer\"",
-                "\"main\"",
-                "\"nav\""
+                "\"nav\"",
+                "\"aside\""
               ],
               "default": "\"div\"",
               "description": "Element to render, so the page wrapper can be the real landmark (`main`, `header`, `footer`, `nav`) instead of a `div`."
@@ -6393,7 +6393,7 @@
           ]
         }
       },
-      "apiHash": "04b60e913280588b"
+      "apiHash": "a05fc82e0134604f"
     },
     "Grid": {
       "layer": "primitive",
@@ -6433,14 +6433,14 @@
       "props": {
         "GridGap": {
           "union": [
+            "\"none\"",
+            "\"1\"",
+            "\"2\"",
             "\"3\"",
             "\"4\"",
             "\"5\"",
             "\"6\"",
-            "\"8\"",
-            "\"none\"",
-            "\"1\"",
-            "\"2\""
+            "\"8\""
           ]
         },
         "GridColumnCount": {
@@ -6457,10 +6457,10 @@
         },
         "GridBreakpoint": {
           "union": [
+            "\"base\"",
             "\"sm\"",
             "\"md\"",
             "\"lg\"",
-            "\"base\"",
             "\"xl\""
           ]
         },
@@ -6492,14 +6492,14 @@
               "type": "GridGap",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "default": "\"4\"",
               "description": "Space between all tracks, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px."
@@ -6509,14 +6509,14 @@
               "type": "GridGap",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "description": "Space between rows when it differs from `gap`, for example a tight grid with airy rows."
             },
@@ -6525,14 +6525,14 @@
               "type": "GridGap",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "description": "Space between columns when it differs from `gap`."
             },
@@ -6563,7 +6563,7 @@
           ]
         }
       },
-      "apiHash": "902ca38478fe5b70"
+      "apiHash": "1a0e15f2c40f6b12"
     },
     "Inline": {
       "layer": "primitive",
@@ -6595,14 +6595,14 @@
       "props": {
         "InlineGap": {
           "union": [
+            "\"none\"",
+            "\"1\"",
+            "\"2\"",
             "\"3\"",
             "\"4\"",
             "\"5\"",
             "\"6\"",
-            "\"8\"",
-            "\"none\"",
-            "\"1\"",
-            "\"2\""
+            "\"8\""
           ]
         },
         "InlineAlign": {
@@ -6634,14 +6634,14 @@
               "type": "InlineGap",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "default": "\"2\"",
               "description": "Space between items, used for both the row gap and the wrap gap, from the spacing scale: `none` 0, `1` 4px, `2` 8px (default), `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px."
@@ -6693,7 +6693,7 @@
           ]
         }
       },
-      "apiHash": "5f9687e2b7cab660"
+      "apiHash": "72db51066940d3c4"
     },
     "Stack": {
       "layer": "primitive",
@@ -6737,14 +6737,14 @@
       "props": {
         "StackGap": {
           "union": [
+            "\"none\"",
+            "\"1\"",
+            "\"2\"",
             "\"3\"",
             "\"4\"",
             "\"5\"",
             "\"6\"",
-            "\"8\"",
-            "\"none\"",
-            "\"1\"",
-            "\"2\""
+            "\"8\""
           ]
         },
         "StackAxisValue": {
@@ -6755,10 +6755,10 @@
         },
         "StackBreakpoint": {
           "union": [
+            "\"base\"",
             "\"sm\"",
             "\"md\"",
             "\"lg\"",
-            "\"base\"",
             "\"xl\""
           ]
         },
@@ -6783,14 +6783,14 @@
               "type": "StackGap",
               "required": false,
               "values": [
+                "\"none\"",
+                "\"1\"",
+                "\"2\"",
                 "\"3\"",
                 "\"4\"",
                 "\"5\"",
                 "\"6\"",
-                "\"8\"",
-                "\"none\"",
-                "\"1\"",
-                "\"2\""
+                "\"8\""
               ],
               "default": "\"4\"",
               "description": "Maps to the spacing scale (`gap-*` utilities): `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px."
@@ -6828,7 +6828,7 @@
           ]
         }
       },
-      "apiHash": "9b0d9abeeded9b1f"
+      "apiHash": "6df0b9f5d6f4eeb7"
     },
     "VisuallyHidden": {
       "layer": "primitive",
@@ -6852,12 +6852,12 @@
       "props": {
         "VisuallyHiddenElement": {
           "union": [
-            "\"div\"",
-            "\"li\"",
             "\"span\"",
+            "\"div\"",
             "\"p\"",
             "\"label\"",
-            "\"legend\""
+            "\"legend\"",
+            "\"li\""
           ]
         },
         "VisuallyHiddenProps": {
@@ -6880,12 +6880,12 @@
               "type": "VisuallyHiddenElement",
               "required": false,
               "values": [
-                "\"div\"",
-                "\"li\"",
                 "\"span\"",
+                "\"div\"",
                 "\"p\"",
                 "\"label\"",
-                "\"legend\""
+                "\"legend\"",
+                "\"li\""
               ],
               "default": "\"span\"",
               "description": "Element to render, when the hidden text is a `label` for a control or a `li` inside a list rather than a generic `span`."
@@ -6910,7 +6910,7 @@
           ]
         }
       },
-      "apiHash": "3f8b3582fd0eb79a"
+      "apiHash": "ff9dbb08f656d666"
     }
   }
 }

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, userEvent } from '@storybook/test';
-import { Radio } from '@scorp-ds/components';
+import { Fieldset, Radio } from '@scorp-ds/components';
 
 const meta: Meta<typeof Radio> = {
   title: 'Components/Inputs/Radio',
@@ -20,14 +20,11 @@ type Story = StoryObj<typeof Radio>;
 export const Group: Story = {
   name: 'Radio group',
   render: () => (
-    <fieldset className="flex flex-col gap-2 border-0 p-0">
-      <legend className="mb-2 font-mono text-sm text-secondary-700 dark:text-secondary-300">
-        Pick one
-      </legend>
+    <Fieldset legend="Pick one" variant="field" role="radiogroup" gap="2">
       <Radio name="plan" value="free" label="Free" defaultChecked onChange={fn()} />
       <Radio name="plan" value="pro" label="Pro" onChange={fn()} />
       <Radio name="plan" value="team" label="Team" onChange={fn()} />
-    </fieldset>
+    </Fieldset>
   ),
 };
 
@@ -38,10 +35,7 @@ export const Group: Story = {
 export const WithMessages: Story = {
   name: 'Helper and error text',
   render: () => (
-    <fieldset className="flex flex-col gap-3 border-0 p-0">
-      <legend className="mb-2 font-mono text-sm text-secondary-700 dark:text-secondary-300">
-        Billing
-      </legend>
+    <Fieldset legend="Billing" variant="field" role="radiogroup" gap="3">
       <Radio name="billing" value="monthly" label="Monthly" helperText="Cancel any time." onChange={fn()} />
       <Radio
         name="billing"
@@ -50,7 +44,7 @@ export const WithMessages: Story = {
         errorMessage="Not available on the free plan."
         onChange={fn()}
       />
-    </fieldset>
+    </Fieldset>
   ),
 };
 

@@ -59,4 +59,11 @@ describe('api-surface.json', () => {
     expect(names).toEqual(expect.arrayContaining(['ThemeProvider', 'cn', 'ControlSize', 'CardLayout']));
     expect(manifest.exports.find((e) => e.name === 'ThemeProvider')?.kind).toBe('component');
   });
+
+  it('lists values in source order, not the type checker\'s creation order', () => {
+    // keyof typeof gapClass: the object's key order.
+    expect(manifest.components.Stack.props.StackGap.union?.slice(0, 3)).toEqual(['"none"', '"1"', '"2"']);
+    // A union written inline keeps its written order.
+    expect(prop('Badge', 'BadgeProps', 'size')?.values).toEqual(['"sm"', '"md"', '"lg"']);
+  });
 });

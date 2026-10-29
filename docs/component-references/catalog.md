@@ -423,7 +423,7 @@ Status: draft · Spec: [`docs/specs/ProgressBar.md`](../../docs/specs/ProgressBa
 | `showLabel` | `boolean` | `true` | Show the label visually (default true). |
 | `showValue` | `boolean` | `true` | Show the percentage next to the label for determinate bars (default true). |
 | `size` | `"sm"` `"md"` `"lg"` | `"md"` | Track thickness: sm, md (default), lg. |
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` | `"primary"` | Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error. |
+| `tone` | `"primary"` `"neutral"` `"info"` `"success"` `"warning"` `"error"` | `"primary"` | Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error. |
 | `segments` | `number` | `20` | Number of blocks across the track (default 20, so each block is 5%). |
 | `className` | `string` |  | Extra classes for the root (width). |
 
@@ -613,7 +613,7 @@ Status: draft · Spec: [`docs/specs/Fieldset.md`](../../docs/specs/Fieldset.md) 
 | `children` (required) | `ReactNode` |  | The controls in the group: Radios sharing one `name`, Checkboxes, Switches or fields. |
 | `description` | `ReactNode` |  | One line under the legend that explains the choice. |
 | `variant` | `"eyebrow"` `"field"` | `"eyebrow"` | Legend voice. `eyebrow` (default, `text-xs` uppercase) titles a group inside a settings card; `field` matches the Input label and suits a group that asks one question in a form. |
-| `gap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` | `"2"` | Space between the children, on the Stack gap scale: `2` (default) between the options of one choice group, `4` for a group mixing Switch rows and Checkboxes. |
+| `gap` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` | `"2"` | Space between the children, on the Stack gap scale: `2` (default) between the options of one choice group, `4` for a group mixing Switch rows and Checkboxes. |
 | `disabled` | `boolean` | `false` | Disables every control in the group natively (the browser disables each descendant input and button) and dims the controls but not the legend, as Input dims its field but not its label. |
 | `error` | `boolean` | `false` | Group-level error without a message. |
 | `errorMessage` | `ReactNode` |  | Group-level validation message under the controls ("Pick a plan"), linked with `aria-describedby`. |
@@ -776,9 +776,9 @@ Status: draft · Spec: [`docs/specs/Box.md`](../../docs/specs/Box.md) · Story: 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `children` | `ReactNode` |  | Content to sit inside the padding and on top of the background. |
-| `padding` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` |  | Padding on all four sides, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px. |
-| `paddingX` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` |  | Left/right inset when it differs from the vertical one; replaces `padding` on that axis. |
-| `paddingY` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` |  | Top/bottom inset when it differs from the horizontal one; replaces `padding` on that axis. |
+| `padding` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` |  | Padding on all four sides, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px. |
+| `paddingX` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` |  | Left/right inset when it differs from the vertical one; replaces `padding` on that axis. |
+| `paddingY` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` |  | Top/bottom inset when it differs from the horizontal one; replaces `padding` on that axis. |
 | `background` | `"none"` `"page"` `"container"` `"card"` `"subtle"` `"muted"` `"raised"` `"inverse"` | `"none"` | Semantic surface to paint behind the content. `card` sits on top of `container`, `container` sits on `page`; `inverse` also flips the text color so content stays readable. |
 | `border` | `"none"` `"hairline"` | `"none"` | `hairline` wraps the content in the plate ring (outer stroke layer plus a 1px-inset fill layer) because `clip-path` would slice a real CSS border. |
 | `as` | `"div"` `"section"` `"article"` `"aside"` `"header"` `"footer"` `"main"` `"nav"` `"figure"` `"li"` `"span"` | `"div"` | Element to render when the Box is a landmark or a list item rather than a generic grouping (`section`, `nav`, `li`, ...). |
@@ -801,7 +801,7 @@ Status: draft · Spec: [`docs/specs/Center.md`](../../docs/specs/Center.md) · S
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `children` (required) | `ReactNode` |  | Content to center; it keeps its own layout inside the column. |
-| `maxWidth` | `"sm"` `"md"` `"lg"` `"none"` `"xl"` `"xs"` `"2xl"` | `"md"` | Width of the centered column: `xs` 320px, `sm` 384px, `md` 448px (default, about the width of a sign-in card), `lg` 512px, `xl` 576px, `2xl` 672px, `none` to center a block that sizes itself. |
+| `maxWidth` | `"xs"` `"sm"` `"md"` `"lg"` `"xl"` `"2xl"` `"none"` | `"md"` | Width of the centered column: `xs` 320px, `sm` 384px, `md` 448px (default, about the width of a sign-in card), `lg` 512px, `xl` 576px, `2xl` 672px, `none` to center a block that sizes itself. |
 | `andText` | `boolean` | `false` | Whether to center the text as well as the box. |
 | `fullHeight` | `boolean` | `false` | Whether to also center vertically in the viewport, for a splash, sign-in or error screen that owns the whole page. |
 | `as` | `"div"` `"section"` `"article"` `"main"` `"figure"` | `"div"` | Element to render, so a centered block can be a `section` or the page `main` instead of a `div`. |
@@ -824,9 +824,9 @@ Status: draft · Spec: [`docs/specs/Container.md`](../../docs/specs/Container.md
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `children` (required) | `ReactNode` |  | Page content; centered inside the max width and inset by the gutters. |
-| `size` | `"sm"` `"md"` `"lg"` `"full"` `"xl"` | `"lg"` | Where the content stops growing: `sm` 640px, `md` 768px, `lg` 1024px (default, the reading width for most pages), `xl` 1280px, `full` no limit. |
+| `size` | `"sm"` `"md"` `"lg"` `"xl"` `"full"` | `"lg"` | Where the content stops growing: `sm` 640px, `md` 768px, `lg` 1024px (default, the reading width for most pages), `xl` 1280px, `full` no limit. |
 | `gutter` | `boolean` | `true` | Whether to inset the content from the viewport edges (20px, 40px from `lg` up). |
-| `as` | `"div"` `"section"` `"article"` `"aside"` `"header"` `"footer"` `"main"` `"nav"` | `"div"` | Element to render, so the page wrapper can be the real landmark (`main`, `header`, `footer`, `nav`) instead of a `div`. |
+| `as` | `"div"` `"main"` `"section"` `"article"` `"header"` `"footer"` `"nav"` `"aside"` | `"div"` | Element to render, so the page wrapper can be the real landmark (`main`, `header`, `footer`, `nav`) instead of a `div`. |
 | `className` | `string` |  | Extra classes (vertical padding, background), merged with `cn()` so they win. |
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`.
@@ -847,9 +847,9 @@ Status: draft · Spec: [`docs/specs/Grid.md`](../../docs/specs/Grid.md) · Story
 |---|---|---|---|
 | `children` (required) | `ReactNode` |  | Cells to place in the tracks; each child fills one cell in source order. |
 | `columns` | `GridColumns` | `1` | Track count. |
-| `gap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` | `"4"` | Space between all tracks, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px. |
-| `rowGap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` |  | Space between rows when it differs from `gap`, for example a tight grid with airy rows. |
-| `columnGap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` |  | Space between columns when it differs from `gap`. |
+| `gap` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` | `"4"` | Space between all tracks, from the spacing scale: `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px. |
+| `rowGap` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` |  | Space between rows when it differs from `gap`, for example a tight grid with airy rows. |
+| `columnGap` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` |  | Space between columns when it differs from `gap`. |
 | `align` | `"start"` `"center"` `"end"` `"stretch"` | `"stretch"` | How cells sit vertically in their row. `stretch` (default) gives every card in a row the height of the tallest one; `start` lets them keep their own height. |
 | `className` | `string` |  | Extra classes (width, padding, explicit row definitions), merged with `cn()` so they win. |
 
@@ -870,7 +870,7 @@ Status: draft · Spec: [`docs/specs/Inline.md`](../../docs/specs/Inline.md) · S
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `children` (required) | `ReactNode` |  | Items to place side by side; they keep their own width and wrap as a unit. |
-| `gap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` | `"2"` | Space between items, used for both the row gap and the wrap gap, from the spacing scale: `none` 0, `1` 4px, `2` 8px (default), `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px. |
+| `gap` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` | `"2"` | Space between items, used for both the row gap and the wrap gap, from the spacing scale: `none` 0, `1` 4px, `2` 8px (default), `3` 12px, `4` 16px, `5` 20px, `6` 24px, `8` 32px. |
 | `align` | `"start"` `"center"` `"end"` `"baseline"` | `"center"` | How items line up across the row. `center` (default) suits controls of mixed height; `baseline` lines up the text in a label plus value meta row. |
 | `justify` | `"start"` `"center"` `"end"` `"between"` | `"start"` | How leftover horizontal space is distributed. `start` (default) keeps the cluster tight; `between` pushes the first and last item to the edges of a full-width row such as a toolbar. |
 | `wrap` | `boolean` | `true` | Whether items flow onto a new line when the row runs out of width. |
@@ -893,7 +893,7 @@ Status: draft · Spec: [`docs/specs/Stack.md`](../../docs/specs/Stack.md) · Sto
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `children` (required) | `ReactNode` |  | Stack contents; laid out along `axis` with `gap` between them. |
-| `gap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` | `"4"` | Maps to the spacing scale (`gap-*` utilities): `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px. |
+| `gap` | `"none"` `"1"` `"2"` `"3"` `"4"` `"5"` `"6"` `"8"` | `"4"` | Maps to the spacing scale (`gap-*` utilities): `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px. |
 | `className` | `string` |  | Additional CSS classes (width, padding, alignment overrides). |
 | `axis` | `StackAxis` | `"vertical"` | Layout direction: `"vertical"` (default, a column), `"horizontal"` (a row that wraps and centres its children), or a breakpoint map such as `{ base: "vertical", md: "horizontal" }` (keys `base`, `sm`, `md`, `lg`, `xl`; `base` required). |
 | `align` | `"start"` `"center"` `"end"` `"stretch"` |  | Cross-axis placement of children at every breakpoint; unset, a column stretches them and a row centres them. |
@@ -916,7 +916,7 @@ Status: draft · Spec: [`docs/specs/VisuallyHidden.md`](../../docs/specs/Visuall
 |---|---|---|---|
 | `children` (required) | `ReactNode` |  | Text or markup to announce. |
 | `focusable` | `boolean` | `false` | Whether the content shows itself once anything inside it takes focus. |
-| `as` | `"div"` `"li"` `"span"` `"p"` `"label"` `"legend"` | `"span"` | Element to render, when the hidden text is a `label` for a control or a `li` inside a list rather than a generic `span`. |
+| `as` | `"span"` `"div"` `"p"` `"label"` `"legend"` `"li"` | `"span"` | Element to render, when the hidden text is a `label` for a control or a `li` inside a list rather than a generic `span`. |
 | `htmlFor` | `string` |  | With `as="label"`, the `id` of the control this labels. |
 | `className` | `string` |  | Extra classes (placement for the focusable variant), merged with `cn()` so they win. |
 
@@ -1414,7 +1414,7 @@ Status: draft · Spec: [`docs/specs/Meter.md`](../../docs/specs/Meter.md) · Sto
 | `optimum` | `number` |  | The ideal value; decides which region reads as good. |
 | `label` (required) | `ReactNode` |  | Visible label ("Disk"). |
 | `valueText` | `string` |  | Human-readable value, shown next to the label and used as `aria-valuetext` ("42 GB of 64 GB"). |
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` |  | Force a tone instead of deriving it from the thresholds. |
+| `tone` | `"primary"` `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Force a tone instead of deriving it from the thresholds. |
 | `segments` | `number` | `20` | Number of blocks the range is divided into (default 20). |
 | `size` | `"sm"` `"md"` | `"md"` | Block height: sm 8px, md 12px (default). |
 | `className` | `string` |  | Extra classes for the wrapper. |
@@ -1446,7 +1446,7 @@ Status: draft · Spec: [`docs/specs/StatusLine.md`](../../docs/specs/StatusLine.
 |---|---|---|---|
 | `className` | `string` |  | Extra classes for the segment. |
 | `icon` | `IconSlot` |  | Icon before the text, a TuiIcon name or an element. |
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` | `"neutral"` | Semantic tone (default "neutral"). |
+| `tone` | `"neutral"` `"primary"` `"success"` `"warning"` `"error"` `"info"` | `"neutral"` | Semantic tone (default "neutral"). |
 | `children` (required) | `ReactNode` |  | Segment text. |
 
 ### TreeView

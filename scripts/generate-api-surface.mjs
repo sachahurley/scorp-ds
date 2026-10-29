@@ -126,6 +126,7 @@ for (const sf of program.getSourceFiles()) {
       deprecated: deprecationOf(node) !== undefined,
       literals: literalValues(type) ?? [],
       references: refs,
+      text: sourceTextOf(node.type),
     });
   });
 }
@@ -164,10 +165,51 @@ function literalValues(type) {
   return out.length ? out : null;
 }
 
-/** Where a literal first appears in a type's source text; aliases expanded later sort after. */
+/**
+ * The source text a type's literals are written in: the type itself, plus the
+ * object behind any `keyof typeof x` it contains, so `StackGap` and `TuiIconName`
+ * can be ordered by the keys of the object they come from.
+ */
+function sourceTextOf(typeNode) {
+  let text = typeNode.getText();
+  const walk = (n) => {
+    if (ts.isTypeQueryNode(n)) {
+      const decl = checker.getSymbolAtLocation(n.exprName)?.valueDeclaration;
+      if (decl && ts.isVariableDeclaration(decl) && decl.initializer) text += "\n" + decl.initializer.getText();
+    }
+    ts.forEachChild(n, walk);
+  };
+  walk(typeNode);
+  return text;
+}
+
+/** A prop's own type text followed by every alias it reaches, in reach order. */
+function orderingText(typeNode) {
+  let text = sourceTextOf(typeNode);
+  for (const name of reachableAliases(typeNode)) text += "\n" + aliases.get(name).text;
+  return text;
+}
+
+/**
+ * Where a literal first appears in the text: as written (`"sm"`), or as a bare
+ * object key (`none:`) for `keyof typeof` types. Unfound literals sort last.
+ */
 function rank(text, literal) {
   const i = text.indexOf(literal);
-  return i < 0 ? Number.MAX_SAFE_INTEGER : i;
+  if (i >= 0) return i;
+  const bare = literal.replace(/^"|"$/g, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const m = new RegExp(`(^|[^\\w-])["']?${bare}["']?\\s*:`).exec(text);
+  return m ? m.index : Number.MAX_SAFE_INTEGER;
+}
+
+/**
+ * Sorts literals into the order a reader meets them in the source. The checker's
+ * own order is by type creation, which shifts when an unrelated literal is added
+ * anywhere in the program; that used to reorder (and re-hash) untouched
+ * components. Ties, and literals found nowhere, fall back to alphabetical.
+ */
+function sortBySource(values, text) {
+  return values.sort((a, b) => rank(text, a) - rank(text, b) || a.localeCompare(b));
 }
 
 /** The interface or type alias a React DOM prop was declared on, e.g. `ButtonHTMLAttributes`. */
@@ -221,11 +263,7 @@ function propsOf(declNode, defaults) {
     };
     const values = literalValues(propType);
     if (values) {
-      // The checker orders union members by type id; a reader expects the source
-      // order (`"primary" | "secondary" | …`), so sort by where each first appears.
-      const text = typeNode ? typeNode.getText() : "";
-      values.sort((a, b) => rank(text, a) - rank(text, b));
-      entry.values = values;
+      entry.values = sortBySource(values, typeNode ? orderingText(typeNode) : "");
     }
     if (values && typeNode) {
       const deprecatedLiterals = new Set();
@@ -292,7 +330,7 @@ function analyse(file) {
       exports.push({ name: node.name.text, kind: "type" });
       const values = literalValues(checker.getTypeAtLocation(node.name));
       if (values) {
-        propsByInterface[node.name.text] = { union: values };
+        propsByInterface[node.name.text] = { union: sortBySource(values, orderingText(node.type)) };
       } else if (/Props$/.test(node.name.text)) {
         const { props, inherits } = propsOf(node, defaults);
         propsByInterface[node.name.text] = { props, ...(inherits.length ? { inherits } : {}) };
