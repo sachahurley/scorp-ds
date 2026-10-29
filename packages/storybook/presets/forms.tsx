@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Button, Checkbox, Inline, Input, Radio, Select, Stack, Switch, Textarea } from '@scorp-ds/components';
+import { Button, Checkbox, Fieldset, Inline, Input, Radio, Select, Switch, Textarea } from '@scorp-ds/components';
 
 /**
  * Forms preset: a complete single-column form that uses every field component
  * once, in the order a settings form usually asks for them. It is the reference for
  * the form rules in `composition-presets-guidelines.md` ("Composition rules"):
- * a visible label on every field, `fieldset` + `legend` around each radio or
- * checkbox group, the error message under its field, the switch row (name and
+ * a visible label on every field, a `Fieldset` (field-label legend) around each
+ * radio or checkbox group, the error message under its field, the switch row (name and
  * consequence left, control right), and the action row (quiet action, then the
  * one primary `type="submit"` action at the end).
  *
@@ -49,29 +49,20 @@ export function AccountSettingsForm() {
         <option value="et">Eastern Time (UTC-5)</option>
       </Select>
 
-      {/* Radio group: fieldset + legend in the label style */}
-      <fieldset>
-        <legend className="mb-2 block font-mono text-sm text-secondary-800 dark:text-secondary-200">
-          Theme
-        </legend>
-        <Stack gap="2">
-          <Radio name="forms-theme" value="system" label="Match system" defaultChecked />
-          <Radio name="forms-theme" value="light" label="Light" />
-          <Radio name="forms-theme" value="dark" label="Dark" />
-        </Stack>
-      </fieldset>
+      {/* Radio group: a Fieldset with the field-label legend; radiogroup so the
+          group, not each radio, can carry an invalid state */}
+      <Fieldset legend="Theme" variant="field" role="radiogroup">
+        <Radio name="forms-theme" value="system" label="Match system" defaultChecked />
+        <Radio name="forms-theme" value="light" label="Light" />
+        <Radio name="forms-theme" value="dark" label="Dark" />
+      </Fieldset>
 
       {/* Checkbox group: same legend treatment */}
-      <fieldset>
-        <legend className="mb-2 block font-mono text-sm text-secondary-800 dark:text-secondary-200">
-          Email notifications
-        </legend>
-        <Stack gap="2">
-          <Checkbox label="Product updates" defaultChecked />
-          <Checkbox label="Weekly digest" defaultChecked />
-          <Checkbox label="Marketing and promotions" />
-        </Stack>
-      </fieldset>
+      <Fieldset legend="Email notifications" variant="field">
+        <Checkbox label="Product updates" defaultChecked />
+        <Checkbox label="Weekly digest" defaultChecked />
+        <Checkbox label="Marketing and promotions" />
+      </Fieldset>
 
       {/* Switch row: setting name + consequence on the left, control right */}
       <Inline justify="between" gap="4" wrap={false}>

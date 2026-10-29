@@ -180,6 +180,9 @@ export { Kbd } from './components/Kbd';
 export type { KbdProps } from './components/Kbd';
 // --- end navigation + terminal components ---
 
+export { Fieldset } from './components/Fieldset';
+export type { FieldsetGap, FieldsetProps, FieldsetVariant } from './components/Fieldset';
+
 // Primitives
 export { Stack } from './primitives/Stack';
 export type { StackProps, StackGap } from './primitives/Stack';
