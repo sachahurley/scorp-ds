@@ -2,7 +2,7 @@
   "name": "scorp-ds",
   "private": true,
   "version": "0.0.1",
-  "description": "Scorp Design System — TUI-inspired React/TypeScript component library",
+  "description": "Scorp Design System \u2014 TUI-inspired React/TypeScript component library",
   "workspaces": [
     "packages/*"
   ],
@@ -23,6 +23,7 @@
     "preview:fresh": "node scripts/preview.mjs --fresh",
     "site": "npm run dev --workspace=@scorp-ds/site",
     "spec-drift": "bash scripts/detect-spec-drift.sh",
+    "spec-status": "node scripts/spec-status.mjs",
     "storybook": "npm run --workspace=packages/storybook storybook",
     "storybook:clean": "rm -rf node_modules/.cache/storybook node_modules/.vite node_modules/.cache/vite packages/storybook/node_modules/.vite",
     "test": "vitest run --config vitest.config.mts",

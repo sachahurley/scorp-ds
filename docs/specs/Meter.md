@@ -35,6 +35,8 @@ the meter is `primary`. `tone` overrides. The label and value text are always
 visible and warning / error add a 1-bit icon, so color is never the only
 signal. `getMeterTone()` is exported.
 
+Don't use this for: a task moving toward completion (use ProgressBar instead) or work of unknown length (use Spinner instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

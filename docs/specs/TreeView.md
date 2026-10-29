@@ -36,6 +36,8 @@ printable keys type-ahead. Clicking a row selects it (and toggles branches).
 Disclosure icons are the 1-bit ChevronRight / ChevronDown. `expanded` and
 `selected` are each controlled or uncontrolled.
 
+Don't use this for: site or app navigation (use SideNav instead) or a few collapsible content sections (use Accordion instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

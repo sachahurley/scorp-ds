@@ -34,6 +34,8 @@ bottom resumes. The container is `role="log"` with `aria-live="polite"` and is
 keyboard focusable. `framed={false}` drops the plate ring for use inside a
 Window body.
 
+Don't use this for: records with columns to compare (use Table instead) or a short list of events people act on (use ListRow instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

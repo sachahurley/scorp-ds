@@ -30,6 +30,8 @@ holding one `<kbd>` per key) with a visible "+" separator that screen readers
 also read. Each key is a small plate with the ring recipe and a 2px bottom lip
 so it reads as a keycap.
 
+Don't use this for: code, file names or command text (use a plain `<code>` element instead) or a status or count chip (use Badge instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

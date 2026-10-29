@@ -33,6 +33,8 @@ right-aligned; `leader` draws a dotted rule between them as a pseudo-element on
 the term (no extra nodes in the list). `layout="stacked"` puts a small uppercase
 term above each value.
 
+Don't use this for: several records that share the same columns (use Table instead) or a list of items people open or act on (use ListRow instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---
