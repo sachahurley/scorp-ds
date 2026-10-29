@@ -241,7 +241,7 @@ Status: draft · Spec: [`docs/specs/Divider.md`](../../docs/specs/Divider.md) ·
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `orientation` | `"horizontal"` `"vertical"` | `"horizontal"` | `horizontal` (default) for a full-width rule between stacked blocks; `vertical` for a full-height rule between items in a row (the parent needs a height). |
-| `label` | `ReactNode` |  | Centred label on a horizontal rule ("or", a section name), drawn between box-drawing runs. |
+| `label` | `ReactNode` |  | Centred label on a horizontal rule ("or", a section name), drawn between two hairline runs that fill the width beside it. |
 | `spacing` | `"none"` `"sm"` `"md"` `"lg"` | `"md"` | Margin around the rule: none, sm 4px, md 16px (default), lg 32px. |
 | `className` | `string` | `""` | Extra classes on the rule (width, colour override, alignment). |
 
