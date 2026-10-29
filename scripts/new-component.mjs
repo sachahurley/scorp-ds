@@ -39,7 +39,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CONFIG = JSON.parse(readFileSync(join(ROOT, ".claude/ds-config.json"), "utf8"));
-const COMPONENT_GROUPS = ["Actions", "Display", "Feedback", "Inputs", "Navigation", "Overlays", "Terminal", "Theme"];
+const COMPONENT_GROUPS = ["Actions", "Chat", "Display", "Feedback", "Inputs", "Navigation", "Overlays", "Terminal", "Theme"];
 const TODO = "TODO(scaffold)";
 
 function fail(message) {

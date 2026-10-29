@@ -274,6 +274,16 @@
       "from": "packages/components/src/lib/utils.ts"
     },
     {
+      "name": "CodeBlock",
+      "kind": "component",
+      "from": "packages/components/src/components/CodeBlock.tsx"
+    },
+    {
+      "name": "CodeBlockProps",
+      "kind": "interface",
+      "from": "packages/components/src/components/CodeBlock.tsx"
+    },
+    {
       "name": "Combobox",
       "kind": "component",
       "from": "packages/components/src/components/Combobox.tsx"
@@ -287,6 +297,26 @@
       "name": "ComboboxProps",
       "kind": "interface",
       "from": "packages/components/src/components/Combobox.tsx"
+    },
+    {
+      "name": "Composer",
+      "kind": "component",
+      "from": "packages/components/src/components/Composer.tsx"
+    },
+    {
+      "name": "ComposerProps",
+      "kind": "type",
+      "from": "packages/components/src/components/Composer.tsx"
+    },
+    {
+      "name": "ComposerSize",
+      "kind": "type",
+      "from": "packages/components/src/components/Composer.tsx"
+    },
+    {
+      "name": "ComposerSubmitKey",
+      "kind": "type",
+      "from": "packages/components/src/components/Composer.tsx"
     },
     {
       "name": "Container",
@@ -527,6 +557,26 @@
       "name": "LogViewProps",
       "kind": "interface",
       "from": "packages/components/src/components/LogView.tsx"
+    },
+    {
+      "name": "Message",
+      "kind": "component",
+      "from": "packages/components/src/components/Message.tsx"
+    },
+    {
+      "name": "MessageAuthor",
+      "kind": "type",
+      "from": "packages/components/src/components/Message.tsx"
+    },
+    {
+      "name": "MessageProps",
+      "kind": "interface",
+      "from": "packages/components/src/components/Message.tsx"
+    },
+    {
+      "name": "MessageStatus",
+      "kind": "type",
+      "from": "packages/components/src/components/Message.tsx"
     },
     {
       "name": "Meter",
@@ -952,6 +1002,21 @@
       "name": "TooltipProps",
       "kind": "interface",
       "from": "packages/components/src/components/Tooltip.tsx"
+    },
+    {
+      "name": "Transcript",
+      "kind": "component",
+      "from": "packages/components/src/components/Transcript.tsx"
+    },
+    {
+      "name": "TranscriptProps",
+      "kind": "type",
+      "from": "packages/components/src/components/Transcript.tsx"
+    },
+    {
+      "name": "TranscriptWidth",
+      "kind": "type",
+      "from": "packages/components/src/components/Transcript.tsx"
     },
     {
       "name": "TreeNode",
@@ -2363,6 +2428,99 @@
       },
       "apiHash": "7fed86b9cfc4023a"
     },
+    "CodeBlock": {
+      "layer": "component",
+      "file": "packages/components/src/components/CodeBlock.tsx",
+      "spec": "docs/specs/CodeBlock.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "CodeBlockProps",
+          "kind": "interface"
+        },
+        {
+          "name": "CodeBlock",
+          "kind": "component"
+        }
+      ],
+      "props": {
+        "CodeBlockProps": {
+          "props": [
+            {
+              "name": "code",
+              "type": "string",
+              "required": true,
+              "description": "The code, as one string with `\\n` line breaks. Rendered as text, never as HTML, so it is safe for generated source."
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "required": false,
+              "description": "Language name (\"tsx\", \"json\"). A label only for now (no syntax colors); also set as `data-language`, and the title when `title` is unset."
+            },
+            {
+              "name": "title",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Title bar text, usually the file name (\"settings-screen.tsx\"). Defaults to `language`."
+            },
+            {
+              "name": "showLineNumbers",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Show a gutter of 1-based line numbers (default false), for code people will discuss by line. Numbers are hidden from screen readers and from copying."
+            },
+            {
+              "name": "highlightLines",
+              "type": "number[]",
+              "required": false,
+              "description": "1-based lines to mark with a muted row and a gutter marker (never color alone), for the lines an answer is about."
+            },
+            {
+              "name": "wrap",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Wrap long lines instead of scrolling horizontally (default false). Turn on for prose-like content such as JSON in a narrow pane."
+            },
+            {
+              "name": "copyable",
+              "type": "boolean",
+              "required": false,
+              "default": "true",
+              "description": "Show the copy button (default true). It is not rendered without the Clipboard API."
+            },
+            {
+              "name": "onCopy",
+              "type": "(code: string) => void",
+              "required": false,
+              "description": "Fires with the code after a successful copy, for analytics or a toast."
+            },
+            {
+              "name": "framed",
+              "type": "boolean",
+              "required": false,
+              "default": "true",
+              "description": "Draw the plate ring (default true). Set false inside a Window body or a tab panel that already frames it."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": false,
+              "description": "Accessible name of the block. Defaults to the title when it is text, else the language, else \"Code\"; set it when the title is a node."
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Extra classes for the figure. Cap the height here (`max-h-96`); the code then scrolls."
+            }
+          ]
+        }
+      },
+      "apiHash": "10508666b4affdc0"
+    },
     "Combobox": {
       "layer": "component",
       "file": "packages/components/src/components/Combobox.tsx",
@@ -2520,6 +2678,217 @@
         }
       },
       "apiHash": "b5b954feeddab44e"
+    },
+    "Composer": {
+      "layer": "component",
+      "file": "packages/components/src/components/Composer.tsx",
+      "spec": "docs/specs/Composer.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "ComposerSubmitKey",
+          "kind": "type"
+        },
+        {
+          "name": "ComposerSize",
+          "kind": "type"
+        },
+        {
+          "name": "ComposerProps",
+          "kind": "type"
+        },
+        {
+          "name": "Composer",
+          "kind": "component"
+        }
+      ],
+      "props": {
+        "ComposerSubmitKey": {
+          "union": [
+            "\"enter\"",
+            "\"mod-enter\""
+          ]
+        },
+        "ComposerSize": {
+          "union": [
+            "\"md\"",
+            "\"lg\""
+          ]
+        },
+        "ComposerProps": {
+          "props": [
+            {
+              "name": "value",
+              "type": "string",
+              "required": false,
+              "description": "Controlled text. Pair with `onValueChange`; the parent clears it after a send."
+            },
+            {
+              "name": "defaultValue",
+              "type": "string",
+              "required": false,
+              "default": "\"\"",
+              "description": "Starting text when uncontrolled (default \"\"). An uncontrolled Composer clears itself after a send."
+            },
+            {
+              "name": "onValueChange",
+              "type": "(value: string) => void",
+              "required": false,
+              "description": "Fires on every edit with the new text, and with \"\" when an uncontrolled Composer clears itself after a send."
+            },
+            {
+              "name": "onSubmit",
+              "type": "(value: string) => void",
+              "required": true,
+              "description": "Fires with the trimmed text on Enter (per `submitKey`) or the send button, only when the text is not blank and the Composer is neither `busy` nor `disabled`."
+            },
+            {
+              "name": "busy",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "A reply is streaming. With `onStop` the send button becomes a stop button; without it, send shows Button's loading state. Enter does not send, but the field stays editable so the next message can be drafted."
+            },
+            {
+              "name": "onStop",
+              "type": "() => void",
+              "required": false,
+              "description": "Called by the stop button while `busy`. Pass it whenever the reply can be cancelled."
+            },
+            {
+              "name": "submitKey",
+              "type": "ComposerSubmitKey",
+              "required": false,
+              "values": [
+                "\"enter\"",
+                "\"mod-enter\""
+              ],
+              "default": "\"enter\"",
+              "description": "`enter` (default): Enter sends, Shift+Enter breaks the line. `mod-enter`: Cmd/Ctrl+Enter sends, for long multi-paragraph messages."
+            },
+            {
+              "name": "minRows",
+              "type": "number",
+              "required": false,
+              "default": "1",
+              "description": "Rows shown when empty (default 1). Raise it where messages are usually long."
+            },
+            {
+              "name": "maxRows",
+              "type": "number",
+              "required": false,
+              "default": "8",
+              "description": "Rows the field grows to before it scrolls instead (default 8)."
+            },
+            {
+              "name": "size",
+              "type": "ComposerSize",
+              "required": false,
+              "values": [
+                "\"md\"",
+                "\"lg\""
+              ],
+              "default": "\"md\"",
+              "description": "Type size, padding and send button size: `md` (default), or `lg` for a prompt that leads the page."
+            },
+            {
+              "name": "context",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Row of chips above the field for what the message refers to: attachments, referenced components (`@Card`)."
+            },
+            {
+              "name": "actions",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Leading actions in the action row (attach, insert): ghost icon-only Buttons with `type=\"button\"` and an `aria-label`. More than three belong in a menu."
+            },
+            {
+              "name": "hint",
+              "type": "ReactNode | false",
+              "required": false,
+              "description": "Text before the send button, linked to the field as its description. Defaults to the shortcut for `submitKey`; `false` hides it. Hidden below `sm`."
+            },
+            {
+              "name": "placeholder",
+              "type": "string",
+              "required": false,
+              "default": "\"Message\"",
+              "description": "Placeholder text (default \"Message\"). Never the only description of the field: it vanishes as soon as someone types."
+            },
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Visible label above the plate, wired to the field; one of `label`, `aria-label` or `aria-labelledby` is required. A chat pane usually uses `aria-label` instead."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": false,
+              "description": "Accessible name of the field when there is no visible label, such as \"Message\"; one of `label`, `aria-label` or `aria-labelledby` is required. Wins over `label`."
+            },
+            {
+              "name": "aria-labelledby",
+              "type": "string",
+              "required": false,
+              "description": "Id of visible text elsewhere that names the field, such as the pane title. Wins over `label` and `aria-label`."
+            },
+            {
+              "name": "helperText",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Hint under the plate (a character limit, why typing is off), linked as a description. Hidden while `errorMessage` is set."
+            },
+            {
+              "name": "errorMessage",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Error under the plate. Sets the error ring and fill and `aria-invalid`, and replaces `helperText`."
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Disables the field, the actions and the send button together (one disabled fieldset) and dims the plate to 50%. Use it when typing is off, not while a reply streams (use `busy`)."
+            },
+            {
+              "name": "maxLength",
+              "type": "number",
+              "required": false,
+              "description": "Native character limit on the field. Say what the limit is in `helperText`."
+            },
+            {
+              "name": "sendLabel",
+              "type": "string",
+              "required": false,
+              "default": "\"Send message\"",
+              "description": "Accessible name of the send button (default \"Send message\")."
+            },
+            {
+              "name": "stopLabel",
+              "type": "string",
+              "required": false,
+              "default": "\"Stop response\"",
+              "description": "Accessible name of the stop button (default \"Stop response\")."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": false,
+              "description": "Field `name`, for native form handling."
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Extra classes for the ring wrapper (margin). Width comes from the parent."
+            }
+          ]
+        }
+      },
+      "apiHash": "cb5c8b802244a86c"
     },
     "DescriptionList": {
       "layer": "component",
@@ -3508,6 +3877,125 @@
         }
       },
       "apiHash": "e52d07cbe79940ba"
+    },
+    "Message": {
+      "layer": "component",
+      "file": "packages/components/src/components/Message.tsx",
+      "spec": "docs/specs/Message.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "MessageAuthor",
+          "kind": "type"
+        },
+        {
+          "name": "MessageStatus",
+          "kind": "type"
+        },
+        {
+          "name": "MessageProps",
+          "kind": "interface"
+        },
+        {
+          "name": "Message",
+          "kind": "component"
+        }
+      ],
+      "props": {
+        "MessageAuthor": {
+          "union": [
+            "\"user\"",
+            "\"assistant\"",
+            "\"system\""
+          ]
+        },
+        "MessageStatus": {
+          "union": [
+            "\"done\"",
+            "\"streaming\"",
+            "\"stopped\"",
+            "\"error\""
+          ]
+        },
+        "MessageProps": {
+          "props": [
+            {
+              "name": "author",
+              "type": "MessageAuthor",
+              "required": true,
+              "values": [
+                "\"user\"",
+                "\"assistant\"",
+                "\"system\""
+              ],
+              "description": "Who the turn is from: `user` (prompt marker and plate), `assistant` (plain output) or `system` (one muted line). Named `author`, not `role`, so it never collides with the ARIA attribute."
+            },
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Visible role label, which also names the turn for screen readers (default \"You\", \"Scorp\" or \"System\"). Set it to the model or product name when that is clearer."
+            },
+            {
+              "name": "meta",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Secondary header text after the label: a time, the model, \"replayed\"."
+            },
+            {
+              "name": "status",
+              "type": "MessageStatus",
+              "required": false,
+              "values": [
+                "\"done\"",
+                "\"streaming\"",
+                "\"stopped\"",
+                "\"error\""
+              ],
+              "default": "\"done\"",
+              "description": "`done` (default); `streaming` adds the block cursor and `aria-busy`; `stopped` adds a \"Stopped\" footer; `error` adds the error footer with `errorMessage`."
+            },
+            {
+              "name": "errorMessage",
+              "type": "ReactNode",
+              "required": false,
+              "default": "\"Something went wrong.\"",
+              "description": "Footer text when `status=\"error\"` (default \"Something went wrong.\"). Say what failed and, with `onRetry`, that it can be retried."
+            },
+            {
+              "name": "onRetry",
+              "type": "() => void",
+              "required": false,
+              "description": "Adds a Retry button to the error footer. Only shown when `status=\"error\"`."
+            },
+            {
+              "name": "actions",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Header actions (copy, retry, edit): ghost `size=\"sm\"` icon-only Buttons with `type=\"button\"` and an `aria-label`. Always rendered, never only on hover."
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "The turn's content. A string keeps its line breaks; nodes (paragraphs, a CodeBlock) render as given, `spacing.3` apart."
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": false,
+              "description": "Anchor id, for linking to a turn."
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Extra classes for the article (margin). Spacing between turns belongs to `Transcript`."
+            }
+          ]
+        }
+      },
+      "apiHash": "f9abebafb8d0a867"
     },
     "Meter": {
       "layer": "component",
@@ -5585,6 +6073,111 @@
         }
       },
       "apiHash": "6e02c20625d0c90e"
+    },
+    "Transcript": {
+      "layer": "component",
+      "file": "packages/components/src/components/Transcript.tsx",
+      "spec": "docs/specs/Transcript.md",
+      "import": "@scorp-ds/components",
+      "exports": [
+        {
+          "name": "TranscriptWidth",
+          "kind": "type"
+        },
+        {
+          "name": "TranscriptProps",
+          "kind": "type"
+        },
+        {
+          "name": "Transcript",
+          "kind": "component"
+        }
+      ],
+      "props": {
+        "TranscriptWidth": {
+          "union": [
+            "\"sm\"",
+            "\"md\"",
+            "\"lg\"",
+            "\"full\""
+          ]
+        },
+        "TranscriptProps": {
+          "props": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Messages, oldest first. Append new turns to the end; a streaming reply grows in place as the last child."
+            },
+            {
+              "name": "busy",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "A reply is streaming. Drives the \"Responding\" and \"Response complete\" announcements; pair it with the last Message's `status=\"streaming\"` and the Composer's `busy`."
+            },
+            {
+              "name": "autoScroll",
+              "type": "boolean",
+              "required": false,
+              "default": "true",
+              "description": "Follow new content to the bottom (default true). Following pauses while the reader is scrolled up and resumes at the bottom or from \"Jump to latest\"."
+            },
+            {
+              "name": "emptyState",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Shown centered when there are no children. Usually an EmptyState with starter prompts that teach what to ask."
+            },
+            {
+              "name": "width",
+              "type": "TranscriptWidth",
+              "required": false,
+              "values": [
+                "\"sm\"",
+                "\"md\"",
+                "\"lg\"",
+                "\"full\""
+              ],
+              "default": "\"md\"",
+              "description": "Max width of the content column: `sm`, `md` (default), `lg` or `full`, on the Container scale. Use `full` inside a narrow pane."
+            },
+            {
+              "name": "framed",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Draw the plate ring, as LogView does (default false: a Transcript usually fills a pane that is already framed, such as a Window)."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": false,
+              "description": "Accessible name of the log region, such as \"Conversation\"; this or `aria-labelledby` is required."
+            },
+            {
+              "name": "aria-labelledby",
+              "type": "string",
+              "required": false,
+              "description": "Id of visible text that names the log region, such as the pane title. Use it instead of `aria-label` when such text exists."
+            },
+            {
+              "name": "onFollowChange",
+              "type": "(following: boolean) => void",
+              "required": false,
+              "description": "Fires with `false` when following pauses (the reader scrolled up) and `true` when it resumes."
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Extra classes for the wrapper. Set the height here (`h-96`) or let a flex parent size it (`min-h-0 flex-1`)."
+            }
+          ]
+        }
+      },
+      "apiHash": "84ad744a629e1f7d"
     },
     "TreeView": {
       "layer": "component",

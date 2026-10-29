@@ -79,9 +79,9 @@ Space grows as the relationship loosens. From tightest to loosest:
 | Buttons in an action row | `spacing.3`; `spacing.2` in the densest rows | `Inline gap="3"` / `gap="2"` | Forms, AuthCard, MarketingHero (3); SettingsPanel footer, WorkbenchSplit toolbar (2) |
 | The action row and the last field of a page-level form | `spacing.6` plus `spacing.2` | the form's `space-y-6`, `pt-2` on the row | Forms |
 | Items inside a dense row; rows of a dense list | `spacing.3`; `spacing.2` | row `gap-3 px-3 py-2`; `Stack gap="2"` | DenseListRow |
-| Panes of a split | `spacing.4` | `gap-4` on the split | WorkbenchSplit |
+| Panes of a split | `spacing.4` | `gap-4` on the split | WorkbenchSplit, ChatComposer |
 | Page edge to content (pattern pages) | `spacing.6`, `spacing.10` from `md` | `p-6 md:p-10` on the shell | Forms, AuthCard, SettingsPanel, SideNavigation, DenseListRow |
-| Page edge to content (tool screens) | `spacing.4`, `spacing.6` from `md` | `p-4 md:p-6` on the shell | WorkbenchSplit |
+| Page edge to content (tool screens) | `spacing.4`, `spacing.6` from `md` | `p-4 md:p-6` on the shell | WorkbenchSplit, ChatComposer |
 | Eyebrow line to the content under it | `spacing.4` | `space-y-4` / `mb-4` on the column | every pattern story |
 
 - **Padding belongs to the container.** Card pads its header, body and footer itself
@@ -204,6 +204,7 @@ list row (`DenseRowShell`), a Known Gap in its pattern spec.
 | `presets/sideNavigation.tsx` | `SideNavigationRail`, `navigationRailTopItems`, `navigationRailSectionItems` | The sidebar rail: SideNav with top-level links and one collapsible group | `Patterns/SideNavigation` |
 | `presets/denseListRow.tsx` | `JobRunList`, `JobRunListRow`, `DenseRowShell`, `jobRunRows` | Dense list rows: avatar, text column, status, trailing actions | `Patterns/DenseListRow` |
 | `presets/workbenchSplit.tsx` | `LogInspectorSplit`, `workbenchBuffers`, `workbenchLogLines` | Two terminal panes: buffer index beside the focused inspector | `Patterns/WorkbenchSplit` |
+| `presets/chatComposer.tsx` | `ChatComposerWorkbench`, `ChatPane`, `ChatCanvasPane`, `ChatSessionStatus`, `chatGeneratedSource` | Chat pane (Transcript over Composer) beside the canvas it produced, split or tabbed, over a StatusLine | `Patterns/ChatComposer` |
 
 `Patterns/MusicPlayer` is not a preset: it is a large stateful demo whose playback hook
 and layouts are story-local, documented in `docs/specs/patterns-music-player.md`.
