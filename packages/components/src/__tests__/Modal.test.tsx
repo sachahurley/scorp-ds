@@ -230,9 +230,11 @@ describe("Modal sizes and uncontrolled use", () => {
   });
 
   it.each([
+    ["xs", "320px"],
     ["sm", "360px"],
-    ["md", "640px"],
-    ["lg", "740px"],
+    ["md", "440px"],
+    ["lg", "640px"],
+    ["xl", "740px"],
     ["full", "100vw"],
   ] as const)("maps size %s to %s", (size, width) => {
     render(
