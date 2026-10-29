@@ -13,8 +13,8 @@
 | Story | `Components/Terminal/TreeView` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `7135e0f0f176a961` |
+| Last updated | 2026-10-29 |
+| API hash | `fe5a2c5f6fb95a81` |
 
 ---
 
@@ -69,12 +69,14 @@ Don't use this for: site or app navigation (use SideNav instead) or a few collap
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `nodes` | `TreeNode[]` | - | Yes | `{ id, label, textValue?, icon?, children?, disabled? }`. |
-| `aria-label` / `aria-labelledby` | `string` | - | One of | Tree name. |
+| `aria-label` / `aria-labelledby` | `string` | - | One of the two (enforced by the type) | Tree name. `aria-labelledby` points at a visible heading. |
 | `expanded` / `defaultExpanded` / `onExpandedChange` | `string[]` / `string[]` / `fn` | `[]` | No | Open branches. |
 | `selected` / `defaultSelected` / `onSelectedChange` | `string \| null` / same / `fn` | `null` | No | Selection. |
 | `onActivate` | `(id) => void` | - | No | Enter or leaf click. |
 | `typeahead` | `boolean` | `true` | No | Printable-key search. |
 | `className` | `string` | - | No | Root classes. |
+
+`TreeViewProps` is `TreeViewOwnProps & ({ "aria-label" } | { "aria-labelledby" })`: a tree with neither does not type-check. The generated manifest lists both as optional, because it reads the props shared by every member of the union.
 
 <!-- AUTO-END:properties -->
 
@@ -161,7 +163,7 @@ No hardcoded values found.
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: `tree` / `treeitem` / `group`
-- Required labels: `aria-label` or `aria-labelledby`
+- Required labels: `aria-label` or `aria-labelledby`, enforced by the type
 - Focus order: single tab stop (focused, else selected, else first node)
 - Touch target minimum: 44px rows
 - Color independence: selection is a filled plate plus `aria-selected`
@@ -198,6 +200,8 @@ No hardcoded values found.
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
+| 2026-10-29 | The tree name was documented as required but typed as optional, so an unnamed tree type-checked | The type requires `aria-label` or `aria-labelledby` | Resolved |
+| 2026-10-29 | An empty `nodes` array renders an empty `role="tree"` list: nothing visible, no focusable node, and no empty state | None yet; render an `EmptyState` in place of the tree when there are no nodes | Open |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -210,6 +214,7 @@ No hardcoded values found.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
+| Unreleased | 2026-10-29 | feat (breaking type) | Accessible name required by the type (`aria-label` or `aria-labelledby`). `TreeViewProps` is now a type alias |
 
 <!-- AUTO-END:changelog -->
 

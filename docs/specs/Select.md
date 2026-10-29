@@ -13,7 +13,7 @@
 | Story | `Components/Inputs/Select` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-29 |
 | API hash | `65dfd5b76166695c` |
 
 ---
@@ -63,7 +63,7 @@ Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows). Gro
 |----------|------|---------|----------|-------------|
 | `children` | `<option>` / `<optgroup>` elements | none | Yes | Options, read from each child's `value`, text `children` and `disabled`. Children are flattened, so arrays, fragments and a static option mixed with a mapped list all work; `<optgroup>` children are read with the group's `label` and `disabled` inherited. An option with no `value` submits its text, as in a native select. |
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Trigger height. Legacy names are deprecated. |
-| `label` | `ReactNode` | none | No | Visible label, associated with the trigger button via `htmlFor`/`id`. Preferred over `aria-label`. |
+| `label` | `ReactNode` | none | No | Visible label, associated with the trigger (the combobox) via `htmlFor`/`id`. Preferred over `aria-label`. |
 | `aria-label` | `string` | `"Select an option"` when there is no `label` | No | Accessible name for the trigger when no visible label is set. |
 | `value` | `string \| number \| readonly string[]` | none | No | Controlled value (stringified). When set, selection does not change until the parent updates `value`. |
 | `defaultValue` | `string \| number \| readonly string[]` | first option's value | No | Uncontrolled initial value. |
@@ -190,9 +190,9 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic role: trigger is a `type="button"` control with `aria-haspopup="listbox"`, `aria-expanded` and, while open, `aria-controls` pointing at the listbox; the menu is `role="listbox"` (labelled by the visible `label`, or by `aria-label`) with `role="option"` buttons carrying `aria-selected`. `<optgroup>` children become `role="group"` with a labelling heading. The native select is hidden from assistive tech. No control here submits a surrounding form.
+- Semantic role: the trigger follows the APG select-only combobox pattern: a native `<button type="button">` with `role="combobox"` (allowed on a button by ARIA in HTML, and it keeps native focus, `disabled` and `<label htmlFor>`), `aria-haspopup="listbox"`, `aria-expanded` and, while open, `aria-controls` pointing at the listbox and `aria-activedescendant` naming the highlighted option. The selected option's text is the combobox value; the menu is `role="listbox"` (labelled by the visible `label`, or by `aria-label`) with `role="option"` buttons carrying `aria-selected`. `<optgroup>` children become `role="group"` with a labelling heading. The native select is hidden from assistive tech. No control here submits a surrounding form.
 - Required labels: `label` (associated with the trigger) or `aria-label`; falls back to the generic "Select an option".
-- Description: helper or error text on the trigger via `aria-describedby`; `aria-invalid` in error.
+- Description: helper or error text on the trigger via `aria-describedby`; `aria-invalid` in error, which the combobox role supports.
 - Keyboard: with focus in the component, Enter, Space, ArrowDown or ArrowUp opens and highlights the selected (or first enabled) option. While open: ArrowDown/ArrowUp move the highlight (wrapping, skipping disabled), Enter/Space select and close, Escape closes. Click outside closes.
 - Focus management: focus stays on the trigger and `aria-activedescendant` names the highlighted option, so screen readers announce it while arrowing. Tab closes the menu and lets focus move on.
 - Touch target minimum: options are 44px tall. The trigger is 32/40/48px; only `lg` meets 44px.
@@ -237,7 +237,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | `error` was boolean only; no helper or error text | Added `helperText` and `errorMessage` on the trigger via aria-describedby and aria-invalid | Resolved |
-| 2026-10-28 | The custom trigger is a `<button>`, and ARIA 1.2 does not support `aria-invalid` on `role="button"`. The APG pattern for this control is a select-only combobox (`role="combobox"`), which does support it. Found by `jsx-a11y/role-supports-aria-props` | Line-level lint exception with this reason until the trigger moves to the combobox pattern | Open |
+| 2026-10-28 | The custom trigger is a `<button>`, and ARIA 1.2 does not support `aria-invalid` on `role="button"`. The APG pattern for this control is a select-only combobox (`role="combobox"`), which does support it. Found by `jsx-a11y/role-supports-aria-props` | 2026-10-29: the trigger is now `role="combobox"` (APG select-only combobox) on the same native button, so `aria-invalid` and `aria-activedescendant` are valid; the lint exception is deleted. Keyboard behaviour is unchanged | Resolved |
 | 2026-09-22 | Keyboard highlight is visual only (no `aria-activedescendant`, no `aria-controls`/labelled listbox) and `--surface-subtle` is nearly invisible against `--surface-card` in light mode | Option ids plus `aria-activedescendant` and `aria-controls` on the trigger, a labelled listbox, and the highlight moved to `--surface-muted` + `--accent` text | Resolved |
 | 2026-09-22 | Options are only parsed from direct `<option>` children: `<optgroup>`, fragments, or a static option mixed with a mapped array are dropped | Children are flattened through `Children.forEach` with fragments unwrapped and `<optgroup>` read (label and `disabled` inherited); groups render as labelled `role="group"` sections | Resolved |
 | 2026-09-22 | The hidden native `<select>` is still flat: it mirrors values, not `<optgroup>` structure. Submission is unaffected | None yet | Open |
@@ -258,6 +258,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 | Unreleased | 2026-09-21 | fix | Added `helperText`, `errorMessage`, aria-invalid |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | `aria-activedescendant` / `aria-controls` and option ids, one raw-index keyboard model, Tab closes the menu, children flattened (fragments, arrays, `<optgroup>`), an option with no `value` falls back to its text, highlight moved to `--surface-muted` + `--accent`, menu uses `--z-index-dropdown`, `min-w-52` and `max-h-80`, stale "Unicode" comments removed |
+| Unreleased | 2026-10-29 | fix | Trigger moved to the APG select-only combobox pattern (`role="combobox"`), so `aria-invalid` is supported; query it with `getByRole("combobox")`, not `"button"` |
 
 <!-- AUTO-END:changelog -->
 

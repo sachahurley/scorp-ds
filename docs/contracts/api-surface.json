@@ -645,7 +645,7 @@
     },
     {
       "name": "SliderProps",
-      "kind": "interface",
+      "kind": "type",
       "from": "packages/components/src/components/Slider.tsx"
     },
     {
@@ -705,7 +705,7 @@
     },
     {
       "name": "SwitchProps",
-      "kind": "interface",
+      "kind": "type",
       "from": "packages/components/src/components/Switch.tsx"
     },
     {
@@ -805,7 +805,7 @@
     },
     {
       "name": "TabsListProps",
-      "kind": "interface",
+      "kind": "type",
       "from": "packages/components/src/components/Tabs.tsx"
     },
     {
@@ -920,7 +920,7 @@
     },
     {
       "name": "TreeViewProps",
-      "kind": "interface",
+      "kind": "type",
       "from": "packages/components/src/components/TreeView.tsx"
     },
     {
@@ -1521,8 +1521,8 @@
             {
               "name": "alt",
               "type": "string",
-              "required": false,
-              "description": "Alt text for the image, usually the person's name. Defaults to \"Avatar\", so pass it whenever `src` is set."
+              "required": true,
+              "description": "Who the avatar shows, usually the person's name. Required, because it names the avatar whatever it renders: the image's alt text, and the name of the initials or icon fallback (which is also what a broken image falls back to). Pass `\"\"` when the name is already written next to the avatar, so it is hidden from assistive tech instead of being read twice."
             },
             {
               "name": "initials",
@@ -1584,7 +1584,7 @@
           ]
         }
       },
-      "apiHash": "d50427a1ea5c8199"
+      "apiHash": "77099a1d0796b170"
     },
     "Badge": {
       "layer": "component",
@@ -4222,7 +4222,7 @@
               "type": "boolean",
               "required": false,
               "default": "false",
-              "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix."
+              "description": "Error styling without a message. Prefer `errorMessage` so users learn what to fix. Styling only: announce the invalid state with `aria-invalid` on the group (`<fieldset role=\"radiogroup\">`), since ARIA does not support it on a radio."
             },
             {
               "name": "helperText",
@@ -4234,7 +4234,7 @@
               "name": "errorMessage",
               "type": "ReactNode",
               "required": false,
-              "description": "Validation message under the label. Sets the error state and replaces `helperText`."
+              "description": "Validation message under the label, read through `aria-describedby`. Sets the error styling and replaces `helperText`. Put `aria-invalid` on the group, not here."
             },
             {
               "name": "onCheckedChange",
@@ -4275,7 +4275,7 @@
               "name": "label",
               "type": "ReactNode",
               "required": false,
-              "description": "Optional visible label; associates with the custom trigger via `htmlFor` / `id` on the button."
+              "description": "Optional visible label; associates with the custom trigger (the combobox) via `htmlFor` / `id`."
             },
             {
               "name": "size",
@@ -4633,7 +4633,7 @@
       "exports": [
         {
           "name": "SliderProps",
-          "kind": "interface"
+          "kind": "type"
         },
         {
           "name": "Slider",
@@ -4647,7 +4647,19 @@
               "name": "label",
               "type": "ReactNode",
               "required": false,
-              "description": "Optional visible label. When set, renders a <label> associated with the input via htmlFor/id. Prefer this or `aria-label` so the control is announced correctly by screen readers."
+              "description": "Visible label tied to the input with htmlFor/id; one of `label`, `aria-label` or `aria-labelledby` is required. Put the current value in it when users need to see the number."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": false,
+              "description": "Accessible name when the slider has no visible label of its own (a zoom slider in a toolbar)."
+            },
+            {
+              "name": "aria-labelledby",
+              "type": "string",
+              "required": false,
+              "description": "Id of visible text elsewhere that names the slider, such as a column heading."
             }
           ],
           "inherits": [
@@ -4658,7 +4670,7 @@
           ]
         }
       },
-      "apiHash": "2853775cf8dd358a"
+      "apiHash": "ccba46e40934dd27"
     },
     "Spinner": {
       "layer": "component",
@@ -4897,7 +4909,7 @@
       "exports": [
         {
           "name": "SwitchProps",
-          "kind": "interface"
+          "kind": "type"
         },
         {
           "name": "Switch",
@@ -4911,14 +4923,20 @@
               "name": "checked",
               "type": "boolean",
               "required": false,
+              "description": "Whether the switch is on, for a controlled switch: keep it in state and update it from `onCheckedChange`. Omit it (and use `defaultChecked`) to let the switch keep its own state."
+            },
+            {
+              "name": "defaultChecked",
+              "type": "boolean",
+              "required": false,
               "default": "false",
-              "description": "Whether the switch is on. The switch is controlled: keep this in state and update it from `onCheckedChange`. Default: false."
+              "description": "Whether an uncontrolled switch starts on. Ignored when `checked` is set. Default: false."
             },
             {
               "name": "onCheckedChange",
               "type": "(checked: boolean) => void",
               "required": false,
-              "description": "Called with the next value when the user clicks the track or label, or presses Space or Enter. Without it the switch cannot change."
+              "description": "Called with the next value when the user clicks the track or label, or presses Space or Enter. A controlled switch cannot change without it."
             },
             {
               "name": "size",
@@ -4944,14 +4962,26 @@
               "name": "label",
               "type": "string",
               "required": false,
-              "description": "Visible label and accessible name. Clicking it toggles the switch. Use `hideLabel` to keep it aria-only."
+              "description": "Visible label and accessible name; one of `label`, `aria-label` or `aria-labelledby` is required. Clicking it toggles the switch. Use `hideLabel` to keep it aria-only."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": false,
+              "description": "Accessible name when there is no `label` (a theme toggle whose state is shown by an icon). Wins over `label` when both are set."
+            },
+            {
+              "name": "aria-labelledby",
+              "type": "string",
+              "required": false,
+              "description": "Id of visible text elsewhere that names the switch, such as a settings row heading. Wins over `label` and `aria-label`."
             },
             {
               "name": "hideLabel",
               "type": "boolean",
               "required": false,
               "default": "false",
-              "description": "Keep `label` as the accessible name only (no visible text). Use in compositions where the row already carries a visible heading — e.g. a settings row — so the name isn't duplicated next to the track."
+              "description": "Keep `label` as the accessible name only (no visible text). Use in compositions where the row already carries a visible heading, such as a settings row, so the name isn't duplicated next to the track."
             },
             {
               "name": "disabled",
@@ -4975,7 +5005,7 @@
           ]
         }
       },
-      "apiHash": "931d4eae1eb5c0fb"
+      "apiHash": "d821debea711ad06"
     },
     "Table": {
       "layer": "component",
@@ -5182,7 +5212,7 @@
         },
         {
           "name": "TabsListProps",
-          "kind": "interface"
+          "kind": "type"
         },
         {
           "name": "TabsList",
@@ -5258,7 +5288,7 @@
               "name": "aria-label",
               "type": "string",
               "required": false,
-              "description": "Accessible name for the tab strip (pass this or `aria-labelledby`)."
+              "description": "Accessible name for the tab strip, such as \"Account sections\"; this or `aria-labelledby` is required."
             },
             {
               "name": "aria-labelledby",
@@ -5307,7 +5337,7 @@
           ]
         }
       },
-      "apiHash": "2e3f508f58aab1bc"
+      "apiHash": "450c9ed1b608b8af"
     },
     "Textarea": {
       "layer": "component",
@@ -5830,7 +5860,7 @@
         },
         {
           "name": "TreeViewProps",
-          "kind": "interface"
+          "kind": "type"
         },
         {
           "name": "TreeView",
@@ -5944,13 +5974,13 @@
               "name": "aria-label",
               "type": "string",
               "required": false,
-              "description": "Accessible name of the tree (pass this or `aria-labelledby`)."
+              "description": "Accessible name of the tree, such as \"Files\"; this or `aria-labelledby` is required."
             },
             {
               "name": "aria-labelledby",
               "type": "string",
               "required": false,
-              "description": "Id of a visible heading naming the tree."
+              "description": "Id of a visible heading naming the tree; use it instead of `aria-label` when such a heading exists."
             },
             {
               "name": "expanded",
@@ -6012,7 +6042,7 @@
           ]
         }
       },
-      "apiHash": "7135e0f0f176a961"
+      "apiHash": "fe5a2c5f6fb95a81"
     },
     "TuiIcon": {
       "layer": "component",

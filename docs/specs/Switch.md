@@ -13,8 +13,8 @@
 | Story | `Components/Inputs/Switch` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `931d4eae1eb5c0fb` |
+| Last updated | 2026-10-29 |
+| API hash | `d821debea711ad06` |
 
 ---
 
@@ -22,7 +22,7 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-Switch toggles a setting on or off with an immediate effect, like enabling notifications or a theme. It is a `role="switch"` button with a plate-shaped track and knob; the knob glides at `duration-normal` (200ms), within the 150 to 200ms interactive-motion ceiling (this replaced the earlier steps(3) pixel hop, Sacha's call on 2026-09-21, because the hop read as jitter). It is fully controlled: the parent owns `checked` and updates it from `onCheckedChange`. Use `Checkbox` instead when the choice is part of a form that is submitted later.
+Switch toggles a setting on or off with an immediate effect, like enabling notifications or a theme. It is a `role="switch"` button with a plate-shaped track and knob; the knob glides at `duration-normal` (200ms), within the 150 to 200ms interactive-motion ceiling (this replaced the earlier steps(3) pixel hop, Sacha's call on 2026-09-21, because the hop read as jitter). It is controlled when the parent owns `checked` and updates it from `onCheckedChange`, and uncontrolled (starting from `defaultChecked`) otherwise. It always has an accessible name: the type requires `label`, `aria-label` or `aria-labelledby`. Use `Checkbox` instead when the choice is part of a form that is submitted later.
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -61,16 +61,21 @@ Every measurement comes from `global.switch` (`--switch-track-height/width-*`, `
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `checked` | `boolean` | `false` | No (effectively yes) | Current state. Switch keeps no internal state, so pass it from the parent. |
-| `onCheckedChange` | `(checked: boolean) => void` | none | No (effectively yes) | Called with the next state on click, Enter, or Space. Without it the switch cannot change. |
-| `label` | `string` | none | No | Visible label and the accessible name (`aria-label`). Clicking the visible text toggles the switch. |
+| `checked` | `boolean` | none | No | Controlled state: pass it from the parent and update it from `onCheckedChange`. Omit it to let the switch keep its own state. |
+| `defaultChecked` | `boolean` | `false` | No | Initial state of an uncontrolled switch. Ignored when `checked` is set. |
+| `onCheckedChange` | `(checked: boolean) => void` | none | No | Called with the next state on click, Enter, or Space, controlled or not. A controlled switch cannot change without it. |
+| `label` | `string` | none | One name is required | Visible label and the accessible name (`aria-label`). Clicking the visible text toggles the switch. |
+| `aria-label` | `string` | none | One name is required | Accessible name when there is no `label` (the theme toggle). Wins over `label`. |
+| `aria-labelledby` | `string` | none | One name is required | Id of visible text elsewhere that names the switch (a settings row heading). Wins over both. |
 | `hideLabel` | `boolean` | `false` | No | Keeps `label` as the accessible name only, with no visible text. Use in rows that already show a heading, such as settings rows. |
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Track size. Legacy names are deprecated. |
 | `disabled` | `boolean` | `false` | No | Native disabled; switch dims to 50% and the label uses `secondary-700` / `dark:secondary-400`. |
 | `icon` | `ReactNode` | none | No | Glyph inside the knob. |
 | `className` | `string` | `""` | No | Applied to the outer wrapper. |
 | `ref` | `Ref<HTMLButtonElement>` | none | No | Forwarded to the switch button. |
-| `...rest` | native `<button>` attributes (except `onChange`) | | No | Spread onto the button after the built-in attributes, so a consumer `aria-label` overrides `label`. |
+| `...rest` | native `<button>` attributes (except `onChange` and `defaultChecked`) | | No | Spread onto the button after the built-in attributes. |
+
+`SwitchProps` is `SwitchOwnProps & ({ label } | { "aria-label" } | { "aria-labelledby" })`: a switch with none of the three does not type-check. The generated manifest lists all three as optional, because it reads the props shared by every member of the union.
 
 <!-- AUTO-END:properties -->
 
@@ -108,8 +113,8 @@ Every measurement comes from `global.switch` (`--switch-track-height/width-*`, `
 
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Off | `checked={false}` | Track `--control-track`, knob at `--switch-knob-inset-*` |
-| On | `checked={true}` | Track `--accent`, knob at `--switch-knob-travel-*` |
+| Off | `checked={false}`, or uncontrolled without `defaultChecked` | Track `--control-track`, knob at `--switch-knob-inset-*` |
+| On | `checked={true}`, or uncontrolled with `defaultChecked` | Track `--accent`, knob at `--switch-knob-travel-*` |
 | Focus visible | `group-focus-visible` on the track | Inset ring `--focus-ring-primary` |
 | Disabled | `disabled` | Button `opacity-50`, `cursor-not-allowed`; label `secondary-700` / `secondary-400` |
 | Hidden label | `hideLabel` | No visible span; `aria-label` still set |
@@ -175,7 +180,7 @@ None imported. `ThemeToggle` composes Switch with a knob `icon`.
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: `button` with `role="switch"` and `aria-checked`; `type="button"`.
-- Required labels: `label` (visible or with `hideLabel`) or `aria-label`. Without either, the name falls back to "On" or "Off", which describes the state, not the setting.
+- Required labels: `label` (visible or with `hideLabel`), `aria-label` or `aria-labelledby`, enforced by the type. There is no fallback name: the old "On" / "Off" fallback described the state, not the setting, and is gone.
 - Keyboard: Tab to focus; Space or Enter toggles (handled in `onKeyDown`).
 - Focus: 2px inset ring on the track via `group-focus-visible`.
 - Touch target minimum: 44px tall hit area at every size; width is the track width (44/56/72px). The visible label text toggles the switch too, like a native control label. It is a plain `<span>` (a `<button>` is not a labelable element), so the accessible name still comes from `aria-label` and the click is wired by hand; it does nothing while `disabled`.
@@ -224,6 +229,7 @@ None imported. `ThemeToggle` composes Switch with a knob `icon`.
 | 2026-09-22 | Off track in light mode (`secondary-300` `#F0EBE4` on the `#FDFCFB` page, with a white knob) is far below the 3:1 non-text contrast guideline; the visible label is not clickable; no reduced-motion handling for the knob glide | Off track is now `--control-track` (sepia-600): 3.31:1 light / 5.34:1 dark on the page, 3.39:1 / 5.69:1 against the knob. The visible label toggles the switch. Track colour and knob glide carry `motion-reduce:transition-none` | Resolved |
 | 2026-09-22 | On track was `--button-primary-background` (amber-400), leaving the white knob at 1.67:1 in the light theme | On track is now `--accent`: 4.9:1 on the light page and 4.9:1 against the knob (dark is unchanged, the accent and the primary fill are both the gold there) | Resolved |
 | 2026-09-22 | Track and knob geometry were hardcoded (`w-[72px]`, inline `translateX` literals, Tailwind height steps) | Moved to `global.switch` tokens; `md` / `lg` track heights alias the control-height tokens and `sm`'s width aliases `touch.target` | Resolved |
+| 2026-10-29 | A switch with no `label` or `aria-label` was named "On" or "Off", which says nothing about the setting; `defaultChecked` was inherited from the button attributes but did nothing | The type requires `label`, `aria-label` or `aria-labelledby` and the fallback is removed; `defaultChecked` makes the switch uncontrolled | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -239,6 +245,7 @@ None imported. `ThemeToggle` composes Switch with a knob `icon`.
 | Unreleased | 2026-09-21 | fix | 44px hit area at every size |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Off track moved to `--control-track` and the on track to `--accent` so both states clear the 3:1 non-text rule; visible label now toggles; knob glide is reduced-motion safe; track and knob geometry moved to `global.switch` tokens |
+| Unreleased | 2026-10-29 | feat (breaking type) | Accessible name required by the type (`label`, `aria-label` or `aria-labelledby`); "On" / "Off" fallback removed; `defaultChecked` for uncontrolled use. `SwitchProps` is now a type alias |
 
 <!-- AUTO-END:changelog -->
 

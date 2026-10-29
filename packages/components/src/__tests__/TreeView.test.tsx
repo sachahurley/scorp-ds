@@ -41,6 +41,22 @@ describe("TreeView", () => {
     expect(screen.queryByRole("treeitem", { name: "Button.tsx" })).toBeNull();
   });
 
+  it("takes its name from aria-labelledby", () => {
+    render(
+      <>
+        <h2 id="files-heading">Project files</h2>
+        <TreeView aria-labelledby="files-heading" nodes={nodes} />
+      </>
+    );
+    expect(screen.getByRole("tree", { name: "Project files" })).toBeInTheDocument();
+  });
+
+  it("requires a name at the type level", () => {
+    // @ts-expect-error: one of aria-label or aria-labelledby is required
+    render(<TreeView nodes={nodes} />);
+    expect(screen.getByRole("tree")).toBeInTheDocument();
+  });
+
   it("uses a single tab stop on the selected node", () => {
     render(<TreeView aria-label="Files" nodes={nodes} defaultExpanded={["src"]} defaultSelected="index" />);
     const stops = screen.getAllByRole("treeitem").filter((el) => el.tabIndex === 0);
