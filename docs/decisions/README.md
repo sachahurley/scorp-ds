@@ -42,3 +42,4 @@ Start from `0000-template.md`. Number sequentially.
 | [0029](0029-accessible-names-are-required-by-type.md) | An interactive component's accessible name is required by its type | Switch, Slider, TreeView, TabsList, Avatar, Popover, BottomSheet |
 | [0030](0030-every-data-state-has-a-story.md) | Every state a component's API supports has a story | Stories, doc requirements |
 | [0031](0031-the-0024-aliases-are-removed.md) | The 0024 aliases are removed; Modal `width` stays | Every component that carried an alias, `lib/size.ts` |
+| [0032](0032-responsive-props-take-a-breakpoint-map.md) | A responsive prop takes a breakpoint map, and only where a pattern needs one | `Stack` `axis` and `align`, `Grid` `columns`, future responsive props |

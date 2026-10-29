@@ -6511,6 +6511,26 @@
           "kind": "type"
         },
         {
+          "name": "StackAxisValue",
+          "kind": "type"
+        },
+        {
+          "name": "StackBreakpoint",
+          "kind": "type"
+        },
+        {
+          "name": "StackResponsiveAxis",
+          "kind": "type"
+        },
+        {
+          "name": "StackAxis",
+          "kind": "type"
+        },
+        {
+          "name": "StackAlign",
+          "kind": "type"
+        },
+        {
           "name": "StackProps",
           "kind": "interface"
         },
@@ -6530,6 +6550,29 @@
             "\"none\"",
             "\"1\"",
             "\"2\""
+          ]
+        },
+        "StackAxisValue": {
+          "union": [
+            "\"vertical\"",
+            "\"horizontal\""
+          ]
+        },
+        "StackBreakpoint": {
+          "union": [
+            "\"sm\"",
+            "\"md\"",
+            "\"lg\"",
+            "\"base\"",
+            "\"xl\""
+          ]
+        },
+        "StackAlign": {
+          "union": [
+            "\"start\"",
+            "\"center\"",
+            "\"end\"",
+            "\"stretch\""
           ]
         },
         "StackProps": {
@@ -6565,14 +6608,22 @@
             },
             {
               "name": "axis",
-              "type": "\"vertical\" | \"horizontal\"",
+              "type": "StackAxis",
+              "required": false,
+              "default": "\"vertical\"",
+              "description": "Layout direction: `\"vertical\"` (default, a column), `\"horizontal\"` (a row that wraps and centres its children), or a breakpoint map such as `{ base: \"vertical\", md: \"horizontal\" }` (keys `base`, `sm`, `md`, `lg`, `xl`; `base` required). Use the map for a split that stacks on small screens and sits side by side from a breakpoint."
+            },
+            {
+              "name": "align",
+              "type": "StackAlign",
               "required": false,
               "values": [
-                "\"vertical\"",
-                "\"horizontal\""
+                "\"start\"",
+                "\"center\"",
+                "\"end\"",
+                "\"stretch\""
               ],
-              "default": "\"vertical\"",
-              "description": "Default vertical stack; horizontal for toolbars / button groups."
+              "description": "Cross-axis placement of children at every breakpoint; unset, a column stretches them and a row centres them. Set `stretch` on a responsive split so its panes share one height once they sit side by side."
             }
           ],
           "inherits": [
@@ -6582,7 +6633,7 @@
           ]
         }
       },
-      "apiHash": "9b4f07e14c450d5e"
+      "apiHash": "9b0d9abeeded9b1f"
     },
     "VisuallyHidden": {
       "layer": "primitive",

@@ -867,7 +867,8 @@ Status: draft · Spec: [`docs/specs/Stack.md`](../../docs/specs/Stack.md) · Sto
 | `children` (required) | `ReactNode` |  | Stack contents; laid out along `axis` with `gap` between them. |
 | `gap` | `"3"` `"4"` `"5"` `"6"` `"8"` `"none"` `"1"` `"2"` | `"4"` | Maps to the spacing scale (`gap-*` utilities): `none` 0, `1` 4px, `2` 8px, `3` 12px, `4` 16px (default), `5` 20px, `6` 24px, `8` 32px. |
 | `className` | `string` |  | Additional CSS classes (width, padding, alignment overrides). |
-| `axis` | `"vertical"` `"horizontal"` | `"vertical"` | Default vertical stack; horizontal for toolbars / button groups. |
+| `axis` | `StackAxis` | `"vertical"` | Layout direction: `"vertical"` (default, a column), `"horizontal"` (a row that wraps and centres its children), or a breakpoint map such as `{ base: "vertical", md: "horizontal" }` (keys `base`, `sm`, `md`, `lg`, `xl`; `base` required). |
+| `align` | `"start"` `"center"` `"end"` `"stretch"` |  | Cross-axis placement of children at every breakpoint; unset, a column stretches them and a row centres them. |
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`.
 
