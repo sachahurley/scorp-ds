@@ -13,8 +13,8 @@
 | Story | `Components/Display/Avatar` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `d50427a1ea5c8199` |
+| Last updated | 2026-10-29 |
+| API hash | `77099a1d0796b170` |
 
 ---
 
@@ -68,7 +68,7 @@ Content priority: image, initials, icon, default glyph. A failed image falls bac
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `src` | `string` | `undefined` | No | Image URL. Falls back to initials, icon, then `@` if it fails to load. |
-| `alt` | `string` | `"Avatar"` | No | Image alt text. Pass the person's name; the default is generic. |
+| `alt` | `string` | none | Yes | Who the avatar shows. Names the image, or the box (`role="img"`) when it renders initials, an icon or the `@` glyph, including after a broken image. `""` marks it decorative: the image gets `alt=""` and the fallback box `aria-hidden`. |
 | `initials` | `string` | `undefined` | No | One or two letters shown when there is no usable image. |
 | `icon` | `ReactNode` | `undefined` | No | Custom icon (e.g. `TuiIcon`) shown when there is no image or initials. |
 | `size` | `ControlSizeProp \| "xl"` | `"md"` | No | Square size: `sm` 24px, `md` 40px, `lg` 64px, `xl` 96px. Legacy names are deprecated aliases. |
@@ -110,7 +110,8 @@ Exported type: `AvatarProps`.
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
 | Content mode | `src`, `initials`, `icon` | Which child renders |
-| Image failed | `img` `onError` | Switches to the next fallback; calls `onError` |
+| Image failed | `img` `onError` | Switches to the next fallback, which keeps the `alt` name; calls `onError` |
+| Decorative | `alt=""` | Image `alt=""`, fallback box `aria-hidden`; the status dot is still announced |
 | Size | `size` | Box, font, icon, dot size and dot inset |
 | Presence | `status` | Dot color |
 
@@ -128,7 +129,7 @@ Exported type: `AvatarProps`.
 | Initials | Yes | Yes | `Initials`, `AllSizes` |
 | Icon | Yes | Yes | `Icon` |
 | Default `@` glyph | Yes | No | |
-| Image error fallback | Yes | No | |
+| Image error fallback | Yes | Yes | `Image fallback` (an undecodable data URL, so no network; the play function waits for the initials) |
 | `sm` / `md` / `lg` / `xl` | Yes | Yes | `AllSizes` (4 items) |
 | `online` | Yes | Yes | `Initials` |
 | `away` | Yes | Yes | `Image` |
@@ -136,7 +137,7 @@ Exported type: `AvatarProps`.
 
 Interactive controls: `size` (select), `status` (select).
 
-**Coverage:** 75% (9/12, counting each size and status)
+**Coverage:** 83% (10/12, counting each size and status)
 
 <!-- AUTO-END:storybook -->
 
@@ -146,7 +147,7 @@ Interactive controls: `size` (select), `status` (select).
 
 <!-- AUTO-START:hardcoded -->
 
-- Fallback alt text `"Avatar"`.
+- Fallback alt text `"Avatar"`, reached only by an untyped caller that omits the required `alt`.
 - Default glyph `@`.
 - Status label template `Status: {status}` (English).
 
@@ -178,8 +179,8 @@ None (consumers may pass `TuiIcon` via `icon`).
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic role: image mode is an `img` with `alt`; the status dot is `role="img"` with `aria-label="Status: {status}"`; the wrapper has no role
-- Required labels: pass `alt` with the person's name. Initials, icon, and default glyph modes expose no accessible name (the glyph is `aria-hidden`), so name the person in adjacent text
+- Semantic role: image mode is an `img` with `alt`; initials, icon and default glyph modes make the content box `role="img"` with `aria-label={alt}`, so the letters are not read on their own; the status dot is `role="img"` with `aria-label="Status: {status}"`; the outer wrapper has no role
+- Required labels: `alt`, enforced by the type. Pass the person's name, or `""` when the name is printed beside the avatar, which hides the avatar from assistive tech so the name is not read twice
 - Focus order: not focusable
 - Touch target minimum: not interactive; if wrapped in a link or button, that control must provide 44x44 (the `sm` 24px avatar needs extra hit area)
 - Color independence: presence is conveyed to screen readers by the label, but visually only by dot color (all dots share one shape); pair with text where presence matters
@@ -192,9 +193,9 @@ None (consumers may pass `TuiIcon` via `icon`).
 
 <!-- HUMAN-SECTION:do-dont (preserved across auto-updates) -->
 
-- Do pass `alt` with the person's name when using `src`.
+- Do pass `alt` with the person's name, or `alt=""` when the name is printed beside the avatar.
 - Do always pass `initials` alongside `src` so a broken image still identifies the person.
-- Do show the person's name next to the avatar; the avatar alone is not a label.
+- Do show the person's name next to the avatar; the avatar alone is not a visible label.
 - Don't rely on the status dot alone to communicate availability in critical flows.
 - Don't round the avatar with `className`; the plate clip is the Scorp shape.
 
@@ -220,7 +221,8 @@ None (consumers may pass `TuiIcon` via `icon`).
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | Sizes use `w-6` / `w-10` / `w-16` / `w-24` (24/40/64/96px), not the control-height tokens the 2026-09-21 changelog row mentions; non-image modes have no accessible name; image alt defaults to generic "Avatar" | None yet | Open |
+| 2026-09-22 | Sizes use `w-6` / `w-10` / `w-16` / `w-24` (24/40/64/96px), not the control-height tokens the 2026-09-21 changelog row mentions | None yet | Open |
+| 2026-09-22 | Non-image modes have no accessible name; image alt defaults to generic "Avatar" | 2026-10-29: `alt` is required by the type and names the image or the fallback box (`role="img"`); `alt=""` marks a decorative avatar | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -234,6 +236,7 @@ None (consumers may pass `TuiIcon` via `icon`).
 |---------|------|------|---------|
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` | xl (fixed 24/40/64/96px boxes, not control-height tokens); small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
+| Unreleased | 2026-10-29 | feat (breaking type) | `alt` is required and names every mode (the fallback box becomes `role="img"`); `alt=""` is decorative and no longer becomes "Avatar". `Image fallback` story added |
 
 <!-- AUTO-END:changelog -->
 

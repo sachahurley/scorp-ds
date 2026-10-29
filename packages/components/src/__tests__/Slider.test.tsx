@@ -19,6 +19,24 @@ describe("Slider", () => {
     expect(input).toHaveAttribute("type", "range");
   });
 
+  it("takes its name from aria-labelledby", () => {
+    render(
+      <>
+        <span id="zoom-heading">Zoom</span>
+        <Slider aria-labelledby="zoom-heading" />
+      </>
+    );
+    expect(screen.getByRole("slider", { name: "Zoom" })).toBeInTheDocument();
+  });
+
+  it("requires a name at the type level", () => {
+    // @ts-expect-error: one of label, aria-label or aria-labelledby is required
+    render(<Slider min={0} max={10} />);
+    // @ts-expect-error: a label that renders nothing does not name the slider
+    render(<Slider label={null} />);
+    expect(screen.getAllByRole("slider")).toHaveLength(2);
+  });
+
   it("gives the control a 44px touch target", () => {
     const { container } = render(<Slider aria-label="Zoom" />);
     const input = screen.getByRole("slider");

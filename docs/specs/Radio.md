@@ -13,7 +13,7 @@
 | Story | `Components/Inputs/Radio` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
+| Last updated | 2026-10-29 |
 | API hash | `1644dd9933fcf583` |
 
 ---
@@ -69,9 +69,9 @@ Label text is `text-sm` at every size; the hit area is 44x44px at every size.
 | `defaultChecked` | `boolean` | none | No | Native uncontrolled initial selection (passed through). |
 | `onCheckedChange` | `(checked: boolean) => void` | none | No | Called with this radio's own checked state (read from `event.currentTarget`). Native radios only fire on becoming selected, so this is always called with `true`. |
 | `onChange` | `ChangeEventHandler<HTMLInputElement>` | none | No | Native change handler; called before `onCheckedChange`. |
-| `error` | `boolean` | `false` | No | Error styling and `aria-invalid` without a message. Prefer `errorMessage`. |
+| `error` | `boolean` | `false` | No | Error styling without a message. Prefer `errorMessage`. Styling only: the invalid state is announced from the group (see Accessibility). |
 | `helperText` | `ReactNode` | none | No | Secondary line under the label, linked with `aria-describedby`. Hidden while `errorMessage` is set. |
-| `errorMessage` | `ReactNode` | none | No | Validation message under the label; sets the error state and `aria-invalid`, and leads with the AlertCircle icon. |
+| `errorMessage` | `ReactNode` | none | No | Validation message under the label, linked with `aria-describedby`; sets the error styling and leads with the AlertCircle icon. Does not set `aria-invalid` on the radio. |
 | `disabled` | `boolean` | `false` | No | Native disabled; box and label dim. |
 | `className` | `string` | `""` | No | Applied to the outer wrapper. |
 | `ref` | `Ref<HTMLInputElement>` | none | No | Forwarded to the native input. |
@@ -184,7 +184,8 @@ None.
 - Keyboard: native. Tab enters the group at the selected radio; arrow keys move and select within the group.
 - Focus: 2px inset ring on the plate when the native input is focus-visible.
 - Touch target minimum: 44x44px at every size via the `::before` hit area inside the label.
-- Description: `helperText` / `errorMessage` are tied to the input with `aria-describedby`, and `errorMessage` also sets `aria-invalid`.
+- Description: `helperText` / `errorMessage` are tied to the input with `aria-describedby`, so each radio's own message is read when it is focused.
+- Invalid state: the group carries it, not the radio. ARIA 1.2 does not support `aria-invalid` on `role="radio"` (nor on `group`), so Radio never sets it. Render the group as `<fieldset role="radiogroup" aria-invalid="true" aria-describedby="<group message id>">` with a `<legend>`, and put the group-level message under it.
 - Color independence: selection shows a square dot, not just fill. An `errorMessage` adds the AlertCircle icon and text, so the error state is never color alone; bare `error` still is, so pair it with text.
 
 <!-- AUTO-END:accessibility -->
@@ -212,7 +213,7 @@ None.
 
 - Box sizes and hit areas match `Checkbox`, so the two align in mixed forms.
 - Stack vertically (`flex flex-col gap-2` as in the story); horizontal groups need enough gap that the 44px hit areas do not overlap.
-- For a per-option message use `helperText` / `errorMessage`. For a group-level error, render the message yourself under the fieldset (there is still no RadioGroup) and set `error` on each radio.
+- For a per-option message use `helperText` / `errorMessage`. For a group-level error, render the message yourself under the fieldset (there is still no RadioGroup), set `error` on each radio for the styling, and give the fieldset `role="radiogroup"`, `aria-invalid="true"` and `aria-describedby` pointing at the message.
 
 <!-- /HUMAN-SECTION:composition -->
 
@@ -225,7 +226,7 @@ None.
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
 | 2026-09-21 | Circle (`rounded-full`) broke the sharp-corner shape language | Plate ring recipe (stepped --plate-round), inset focus ring, square checked dot | Resolved |
-| 2026-10-28 | `aria-invalid` sits on each radio `<input>`. ARIA 1.2 does not support it on `role="radio"`; it belongs on the group (`radiogroup`, or the `fieldset`). Found by `jsx-a11y/role-supports-aria-props` | Line-level lint exception with this reason until a group component carries the invalid state | Open |
+| 2026-10-28 | `aria-invalid` sits on each radio `<input>`. ARIA 1.2 does not support it on `role="radio"`; it belongs on the group (`radiogroup`, or the `fieldset`). Found by `jsx-a11y/role-supports-aria-props` | 2026-10-29: `aria-invalid` removed from the radio and the lint exception deleted. The error message stays linked through `aria-describedby`; the caller's `<fieldset role="radiogroup">` carries `aria-invalid` (see Accessibility) | Resolved |
 | 2026-09-21 | 16px small circle below the 44px target; unlabeled radios ignored mouse clicks | 44px pseudo-element hit area at every size; control always wrapped in a label | Resolved |
 | 2026-09-22 | No `helperText` / `errorMessage` (unlike Checkbox) and no RadioGroup wrapper, so group errors are color only unless the consumer adds text; `label`, `error` and `onCheckedChange` lack JSDoc | Added `helperText` / `errorMessage` through `lib/field.tsx` (same plumbing as Checkbox) and JSDoc on every public prop | Resolved |
 | 2026-09-22 | Still no RadioGroup wrapper: a group-level error has to be rendered by the consumer under the fieldset | None yet | Open |
@@ -246,6 +247,7 @@ None.
 | Unreleased | 2026-09-21 | fix | 44px hit area, unlabeled click fix |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | `helperText` / `errorMessage` under the label (wired through `aria-describedby`), JSDoc on `label`, `error` and `onCheckedChange`, selected-error dot tokenized, and `onCheckedChange` now reads `event.currentTarget.checked`. The wrapper is `flex flex-col gap-1` so the message can sit under the label |
+| Unreleased | 2026-10-29 | fix | `aria-invalid` removed from the radio input (ARIA 1.2 does not support it on `role="radio"`); the group carries the invalid state |
 
 <!-- AUTO-END:changelog -->
 

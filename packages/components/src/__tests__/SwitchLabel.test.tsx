@@ -23,6 +23,24 @@ describe("Switch label and track", () => {
     expect(screen.getByRole("switch", { name: "Switch to light theme" })).toBeVisible();
   });
 
+  it("takes its name from aria-labelledby, with no On/Off fallback", () => {
+    render(
+      <>
+        <span id="row-heading">Email digests</span>
+        <Switch aria-labelledby="row-heading" onCheckedChange={vi.fn()} />
+      </>
+    );
+    const control = screen.getByRole("switch", { name: "Email digests" });
+    expect(control).not.toHaveAttribute("aria-label");
+  });
+
+  it("requires a name at the type level", () => {
+    // @ts-expect-error: one of label, aria-label or aria-labelledby is required
+    render(<Switch checked onCheckedChange={vi.fn()} />);
+    // At runtime an unnamed switch is still rendered, just without a made-up name.
+    expect(screen.getByRole("switch")).not.toHaveAttribute("aria-label");
+  });
+
   it("does not toggle from the label when disabled", () => {
     const onCheckedChange = vi.fn();
     render(<Switch label="Locked" disabled checked={false} onCheckedChange={onCheckedChange} />);
@@ -45,6 +63,35 @@ describe("Switch label and track", () => {
     rerender(<Switch label="Notifications" checked onCheckedChange={vi.fn()} />);
     const on = document.querySelector('[data-state="on"]') as HTMLElement;
     expect(on.className).toContain("bg-[var(--accent)]");
+  });
+
+  it("keeps its own state when uncontrolled, seeded from defaultChecked", () => {
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Email digests" defaultChecked onCheckedChange={onCheckedChange} />);
+    const control = screen.getByRole("switch", { name: "Email digests" });
+    expect(control).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(control);
+    expect(control).toHaveAttribute("aria-checked", "false");
+    expect(onCheckedChange).toHaveBeenLastCalledWith(false);
+    fireEvent.keyDown(control, { key: " " });
+    expect(control).toHaveAttribute("aria-checked", "true");
+    expect(onCheckedChange).toHaveBeenLastCalledWith(true);
+  });
+
+  it("starts off when uncontrolled without defaultChecked", () => {
+    render(<Switch label="Email digests" />);
+    expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("follows checked over defaultChecked when controlled", () => {
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Email digests" checked={false} defaultChecked onCheckedChange={onCheckedChange} />);
+    const control = screen.getByRole("switch");
+    expect(control).toHaveAttribute("aria-checked", "false");
+    fireEvent.click(control);
+    // The parent did not update `checked`, so the switch stays off.
+    expect(control).toHaveAttribute("aria-checked", "false");
+    expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 
   it("holds the knob still under prefers-reduced-motion", () => {

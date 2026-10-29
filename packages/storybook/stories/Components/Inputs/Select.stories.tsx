@@ -25,7 +25,7 @@ export const Default: Story = {
   // thing they document.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button'));
+    await userEvent.click(canvas.getByRole('combobox'));
   },
   render: (args) => (
     <div className="w-72">
@@ -84,7 +84,7 @@ export const Grouped: Story = {
   // resting frame documents nothing this story is named for.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button'));
+    await userEvent.click(canvas.getByRole('combobox'));
   },
   render: (args) => (
     <div className="w-72">
@@ -113,7 +113,7 @@ export const WithAriaLabelOnly: Story = {
   // only by aria-label.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button'));
+    await userEvent.click(canvas.getByRole('combobox'));
   },
   render: (args) => (
     <div className="w-72">

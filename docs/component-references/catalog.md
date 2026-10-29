@@ -195,7 +195,7 @@ Status: draft · Spec: [`docs/specs/Avatar.md`](../../docs/specs/Avatar.md) · S
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `src` | `string` |  | Image URL. |
-| `alt` | `string` |  | Alt text for the image, usually the person's name. |
+| `alt` (required) | `string` |  | Who the avatar shows, usually the person's name. |
 | `initials` | `string` |  | One or two letters shown when there is no image, or the image fails to load. |
 | `icon` | `ReactNode` |  | Icon shown when there is neither an image nor initials (for a team, a bot, a system account). |
 | `size` | `"xl"` `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. |
@@ -645,7 +645,7 @@ Status: draft · Spec: [`docs/specs/Radio.md`](../../docs/specs/Radio.md) · Sto
 | `label` | `string \| ReactNode` |  | Visible label next to the box; clicking it selects the radio. |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Secondary line under the label (explains what picking this option means). |
-| `errorMessage` | `ReactNode` |  | Validation message under the label. |
+| `errorMessage` | `ReactNode` |  | Validation message under the label, read through `aria-describedby`. |
 | `onCheckedChange` | `(checked: boolean) => void` |  | Called with this radio's checked state after a change (alternative to `onChange`). |
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`, `InputHTMLAttributes`.
@@ -664,7 +664,7 @@ Status: draft · Spec: [`docs/specs/Select.md`](../../docs/specs/Select.md) · S
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `label` | `ReactNode` |  | Optional visible label; associates with the custom trigger via `htmlFor` / `id` on the button. |
+| `label` | `ReactNode` |  | Optional visible label; associates with the custom trigger (the combobox) via `htmlFor` / `id`. |
 | `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Trigger height: sm 32px, md 40px (default), lg 48px. |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Hint shown under the trigger. |
@@ -686,7 +686,9 @@ Status: draft · Spec: [`docs/specs/Slider.md`](../../docs/specs/Slider.md) · S
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `label` | `ReactNode` |  | Optional visible label. |
+| `label` | `ReactNode` |  | Visible label tied to the input with htmlFor/id; one of `label`, `aria-label` or `aria-labelledby` is required. |
+| `aria-label` | `string` |  | Accessible name when the slider has no visible label of its own (a zoom slider in a toolbar). |
+| `aria-labelledby` | `string` |  | Id of visible text elsewhere that names the slider, such as a column heading. |
 
 Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAttributes`, `InputHTMLAttributes`.
 
@@ -704,10 +706,13 @@ Status: draft · Spec: [`docs/specs/Switch.md`](../../docs/specs/Switch.md) · S
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `checked` | `boolean` | `false` | Whether the switch is on. |
+| `checked` | `boolean` |  | Whether the switch is on, for a controlled switch: keep it in state and update it from `onCheckedChange`. |
+| `defaultChecked` | `boolean` | `false` | Whether an uncontrolled switch starts on. |
 | `onCheckedChange` | `(checked: boolean) => void` |  | Called with the next value when the user clicks the track or label, or presses Space or Enter. |
 | `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Track size. |
-| `label` | `string` |  | Visible label and accessible name. |
+| `label` | `string` |  | Visible label and accessible name; one of `label`, `aria-label` or `aria-labelledby` is required. |
+| `aria-label` | `string` |  | Accessible name when there is no `label` (a theme toggle whose state is shown by an icon). |
+| `aria-labelledby` | `string` |  | Id of visible text elsewhere that names the switch, such as a settings row heading. |
 | `hideLabel` | `boolean` | `false` | Keep `label` as the accessible name only (no visible text). |
 | `disabled` | `boolean` | `false` | Blocks interaction and dims the switch. |
 | `icon` | `ReactNode` |  | Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle). |
@@ -1079,7 +1084,7 @@ Status: draft · Spec: [`docs/specs/Tabs.md`](../../docs/specs/Tabs.md) · Story
 |---|---|---|---|
 | `children` (required) | `ReactNode` |  | The `TabsTrigger` buttons, in the order the arrow keys move through them. |
 | `className` | `string` |  | Extra classes on the tab strip (alignment, overflow). |
-| `aria-label` | `string` |  | Accessible name for the tab strip (pass this or `aria-labelledby`). |
+| `aria-label` | `string` |  | Accessible name for the tab strip, such as "Account sections"; this or `aria-labelledby` is required. |
 | `aria-labelledby` | `string` |  | Id of a visible heading that names the tab strip; use it instead of `aria-label` when such a heading exists. |
 
 **`TabsContentProps`**
@@ -1457,8 +1462,8 @@ Status: draft · Spec: [`docs/specs/TreeView.md`](../../docs/specs/TreeView.md) 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `nodes` (required) | `TreeNode[]` |  | Root nodes. |
-| `aria-label` | `string` |  | Accessible name of the tree (pass this or `aria-labelledby`). |
-| `aria-labelledby` | `string` |  | Id of a visible heading naming the tree. |
+| `aria-label` | `string` |  | Accessible name of the tree, such as "Files"; this or `aria-labelledby` is required. |
+| `aria-labelledby` | `string` |  | Id of a visible heading naming the tree; use it instead of `aria-label` when such a heading exists. |
 | `expanded` | `string[]` |  | Ids of open branches (controlled). |
 | `defaultExpanded` | `string[]` | `[]` | Ids of branches open on first render (uncontrolled). |
 | `onExpandedChange` | `(expanded: string[]) => void` |  | Fires with the next list of open branch ids. |

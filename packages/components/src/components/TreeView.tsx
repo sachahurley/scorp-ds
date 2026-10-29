@@ -57,12 +57,13 @@ export interface TreeNode {
   disabled?: boolean;
 }
 
-export interface TreeViewProps {
+/** Every TreeView prop except the requirement that one accessible name is set. */
+interface TreeViewOwnProps {
   /** Root nodes. */
   nodes: TreeNode[];
-  /** Accessible name of the tree (pass this or `aria-labelledby`). */
+  /** Accessible name of the tree, such as "Files"; this or `aria-labelledby` is required. */
   "aria-label"?: string;
-  /** Id of a visible heading naming the tree. */
+  /** Id of a visible heading naming the tree; use it instead of `aria-label` when such a heading exists. */
   "aria-labelledby"?: string;
   /** Ids of open branches (controlled). */
   expanded?: string[];
@@ -83,6 +84,15 @@ export interface TreeViewProps {
   /** Extra classes for the tree root. */
   className?: string;
 }
+
+/**
+ * The name a TreeView is announced by. The type requires one: a screen reader
+ * entering an unnamed tree says only "tree".
+ */
+type TreeViewName = { "aria-label": string } | { "aria-labelledby": string };
+
+/** Props of `TreeView`: its own props plus a required accessible name, given as `aria-label` or `aria-labelledby`. */
+export type TreeViewProps = TreeViewOwnProps & TreeViewName;
 
 type FlatNode = {
   node: TreeNode;

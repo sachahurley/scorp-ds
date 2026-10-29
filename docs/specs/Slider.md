@@ -13,8 +13,8 @@
 | Story | `Components/Inputs/Slider` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `2853775cf8dd358a` |
+| Last updated | 2026-10-29 |
+| API hash | `ccba46e40934dd27` |
 
 ---
 
@@ -56,7 +56,9 @@ A `flex w-full flex-col gap-1.5` span (receives `className`) holding an optional
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `label` | `ReactNode` | none | No | Visible label associated via `htmlFor`/`id`. Put the current value in it if users need to see it. Use this or `aria-label`. |
+| `label` | `ReactNode` | none | One name is required | Visible label associated via `htmlFor`/`id`. Put the current value in it if users need to see it. A `null`, `undefined` or boolean label does not count as a name. |
+| `aria-label` | `string` | none | One name is required | Accessible name when there is no visible label (a toolbar zoom slider). |
+| `aria-labelledby` | `string` | none | One name is required | Id of visible text elsewhere that names the slider. |
 | `id` | `string` | generated (`useId`) | No | Id for the input; always set so the label can target it. |
 | `disabled` | `boolean` | none | No | Native disabled; input dims to 50% with a default cursor. |
 | `min` / `max` / `step` | `number \| string` | native (`0` / `100` / `1`) | No | Range bounds and increment. |
@@ -64,7 +66,9 @@ A `flex w-full flex-col gap-1.5` span (receives `className`) holding an optional
 | `onChange` | `ChangeEventHandler<HTMLInputElement>` | none | No | Native change handler; fires continuously while dragging. Read `Number(e.target.value)`. |
 | `className` | `string` | `""` | No | Applied to the outer span, which is already `w-full`. Pass a width or `max-w-*` here, or constrain the parent. |
 | `ref` | `Ref<HTMLInputElement>` | none | No | Forwarded to the range input. |
-| `...rest` | native `<input>` attributes (except `size` and `type`) | | No | `name`, `aria-label`, `aria-valuetext`, `list`, and so on. |
+| `...rest` | native `<input>` attributes (except `size` and `type`) | | No | `name`, `aria-valuetext`, `list`, and so on. |
+
+`SliderProps` is `SliderOwnProps & ({ label } | { "aria-label" } | { "aria-labelledby" })`: a slider with none of the three does not type-check. The generated manifest lists all three as optional, because it reads the props shared by every member of the union.
 
 <!-- AUTO-END:properties -->
 
@@ -161,7 +165,7 @@ None.
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: native `slider` (range input) with implicit `aria-valuemin`, `aria-valuemax`, `aria-valuenow`.
-- Required labels: `label` or `aria-label`; no dev warning when missing. Use `aria-valuetext` when the raw number is not meaningful ("4x zoom").
+- Required labels: `label`, `aria-label` or `aria-labelledby`, enforced by the type. Use `aria-valuetext` when the raw number is not meaningful ("4x zoom").
 - Keyboard: native. Arrow keys step, Page Up/Down jump, Home/End go to the bounds.
 - Focus: inset ring on the input box (outlines are suppressed).
 - Touch target minimum: met. The input is `h-touch` (44px) and spans the full width, so the whole band is the pointer target; the visible rail stays 4px.
@@ -207,6 +211,7 @@ None.
 | 2026-09-22 | No 44px touch target (24px input, 14px thumb) despite the header comment; track `--surface-muted` has very low contrast against the page in both themes and there is no filled portion; no `size`, `helperText`/`errorMessage`, or tests | Row is now `h-touch` (44px) and full width; the rail moved to `--control-track` (3.31:1 light / 5.34:1 dark, up from 1.06:1 / 1.09:1) and a `--accent` fill marks the value. Unit tests added | Resolved |
 | 2026-09-22 | The `inline-flex` wrapper sized to its content, so a parent width such as `w-64` had no effect | Root is `flex w-full`; width comes from the container or from `className` | Resolved |
 | 2026-09-22 | No `size` prop and no `helperText` / `errorMessage` | None yet; Slider is the only field tier without them | Open |
+| 2026-10-29 | A slider could be rendered with no accessible name, read as a bare number | The type requires `label`, `aria-label` or `aria-labelledby` | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -220,6 +225,7 @@ None.
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec created from source |
 | Unreleased | 2026-09-22 | fix | Real 44px touch target, `--control-track` rail with an `--accent` fill, full-width layout, and the first unit tests |
+| Unreleased | 2026-10-29 | feat (breaking type) | Accessible name required by the type (`label`, `aria-label` or `aria-labelledby`). `SliderProps` is now a type alias |
 
 <!-- AUTO-END:changelog -->
 

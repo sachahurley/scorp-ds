@@ -147,3 +147,31 @@ describe("Tabs trigger affordances", () => {
     expect(document.body.innerHTML).not.toContain("0.5px");
   });
 });
+
+describe("TabsList accessible name", () => {
+  it("takes its name from aria-labelledby", () => {
+    render(
+      <Tabs defaultValue="a">
+        <h2 id="sections-heading">Account</h2>
+        <TabsList aria-labelledby="sections-heading">
+          <TabsTrigger value="a">Alpha</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">alpha panel</TabsContent>
+      </Tabs>
+    );
+    expect(screen.getByRole("tablist", { name: "Account" })).toBeInTheDocument();
+  });
+
+  it("requires a name at the type level", () => {
+    render(
+      <Tabs defaultValue="a">
+        {/* @ts-expect-error: one of aria-label or aria-labelledby is required */}
+        <TabsList>
+          <TabsTrigger value="a">Alpha</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">alpha panel</TabsContent>
+      </Tabs>
+    );
+    expect(screen.getByRole("tablist")).toBeInTheDocument();
+  });
+});

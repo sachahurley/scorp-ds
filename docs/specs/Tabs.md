@@ -13,8 +13,8 @@
 | Story | `Components/Navigation/Tabs` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `2e3f508f58aab1bc` |
+| Last updated | 2026-10-29 |
+| API hash | `450c9ed1b608b8af` |
 
 ---
 
@@ -71,10 +71,12 @@ Tabs switch between related views that share one context, such as the sections o
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `aria-label` | `string` | none | One of the two | Accessible name for the tab strip. |
-| `aria-labelledby` | `string` | none | One of the two | Id of a visible heading naming the strip. |
+| `aria-label` | `string` | none | One of the two (enforced by the type) | Accessible name for the tab strip. |
+| `aria-labelledby` | `string` | none | One of the two (enforced by the type) | Id of a visible heading naming the strip. |
 | `children` | `ReactNode` | none | Yes | `TabsTrigger` elements only, as direct children. |
 | `className` | `string` | none | No | Classes on the tablist. |
+
+`TabsListProps` is `TabsListOwnProps & ({ "aria-label" } | { "aria-labelledby" })`: a strip with neither does not type-check. The generated manifest lists both as optional, because it reads the props shared by every member of the union.
 
 ### TabsTrigger
 
@@ -194,7 +196,7 @@ None.
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: `tablist` > `tab` (native `<button>`) > `tabpanel`, linked with `aria-controls` / `aria-labelledby`; `aria-selected` on each tab.
-- Required labels: `aria-label` or `aria-labelledby` on `TabsList`; `aria-label` on icon-only triggers.
+- Required labels: `aria-label` or `aria-labelledby` on `TabsList` (enforced by the type); `aria-label` on icon-only triggers.
 - Focus order (roving tabindex): only the selected tab is in the tab order (`tabIndex=0`, others `-1`). Tab moves from the strip to the active panel, which is focusable (`tabIndex=0`).
 - Keyboard: ArrowRight / ArrowDown select the next tab and ArrowLeft / ArrowUp the previous, wrapping at the ends; Home and End jump to the first and last. All four skip disabled triggers (selection follows focus here, so landing on one would also select it), and when no other trigger is enabled focus stays put. Focus moves on the next animation frame.
 - Focus ring: triggers use the system's inset `box-shadow` ring (`--focus-ring-width` / `--focus-ring-primary`) rather than the browser outline.
@@ -242,6 +244,7 @@ None.
 | 2026-09-22 | Arrow, Home and End navigation does not skip disabled triggers, so the keyboard can select a disabled tab | Navigation scans for the next enabled trigger (reading `disabled` off the rendered button) and stays put when there is none | Resolved |
 | 2026-09-22 | Triggers have no token focus ring (they rely on the browser outline) and are about 37px tall, below the 44px target | Inset `--focus-ring-primary` ring on `focus-visible`; a 44px-tall pseudo-element raises the tap target without moving the underline | Resolved |
 | 2026-09-22 | No unit tests (keyboard and roving tabindex are untested) | `packages/components/src/__tests__/Tabs.test.tsx` covers arrows, Home, End, disabled skipping, the focus ring, the tap target and the roving tabindex | Resolved |
+| 2026-10-29 | The tablist name was documented as required but typed as optional, so an unnamed strip type-checked | The type requires `aria-label` or `aria-labelledby` on `TabsList` | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 
@@ -255,6 +258,7 @@ None.
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Arrows and Home/End skip disabled triggers; inset token focus ring; 44px tap target; unit tests and a disabled-trigger story added |
+| Unreleased | 2026-10-29 | feat (breaking type) | `TabsList` accessible name required by the type (`aria-label` or `aria-labelledby`). `TabsListProps` is now a type alias |
 
 <!-- AUTO-END:changelog -->
 

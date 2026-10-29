@@ -5,12 +5,31 @@ import { Radio } from "../components/Radio";
 describe("Radio messages", () => {
   afterEach(() => cleanup());
 
-  it("wires errorMessage to the input and marks it invalid", () => {
+  it("wires errorMessage to the input through aria-describedby", () => {
     render(<Radio name="plan" value="pro" label="Pro" errorMessage="Pick a paid plan" />);
     const input = screen.getByRole("radio", { name: /pro/i });
-    expect(input).toHaveAttribute("aria-invalid", "true");
     expect(screen.getByText("Pick a paid plan")).toBeVisible();
     expect(input.getAttribute("aria-describedby")).toBe(screen.getByText("Pick a paid plan").closest("p")?.id);
+    expect(input).toHaveAccessibleDescription(/pick a paid plan/i);
+  });
+
+  it("never puts aria-invalid on the radio: ARIA 1.2 does not support it on role radio", () => {
+    const { rerender } = render(<Radio name="plan" value="pro" label="Pro" errorMessage="Pick a paid plan" />);
+    expect(screen.getByRole("radio")).not.toHaveAttribute("aria-invalid");
+    rerender(<Radio name="plan" value="pro" label="Pro" error />);
+    expect(screen.getByRole("radio")).not.toHaveAttribute("aria-invalid");
+  });
+
+  it("leaves the invalid state to the group the caller renders", () => {
+    render(
+      <fieldset role="radiogroup" aria-invalid="true" aria-labelledby="plan-legend">
+        <legend id="plan-legend">Plan</legend>
+        <Radio name="plan" value="free" label="Free" error />
+        <Radio name="plan" value="pro" label="Pro" errorMessage="Pick a plan" />
+      </fieldset>
+    );
+    expect(screen.getByRole("radiogroup", { name: "Plan" })).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getAllByRole("radio")).toHaveLength(2);
   });
 
   it("shows helperText and hides it while an errorMessage is present", () => {
