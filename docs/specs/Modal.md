@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `818f02381340ff68` |
+| API hash | `a95eba2e2bf10048` |
 
 ---
 
@@ -45,9 +45,11 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 
 | Enum Value | Description |
 |-----------|-------------|
-| `sm` | 360px: a short confirmation or a celebratory notice. |
-| `md` | 640px: a compare card (the docked equip card) or a short form. |
-| `lg` (default) | 740px: a full task. The width used when neither `size` nor `width` is passed. |
+| `xs` | 320px: a one-line notice or a reward (level up, chest opened). |
+| `sm` | 360px: a confirmation ("Are you sure?"). |
+| `md` | 440px: a picker or a short form. |
+| `lg` | 640px: a compare card (the docked equip card) or a form with sections. |
+| `xl` (default) | 740px: a full task. The width used when neither `size` nor `width` is passed. |
 | `full` | The whole viewport width (`100vw`), capped by `max-w-full` at the scrim padding, or at the viewport when docked. |
 | `width` (deprecated) | Still honoured when `size` is not passed: numbers are px, strings pass through. Use `size`. |
 
@@ -67,7 +69,7 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 | `title` | `string` | | Yes | Header text (truncated on one line) and the dialog's `aria-label`. |
 | `children` | `ReactNode` | | Yes | Body content; scrolls when it exceeds the panel height. The body already has `px-6 py-5` padding. |
 | `footerContent` | `ReactNode` | `undefined` | No | Fixed footer band, actions right-aligned with `gap-3`. Render DS Buttons (secondary cancel, primary confirm). |
-| `size` | `"sm" \| "md" \| "lg" \| "full"` | `"lg"` | No | Panel width: 360 / 640 / 740px / viewport. Always capped at the viewport by `max-w-full`. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| "full"` | `"xl"` | No | Panel width: 320 / 360 / 440 / 640 / 740px / viewport. Always capped at the viewport by `max-w-full`. |
 | `width` | `number \| string` | | No | **Deprecated**, use `size`. Honoured when `size` is not passed (numbers are px, strings pass through); warns once in development. |
 | `docked` | `boolean` | `false` | No | Non-modal bottom-center panel on viewports of 960px and up; falls back to the centered modal below. |
 
@@ -131,7 +133,7 @@ Exported type: `ModalProps`.
 | Enter and exit fade | Yes | Yes | Every story |
 | Long content scroll | Yes | Yes | `LongContent` (opens by default) |
 | Footer CTAs | Yes | Yes | `WithFooter`, `Docked` |
-| `size` other than the default | Yes | Yes | `Docked` (`size="md"`, 640px) |
+| `size` other than the default | Yes | Yes | `Docked` (`size="lg"`, 640px) |
 | Docked | Yes | Yes | `Docked` |
 | Docked fallback below 960px | Yes | Yes | `Docked`, by resizing the viewport |
 
@@ -147,7 +149,7 @@ Interactive controls: N/A (render function stories).
 
 <!-- AUTO-START:hardcoded -->
 
-- Panel widths per `size` (`MODAL_WIDTHS`: 360, 640, 740px, `100vw`). There are no width tokens; 740 is the long-standing default.
+- Panel widths per `size` (`MODAL_WIDTHS`: 320, 360, 440, 640, 740px, `100vw`). There are no width tokens; 740 (`xl`) is the long-standing default.
 - `max-h-[80vh]` panel height cap.
 - `border-b-[0.5px]` / `border-t-[0.5px]` hairlines.
 - Docked: `bottom: "48px"` and `filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.35))` (drop shadow follows the clipped silhouette; values track `elevation.high`'s dark blur).
@@ -246,6 +248,7 @@ Interactive controls: N/A (render function stories).
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Focus trap while modal (docked stays non-modal); 44px close-button hit area; 66vh comment corrected; story double padding removed |
 | Unreleased | 2026-09-22 | change | Docked breakpoint comes from the `--breakpoint-docked` token instead of a hardcoded 960 (same 960px switch point) |
+| Unreleased | 2026-10-29 | change | Five-step size scale chosen from the widths consumers use: `xs` 320, `sm` 360, `md` 440, `lg` 640, `xl` 740 (default, unchanged), `full`. `md` and `lg` were 640 and 740; no consumer used them. Prepares removing `width` |
 | Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `open` / `defaultOpen` / `onOpenChange` replace `isOpen` / `onClose`, and `size` (`sm \| md \| lg \| full`) replaces `width`. The old props are deprecated aliases that still work and warn once; the default render is unchanged (740px) |
 | Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `isOpen` and `onClose` props and their dev warnings; use `open` and `onOpenChange`. The deprecated `width` stays, pending a decision on the missing sizes. Rendering unchanged |
 

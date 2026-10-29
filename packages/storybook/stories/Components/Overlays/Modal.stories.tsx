@@ -142,7 +142,7 @@ export const Docked: Story = {
           onOpenChange={setOpen}
           title="Compare"
           docked
-          size="md"
+          size="lg"
           footerContent={
             <Button variant="primary" size="sm" type="button" onClick={() => setOpen(false)}>
               Equip

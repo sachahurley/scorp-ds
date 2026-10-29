@@ -82,3 +82,12 @@ gives the same square `md` plate.
 - 0024's deprecation pattern still stands for future renames: `warnDeprecated` and the
   `@deprecated` alias types are how the next one is done, and the manifest still records
   deprecated values and props (`api-surface.test.ts`).
+
+## Amendment 2026-10-29: the Modal size scale
+
+Modal `width` stayed because the portfolio's dialogs used widths no `size` matched (320,
+420, 440 and 560px). The scale is now five steps chosen from the widths actually in use:
+`xs` 320, `sm` 360, `md` 440, `lg` 640, `xl` 740 (the default, unchanged), plus `full`.
+`md` and `lg` were 640 and 740 for one day and no consumer used them, so renaming the steps
+broke nothing. The portfolio moves onto the scale in its vendor PR (its 420px Avatar
+dialog becomes `md`, its 560px WorldStats dialog becomes `lg`), then `width` is removed.
