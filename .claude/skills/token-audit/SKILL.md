@@ -21,6 +21,8 @@ Compare the tokens documented in `design-tokens.md` against the actual foundatio
 
 Read `design-tokens.md`.
 
+Tables between `<!-- AUTO-START:tokens-<group> -->` and `<!-- AUTO-END:tokens-<group> -->` are generated from `tokens.json` by `npm run tokens-doc` (`scripts/generate-token-docs.mjs`), and CI's `tokens-doc:check` step fails while one is stale. Do not report or hand-fix a mismatch inside those markers: the fix is to change the token (or its `$description`) and re-run the script. Spend the audit on the hand-written tables outside the markers (surface, text, field, button, elevation, plates and the rest).
+
 Read `.claude/ds-config.json: paths.foundation` to locate all foundation token files. Read all foundation files (colors, typography, spacing, icons, motion, opacity, gradients, shadows, or equivalent for the project's stack).
 
 ### 2. Extract all semantic tokens from code

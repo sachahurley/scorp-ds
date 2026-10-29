@@ -5,7 +5,9 @@
 > **To find or use a component, read `docs/component-references/catalog.md` first.** It is
 > generated from the code and the specs: what each component is for, what to use instead,
 > how to import it, and every prop with the values it accepts (deprecated ones struck
-> through). Do not guess a prop value the catalog does not list.
+> through). Do not guess a prop value the catalog does not list. Each entry's status says
+> how far to rely on it: `npm run spec-status` reports which specs meet the bar for
+> `stable` and which fall short, and why (`docs/decisions/0026-a-spec-is-stable-when-it-meets-the-bar.md`).
 
 > **Before changing a pattern, read the relevant record in `docs/decisions/`. After
 > changing one, write a new record there.** The rules below say what to do;
@@ -87,9 +89,9 @@ directory in the change that first needs it.
   - **Semantic tokens** (everything in the `light` and `dark` layers: surface, text, border, field, focus, button, elevation, accent, fire, control, terminal accents) are referenced by their CSS variable: `<utility>-[var(--token-name)]`, for example `text-[var(--text-secondary)]` or `bg-[var(--surface-raised)]`. Copy the name exactly from `packages/tokens/src/styles/tokens.css`; never invent one. Do not use the preset's semantic keys (`text-foreground-*`, `border-line-*`, `bg-field-*`, `bg-surface-*`) inside this repo: they exist for consumers only.
   - **Foundation colour scales** use the preset classes through the semantic alias: `bg-error-50`, `text-secondary-800`, never `amber-*` (see Token Architecture).
   - **Geometry** uses the preset classes: `h-control-md`, `size-touch`, `plate-round`, `font-mono`.
-  - Every `var(--x)` must name a custom property declared in `tokens.css`, or a component-local variable the same file declares (for example `--btn-ring`). A misspelt name renders nothing and fails no check by itself, so check the name. The lint rule `scorp/no-undefined-css-var` that enforces this is specified in 0023 and lands separately.
+  - Every `var(--x)` must name a custom property declared in `tokens.css`, or a component-local variable the same file declares (for example `--btn-ring`). A misspelt name renders nothing, so lint fails it: `scorp/no-undefined-css-var` (0023) checks every `var(--x)` against `tokens.css` and the file's own declarations.
 - NEVER use raw font sizes in components. Always use Tailwind font size classes that map to token CSS variables (`text-sm`, `text-base`, etc.).
-- NEVER use raw numeric spacing values. Use Tailwind's spacing classes on the 4px scale (`p-4`, `gap-2`). Today the preset does not map them to the `--spacing-*` tokens (the values only coincide with Tailwind's defaults); `docs/decisions/0027-half-step-spacing-is-tokenised.md` wires them and adds the half steps.
+- NEVER use raw numeric spacing values. Use Tailwind's spacing classes on the token scale: 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10, 12, 16, 20, 24 (`p-4`, `gap-2`, `py-1.5`). The preset maps every step, whole and half, to its `--spacing-*` variable (`p-4` is `var(--spacing-4)`, `py-1.5` is `var(--spacing-1-5)`), and `scorp/no-off-scale-spacing` fails padding, margin, gap and space utilities off that scale (`p-7`, `gap-9`). Width, height and position utilities stay on Tailwind's scale (`docs/decisions/0027-half-step-spacing-is-tokenised.md`).
 - NEVER use raw border-radius values. The Scorp design language uses sharp corners (`rounded-none`); where a softened corner is wanted, use the plate silhouettes (`plate-round`, `plate-round-lg` from the preset plugin, backed by `--plate-round*`). There are no radius tokens: they were retired when plates became the shape language.
 - The ONLY place raw values are permitted is inside `packages/tokens/src/tokens.json` and the hand-written `styles/tokens.css`.
 
@@ -149,21 +151,25 @@ tokens ← components ← storybook
 ## Storybook Story Structure
 
 Every documentation page in Storybook MUST follow the rules in `design-system-doc-requirements.md`. Story `title:` groups, as used in `packages/storybook/stories/`:
-- `Foundation/<Name>`: global tokens (`Foundation/Colors`, `Foundation/Typography`, `Foundation/Spacing`, `Foundation/Motion`, `Foundation/Breakpoints`, `Foundation/Z-index`, `Foundation/1-bit icons`)
+- `Foundation/<Name>`: global tokens (`Foundation/Colors`, `Foundation/Typography`, `Foundation/Spacing`, `Foundation/Motion`, `Foundation/Breakpoints`, `Foundation/ZIndex`, `Foundation/OneBitIcons`)
 - `Semantic/<Name>`: theme tokens, light and dark (`Semantic/Colors`, `Semantic/Elevation`, `Semantic/Focus`, `Semantic/Opacity`, `Semantic/Shape`)
 - `Primitives/Layout/<Name>`: layout primitives (`Primitives/Layout/Box`, `Primitives/Layout/Stack`, `Primitives/Layout/Grid`)
 - `Components/<Group>/<Name>`, where `<Group>` is one of:
   - `Actions` (`Components/Actions/Button`)
-  - `Display` (`Components/Display/Card`, `Components/Display/Tooltip`)
+  - `Display` (`Components/Display/Card`, `Components/Display/Table`)
   - `Feedback` (`Components/Feedback/Badge`, `Components/Feedback/ProgressBar`)
   - `Inputs` (`Components/Inputs/Input`, `Components/Inputs/Combobox`)
   - `Navigation` (`Components/Navigation/Tabs`, `Components/Navigation/SideNav`)
-  - `Overlays` (`Components/Overlays/Modal`, `Components/Overlays/Popover`)
+  - `Overlays` (`Components/Overlays/Modal`, `Components/Overlays/Popover`, `Components/Overlays/Tooltip`)
   - `Terminal` (`Components/Terminal/Kbd`, `Components/Terminal/Window`)
   - `Theme` (`Components/Theme/ThemeToggle`)
 - `Patterns/<Name>`: compositions of several components (`Patterns/AuthCard`, `Patterns/SettingsPanel`)
 - `Screens/<Name>`: full-page templates (`Screens/CaseStudyTemplate`, `Screens/MarketingHero`)
-- `Lab/<Name>`: experimental (`Lab/Tui art playground`)
+- `Lab/<Name>`: experimental (`Lab/TuiArtPlayground`)
+
+The `<Name>` segment is PascalCase, like the component it documents (`Foundation/ZIndex`,
+not `Foundation/Z-index`). The story id, and so each visual baseline's file name, is derived
+from the title: renaming a title means `git mv`-ing its baselines to the new id.
 
 **A story whose subject only exists after an interaction carries a Storybook `play`
 function.** There is no interaction map in the visual harness, and one must not be added:
@@ -195,19 +201,28 @@ those markers stays hand-written.
 2. Add the matching custom property to `packages/tokens/src/styles/tokens.css` **in the same commit**, in both `:root` and `.dark` if the value is theme-specific. The name is the JSON path hyphen-joined with camelCase segments kebab-cased (`zIndex.modal` → `--z-index-modal`)
 3. Run `npm test` — `packages/tokens/src/lib/token-parser.test.ts` fails and names any token present in one file and not the other, or resolving to a different value
 4. If the token needs a Tailwind class, add it to `packages/tokens/tailwind.preset.js`
-5. Update `design-tokens.md` with the new token's entry
+5. Give the token a `$description` saying when to use it, then run `npm run tokens-doc`. The token tables in `design-tokens.md` between `AUTO-START:tokens-*` markers are generated from `tokens.json` (the description is the "Use for" text), and CI fails while one is stale (`npm run tokens-doc:check`). A token in a group with no generated table (surface, text, field, button and the others listed in `scripts/generate-token-docs.mjs`) still needs its row written by hand
 6. Add a visual example to the relevant Foundation story
 
 ### New Component
-1. Create `packages/components/src/components/{ComponentName}.tsx`
+1. Scaffold it: `npm run new:component -- <Name> --group <Actions|Display|Feedback|Inputs|Navigation|Overlays|Terminal|Theme>`
+   (`--primitive` for a primitive, `--dry-run` to list the files first). It writes
+   `packages/components/src/components/<Name>.tsx`, the barrel export in `packages/components/src/index.ts`,
+   a Playground story in `packages/storybook/stories/Components/<Group>/`, a rendering test and
+   `docs/specs/<Name>.md`, then regenerates the manifest, stamps the spec and rebuilds the catalog.
+   It refuses a name that is not PascalCase or already exists. Every prose slot it writes is a
+   `TODO(scaffold)` placeholder, and `npm run spec-status` reports the component as short of the
+   bar until each one is replaced
 2. Reference tokens as the No Hardcoding section says (semantic tokens by `var(--name)`, scales and geometry by preset class); no hardcoded values
-3. Add JSDoc to the component class and all public props
-4. Export from `packages/components/src/index.ts`
-5. Add a Storybook story in `packages/storybook/stories/Components/`
-6. Add a `docs/specs/{component-name}.md` via `/update-spec`
-7. Add a test in `packages/components/src/__tests__/` that imports it. Run `node scripts/generate-api-surface.mjs` so the
-   manifest lists it; `coverage.test.ts` then fails until it has both a story and a test (`docs/decisions/0017`)
-8. Run `node scripts/generate-catalog.mjs` so the catalog lists it (CI fails while it is stale)
+3. Replace the placeholder JSDoc on the component and on every public prop with usage (`scorp/prop-jsdoc`)
+4. Keep the barrel export in `packages/components/src/index.ts` in step with what the file exports
+5. Grow the story in `packages/storybook/stories/Components/<Group>/` past the Playground: one story per state worth seeing
+6. Write the spec's Intent (what it is for, what to use instead), then fill the rest with `/update-spec`
+7. Extend the test in `packages/components/src/__tests__/`. After any props change, run
+   `node scripts/generate-api-surface.mjs` and `node scripts/stamp-spec-api-hash.mjs <Name>`;
+   `coverage.test.ts` fails while a component lacks a story or a rendering test (`docs/decisions/0017`)
+8. Run `node scripts/generate-catalog.mjs` so the catalog lists it (CI fails while it is stale), then
+   `npm run spec-status` to see what still stands between the spec and `stable`
 
 ### New Storybook Story
 Follow the structure in `design-system-doc-requirements.md`. Use `/storybook-check` to verify compliance.

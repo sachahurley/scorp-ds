@@ -7,7 +7,9 @@
  *   2. its Intent says what the component is for AND what to use instead;
  *   3. it has an Accessibility section with content;
  *   4. the component has a story and a unit test that renders it;
- *   5. its Known Gaps table has no open row marked `blocking`.
+ *   5. its Known Gaps table has no open row marked `blocking`;
+ *   6. neither the spec's Intent nor the component source still holds a
+ *      `TODO(scaffold)` placeholder from scripts/new-component.mjs.
  *
  * This only REPORTS. Promotion is a human edit to the spec's Status row: the bar
  * is necessary, not sufficient, because no check can tell whether the intent is
@@ -47,7 +49,10 @@ function section(md, heading) {
 /** Section text with markers, comments and blank lines removed. */
 const content = (s) => (s ?? "").replace(/<!--[\s\S]*?-->/g, "").trim();
 
-const USE_INSTEAD = /use\s+[^.]*\binstead\b|don.t use|do not use|not for\b|reach for\b/i;
+/** The placeholder scripts/new-component.mjs leaves for the author to replace. */
+const SCAFFOLD_TODO = /TODO\(scaffold\)/;
+
+const USE_INSTEAD =/use\s+[^.]*\binstead\b|don.t use|do not use|not for\b|reach for\b/i;
 
 /**
  * "Use `Select` when …", "Use Modal for …", "For a column use Stack": the intent
@@ -86,6 +91,11 @@ for (const [name, entry] of Object.entries(manifest).sort(([a], [b]) => a.locale
     story: names.some((n) => stories.some((s) => new RegExp(`\\b${n}\\b`).test(s) && s.includes("@scorp-ds/components"))),
     "rendering test": names.some((n) => tests.some((t) => new RegExp(`<${n}[\\s/>.]|\\b${n}\\(`).test(t))),
     "no blocking gap": !gaps.split("\n").some((l) => /\|\s*open\s*\|/i.test(l) && /blocking/i.test(l)),
+    // scripts/new-component.mjs writes TODO(scaffold) placeholders that satisfy
+    // lint and the checks above ("say what it is for and what to use instead"
+    // reads as an intent with a use-instead). A placeholder is not an intent.
+    "intent written": !SCAFFOLD_TODO.test(intent),
+    "source JSDoc written": !(existsSync(join(ROOT, entry.file)) && SCAFFOLD_TODO.test(readFileSync(join(ROOT, entry.file), "utf8"))),
   };
   rows.push({ name, status, checks, failing: Object.keys(checks).filter((k) => !checks[k]) });
 }
