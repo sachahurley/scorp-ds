@@ -13,57 +13,57 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 
 | Component | Category | Status | For |
 |---|---|---|---|
-| [Button](#button) | Actions | draft | Button triggers an action in place: submitting a form, opening a dialog, saving, deleting. |
-| [Accordion](#accordion) | Display | draft | Stacked sections that expand and collapse under headings. |
-| [Avatar](#avatar) | Display | draft | Avatar is a square plate that represents a person or entity in profiles, comments, identity headers, and team lists. |
-| [Card](#card) | Display | draft | Card is the standard container for a self-contained group of content on a page: a settings group, a profile, a testimonial, a deploy summary. |
-| [Divider](#divider) | Display | draft | Divider is a thin rule that separates groups of content within the same surface: sections of a form, items in a toolbar, blocks inside a Card body. |
-| [ListRow](#listrow) | Display | draft | ListRow is the list and navigation tier of the container system, promoted from the portfolio's plate row: a meta line, a title and an optional description, clipped to the small plate. |
-| [Table](#table) | Display | draft | Table is a set of thin, semantic wrappers over native table elements (`Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`) with token-backed chrome for dense monospace data: build status, hosts, inventories, anything read across columns. |
-| [TuiIcon](#tuiicon) | Display | draft | TuiIcon is the system's only icon component: 52 names drawn as 1-bit pixel art on a 7x7 grid. |
-| [Alert](#alert) | Feedback | draft | Alert is an inline, persistent message that sits in the page flow next to the content it describes: a failed save above a form, a warning at the top of a settings panel, a neutral notice about a changed default. |
-| [Badge](#badge) | Feedback | draft | Badge is a compact inline chip for labelling, categorising, or flagging state: a status next to a row, a count, a filter tag, a tier marker. |
-| [EmptyState](#emptystate) | Feedback | draft | What a view shows when it has nothing to show: a 1-bit icon on a subtle plate, a plain title, a short description, and at most one primary and one secondary Button. `sm` for inline use in cards and tables, `md` for a page or panel. |
-| [ProgressBar](#progressbar) | Feedback | draft | Shows task progress. |
-| [Skeleton](#skeleton) | Feedback | draft | Placeholder blocks that hold the layout while content loads. |
-| [Spinner](#spinner) | Feedback | draft | TUI loading indicator in the 1-bit icon language: eight square dots on an 8x8 pixel grid with a two-dot gap that steps clockwise around the ring (100ms per frame). |
-| [Toast](#toast) | Feedback | draft | Toast is a brief, non-blocking confirmation that rises from the bottom edge and goes away on its own: "Copied to clipboard", "+40 XP", "Item deleted (Undo)". `Toaster` is the fixed bottom-center region that renders a queue of toasts. |
-| [Checkbox](#checkbox) | Inputs | draft | Checkbox lets users turn an independent option on or off, or pick any number of items from a list, usually as part of a form that is submitted later. |
-| [Combobox](#combobox) | Inputs | draft | Text input with a filtered listbox for choosing one option from a long list. |
-| [Fieldset](#fieldset) | Inputs | draft | Fieldset names a group of related controls: radios that answer one question, a set of checkboxes, or a titled group of settings inside a Card. |
-| [Input](#input) | Inputs | draft | Input is the single-line text field for short free-form values: names, emails, search terms, codes. |
-| [Radio](#radio) | Inputs | draft | Radio lets users choose exactly one option from a small, visible set (roughly two to five). |
-| [Select](#select) | Inputs | draft | Select picks one value from a list of options inside a form. |
-| [Slider](#slider) | Inputs | draft | Slider picks a numeric value from a continuous or stepped range, such as zoom level, size, or bias, where the relative position matters more than typing an exact number. |
-| [Switch](#switch) | Inputs | draft | Switch toggles a setting on or off with an immediate effect, like enabling notifications or a theme. |
-| [Textarea](#textarea) | Inputs | draft | Textarea is the multi-line text field for longer free-form input: notes, feedback, descriptions. |
-| [Box](#box) | Layout | draft | Box is the base surface primitive: token-backed padding, a semantic background, and the optional hairline plate ring, on the element of your choice. |
-| [Center](#center) | Layout | draft | Center puts one column of content in the middle of its parent: a measured width, optionally centered text, and optionally the full viewport height. |
-| [Container](#container) | Layout | draft | Container is the page-width wrapper: one max width, one set of gutters, one place to change either. |
-| [Grid](#grid) | Layout | draft | Grid is the two-dimensional layout primitive: a token-backed gap and a column count that can change per breakpoint. |
-| [Inline](#inline) | Layout | draft | Inline is the horizontal cluster: a row of items that wraps onto the next line instead of overflowing. |
-| [Stack](#stack) | Layout | draft | Stack is the layout primitive for spacing a group of elements along one axis with a gap from the spacing scale. |
-| [VisuallyHidden](#visuallyhidden) | Layout | draft | VisuallyHidden renders content that screen readers announce and nobody sees: the word "Close" in an icon button, a caption for a table, the "Skip to content" link at the top of a page. |
-| [AppHeader](#appheader) | Navigation | draft | The application top bar: a `<header>` with `brand`, `navigation`, and `actions` slots. |
-| [Breadcrumbs](#breadcrumbs) | Navigation | draft | Shows where the current page sits in a hierarchy: a `<nav aria-label="Breadcrumb">` landmark around an ordered list of links, ending on the current page (plain text with `aria-current="page"`). |
-| [Link](#link) | Navigation | draft | Link is the inline text link for navigation inside prose, captions, nav lists and footers. |
-| [Pagination](#pagination) | Navigation | draft | Page picker for long, paged collections. |
-| [SideNav](#sidenav) | Navigation | draft | The Patterns/SideNavigation recipe as a compound component: `SideNav` > `SideNavSection` (optional heading naming a group) > `SideNavItem`. |
-| [Tabs](#tabs) | Navigation | draft | Tabs switch between related views that share one context, such as the sections of a settings screen, without leaving the page. |
-| [BottomSheet](#bottomsheet) | Overlays | draft | BottomSheet is a panel that slides up from the bottom edge over a scrim, for menus and quick actions that dismiss easily: a site menu on mobile, a short list of options, a share sheet. |
-| [Dropdown](#dropdown) | Overlays | draft | Dropdown is an action menu: a trigger that opens a short list of commands such as Edit, Duplicate, or Delete. |
-| [Modal](#modal) | Overlays | draft | Modal is a centered dialog over a scrim that interrupts the page for a task or decision the user must finish or dismiss before going back: confirmations, short forms, reward claims. |
-| [Popover](#popover) | Overlays | draft | Anchored, non-modal floating panel for rich interactive content next to a trigger (filters, a small form, a details card). |
-| [Tooltip](#tooltip) | Overlays | draft | Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. |
-| [CaseStudy](#casestudy) | Patterns | draft | CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. |
-| [DescriptionList](#descriptionlist) | Terminal | draft | Term and value pairs on a real `<dl>`: metadata panels, config readouts, neofetch-style summaries. |
-| [Kbd](#kbd) | Terminal | draft | Inline keyboard key for shortcut hints. |
-| [LogView](#logview) | Terminal | draft | A monospace scrolling log: build output, server logs, job runs. |
-| [Meter](#meter) | Terminal | draft | A gauge for a value in a known range (disk, quota, battery), not a progress bar. `role="meter"` with `aria-valuenow` / `min` / `max` / `aria-valuetext`, drawn as stepped blocks on the pixel grid. |
-| [StatusLine](#statusline) | Terminal | draft | The bottom bar of a terminal app (vim, tmux): `left`, `center`, and `right` zones of `StatusLineSegment`s. |
-| [TreeView](#treeview) | Terminal | draft | Hierarchical list with expandable branches (file trees, outlines). |
-| [Window](#window) | Terminal | draft | A framed terminal pane: the large plate ring (stroke layer + fill inset 1px), a TUI title bar (title, a hairline rule filling the gap, optional `status` text and `actions`), and a keyboard-focusable scroll body named by the title. |
-| [ThemeToggle](#themetoggle) | Theme | draft | ThemeToggle is a ready-made light/dark control: a small `Switch` with a 1-bit Moon or Sun icon in the knob and a "Dark" / "Light" label beside it. |
+| [Button](#button) | Actions | stable | Button triggers an action in place: submitting a form, opening a dialog, saving, deleting. |
+| [Accordion](#accordion) | Display | stable | Stacked sections that expand and collapse under headings. |
+| [Avatar](#avatar) | Display | stable | Avatar is a square plate that represents a person or entity in profiles, comments, identity headers, and team lists. |
+| [Card](#card) | Display | stable | Card is the standard container for a self-contained group of content on a page: a settings group, a profile, a testimonial, a deploy summary. |
+| [Divider](#divider) | Display | stable | Divider is a thin rule that separates groups of content within the same surface: sections of a form, items in a toolbar, blocks inside a Card body. |
+| [ListRow](#listrow) | Display | stable | ListRow is the list and navigation tier of the container system, promoted from the portfolio's plate row: a meta line, a title and an optional description, clipped to the small plate. |
+| [Table](#table) | Display | stable | Table is a set of thin, semantic wrappers over native table elements (`Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`) with token-backed chrome for dense monospace data: build status, hosts, inventories, anything read across columns. |
+| [TuiIcon](#tuiicon) | Display | stable | TuiIcon is the system's only icon component: 52 names drawn as 1-bit pixel art on a 7x7 grid. |
+| [Alert](#alert) | Feedback | stable | Alert is an inline, persistent message that sits in the page flow next to the content it describes: a failed save above a form, a warning at the top of a settings panel, a neutral notice about a changed default. |
+| [Badge](#badge) | Feedback | stable | Badge is a compact inline chip for labelling, categorising, or flagging state: a status next to a row, a count, a filter tag, a tier marker. |
+| [EmptyState](#emptystate) | Feedback | stable | What a view shows when it has nothing to show: a 1-bit icon on a subtle plate, a plain title, a short description, and at most one primary and one secondary Button. `sm` for inline use in cards and tables, `md` for a page or panel. |
+| [ProgressBar](#progressbar) | Feedback | stable | Shows task progress. |
+| [Skeleton](#skeleton) | Feedback | stable | Placeholder blocks that hold the layout while content loads. |
+| [Spinner](#spinner) | Feedback | stable | TUI loading indicator in the 1-bit icon language: eight square dots on an 8x8 pixel grid with a two-dot gap that steps clockwise around the ring (100ms per frame). |
+| [Toast](#toast) | Feedback | stable | Toast is a brief, non-blocking confirmation that rises from the bottom edge and goes away on its own: "Copied to clipboard", "+40 XP", "Item deleted (Undo)". `Toaster` is the fixed bottom-center region that renders a queue of toasts. |
+| [Checkbox](#checkbox) | Inputs | stable | Checkbox lets users turn an independent option on or off, or pick any number of items from a list, usually as part of a form that is submitted later. |
+| [Combobox](#combobox) | Inputs | stable | Text input with a filtered listbox for choosing one option from a long list. |
+| [Fieldset](#fieldset) | Inputs | stable | Fieldset names a group of related controls: radios that answer one question, a set of checkboxes, or a titled group of settings inside a Card. |
+| [Input](#input) | Inputs | stable | Input is the single-line text field for short free-form values: names, emails, search terms, codes. |
+| [Radio](#radio) | Inputs | stable | Radio lets users choose exactly one option from a small, visible set (roughly two to five). |
+| [Select](#select) | Inputs | stable | Select picks one value from a list of options inside a form. |
+| [Slider](#slider) | Inputs | stable | Slider picks a numeric value from a continuous or stepped range, such as zoom level, size, or bias, where the relative position matters more than typing an exact number. |
+| [Switch](#switch) | Inputs | stable | Switch toggles a setting on or off with an immediate effect, like enabling notifications or a theme. |
+| [Textarea](#textarea) | Inputs | stable | Textarea is the multi-line text field for longer free-form input: notes, feedback, descriptions. |
+| [Box](#box) | Layout | stable | Box is the base surface primitive: token-backed padding, a semantic background, and the optional hairline plate ring, on the element of your choice. |
+| [Center](#center) | Layout | stable | Center puts one column of content in the middle of its parent: a measured width, optionally centered text, and optionally the full viewport height. |
+| [Container](#container) | Layout | stable | Container is the page-width wrapper: one max width, one set of gutters, one place to change either. |
+| [Grid](#grid) | Layout | stable | Grid is the two-dimensional layout primitive: a token-backed gap and a column count that can change per breakpoint. |
+| [Inline](#inline) | Layout | stable | Inline is the horizontal cluster: a row of items that wraps onto the next line instead of overflowing. |
+| [Stack](#stack) | Layout | stable | Stack is the layout primitive for spacing a group of elements along one axis with a gap from the spacing scale. |
+| [VisuallyHidden](#visuallyhidden) | Layout | stable | VisuallyHidden renders content that screen readers announce and nobody sees: the word "Close" in an icon button, a caption for a table, the "Skip to content" link at the top of a page. |
+| [AppHeader](#appheader) | Navigation | stable | The application top bar: a `<header>` with `brand`, `navigation`, and `actions` slots. |
+| [Breadcrumbs](#breadcrumbs) | Navigation | stable | Shows where the current page sits in a hierarchy: a `<nav aria-label="Breadcrumb">` landmark around an ordered list of links, ending on the current page (plain text with `aria-current="page"`). |
+| [Link](#link) | Navigation | stable | Link is the inline text link for navigation inside prose, captions, nav lists and footers. |
+| [Pagination](#pagination) | Navigation | stable | Page picker for long, paged collections. |
+| [SideNav](#sidenav) | Navigation | stable | The Patterns/SideNavigation recipe as a compound component: `SideNav` > `SideNavSection` (optional heading naming a group) > `SideNavItem`. |
+| [Tabs](#tabs) | Navigation | stable | Tabs switch between related views that share one context, such as the sections of a settings screen, without leaving the page. |
+| [BottomSheet](#bottomsheet) | Overlays | stable | BottomSheet is a panel that slides up from the bottom edge over a scrim, for menus and quick actions that dismiss easily: a site menu on mobile, a short list of options, a share sheet. |
+| [Dropdown](#dropdown) | Overlays | stable | Dropdown is an action menu: a trigger that opens a short list of commands such as Edit, Duplicate, or Delete. |
+| [Modal](#modal) | Overlays | stable | Modal is a centered dialog over a scrim that interrupts the page for a task or decision the user must finish or dismiss before going back: confirmations, short forms, reward claims. |
+| [Popover](#popover) | Overlays | stable | Anchored, non-modal floating panel for rich interactive content next to a trigger (filters, a small form, a details card). |
+| [Tooltip](#tooltip) | Overlays | stable | Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. |
+| [CaseStudy](#casestudy) | Patterns | stable | CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. |
+| [DescriptionList](#descriptionlist) | Terminal | stable | Term and value pairs on a real `<dl>`: metadata panels, config readouts, neofetch-style summaries. |
+| [Kbd](#kbd) | Terminal | stable | Inline keyboard key for shortcut hints. |
+| [LogView](#logview) | Terminal | stable | A monospace scrolling log: build output, server logs, job runs. |
+| [Meter](#meter) | Terminal | stable | A gauge for a value in a known range (disk, quota, battery), not a progress bar. `role="meter"` with `aria-valuenow` / `min` / `max` / `aria-valuetext`, drawn as stepped blocks on the pixel grid. |
+| [StatusLine](#statusline) | Terminal | stable | The bottom bar of a terminal app (vim, tmux): `left`, `center`, and `right` zones of `StatusLineSegment`s. |
+| [TreeView](#treeview) | Terminal | stable | Hierarchical list with expandable branches (file trees, outlines). |
+| [Window](#window) | Terminal | stable | A framed terminal pane: the large plate ring (stroke layer + fill inset 1px), a TUI title bar (title, a hairline rule filling the gap, optional `status` text and `actions`), and a keyboard-focusable scroll body named by the title. |
+| [ThemeToggle](#themetoggle) | Theme | stable | ThemeToggle is a ready-made light/dark control: a small `Switch` with a 1-bit Moon or Sun icon in the knob and a "Dark" / "Light" label beside it. |
 
 ## Other exports
 
@@ -86,7 +86,7 @@ Button triggers an action in place: submitting a form, opening a dialog, saving,
 
 `import { Button } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Button.md`](../../docs/specs/Button.md) · Story: `Components/Actions/Button`
+Status: stable · Spec: [`docs/specs/Button.md`](../../docs/specs/Button.md) · Story: `Components/Actions/Button`
 
 **`ButtonProps`**
 
@@ -114,7 +114,7 @@ Stacked sections that expand and collapse under headings.
 
 `import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Accordion.md`](../../docs/specs/Accordion.md) · Story: `Components/Display/Accordion`
+Status: stable · Spec: [`docs/specs/Accordion.md`](../../docs/specs/Accordion.md) · Story: `Components/Display/Accordion`
 
 **`AccordionSingleProps`**
 
@@ -189,7 +189,7 @@ Avatar is a square plate that represents a person or entity in profiles, comment
 
 `import { Avatar } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Avatar.md`](../../docs/specs/Avatar.md) · Story: `Components/Display/Avatar`
+Status: stable · Spec: [`docs/specs/Avatar.md`](../../docs/specs/Avatar.md) · Story: `Components/Display/Avatar`
 
 **`AvatarProps`**
 
@@ -212,7 +212,7 @@ Card is the standard container for a self-contained group of content on a page: 
 
 `import { Card } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Card.md`](../../docs/specs/Card.md) · Story: `Components/Display/Card`
+Status: stable · Spec: [`docs/specs/Card.md`](../../docs/specs/Card.md) · Story: `Components/Display/Card`
 
 **`CardProps`**
 
@@ -234,7 +234,7 @@ Divider is a thin rule that separates groups of content within the same surface:
 
 `import { Divider } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Divider.md`](../../docs/specs/Divider.md) · Story: `Components/Display/Divider`
+Status: stable · Spec: [`docs/specs/Divider.md`](../../docs/specs/Divider.md) · Story: `Components/Display/Divider`
 
 **`DividerProps`**
 
@@ -253,7 +253,7 @@ ListRow is the list and navigation tier of the container system, promoted from t
 
 `import { ListRow } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/ListRow.md`](../../docs/specs/ListRow.md) · Story: `Components/Display/ListRow`
+Status: stable · Spec: [`docs/specs/ListRow.md`](../../docs/specs/ListRow.md) · Story: `Components/Display/ListRow`
 
 **`ListRowProps`**
 
@@ -281,7 +281,7 @@ Table is a set of thin, semantic wrappers over native table elements (`Table`, `
 
 `import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Table.md`](../../docs/specs/Table.md) · Story: `Components/Display/Table`
+Status: stable · Spec: [`docs/specs/Table.md`](../../docs/specs/Table.md) · Story: `Components/Display/Table`
 
 **`TableProps`**
 
@@ -312,7 +312,7 @@ TuiIcon is the system's only icon component: 52 names drawn as 1-bit pixel art o
 
 `import { TuiIcon } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/TuiIcon.md`](../../docs/specs/TuiIcon.md) · Story: `Components/Display/TuiIcon`
+Status: stable · Spec: [`docs/specs/TuiIcon.md`](../../docs/specs/TuiIcon.md) · Story: `Components/Display/TuiIcon`
 
 **`TuiIconProps`**
 
@@ -332,7 +332,7 @@ Alert is an inline, persistent message that sits in the page flow next to the co
 
 `import { Alert } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Alert.md`](../../docs/specs/Alert.md) · Story: `Components/Feedback/Alert`
+Status: stable · Spec: [`docs/specs/Alert.md`](../../docs/specs/Alert.md) · Story: `Components/Feedback/Alert`
 
 **`AlertProps`**
 
@@ -354,7 +354,7 @@ Badge is a compact inline chip for labelling, categorising, or flagging state: a
 
 `import { Badge } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Badge.md`](../../docs/specs/Badge.md) · Story: `Components/Feedback/Badge`
+Status: stable · Spec: [`docs/specs/Badge.md`](../../docs/specs/Badge.md) · Story: `Components/Feedback/Badge`
 
 **`BadgeProps`**
 
@@ -378,7 +378,7 @@ What a view shows when it has nothing to show: a 1-bit icon on a subtle plate, a
 
 `import { EmptyState } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/EmptyState.md`](../../docs/specs/EmptyState.md) · Story: `Components/Feedback/EmptyState`
+Status: stable · Spec: [`docs/specs/EmptyState.md`](../../docs/specs/EmptyState.md) · Story: `Components/Feedback/EmptyState`
 
 **`EmptyStateAction`**
 
@@ -411,7 +411,7 @@ Shows task progress.
 
 `import { ProgressBar } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/ProgressBar.md`](../../docs/specs/ProgressBar.md) · Story: `Components/Feedback/ProgressBar`
+Status: stable · Spec: [`docs/specs/ProgressBar.md`](../../docs/specs/ProgressBar.md) · Story: `Components/Feedback/ProgressBar`
 
 **`ProgressBarProps`**
 
@@ -435,7 +435,7 @@ Placeholder blocks that hold the layout while content loads.
 
 `import { Skeleton } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Skeleton.md`](../../docs/specs/Skeleton.md) · Story: `Components/Feedback/Skeleton`
+Status: stable · Spec: [`docs/specs/Skeleton.md`](../../docs/specs/Skeleton.md) · Story: `Components/Feedback/Skeleton`
 
 **`SkeletonProps`**
 
@@ -455,7 +455,7 @@ TUI loading indicator in the 1-bit icon language: eight square dots on an 8x8 pi
 
 `import { Spinner } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Spinner.md`](../../docs/specs/Spinner.md) · Story: `Components/Feedback/Spinner`
+Status: stable · Spec: [`docs/specs/Spinner.md`](../../docs/specs/Spinner.md) · Story: `Components/Feedback/Spinner`
 
 **`SpinnerProps`**
 
@@ -473,7 +473,7 @@ Toast is a brief, non-blocking confirmation that rises from the bottom edge and 
 
 `import { Toast, Toaster } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Story: `Components/Feedback/Toast`
+Status: stable · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Story: `Components/Feedback/Toast`
 
 **`ToastAction`**
 
@@ -539,7 +539,7 @@ Checkbox lets users turn an independent option on or off, or pick any number of 
 
 `import { Checkbox } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Checkbox.md`](../../docs/specs/Checkbox.md) · Story: `Components/Inputs/Checkbox`
+Status: stable · Spec: [`docs/specs/Checkbox.md`](../../docs/specs/Checkbox.md) · Story: `Components/Inputs/Checkbox`
 
 **`CheckboxProps`**
 
@@ -563,7 +563,7 @@ Text input with a filtered listbox for choosing one option from a long list.
 
 `import { Combobox } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Combobox.md`](../../docs/specs/Combobox.md) · Story: `Components/Inputs/Combobox`
+Status: stable · Spec: [`docs/specs/Combobox.md`](../../docs/specs/Combobox.md) · Story: `Components/Inputs/Combobox`
 
 **`ComboboxOption`**
 
@@ -603,7 +603,7 @@ Fieldset names a group of related controls: radios that answer one question, a s
 
 `import { Fieldset } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Fieldset.md`](../../docs/specs/Fieldset.md) · Story: `Components/Inputs/Fieldset`
+Status: stable · Spec: [`docs/specs/Fieldset.md`](../../docs/specs/Fieldset.md) · Story: `Components/Inputs/Fieldset`
 
 **`FieldsetProps`**
 
@@ -630,7 +630,7 @@ Input is the single-line text field for short free-form values: names, emails, s
 
 `import { Input } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Input.md`](../../docs/specs/Input.md) · Story: `Components/Inputs/Input`
+Status: stable · Spec: [`docs/specs/Input.md`](../../docs/specs/Input.md) · Story: `Components/Inputs/Input`
 
 **`InputTrailingAction`**
 
@@ -663,7 +663,7 @@ Radio lets users choose exactly one option from a small, visible set (roughly tw
 
 `import { Radio } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Radio.md`](../../docs/specs/Radio.md) · Story: `Components/Inputs/Radio`
+Status: stable · Spec: [`docs/specs/Radio.md`](../../docs/specs/Radio.md) · Story: `Components/Inputs/Radio`
 
 **`RadioProps`**
 
@@ -686,7 +686,7 @@ Select picks one value from a list of options inside a form.
 
 `import { Select } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Select.md`](../../docs/specs/Select.md) · Story: `Components/Inputs/Select`
+Status: stable · Spec: [`docs/specs/Select.md`](../../docs/specs/Select.md) · Story: `Components/Inputs/Select`
 
 **`SelectProps`**
 
@@ -708,7 +708,7 @@ Slider picks a numeric value from a continuous or stepped range, such as zoom le
 
 `import { Slider } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Slider.md`](../../docs/specs/Slider.md) · Story: `Components/Inputs/Slider`
+Status: stable · Spec: [`docs/specs/Slider.md`](../../docs/specs/Slider.md) · Story: `Components/Inputs/Slider`
 
 **`SliderProps`**
 
@@ -728,7 +728,7 @@ Switch toggles a setting on or off with an immediate effect, like enabling notif
 
 `import { Switch } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Switch.md`](../../docs/specs/Switch.md) · Story: `Components/Inputs/Switch`
+Status: stable · Spec: [`docs/specs/Switch.md`](../../docs/specs/Switch.md) · Story: `Components/Inputs/Switch`
 
 **`SwitchProps`**
 
@@ -755,7 +755,7 @@ Textarea is the multi-line text field for longer free-form input: notes, feedbac
 
 `import { Textarea } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Textarea.md`](../../docs/specs/Textarea.md) · Story: `Components/Inputs/Textarea`
+Status: stable · Spec: [`docs/specs/Textarea.md`](../../docs/specs/Textarea.md) · Story: `Components/Inputs/Textarea`
 
 **`TextareaProps`**
 
@@ -779,7 +779,7 @@ Box is the base surface primitive: token-backed padding, a semantic background, 
 
 `import { Box } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Box.md`](../../docs/specs/Box.md) · Story: `Primitives/Layout/Box`
+Status: stable · Spec: [`docs/specs/Box.md`](../../docs/specs/Box.md) · Story: `Primitives/Layout/Box`
 
 **`BoxProps`**
 
@@ -804,7 +804,7 @@ Center puts one column of content in the middle of its parent: a measured width,
 
 `import { Center } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Center.md`](../../docs/specs/Center.md) · Story: `Primitives/Layout/Center`
+Status: stable · Spec: [`docs/specs/Center.md`](../../docs/specs/Center.md) · Story: `Primitives/Layout/Center`
 
 **`CenterProps`**
 
@@ -827,7 +827,7 @@ Container is the page-width wrapper: one max width, one set of gutters, one plac
 
 `import { Container } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Container.md`](../../docs/specs/Container.md) · Story: `Primitives/Layout/Container`
+Status: stable · Spec: [`docs/specs/Container.md`](../../docs/specs/Container.md) · Story: `Primitives/Layout/Container`
 
 **`ContainerProps`**
 
@@ -849,7 +849,7 @@ Grid is the two-dimensional layout primitive: a token-backed gap and a column co
 
 `import { Grid } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Grid.md`](../../docs/specs/Grid.md) · Story: `Primitives/Layout/Grid`
+Status: stable · Spec: [`docs/specs/Grid.md`](../../docs/specs/Grid.md) · Story: `Primitives/Layout/Grid`
 
 **`GridProps`**
 
@@ -873,7 +873,7 @@ Inline is the horizontal cluster: a row of items that wraps onto the next line i
 
 `import { Inline } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Inline.md`](../../docs/specs/Inline.md) · Story: `Primitives/Layout/Inline`
+Status: stable · Spec: [`docs/specs/Inline.md`](../../docs/specs/Inline.md) · Story: `Primitives/Layout/Inline`
 
 **`InlineProps`**
 
@@ -896,7 +896,7 @@ Stack is the layout primitive for spacing a group of elements along one axis wit
 
 `import { Stack } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Stack.md`](../../docs/specs/Stack.md) · Story: `Primitives/Layout/Stack`
+Status: stable · Spec: [`docs/specs/Stack.md`](../../docs/specs/Stack.md) · Story: `Primitives/Layout/Stack`
 
 **`StackProps`**
 
@@ -918,7 +918,7 @@ VisuallyHidden renders content that screen readers announce and nobody sees: the
 
 `import { VisuallyHidden } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/VisuallyHidden.md`](../../docs/specs/VisuallyHidden.md) · Story: `Primitives/Layout/VisuallyHidden`
+Status: stable · Spec: [`docs/specs/VisuallyHidden.md`](../../docs/specs/VisuallyHidden.md) · Story: `Primitives/Layout/VisuallyHidden`
 
 **`VisuallyHiddenProps`**
 
@@ -942,7 +942,7 @@ The application top bar: a `<header>` with `brand`, `navigation`, and `actions` 
 
 `import { AppHeader } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/AppHeader.md`](../../docs/specs/AppHeader.md) · Story: `Components/Navigation/AppHeader`
+Status: stable · Spec: [`docs/specs/AppHeader.md`](../../docs/specs/AppHeader.md) · Story: `Components/Navigation/AppHeader`
 
 **`AppHeaderProps`**
 
@@ -968,7 +968,7 @@ Shows where the current page sits in a hierarchy: a `<nav aria-label="Breadcrumb
 
 `import { Breadcrumbs } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Breadcrumbs.md`](../../docs/specs/Breadcrumbs.md) · Story: `Components/Navigation/Breadcrumbs`
+Status: stable · Spec: [`docs/specs/Breadcrumbs.md`](../../docs/specs/Breadcrumbs.md) · Story: `Components/Navigation/Breadcrumbs`
 
 **`BreadcrumbItem`**
 
@@ -1000,7 +1000,7 @@ Link is the inline text link for navigation inside prose, captions, nav lists an
 
 `import { Link } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Link.md`](../../docs/specs/Link.md) · Story: `Components/Navigation/Link`
+Status: stable · Spec: [`docs/specs/Link.md`](../../docs/specs/Link.md) · Story: `Components/Navigation/Link`
 
 **`LinkProps`**
 
@@ -1022,7 +1022,7 @@ Page picker for long, paged collections.
 
 `import { Pagination } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Pagination.md`](../../docs/specs/Pagination.md) · Story: `Components/Navigation/Pagination`
+Status: stable · Spec: [`docs/specs/Pagination.md`](../../docs/specs/Pagination.md) · Story: `Components/Navigation/Pagination`
 
 **`PaginationProps`**
 
@@ -1050,7 +1050,7 @@ The Patterns/SideNavigation recipe as a compound component: `SideNav` > `SideNav
 
 `import { SideNav, SideNavSection, SideNavItem } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/SideNav.md`](../../docs/specs/SideNav.md) · Story: `Components/Navigation/SideNav`
+Status: stable · Spec: [`docs/specs/SideNav.md`](../../docs/specs/SideNav.md) · Story: `Components/Navigation/SideNav`
 
 **`SideNavProps`**
 
@@ -1095,7 +1095,7 @@ Tabs switch between related views that share one context, such as the sections o
 
 `import { Tabs, TabsList, TabsTrigger, TabsContent } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Tabs.md`](../../docs/specs/Tabs.md) · Story: `Components/Navigation/Tabs`
+Status: stable · Spec: [`docs/specs/Tabs.md`](../../docs/specs/Tabs.md) · Story: `Components/Navigation/Tabs`
 
 **`TabsProps`**
 
@@ -1135,7 +1135,7 @@ BottomSheet is a panel that slides up from the bottom edge over a scrim, for men
 
 `import { BottomSheet } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/BottomSheet.md`](../../docs/specs/BottomSheet.md) · Story: `Components/Overlays/BottomSheet`
+Status: stable · Spec: [`docs/specs/BottomSheet.md`](../../docs/specs/BottomSheet.md) · Story: `Components/Overlays/BottomSheet`
 
 **`BottomSheetProps`**
 
@@ -1156,7 +1156,7 @@ Dropdown is an action menu: a trigger that opens a short list of commands such a
 
 `import { Dropdown } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Dropdown.md`](../../docs/specs/Dropdown.md) · Story: `Components/Overlays/Dropdown`
+Status: stable · Spec: [`docs/specs/Dropdown.md`](../../docs/specs/Dropdown.md) · Story: `Components/Overlays/Dropdown`
 
 **`DropdownItem`**
 
@@ -1187,7 +1187,7 @@ Modal is a centered dialog over a scrim that interrupts the page for a task or d
 
 `import { Modal } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Modal.md`](../../docs/specs/Modal.md) · Story: `Components/Overlays/Modal`
+Status: stable · Spec: [`docs/specs/Modal.md`](../../docs/specs/Modal.md) · Story: `Components/Overlays/Modal`
 
 **`ModalProps`**
 
@@ -1210,7 +1210,7 @@ Anchored, non-modal floating panel for rich interactive content next to a trigge
 
 `import { Popover } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Popover.md`](../../docs/specs/Popover.md) · Story: `Components/Overlays/Popover`
+Status: stable · Spec: [`docs/specs/Popover.md`](../../docs/specs/Popover.md) · Story: `Components/Overlays/Popover`
 
 **`PopoverProps`**
 
@@ -1247,7 +1247,7 @@ Tooltip shows a short supplementary hint next to a trigger when it is hovered or
 
 `import { Tooltip } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Tooltip.md`](../../docs/specs/Tooltip.md) · Story: `Components/Overlays/Tooltip`
+Status: stable · Spec: [`docs/specs/Tooltip.md`](../../docs/specs/Tooltip.md) · Story: `Components/Overlays/Tooltip`
 
 **`TooltipProps`**
 
@@ -1271,7 +1271,7 @@ CaseStudy renders long-form narrative pages (case studies, write-ups, project pa
 
 `import { CaseStudyContent, CaseStudyHeader, CaseStudySections, CaseStudyPage } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/CaseStudy.md`](../../docs/specs/CaseStudy.md) · Story: `Patterns/CaseStudy (full pages: Screens/CaseStudyTemplate)`
+Status: stable · Spec: [`docs/specs/CaseStudy.md`](../../docs/specs/CaseStudy.md) · Story: `Patterns/CaseStudy (full pages: Screens/CaseStudyTemplate)`
 
 **`CaseStudyItem`**
 
@@ -1329,7 +1329,7 @@ Term and value pairs on a real `<dl>`: metadata panels, config readouts, neofetc
 
 `import { DescriptionList } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/DescriptionList.md`](../../docs/specs/DescriptionList.md) · Story: `Components/Terminal/DescriptionList`
+Status: stable · Spec: [`docs/specs/DescriptionList.md`](../../docs/specs/DescriptionList.md) · Story: `Components/Terminal/DescriptionList`
 
 **`DescriptionListItem`**
 
@@ -1356,7 +1356,7 @@ Inline keyboard key for shortcut hints.
 
 `import { Kbd } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Kbd.md`](../../docs/specs/Kbd.md) · Story: `Components/Terminal/Kbd`
+Status: stable · Spec: [`docs/specs/Kbd.md`](../../docs/specs/Kbd.md) · Story: `Components/Terminal/Kbd`
 
 **`KbdProps`**
 
@@ -1376,7 +1376,7 @@ A monospace scrolling log: build output, server logs, job runs.
 
 `import { LogView } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/LogView.md`](../../docs/specs/LogView.md) · Story: `Components/Terminal/LogView`
+Status: stable · Spec: [`docs/specs/LogView.md`](../../docs/specs/LogView.md) · Story: `Components/Terminal/LogView`
 
 **`LogLine`**
 
@@ -1409,7 +1409,7 @@ A gauge for a value in a known range (disk, quota, battery), not a progress bar.
 
 `import { Meter } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Meter.md`](../../docs/specs/Meter.md) · Story: `Components/Terminal/Meter`
+Status: stable · Spec: [`docs/specs/Meter.md`](../../docs/specs/Meter.md) · Story: `Components/Terminal/Meter`
 
 **`MeterProps`**
 
@@ -1436,7 +1436,7 @@ The bottom bar of a terminal app (vim, tmux): `left`, `center`, and `right` zone
 
 `import { StatusLine, StatusLineSegment } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/StatusLine.md`](../../docs/specs/StatusLine.md) · Story: `Components/Terminal/StatusLine`
+Status: stable · Spec: [`docs/specs/StatusLine.md`](../../docs/specs/StatusLine.md) · Story: `Components/Terminal/StatusLine`
 
 **`StatusLineProps`**
 
@@ -1466,7 +1466,7 @@ Hierarchical list with expandable branches (file trees, outlines).
 
 `import { TreeView } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/TreeView.md`](../../docs/specs/TreeView.md) · Story: `Components/Terminal/TreeView`
+Status: stable · Spec: [`docs/specs/TreeView.md`](../../docs/specs/TreeView.md) · Story: `Components/Terminal/TreeView`
 
 **`TreeNode`**
 
@@ -1506,7 +1506,7 @@ A framed terminal pane: the large plate ring (stroke layer + fill inset 1px), a 
 
 `import { Window } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Window.md`](../../docs/specs/Window.md) · Story: `Components/Terminal/Window`
+Status: stable · Spec: [`docs/specs/Window.md`](../../docs/specs/Window.md) · Story: `Components/Terminal/Window`
 
 **`WindowProps`**
 
@@ -1532,4 +1532,4 @@ ThemeToggle is a ready-made light/dark control: a small `Switch` with a 1-bit Mo
 
 `import { ThemeToggle } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/ThemeToggle.md`](../../docs/specs/ThemeToggle.md) · Story: `Components/Theme/ThemeToggle`
+Status: stable · Spec: [`docs/specs/ThemeToggle.md`](../../docs/specs/ThemeToggle.md) · Story: `Components/Theme/ThemeToggle`

@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Toast.tsx` |
 | Story | `Components/Feedback/Toast` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `668be764a3cee7f7` |
 
@@ -297,6 +297,7 @@ Interactive controls: N/A (render function stories).
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-10-28 | feat | Decision 0024 vocabulary: `tone` (`neutral \| info \| success \| warning \| error`, type `ToastTone`) replaces `variant` on `Toast`, `ToastItem` and `ToastOptions`. `variant` and `ToastVariant` still work and are deprecated (`default` maps to `neutral`); using `variant` warns once in development and `tone` wins when both are set. Renders identically |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-21 | feat | Variants (default/success/warning/error/info, Alert icons and colors), `action`, `duration` with hover/focus pause, error `role="alert"`, imperative `toast()` / `useToast()` with `<Toaster />`; controlled API unchanged |

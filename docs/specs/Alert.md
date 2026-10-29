@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Alert.tsx` |
 | Story | `Components/Feedback/Alert` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `03cf4240f4d95486` |
 
@@ -237,6 +237,7 @@ No raw color, size, or spacing values. (The close button's focus ring and hit ar
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | Severity prefixes `[i]` `[ok]` `[!!]` `[er]` and close `[x]` replaced by 1-bit icons: default Bell, info Info (default and info now differ), success CheckCircle, warning AlertTriangle, error AlertCircle; close is a 12px X |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Close button is `type="button"` (no stray form submits), uses the inset token focus ring instead of `focus:ring-1 focus:ring-offset-1`, and gets a 44px pseudo-element hit area; `AlertProps` gained per-prop JSDoc |

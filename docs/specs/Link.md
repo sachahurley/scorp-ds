@@ -12,8 +12,8 @@
 | File | `packages/components/src/components/Link.tsx` |
 | Story | `Components/Navigation/Link` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-10-28 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `0a43288a17fe4939` |
 
 ---
@@ -222,6 +222,7 @@ modes before nesting links.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-20 | added | Initial component: inline/quiet variants, external affordance, router polymorphism |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | `external` sets `target` / `rel` in the `as` form too, so the glyph and the "(opens in new tab)" notice always match the behaviour |

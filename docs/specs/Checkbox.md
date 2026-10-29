@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Checkbox.tsx` |
 | Story | `Components/Inputs/Checkbox` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `7fed86b9cfc4023a` |
 
@@ -242,6 +242,7 @@ None. The error Check and Minus use `--button-destructive-text`, the system's in
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | `indeterminate` prop: sets the native property via a merged ref (announced as mixed), draws the 1-bit Minus bar |
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` backed by control-size tokens; small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-21 | feat | Checkmark text glyph replaced by the 1-bit Check icon (sizes 3/4/5) |

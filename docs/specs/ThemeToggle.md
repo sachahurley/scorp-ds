@@ -12,8 +12,8 @@
 | File | `packages/components/src/components/ThemeToggle.tsx` |
 | Story | `Components/Theme/ThemeToggle` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-09-22 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `9940b8039e25567e` |
 
 ---
@@ -210,6 +210,7 @@ Interactive controls: none (no props).
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | Knob glyphs use the 1-bit Moon and Sun icons |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Reads `resolvedTheme`, so a "system" theme on a dark OS no longer reports "Light"; label and `aria-label` share one source |

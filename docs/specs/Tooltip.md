@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Tooltip.tsx` |
 | Story | `Components/Overlays/Tooltip` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `6e02c20625d0c90e` |
 
@@ -238,6 +238,7 @@ None (the trigger is supplied by the consumer).
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | Viewport flip: measured after open, flips to the opposite side when the preferred one overflows; top/bottom clamp horizontally with the caret kept on the trigger |
 | Unreleased | 2026-09-21 | fix | Added keyboard focus, Escape dismiss, hoverable content, aria-describedby on the trigger |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |

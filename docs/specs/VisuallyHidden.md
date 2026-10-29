@@ -12,8 +12,8 @@
 | File | `packages/components/src/primitives/VisuallyHidden.tsx` |
 | Story | `Primitives/Layout/VisuallyHidden` |
 | Version | `v1` |
-| Status | `draft` |
-| Last updated | 2026-09-22 |
+| Status | `stable` |
+| Last updated | 2026-10-29 |
 | API hash | `ff9dbb08f656d666` |
 
 ---
@@ -210,6 +210,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-22 | feat | Primitive created |
 
 <!-- AUTO-END:changelog -->

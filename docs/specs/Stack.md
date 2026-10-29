@@ -12,7 +12,7 @@
 | File | `packages/components/src/primitives/Stack.tsx` |
 | Story | `Primitives/Layout/Stack` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `6df0b9f5d6f4eeb7` |
 
@@ -232,6 +232,7 @@ None.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-04-04 | spec-created | Initial primitive spec |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | Forwards a `ref`, spreads native attributes (`id`, `role`, `aria-*`), and adds the 20px `gap="5"` step |

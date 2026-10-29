@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Meter.tsx` |
 | Story | `Components/Terminal/Meter` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `6017f90f30e10400` |
 
@@ -215,6 +215,7 @@ No hardcoded values found.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 | Unreleased | 2026-10-28 | feat | `MeterTone` aligned with decision 0024: adds the `neutral` and `info` roles (forced via `tone` only); `primary` stays as Meter's own role. Existing tones render identically |
 | Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md` only. Rendering unchanged |

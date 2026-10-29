@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/Avatar.tsx` |
 | Story | `Components/Display/Avatar` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `b0d20ad04fc99fd1` |
 
@@ -233,6 +233,7 @@ None (consumers may pass `TuiIcon` via `icon`).
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` | xl (fixed 24/40/64/96px boxes, not control-height tokens); small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-10-29 | feat (breaking type) | `alt` is required and names every mode (the fallback box becomes `role="img"`); `alt=""` is decorative and no longer becomes "Avatar". `Image fallback` story added |

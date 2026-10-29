@@ -12,7 +12,7 @@
 | File | `packages/components/src/components/ProgressBar.tsx` |
 | Story | `Components/Feedback/ProgressBar` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `e2b32a77113b77e5` |
 
@@ -207,6 +207,7 @@ None
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial ProgressBar component, story, and unit tests |
 | Unreleased | 2026-10-28 | feat | Decision 0024 vocabulary: `tone` replaces `variant` and adds the `neutral` and `info` roles (`primary` stays the default). `variant` still works, warns once in development, and loses when both are set. New exported type `ProgressBarTone`; `data-tone` on the progressbar. Existing values render identically |
 | Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `variant` prop and its dev warning; use `tone`. Rendering unchanged |
