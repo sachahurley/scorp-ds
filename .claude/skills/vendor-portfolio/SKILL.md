@@ -32,11 +32,19 @@ scorp-ds main (GitHub) → ~/Projects/scorp-ds (local main) ─┬→ portfolio 
 
 1. **Refresh the local DS checkout** (the vendor script reads `../scorp-ds`):
    ```bash
-   git -C ~/Projects/scorp-ds switch main && git -C ~/Projects/scorp-ds pull --ff-only
+   git -C ~/Projects/scorp-ds switch main && git -C ~/Projects/scorp-ds pull --ff-only \
+     && (cd ~/Projects/scorp-ds && npm ci)
    ```
    If the checkout is dirty or on another branch, preserve that state first
    (WIP commit on a branch — never bare-stash; the stash is shared across
    worktrees).
+
+   **Always `npm ci` after the pull.** The portfolio and scorp-protodash vendor a
+   *built* `components/dist`, compiled with this checkout's `node_modules`. Their
+   `ds-check` rebuilds the dist in CI with the lockfile's versions, so a dist built
+   with stale dependencies (for example after a Vite bump) fails `ds-check` as
+   `STALE components/dist` even though the source is identical. This happened on
+   2026-10-29 after scorp-ds #119.
 
 2. **Work on a portfolio feature branch off origin/main** (main is sacred):
    ```bash
