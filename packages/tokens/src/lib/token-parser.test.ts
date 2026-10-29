@@ -12,6 +12,7 @@
  * token is added to one file and not the other, the failure names it.
  */
 
+import { createRequire } from 'node:module';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -194,5 +195,38 @@ describe('tailwind preset breakpoints', () => {
         .map(([name, value]) => [name.replace('breakpoint-', ''), value])
     );
     expect(presetScreens).toEqual(fromCss);
+  });
+});
+
+/**
+ * The preset maps the spacing scale onto the variables (decision 0027), and
+ * every semantic key it offers consumers must point at a variable that exists
+ * (decision 0023). Both are literals in the preset for the vendoring reason
+ * above, so this is what keeps them honest.
+ */
+describe('tailwind preset contract', () => {
+  const presetPath = resolve(dirname(findTokensCss()), '../../tailwind.preset.js');
+  const preset = createRequire(import.meta.url)(presetPath) as {
+    theme: { extend: { spacing: Record<string, string> } };
+  };
+  const presetSource = readFileSync(presetPath, 'utf8');
+
+  it('maps every global.spacing step to its variable, and nothing else on the scale', () => {
+    const fromTokens = Object.fromEntries(
+      Object.keys(tokens.global.spacing as Record<string, unknown>).map((step) => [
+        step.replace('-', '.'),
+        `var(--spacing-${step})`,
+      ])
+    );
+    const scale = Object.fromEntries(
+      Object.entries(preset.theme.extend.spacing).filter(([, value]) => value.startsWith('var(--spacing-'))
+    );
+    expect(scale).toEqual(fromTokens);
+  });
+
+  it('points every var() at a custom property declared in tokens.css', () => {
+    const declared = new Set(Object.keys(rootDeclarations).map((name) => `--${name}`));
+    const used = [...presetSource.matchAll(/var\((--[a-z0-9-]+)/g)].map((m) => m[1]);
+    expect(used.filter((name) => !declared.has(name))).toEqual([]);
   });
 });

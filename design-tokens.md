@@ -267,14 +267,18 @@ There is no 600 step, so `font-semibold` is off-token: use `font-medium` or `fon
 
 Base unit: **4px** per step (see `global.spacing` in `tokens.json`, `--spacing-*` in `tokens.css`).
 
-**The Tailwind spacing classes are not wired to these tokens yet.** The preset maps no spacing scale except `control-*` and `touch` (see Control Size Tokens), so `p-4` and `gap-6` are Tailwind's own default 4px scale. The values coincide with the tokens, which is why the classes look right, but editing `spacing.4` changes no class. Use the classes as normal; [decision 0027](docs/decisions/0027-half-step-spacing-is-tokenised.md) maps every step, and the half steps components already use (`gap-0.5`, `px-1.5`, `py-2.5`), to these variables.
+The Tailwind preset maps every step, whole and half, onto its variable: `p-4` is `var(--spacing-4)`, `py-1.5` is `var(--spacing-1-5)`. The values equal Tailwind's defaults, so the classes render as they always did, but a token edit now reaches every `p-*`, `m-*` and `gap-*` class. Half steps are hyphenated in the token name because DTCG names cannot hold a dot. Padding, margin, gap and space utilities in components must use a step from this table: `p-7`, `gap-9` and the like fail `scorp/no-off-scale-spacing`, and the four derived exceptions are allowlisted with reasons in `eslint.config.mjs` ([decision 0027](docs/decisions/0027-half-step-spacing-is-tokenised.md)). Width, height and position utilities stay on Tailwind's scale.
 
 | Token | Value | Use For |
 |-------|-------|---------|
 | `spacing.0` | 0 | Flush layouts |
+| `spacing.0-5` | 2px | Half step (`0.5`): dense chrome, badge and key insets |
 | `spacing.1` | 4px | Tight gaps |
+| `spacing.1-5` | 6px | Half step (`1.5`): tight row padding |
 | `spacing.2` | 8px | Small padding, icon gaps |
+| `spacing.2-5` | 10px | Half step (`2.5`): compact control padding |
 | `spacing.3` | 12px | Input padding, compact items |
+| `spacing.3-5` | 14px | Half step (`3.5`): dense list row padding |
 | `spacing.4` | 16px | Standard padding |
 | `spacing.5` | 20px | Comfortable inline spacing |
 | `spacing.6` | 24px | Card padding, section gaps |

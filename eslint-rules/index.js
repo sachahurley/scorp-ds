@@ -82,6 +82,15 @@ function locallyDeclared(sourceText) {
   return out;
 }
 
+let spacingCache = null;
+/** Tailwind step names for global.spacing in tokens.json: `0-5` becomes `0.5`. */
+function spacingScale() {
+  if (spacingCache) return spacingCache;
+  const tokens = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, "packages/tokens/src/tokens.json"), "utf8"));
+  spacingCache = new Set(Object.keys(tokens.global.spacing).map((k) => k.replace("-", ".")));
+  return spacingCache;
+}
+
 /**
  * True when a string sits under a Storybook `docs` / `description` key: that is
  * prose about the system ("a drop-shadow filter on a wrapper"), not class names.
@@ -513,6 +522,40 @@ module.exports = {
             else if (decl.type === "TSTypeAliasDeclaration") checkType(decl.typeAnnotation, decl.id.name);
           },
         };
+      },
+    },
+
+    "no-off-scale-spacing": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "Padding, margin, gap and space utilities use a step from global.spacing (whole or half). Tailwind's own extra steps (7, 9, 11, 14, 28, …) are not tokens. Decision 0027.",
+        },
+        schema: [
+          {
+            type: "object",
+            properties: { allow: { type: "array", items: { type: "string" } } },
+            additionalProperties: false,
+          },
+        ],
+        messages: {
+          offScale:
+            "'{{value}}' uses spacing step {{step}}, which is not in global.spacing ({{scale}}). Use a step on the scale, or add it to the rule's allow list in eslint.config.mjs with a reason (docs/decisions/0027).",
+        },
+      },
+      create(context) {
+        const allow = new Set((context.options[0] && context.options[0].allow) || []);
+        const scale = spacingScale();
+        const SPACING = /^(?:p|px|py|pt|pr|pb|pl|ps|pe|m|mx|my|mt|mr|mb|ml|ms|me|gap|gap-x|gap-y|space-x|space-y)-(\d+(?:\.\d+)?)$/;
+        return stringVisitors((node, text) => {
+          if (isDocsProse(node)) return;
+          for (const token of classTokens(text)) {
+            const m = SPACING.exec(token);
+            if (!m || scale.has(m[1]) || allow.has(token)) continue;
+            context.report({ node, messageId: "offScale", data: { value: token, step: m[1], scale: [...scale].join(", ") } });
+          }
+        });
       },
     },
 
