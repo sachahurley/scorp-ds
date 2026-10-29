@@ -36,7 +36,7 @@ type Story = StoryObj<typeof Toaster>;
  *
  * Pushing a toast here starts a 3200ms self-expiry, so any screenshot becomes a
  * race between the settle wait and the dismissal. The appearance of a toast is
- * already covered, stably, by Variants and With action, which render `<Toast>`
+ * already covered, stably, by Tones and With action, which render `<Toast>`
  * directly with no queue and no timer. Opening this one would buy redundant
  * coverage at the cost of a frame that can flake.
  */
@@ -101,15 +101,17 @@ export const Imperative: Story = {
   ),
 };
 
-/** Every variant, rendered in place (no timers) so they can be compared. */
+// The export keeps its old name: it is the story id the visual baselines are keyed by.
+/** Every tone, rendered in place (no timers) so they can be compared. */
 export const Variants: Story = {
+  name: 'Tones',
   render: () => (
     <div className="flex flex-col items-center gap-2">
       <Toast>Link copied</Toast>
-      <Toast variant="success">Profile saved</Toast>
-      <Toast variant="info">New version available</Toast>
-      <Toast variant="warning">Storage almost full</Toast>
-      <Toast variant="error">Upload failed</Toast>
+      <Toast tone="success">Profile saved</Toast>
+      <Toast tone="info">New version available</Toast>
+      <Toast tone="warning">Storage almost full</Toast>
+      <Toast tone="error">Upload failed</Toast>
     </div>
   ),
 };
@@ -120,10 +122,10 @@ export const WithAction: Story = {
   render: () => (
     <div className="flex flex-col items-center gap-2">
       <Toast action={{ label: 'Undo', onClick: () => {} }}>Item deleted</Toast>
-      <Toast variant="error" action={{ label: 'Retry', onClick: () => {} }}>
+      <Toast tone="error" action={{ label: 'Retry', onClick: () => {} }}>
         Upload failed
       </Toast>
-      <Toast variant="info" duration={Infinity} onDismiss={() => {}}>
+      <Toast tone="info" duration={Infinity} onDismiss={() => {}}>
         Syncing library
       </Toast>
     </div>

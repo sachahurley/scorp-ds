@@ -29,7 +29,7 @@ type Story = StoryObj<typeof LogView>;
 const sample: LogLine[] = [
   { id: 1, level: 'info', timestamp: '12:04:01', text: 'connection accepted 127.0.0.1:44122' },
   { id: 2, level: 'debug', timestamp: '12:04:01', text: 'pool size=8 idle=6' },
-  { id: 3, level: 'warn', timestamp: '12:04:02', text: 'slow query 840ms users_by_team' },
+  { id: 3, level: 'warning', timestamp: '12:04:02', text: 'slow query 840ms users_by_team' },
   { id: 4, level: 'info', timestamp: '12:04:03', text: 'job=4821 status=ok duration=42s' },
   { id: 5, level: 'error', timestamp: '12:04:09', text: 'upstream timed out after 30000ms (GET /api/teams)' },
   { id: 6, level: 'info', timestamp: '12:04:10', text: 'retry 1/3 scheduled in 2s' },
@@ -94,7 +94,7 @@ export const Streaming: Story = {
         const t = setInterval(() => {
           setLines((prev) => {
             const n = prev.length + 1;
-            const level = n % 9 === 0 ? 'error' : n % 4 === 0 ? 'warn' : 'info';
+            const level = n % 9 === 0 ? 'error' : n % 4 === 0 ? 'warning' : 'info';
             return [
               ...prev,
               { id: n, level, timestamp: `12:05:${String(n % 60).padStart(2, '0')}`, text: messages[n % messages.length] },

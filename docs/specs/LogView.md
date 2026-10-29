@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
-| API hash | `094353b2797d33ea` |
+| API hash | `6daa84d25c351dc9` |
 
 ---
 
@@ -51,6 +51,18 @@ Don't use this for: records with columns to compare (use Table instead) or a sho
 | framed | Plate ring around the log (default) |
 | unframed | `framed={false}`, inherits the surrounding surface |
 
+### Levels
+
+`level` is the logging domain's own term, so it keeps its name (decision 0024), but its warning value is the shared role name `warning`.
+
+| Enum Value | Description |
+|------------|-------------|
+| `info` | `Info` icon, `INFO` tag, info scale |
+| `warning` | `AlertTriangle` icon, `WARN` tag, warning scale |
+| `error` | `AlertCircle` icon, `ERROR` tag, error scale |
+| `debug` | `Settings` icon, `DEBUG` tag, secondary scale |
+| `warn` | **Deprecated: use `warning`.** Renders identically (same icon, `WARN` tag and colour) and warns once in development. `data-level` echoes the value passed |
+
 ### Sizes
 
 | Enum Value | Description |
@@ -67,7 +79,7 @@ Don't use this for: records with columns to compare (use Table instead) or a sho
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `lines` | `LogLine[]` | - | Yes | `{ id, text, level?, timestamp? }`, oldest first. |
+| `lines` | `LogLine[]` | - | Yes | `{ id, text, level?, timestamp? }`, oldest first. `level` is a `LogLevel`: `"info" \| "warning" \| "error" \| "debug"` (`"warn"` is a deprecated alias of `"warning"`). |
 | `autoScroll` | `boolean` | `true` | No | Follow new lines; pauses when scrolled up. |
 | `showLineNumbers` | `boolean` | `false` | No | Line-number gutter (aria-hidden). |
 | `wrap` | `boolean` | `true` | No | Wrap vs horizontal scroll. |
@@ -215,6 +227,7 @@ No hardcoded values found.
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 | Unreleased | 2026-10-28 | refactor | Follow logic moved into the shared `useFollowScroll` hook; no behavior change (existing tests unchanged and passing) |
+| Unreleased | 2026-10-28 | feat | `LogLevel` takes `warning` (decision 0024); `warn` is a deprecated alias that renders identically and warns once in development |
 
 <!-- AUTO-END:changelog -->
 

@@ -1287,6 +1287,10 @@
       "import": "@scorp-ds/components",
       "exports": [
         {
+          "name": "AlertTone",
+          "kind": "type"
+        },
+        {
           "name": "AlertProps",
           "kind": "interface"
         },
@@ -1296,8 +1300,30 @@
         }
       ],
       "props": {
+        "AlertTone": {
+          "union": [
+            "\"neutral\"",
+            "\"info\"",
+            "\"success\"",
+            "\"warning\"",
+            "\"error\""
+          ]
+        },
         "AlertProps": {
           "props": [
+            {
+              "name": "tone",
+              "type": "AlertTone",
+              "required": false,
+              "values": [
+                "\"neutral\"",
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\""
+              ],
+              "description": "Severity: picks the colour set and the 1-bit severity icon. Default: \"neutral\"."
+            },
             {
               "name": "variant",
               "type": "\"default\" | \"success\" | \"warning\" | \"error\" | \"info\"",
@@ -1309,8 +1335,8 @@
                 "\"error\"",
                 "\"info\""
               ],
-              "default": "\"default\"",
-              "description": "Severity: picks the color set and the 1-bit severity icon."
+              "deprecated": "Use `tone`.",
+              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "title",
@@ -1328,13 +1354,20 @@
               "name": "iconLeft",
               "type": "ReactNode",
               "required": false,
-              "description": "Replaces the variant's severity icon. Use a `TuiIcon`."
+              "description": "Replaces the tone's severity icon. Use a `TuiIcon`."
+            },
+            {
+              "name": "onDismiss",
+              "type": "() => void",
+              "required": false,
+              "description": "Adds a dismiss control (44px hit area) and is called when it is pressed."
             },
             {
               "name": "onClose",
               "type": "() => void",
               "required": false,
-              "description": "Adds a dismiss control (44px hit area) and is called when it is pressed."
+              "deprecated": "Use `onDismiss`.",
+              "description": "Dismiss callback under its old name. When both are set, `onDismiss` wins."
             },
             {
               "name": "className",
@@ -1346,7 +1379,7 @@
           ]
         }
       },
-      "apiHash": "a8d390eb0c11cfec"
+      "apiHash": "f5b35d96e7dfe611"
     },
     "AppHeader": {
       "layer": "component",
@@ -1540,6 +1573,10 @@
       "import": "@scorp-ds/components",
       "exports": [
         {
+          "name": "BadgeTone",
+          "kind": "type"
+        },
+        {
           "name": "BadgeProps",
           "kind": "interface"
         },
@@ -1549,8 +1586,34 @@
         }
       ],
       "props": {
+        "BadgeTone": {
+          "union": [
+            "\"neutral\"",
+            "\"info\"",
+            "\"success\"",
+            "\"warning\"",
+            "\"error\"",
+            "\"primary\"",
+            "\"bone\""
+          ]
+        },
         "BadgeProps": {
           "props": [
+            {
+              "name": "tone",
+              "type": "BadgeTone",
+              "required": false,
+              "values": [
+                "\"neutral\"",
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\"",
+                "\"primary\"",
+                "\"bone\""
+              ],
+              "description": "Colour role. Pair a semantic role with text that says the same thing, since colour alone is not enough; `bone` is a fixed tint that never follows the theme. Default: \"neutral\"."
+            },
             {
               "name": "variant",
               "type": "\"default\" | \"primary\" | \"success\" | \"warning\" | \"error\" | \"info\" | \"bone\"",
@@ -1564,8 +1627,8 @@
                 "\"info\"",
                 "\"bone\""
               ],
-              "default": "\"default\"",
-              "description": "Colour role. Pair a semantic role with text that says the same thing, since colour alone is not enough; `bone` is a fixed tint that never follows the theme. Default: \"default\"."
+              "deprecated": "Use `tone`.",
+              "description": "Colour role under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "size",
@@ -1599,7 +1662,7 @@
               "type": "boolean",
               "required": false,
               "default": "false",
-              "description": "Not-yet-real voice: transparent fill with a 1px dashed border in the variant's text color, for placeholders, empty slots, and free tiers. Dashed chips drop the plate clip for sharp corners (the notched clip would slice the dashes)."
+              "description": "Not-yet-real voice: transparent fill with a 1px dashed border in the tone's text color, for placeholders, empty slots, and free tiers. Dashed chips drop the plate clip for sharp corners (the notched clip would slice the dashes)."
             },
             {
               "name": "children",
@@ -1614,16 +1677,30 @@
               "description": "Icon before the label, usually a `TuiIcon`, to reinforce the meaning of a status badge."
             },
             {
-              "name": "onClose",
+              "name": "onDismiss",
               "type": "() => void",
               "required": false,
               "description": "Adds a remove (x) button that calls this when pressed. Use it for filter chips and tags the user can clear."
             },
             {
-              "name": "onCloseLabel",
+              "name": "onClose",
+              "type": "() => void",
+              "required": false,
+              "deprecated": "Use `onDismiss`.",
+              "description": "Remove callback under its old name. When both are set, `onDismiss` wins."
+            },
+            {
+              "name": "dismissLabel",
               "type": "string",
               "required": false,
               "description": "Accessible name for the remove button. Defaults to `Remove {children}` when the badge label is a plain string (so a list of filter chips reads as \"Remove Draft\", \"Remove Archived\"), and to \"Remove badge\" otherwise. Pass it explicitly whenever the label alone does not identify what is removed."
+            },
+            {
+              "name": "onCloseLabel",
+              "type": "string",
+              "required": false,
+              "deprecated": "Use `dismissLabel`.",
+              "description": "Remove button name under its old name. When both are set, `dismissLabel` wins."
             },
             {
               "name": "className",
@@ -1635,7 +1712,7 @@
           ]
         }
       },
-      "apiHash": "c00a3c829d38c342"
+      "apiHash": "e385070fb858bc4f"
     },
     "BottomSheet": {
       "layer": "component",
@@ -3242,8 +3319,9 @@
       "props": {
         "LogLevel": {
           "union": [
-            "\"error\"",
             "\"info\"",
+            "\"warning\"",
+            "\"error\"",
             "\"warn\"",
             "\"debug\""
           ]
@@ -3267,10 +3345,14 @@
               "type": "LogLevel",
               "required": false,
               "values": [
-                "\"error\"",
                 "\"info\"",
+                "\"warning\"",
+                "\"error\"",
                 "\"warn\"",
                 "\"debug\""
+              ],
+              "deprecatedValues": [
+                "\"warn\""
               ],
               "description": "Severity. Lines without a level render no tag."
             },
@@ -3346,7 +3428,7 @@
           ]
         }
       },
-      "apiHash": "094353b2797d33ea"
+      "apiHash": "6daa84d25c351dc9"
     },
     "Meter": {
       "layer": "component",
@@ -3374,6 +3456,8 @@
       "props": {
         "MeterTone": {
           "union": [
+            "\"neutral\"",
+            "\"info\"",
             "\"success\"",
             "\"warning\"",
             "\"error\"",
@@ -3437,6 +3521,8 @@
               "type": "MeterTone",
               "required": false,
               "values": [
+                "\"neutral\"",
+                "\"info\"",
                 "\"success\"",
                 "\"warning\"",
                 "\"error\"",
@@ -3477,7 +3563,7 @@
           ]
         }
       },
-      "apiHash": "aa2b13b69dd9e18f"
+      "apiHash": "36bbb103e2f4c636"
     },
     "Modal": {
       "layer": "component",
@@ -3883,6 +3969,10 @@
       "import": "@scorp-ds/components",
       "exports": [
         {
+          "name": "ProgressBarTone",
+          "kind": "type"
+        },
+        {
           "name": "ProgressBarProps",
           "kind": "interface"
         },
@@ -3892,6 +3982,16 @@
         }
       ],
       "props": {
+        "ProgressBarTone": {
+          "union": [
+            "\"neutral\"",
+            "\"info\"",
+            "\"success\"",
+            "\"warning\"",
+            "\"error\"",
+            "\"primary\""
+          ]
+        },
         "ProgressBarProps": {
           "props": [
             {
@@ -3948,6 +4048,20 @@
               "description": "Track thickness: sm, md (default), lg."
             },
             {
+              "name": "tone",
+              "type": "ProgressBarTone",
+              "required": false,
+              "values": [
+                "\"neutral\"",
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\"",
+                "\"primary\""
+              ],
+              "description": "Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error."
+            },
+            {
               "name": "variant",
               "type": "\"primary\" | \"success\" | \"warning\" | \"error\"",
               "required": false,
@@ -3957,8 +4071,8 @@
                 "\"warning\"",
                 "\"error\""
               ],
-              "default": "\"primary\"",
-              "description": "Fill color by meaning: primary (default accent), success, warning, error."
+              "deprecated": "Use `tone`.",
+              "description": "Fill colour under its old name. When both are set, `tone` wins."
             },
             {
               "name": "segments",
@@ -3976,7 +4090,7 @@
           ]
         }
       },
-      "apiHash": "24ad2e6f620a8d4b"
+      "apiHash": "ae1377fccc1ef7bb"
     },
     "Radio": {
       "layer": "component",
@@ -4551,11 +4665,11 @@
       "props": {
         "StatusLineTone": {
           "union": [
+            "\"neutral\"",
+            "\"info\"",
             "\"success\"",
             "\"warning\"",
             "\"error\"",
-            "\"info\"",
-            "\"neutral\"",
             "\"primary\""
           ]
         },
@@ -4673,11 +4787,11 @@
               "type": "StatusLineTone",
               "required": false,
               "values": [
+                "\"neutral\"",
+                "\"info\"",
                 "\"success\"",
                 "\"warning\"",
                 "\"error\"",
-                "\"info\"",
-                "\"neutral\"",
                 "\"primary\""
               ],
               "default": "\"neutral\"",
@@ -4692,7 +4806,7 @@
           ]
         }
       },
-      "apiHash": "c6a5f41aaf3e0ce9"
+      "apiHash": "4c0cf0c5d10631aa"
     },
     "Switch": {
       "layer": "component",
@@ -5209,6 +5323,10 @@
       "import": "@scorp-ds/components",
       "exports": [
         {
+          "name": "ToastTone",
+          "kind": "type"
+        },
+        {
           "name": "ToastVariant",
           "kind": "type"
         },
@@ -5254,13 +5372,22 @@
         }
       ],
       "props": {
+        "ToastTone": {
+          "union": [
+            "\"neutral\"",
+            "\"info\"",
+            "\"success\"",
+            "\"warning\"",
+            "\"error\""
+          ]
+        },
         "ToastVariant": {
           "union": [
-            "\"default\"",
+            "\"info\"",
             "\"success\"",
             "\"warning\"",
             "\"error\"",
-            "\"info\""
+            "\"default\""
           ]
         },
         "ToastAction": {
@@ -5294,18 +5421,38 @@
               "description": "Toast content. Keep it to one short line."
             },
             {
+              "name": "tone",
+              "type": "ToastTone",
+              "required": false,
+              "values": [
+                "\"neutral\"",
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\""
+              ],
+              "description": "Severity (default: \"neutral\"). \"error\" is announced assertively."
+            },
+            {
               "name": "variant",
               "type": "ToastVariant",
               "required": false,
               "values": [
-                "\"default\"",
+                "\"info\"",
                 "\"success\"",
                 "\"warning\"",
                 "\"error\"",
-                "\"info\""
+                "\"default\""
               ],
-              "default": "\"default\"",
-              "description": "Severity (default: \"default\"). \"error\" is announced assertively."
+              "deprecatedValues": [
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\"",
+                "\"default\""
+              ],
+              "deprecated": "Use `tone`.",
+              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "action",
@@ -5346,18 +5493,38 @@
               "description": "Called when the plate is clicked (pointer shortcut; wire to dismiss)."
             },
             {
+              "name": "tone",
+              "type": "ToastTone",
+              "required": false,
+              "values": [
+                "\"neutral\"",
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\""
+              ],
+              "description": "Severity (default: \"neutral\"): icon, colors, and `role` (error = alert)."
+            },
+            {
               "name": "variant",
               "type": "ToastVariant",
               "required": false,
               "values": [
-                "\"default\"",
+                "\"info\"",
                 "\"success\"",
                 "\"warning\"",
                 "\"error\"",
-                "\"info\""
+                "\"default\""
               ],
-              "default": "\"default\"",
-              "description": "Severity (default: \"default\"): icon, colors, and `role` (error = alert)."
+              "deprecatedValues": [
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\"",
+                "\"default\""
+              ],
+              "deprecated": "Use `tone`.",
+              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "action",
@@ -5394,18 +5561,38 @@
               "description": "Reuse an id to replace a toast in place (e.g. \"Saving...\" then \"Saved\")."
             },
             {
+              "name": "tone",
+              "type": "ToastTone",
+              "required": false,
+              "values": [
+                "\"neutral\"",
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\""
+              ],
+              "description": "Severity (default: \"neutral\"). The `toast.success()` style helpers set it for you."
+            },
+            {
               "name": "variant",
               "type": "ToastVariant",
               "required": false,
               "values": [
-                "\"default\"",
+                "\"info\"",
                 "\"success\"",
                 "\"warning\"",
                 "\"error\"",
-                "\"info\""
+                "\"default\""
               ],
-              "default": "\"default\"",
-              "description": "Severity (default: \"default\"). The `toast.success()` style helpers set it for you."
+              "deprecatedValues": [
+                "\"info\"",
+                "\"success\"",
+                "\"warning\"",
+                "\"error\"",
+                "\"default\""
+              ],
+              "deprecated": "Use `tone`.",
+              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "action",
@@ -5456,7 +5643,7 @@
           ]
         }
       },
-      "apiHash": "ed94904b6a8a7f95"
+      "apiHash": "845883b5f4719c24"
     },
     "Tooltip": {
       "layer": "component",

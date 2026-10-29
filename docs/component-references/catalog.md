@@ -358,11 +358,13 @@ Status: draft · Spec: [`docs/specs/Alert.md`](../../docs/specs/Alert.md) · Sto
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `variant` | `"default"` `"success"` `"warning"` `"error"` `"info"` | `"default"` | Severity: picks the color set and the 1-bit severity icon. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity: picks the colour set and the 1-bit severity icon. |
+| ~~`variant`~~ | `"default"` `"success"` `"warning"` `"error"` `"info"` |  | Severity under its old name; `default` maps to `neutral`. |
 | `title` | `string` |  | Short bold headline, one line. |
 | `description` | `ReactNode` |  | Body copy under the title: what it means and what to do next. |
-| `iconLeft` | `ReactNode` |  | Replaces the variant's severity icon. |
-| `onClose` | `() => void` |  | Adds a dismiss control (44px hit area) and is called when it is pressed. |
+| `iconLeft` | `ReactNode` |  | Replaces the tone's severity icon. |
+| `onDismiss` | `() => void` |  | Adds a dismiss control (44px hit area) and is called when it is pressed. |
+| ~~`onClose`~~ | `() => void` |  | Dismiss callback under its old name. |
 | `className` | `string` | `""` | Extra classes on the outer ring layer (spacing and width only). |
 
 ### Badge
@@ -379,14 +381,17 @@ Status: draft · Spec: [`docs/specs/Badge.md`](../../docs/specs/Badge.md) · Sto
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `variant` | `"default"` `"primary"` `"success"` `"warning"` `"error"` `"info"` `"bone"` | `"default"` | Colour role. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` `"bone"` |  | Colour role. |
+| ~~`variant`~~ | `"default"` `"primary"` `"success"` `"warning"` `"error"` `"info"` `"bone"` |  | Colour role under its old name; `default` maps to `neutral`. |
 | `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Badge height: sm 20px, md 24px (default), lg 28px. |
 | `caps` | `boolean` | `false` | Uppercase eyebrow voice: uppercase text with .08em tracking. |
-| `dashed` | `boolean` | `false` | Not-yet-real voice: transparent fill with a 1px dashed border in the variant's text color, for placeholders, empty slots, and free tiers. |
+| `dashed` | `boolean` | `false` | Not-yet-real voice: transparent fill with a 1px dashed border in the tone's text color, for placeholders, empty slots, and free tiers. |
 | `children` (required) | `ReactNode` |  | The label: a word, a short phrase or a number. |
 | `iconLeft` | `ReactNode` |  | Icon before the label, usually a `TuiIcon`, to reinforce the meaning of a status badge. |
-| `onClose` | `() => void` |  | Adds a remove (x) button that calls this when pressed. |
-| `onCloseLabel` | `string` |  | Accessible name for the remove button. |
+| `onDismiss` | `() => void` |  | Adds a remove (x) button that calls this when pressed. |
+| ~~`onClose`~~ | `() => void` |  | Remove callback under its old name. |
+| `dismissLabel` | `string` |  | Accessible name for the remove button. |
+| ~~`onCloseLabel`~~ | `string` |  | Remove button name under its old name. |
 | `className` | `string` | `""` | Extra classes on the badge (margin, alignment). |
 
 ### EmptyState
@@ -442,7 +447,8 @@ Status: draft · Spec: [`docs/specs/ProgressBar.md`](../../docs/specs/ProgressBa
 | `showLabel` | `boolean` | `true` | Show the label visually (default true). |
 | `showValue` | `boolean` | `true` | Show the percentage next to the label for determinate bars (default true). |
 | `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Track thickness: sm, md (default), lg. |
-| `variant` | `"primary"` `"success"` `"warning"` `"error"` | `"primary"` | Fill color by meaning: primary (default accent), success, warning, error. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` |  | Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error. |
+| ~~`variant`~~ | `"primary"` `"success"` `"warning"` `"error"` |  | Fill colour under its old name. |
 | `segments` | `number` | `20` | Number of blocks across the track (default 20, so each block is 5%). |
 | `className` | `string` |  | Extra classes for the root (width). |
 
@@ -507,7 +513,8 @@ Status: draft · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Sto
 |---|---|---|---|
 | `id` (required) | `string \| number` |  | Stable key for the toast (also used by dismissal callbacks). |
 | `message` (required) | `ReactNode` |  | Toast content. |
-| `variant` | `"default"` `"success"` `"warning"` `"error"` `"info"` | `"default"` | Severity (default: "default"). "error" is announced assertively. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity (default: "neutral"). "error" is announced assertively. |
+| ~~`variant`~~ | ~~`"info"`~~ ~~`"success"`~~ ~~`"warning"`~~ ~~`"error"`~~ ~~`"default"`~~ |  | Severity under its old name; `default` maps to `neutral`. |
 | `action` | `ToastAction` |  | Optional inline action, such as Undo. |
 | `duration` | `number` |  | Milliseconds before auto-dismiss; `Infinity` persists. |
 
@@ -523,7 +530,8 @@ Status: draft · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Sto
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `onClick` | `() => void` |  | Called when the plate is clicked (pointer shortcut; wire to dismiss). |
-| `variant` | `"default"` `"success"` `"warning"` `"error"` `"info"` | `"default"` | Severity (default: "default"): icon, colors, and `role` (error = alert). |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity (default: "neutral"): icon, colors, and `role` (error = alert). |
+| ~~`variant`~~ | ~~`"info"`~~ ~~`"success"`~~ ~~`"warning"`~~ ~~`"error"`~~ ~~`"default"`~~ |  | Severity under its old name; `default` maps to `neutral`. |
 | `action` | `ToastAction` |  | Optional inline action button, such as Undo. |
 | `duration` | `number` |  | Auto-dismiss after this many ms, paused on hover and focus. `Infinity` persists and shows a dismiss button. |
 | `onDismiss` | `() => void` |  | Removes the toast (timer, action, or the dismiss button call it). |
@@ -534,7 +542,8 @@ Status: draft · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Sto
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `id` | `ToastItem["id"]` |  | Reuse an id to replace a toast in place (e.g. "Saving..." then "Saved"). |
-| `variant` | `"default"` `"success"` `"warning"` `"error"` `"info"` | `"default"` | Severity (default: "default"). |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity (default: "neutral"). |
+| ~~`variant`~~ | ~~`"info"`~~ ~~`"success"`~~ ~~`"warning"`~~ ~~`"error"`~~ ~~`"default"`~~ |  | Severity under its old name; `default` maps to `neutral`. |
 | `action` | `ToastAction` |  | Optional inline action, such as Undo. |
 | `duration` | `number` |  | Milliseconds before auto-dismiss (default 5000); `Infinity` persists. |
 
@@ -1336,7 +1345,7 @@ Status: draft · Spec: [`docs/specs/LogView.md`](../../docs/specs/LogView.md) ·
 |---|---|---|---|
 | `id` (required) | `string \| number` |  | Stable id (used as the React key; keep it unique and stable across appends). |
 | `text` (required) | `ReactNode` |  | The message. |
-| `level` | `"error"` `"info"` `"warn"` `"debug"` |  | Severity. |
+| `level` | `"info"` `"warning"` `"error"` ~~`"warn"`~~ `"debug"` |  | Severity. |
 | `timestamp` | `string` |  | Timestamp text, pre-formatted ("12:04:01"). |
 
 **`LogViewProps`**
@@ -1375,7 +1384,7 @@ Status: draft · Spec: [`docs/specs/Meter.md`](../../docs/specs/Meter.md) · Sto
 | `optimum` | `number` |  | The ideal value; decides which region reads as good. |
 | `label` (required) | `ReactNode` |  | Visible label ("Disk"). |
 | `valueText` | `string` |  | Human-readable value, shown next to the label and used as `aria-valuetext` ("42 GB of 64 GB"). |
-| `tone` | `"success"` `"warning"` `"error"` `"primary"` |  | Force a tone instead of deriving it from the thresholds. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` |  | Force a tone instead of deriving it from the thresholds. |
 | `segments` | `number` | `20` | Number of blocks the range is divided into (default 20). |
 | `size` | `"sm"` `"md"` ~~`"small"`~~ ~~`"medium"`~~ | `"md"` | Block height: sm 8px, md 12px (default). |
 | `className` | `string` |  | Extra classes for the wrapper. |
@@ -1407,7 +1416,7 @@ Status: draft · Spec: [`docs/specs/StatusLine.md`](../../docs/specs/StatusLine.
 |---|---|---|---|
 | `className` | `string` |  | Extra classes for the segment. |
 | `icon` | `"AlertCircle"` `"AlertTriangle"` `"Archive"` `"ArrowLeft"` `"ArrowRight"` `"Bell"` `"Check"` `"CheckCircle"` `"ChevronDown"` `"ChevronRight"` `"ChevronUp"` `"Copy"` `"Download"` `"Edit"` `"ExternalLink"` `"Eye"` `"EyeOff"` `"FileText"` `"Globe"` `"HelpCircle"` `"Info"` `"Lock"` `"LogOut"` `"Mail"` `"Menu"` `"Minus"` `"Moon"` `"MoreVertical"` `"Music2"` `"Pause"` `"Play"` `"Plus"` `"Repeat"` `"Save"` `"Search"` `"Send"` `"Settings"` `"Share2"` `"Shield"` `"Shuffle"` `"SkipBack"` `"SkipForward"` `"Star"` `"Stop"` `"Sun"` `"Tag"` `"Trash2"` `"Upload"` `"User"` `"Volume2"` `"VolumeX"` `"X"` |  | 1-bit icon before the text. |
-| `tone` | `"success"` `"warning"` `"error"` `"info"` `"neutral"` `"primary"` | `"neutral"` | Semantic tone (default "neutral"). |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` | `"neutral"` | Semantic tone (default "neutral"). |
 | `children` (required) | `ReactNode` |  | Segment text. |
 
 ### TreeView

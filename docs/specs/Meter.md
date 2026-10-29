@@ -13,8 +13,8 @@
 | Story | `Components/Terminal/Meter` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `aa2b13b69dd9e18f` |
+| Last updated | 2026-10-28 |
+| API hash | `36bbb103e2f4c636` |
 
 ---
 
@@ -45,11 +45,15 @@ Don't use this for: a task moving toward completion (use ProgressBar instead) or
 
 <!-- AUTO-START:anatomy -->
 
-### Variants
+### Tones
+
+`MeterTone` is the five shared colour roles of decision 0024 plus Meter's own `primary`. Thresholds derive `primary`, `success`, `warning` or `error`; `neutral` and `info` are only reached by passing `tone`.
 
 | Enum Value | Description |
 |------------|-------------|
 | `primary` | No thresholds |
+| `neutral` | Forced only: secondary (sepia) blocks, for a gauge that carries no judgement |
+| `info` | Forced only: info (blue) blocks |
 | `success` | Value in the optimum region |
 | `warning` | One region away (+ AlertTriangle) |
 | `error` | Two regions away (+ AlertCircle) |
@@ -76,7 +80,7 @@ Don't use this for: a task moving toward completion (use ProgressBar instead) or
 | `low` / `high` / `optimum` | `number` | - | No | Native meter thresholds. |
 | `label` | `ReactNode` | - | Yes | Visible label and accessible name. |
 | `valueText` | `string` | percentage | No | Visible value and `aria-valuetext`. |
-| `tone` | `MeterTone` | derived | No | Force a tone. |
+| `tone` | `MeterTone`: `"primary" \| "neutral" \| "info" \| "success" \| "warning" \| "error"` | derived | No | Force a tone. |
 | `segments` | `number` | `20` | No | Block count. |
 | `size` | `"sm" \| "md"` | `"md"` | No | Block height. |
 | `className` | `string` | - | No | Wrapper classes. |
@@ -91,7 +95,7 @@ Don't use this for: a task moving toward completion (use ProgressBar instead) or
 
 | Token | Category | Resolved Value | Usage |
 |-------|----------|----------------|-------|
-| `primary|success|warning|error` 600 light / 400 dark | color | semantic scales | Filled blocks |
+| `primary|secondary|info|success|warning|error` 600 light / 400 dark | color | semantic scales | Filled blocks (`secondary` is the `neutral` tone) |
 | `surface.muted` | color | theme | Empty blocks |
 | `surface.container-stroke` | color | theme | Empty block ring |
 | `text.primary` / `text.secondary` | color | theme | Label / value text |
@@ -214,6 +218,7 @@ No hardcoded values found.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
+| Unreleased | 2026-10-28 | feat | `MeterTone` aligned with decision 0024: adds the `neutral` and `info` roles (forced via `tone` only); `primary` stays as Meter's own role. Existing tones render identically |
 
 <!-- AUTO-END:changelog -->
 

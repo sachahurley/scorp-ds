@@ -7,9 +7,9 @@ const meta: Meta<typeof Alert> = {
   component: Alert,
   tags: ['autodocs'],
   argTypes: {
-    variant: {
+    tone: {
       control: 'select',
-      options: ['default', 'success', 'warning', 'error', 'info'],
+      options: ['neutral', 'info', 'success', 'warning', 'error'],
     },
   },
   parameters: { layout: 'centered' },
@@ -27,7 +27,7 @@ export const Default: Story = {
 
 export const Success: Story = {
   args: {
-    variant: 'success',
+    tone: 'success',
     title: 'Saved',
     description: 'Your changes were stored.',
   },
@@ -35,22 +35,23 @@ export const Success: Story = {
 
 export const Error: Story = {
   args: {
-    variant: 'error',
+    tone: 'error',
     title: 'Could not connect',
     description: 'Check your network and try again.',
-    onClose: fn(),
+    onDismiss: fn(),
   },
 };
 
+// The export keeps its old name: it is the story id the visual baselines are keyed by.
 export const AllVariants: Story = {
-  name: 'All variants',
+  name: 'All tones',
   render: () => (
     <div className="flex w-full max-w-md flex-col gap-3">
-      <Alert variant="default" title="Default" description="Neutral message." />
-      <Alert variant="success" title="Success" description="Operation completed." />
-      <Alert variant="warning" title="Warning" description="Proceed with care." />
-      <Alert variant="error" title="Error" description="Something went wrong." />
-      <Alert variant="info" title="Info" description="For your information." />
+      <Alert tone="neutral" title="Default" description="Neutral message." />
+      <Alert tone="success" title="Success" description="Operation completed." />
+      <Alert tone="warning" title="Warning" description="Proceed with care." />
+      <Alert tone="error" title="Error" description="Something went wrong." />
+      <Alert tone="info" title="Info" description="For your information." />
     </div>
   ),
 };
