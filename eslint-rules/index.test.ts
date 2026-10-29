@@ -167,3 +167,15 @@ tester.run("public-jsdoc", rules["public-jsdoc"], {
     { code: `/** */\nexport function Button() { return null; }`, errors: [{ messageId: "missing" }] },
   ],
 });
+
+tester.run("no-off-scale-spacing", rules["no-off-scale-spacing"], {
+  valid: [
+    { code: `const c = "p-4 gap-1.5 py-3.5 mx-0.5 -mt-2 w-7 h-9";` },
+    { code: `const c = "pl-7";`, options: [{ allow: ["pl-7"] }] },
+  ],
+  invalid: [
+    { code: `const c = "p-7";`, errors: [{ messageId: "offScale" }] },
+    { code: `const c = "hover:gap-x-9";`, errors: [{ messageId: "offScale" }] },
+    { code: `const c = "-mt-14";`, errors: [{ messageId: "offScale" }] },
+  ],
+});

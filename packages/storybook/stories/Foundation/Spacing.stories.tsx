@@ -3,14 +3,20 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Foundation / Spacing
  *
- * Spacing scale from `tokens.json` → CSS variables `--spacing-*`.
- * In components use Tailwind spacing classes (`p-4`, `gap-6`) that map to this scale.
+ * Spacing scale from `tokens.json` → CSS variables `--spacing-*`. The preset maps
+ * every step, whole and half, onto its variable, so `p-4` is `var(--spacing-4)`
+ * and `py-1.5` is `var(--spacing-1-5)`. Steps outside this list are lint errors in
+ * components (decision 0027).
  */
 const STEPS = [
   { step: '0', varName: '--spacing-0', tailwind: '0' },
+  { step: '0-5', varName: '--spacing-0-5', tailwind: '2px / 0.5 (half step)' },
   { step: '1', varName: '--spacing-1', tailwind: '4px / 1 unit' },
+  { step: '1-5', varName: '--spacing-1-5', tailwind: '6px / 1.5 (half step)' },
   { step: '2', varName: '--spacing-2', tailwind: '8px / 2' },
+  { step: '2-5', varName: '--spacing-2-5', tailwind: '10px / 2.5 (half step)' },
   { step: '3', varName: '--spacing-3', tailwind: '12px / 3' },
+  { step: '3-5', varName: '--spacing-3-5', tailwind: '14px / 3.5 (half step)' },
   { step: '4', varName: '--spacing-4', tailwind: '16px / 4' },
   { step: '5', varName: '--spacing-5', tailwind: '20px / 5' },
   { step: '6', varName: '--spacing-6', tailwind: '24px / 6' },

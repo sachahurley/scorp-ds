@@ -45,6 +45,21 @@ export default tseslint.config(
       "scorp/prop-jsdoc": "error",
       "scorp/no-default-tailwind": "error",
       "scorp/no-style-literals": "error",
+      "scorp/no-off-scale-spacing": [
+        "error",
+        {
+          // Off-scale steps that are derived geometry, not spacing choices.
+          allow: [
+            // Field message indent: the 20px box plus the 8px label gap (Checkbox, Radio).
+            "pl-7",
+            // Combobox text clears the chevron: its right inset plus the icon box, sm and lg.
+            "pr-9",
+            "pr-11",
+            // CaseStudy section rhythm at sm and up (#98): page-level, above the control scale.
+            "mt-32",
+          ],
+        },
+      ],
       "scorp/no-slow-motion": [
         "error",
         {
