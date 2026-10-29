@@ -1,5 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@scorp-ds/components';
+import {
+  Badge,
+  EmptyState,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@scorp-ds/components';
 
 const meta: Meta = {
   title: 'Components/Display/Table',
@@ -116,6 +125,62 @@ export const Densities: Story = {
           </Table>
         </div>
       ))}
+    </div>
+  ),
+};
+
+/** The job table's header, shared by the state stories so they read as the same table. */
+const JobHeader = () => (
+  <TableHeader>
+    <TableRow>
+      <TableHead>Job</TableHead>
+      <TableHead>Branch</TableHead>
+      <TableHead>SHA</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead>Duration</TableHead>
+    </TableRow>
+  </TableHeader>
+);
+
+/**
+ * `TableBody loading`: Skeleton rows, one placeholder per header column, while the
+ * data is on its way. The table carries `aria-busy` until the real rows render.
+ */
+export const Loading: Story = {
+  render: () => (
+    <div className="max-w-3xl overflow-x-auto">
+      <Table bordered aria-label="Pipeline runs">
+        <JobHeader />
+        <TableBody loading loadingRows={3} />
+      </Table>
+    </div>
+  ),
+};
+
+/**
+ * `TableBody emptyState`: no rows, so the empty state renders in one cell that spans
+ * every column. Compose `EmptyState size="sm"` for a title, a reason and a next step.
+ */
+export const Empty: Story = {
+  render: () => (
+    <div className="max-w-3xl overflow-x-auto">
+      <Table bordered aria-label="Pipeline runs">
+        <JobHeader />
+        <TableBody
+          emptyState={
+            <EmptyState
+              size="sm"
+              icon="Search"
+              titleAs="p"
+              title="No runs match these filters"
+              description="Try another branch, or clear the filters to see every run."
+              secondaryAction={{ label: 'Clear filters' }}
+            />
+          }
+        >
+          {[]}
+        </TableBody>
+      </Table>
     </div>
   ),
 };

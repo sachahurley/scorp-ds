@@ -4900,7 +4900,34 @@
           ]
         },
         "TableBodyProps": {
-          "props": [],
+          "props": [
+            {
+              "name": "loading",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Show placeholder rows instead of the children while the data loads. Sets `aria-busy` on the parent `Table`; keep it on until the real rows render."
+            },
+            {
+              "name": "loadingRows",
+              "type": "number",
+              "required": false,
+              "default": "3",
+              "description": "How many Skeleton rows `loading` shows (default 3). Match the page size you expect so the table does not jump when the rows arrive."
+            },
+            {
+              "name": "emptyState",
+              "type": "ReactNode",
+              "required": false,
+              "description": "What to show when the body has no rows: a sentence, or an `EmptyState size=\"sm\"`. Rendered in one cell spanning every column. Ignored while `loading`."
+            },
+            {
+              "name": "colSpan",
+              "type": "number",
+              "required": false,
+              "description": "Columns the loading and empty rows span. Leave it unset to use the `TableHeader` column count; set it when the table has no header row."
+            }
+          ],
           "inherits": [
             "AriaAttributes",
             "DOMAttributes",
@@ -4942,7 +4969,7 @@
           ]
         }
       },
-      "apiHash": "ca33f76de42a61a8"
+      "apiHash": "de2ef791d5102eb4"
     },
     "Tabs": {
       "layer": "component",
