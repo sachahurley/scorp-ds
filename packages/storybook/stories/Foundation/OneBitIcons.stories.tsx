@@ -21,7 +21,7 @@ const ICON_ROWS = (Object.keys(TUI_ICON_GLYPHS) as (keyof typeof TUI_ICON_GLYPHS
   }));
 
 /**
- * Foundation / 1-bit icons
+ * Foundation / OneBitIcons
  *
  * Single place to browse every `TuiIcon` name, its glyph, and code points.
  * See **Components → Display → TuiIcon** for interactive controls and size scale.
@@ -29,7 +29,7 @@ const ICON_ROWS = (Object.keys(TUI_ICON_GLYPHS) as (keyof typeof TUI_ICON_GLYPHS
 function OneBitIconsPage() {
   return (
     <div className="min-h-screen max-w-5xl bg-[var(--surface-page)] p-8 font-mono text-sm text-secondary-900 dark:text-secondary-50">
-      <h1 className="mb-2 text-xl font-bold">Foundation / 1-bit icons</h1>
+      <h1 className="mb-2 text-xl font-bold">Foundation / OneBitIcons</h1>
       <p className="mb-2 text-secondary-800 dark:text-secondary-300">
         [Stable] · Last updated Sep 2026
       </p>
@@ -52,7 +52,7 @@ function OneBitIconsPage() {
         </a>
         {' · '}
         <span className="text-secondary-800 dark:text-secondary-400">
-          Live generator: <strong>Lab / Tui art playground</strong>
+          Live generator: <strong>Lab / TuiArtPlayground</strong>
         </span>
       </nav>
 
@@ -137,7 +137,7 @@ function OneBitIconsPage() {
       <section className="mt-10 border-t border-secondary-300 pt-6 dark:border-secondary-700">
         <p className="text-xs text-secondary-800 dark:text-secondary-400">
           Related: <strong>Components / Display / TuiIcon</strong> — sizes and playground. ·{' '}
-          <strong>Lab / Tui art playground</strong> — live frames via <code className="text-primary-700 dark:text-primary-400">@scorp-ds/tui-art</code>.
+          <strong>Lab / TuiArtPlayground</strong> — live frames via <code className="text-primary-700 dark:text-primary-400">@scorp-ds/tui-art</code>.
         </p>
       </section>
     </div>

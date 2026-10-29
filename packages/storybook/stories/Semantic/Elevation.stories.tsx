@@ -192,7 +192,7 @@ function ElevationPage() {
         </h2>
         <p className="text-secondary-800 dark:text-secondary-300">
           See <strong>Semantic / Colors</strong> for base surfaces (<code className="text-primary-800 dark:text-primary-400">surface.*</code>) and{' '}
-          <strong>Foundation / Z-index</strong> for stacking above elevation styling.
+          <strong>Foundation / ZIndex</strong> for stacking above elevation styling.
         </p>
       </section>
     </div>

@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `d821debea711ad06` |
+| API hash | `36196ba7fc1c6767` |
 
 ---
 
@@ -70,7 +70,7 @@ Every measurement comes from `global.switch` (`--switch-track-height/width-*`, `
 | `hideLabel` | `boolean` | `false` | No | Keeps `label` as the accessible name only, with no visible text. Use in rows that already show a heading, such as settings rows. |
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Track size. Legacy names are deprecated. |
 | `disabled` | `boolean` | `false` | No | Native disabled; switch dims to 50% and the label uses `secondary-700` / `dark:secondary-400`. |
-| `icon` | `ReactNode` | none | No | Glyph inside the knob. |
+| `icon` | `IconSlot \| ReactNode` | none | No | Glyph inside the knob: a TuiIcon name or an element. |
 | `className` | `string` | `""` | No | Applied to the outer wrapper. |
 | `ref` | `Ref<HTMLButtonElement>` | none | No | Forwarded to the switch button. |
 | `...rest` | native `<button>` attributes (except `onChange` and `defaultChecked`) | | No | Spread onto the button after the built-in attributes. |

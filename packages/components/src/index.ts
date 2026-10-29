@@ -85,6 +85,7 @@ export { ThemeToggle } from './components/ThemeToggle';
 
 export { TuiIcon, TUI_ICON_GLYPHS } from './components/TuiIcon';
 export type { TuiIconProps, TuiIconName, TuiIconSize } from './components/TuiIcon';
+export type { IconSlot } from './lib/icon-slot';
 
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs';
 export type { TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps } from './components/Tabs';

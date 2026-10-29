@@ -19,7 +19,7 @@ export const workbenchBuffers: WorkbenchBuffer[] = [
 /** The specimen tail shown in the inspector pane. */
 export const workbenchLogLines: LogLine[] = [
   { id: 1, level: 'info', timestamp: '12:04:01', text: 'connection accepted 127.0.0.1:44122' },
-  { id: 2, level: 'warn', timestamp: '12:04:02', text: 'slow query 840ms users_by_team' },
+  { id: 2, level: 'warning', timestamp: '12:04:02', text: 'slow query 840ms users_by_team' },
   { id: 3, level: 'info', timestamp: '12:04:03', text: 'job=4821 status=ok duration=42s' },
   { id: 4, level: 'error', timestamp: '12:04:09', text: 'upstream timed out after 30000ms' },
 ];

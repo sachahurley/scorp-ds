@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
-| API hash | `f95d9b6962c5e2e9` |
+| API hash | `2e2dfba824b54462` |
 
 ---
 
@@ -74,7 +74,7 @@ Don't use this for: the app's top bar (use AppHeader instead), switching between
 | `SideNav.collapsed` | `boolean` | `false` | No | Icon-only rail. |
 | `SideNavSection.heading` | `ReactNode` | - | No | Group heading (names the group). |
 | `SideNavItem.label` | `string` | - | Yes | Row text; accessible name when collapsed. |
-| `SideNavItem.icon` | `TuiIconName` | - | No | 1-bit icon. |
+| `SideNavItem.icon` | `IconSlot` | - | No | A TuiIcon name or an element. |
 | `SideNavItem.active` | `boolean` | `false` | No | Current route: fill + `aria-current`. |
 | `SideNavItem.href` / `onClick` / `as` + `asProps` | - | - | No | Anchor, button, or router link. `asProps` (`Record<string, unknown>`) is spread untyped: TypeScript does not check it against the `as` component's props. |
 | `SideNavItem.trailing` | `ReactNode` | - | No | Row-end slot (Badge, Kbd). |

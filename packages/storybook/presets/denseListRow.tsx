@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Avatar, Badge, Button, Inline, Stack, TuiIcon, type AvatarProps, type BadgeProps } from '@scorp-ds/components';
+import { Avatar, Badge, Button, Inline, Stack, TuiIcon, type AvatarProps, type BadgeTone } from '@scorp-ds/components';
 
 /**
  * Row chrome for a dense list: a wrapping flex row with `gap-3`, a hairline
@@ -40,10 +40,10 @@ export interface JobRunRowData {
   runNumber: number;
   /** Secondary line (commit, runner, age); truncates when the row is narrow. */
   detail: string;
-  /** Status text in the Badge; the word carries the meaning, the variant only tints it. */
+  /** Status text in the Badge; the word carries the meaning, the tone only tints it. */
   status: string;
-  /** Badge variant matching the status. */
-  statusVariant: BadgeProps['variant'];
+  /** Badge tone matching the status. */
+  statusTone: BadgeTone;
   /** Whether "Logs" is unavailable yet (a queued run has none). */
   logsDisabled?: boolean;
 }
@@ -63,7 +63,7 @@ export function JobRunListRow({
   runNumber,
   detail,
   status,
-  statusVariant,
+  statusTone,
   logsDisabled = false,
 }: JobRunRowData) {
   return (
@@ -76,7 +76,7 @@ export function JobRunListRow({
         </Inline>
         <p className="truncate text-xs text-secondary-900 dark:text-secondary-200">{detail}</p>
       </div>
-      <Badge variant={statusVariant}>{status}</Badge>
+      <Badge tone={statusTone}>{status}</Badge>
       <Button variant="outline" size="sm" type="button" disabled={logsDisabled}>
         Logs
       </Button>
@@ -97,7 +97,7 @@ export const jobRunRows: JobRunRowData[] = [
     runNumber: 4821,
     detail: 'chore: token sweep — 2m ago',
     status: 'passed',
-    statusVariant: 'success',
+    statusTone: 'success',
   },
   {
     id: 'e2e-nightly',
@@ -106,7 +106,7 @@ export const jobRunRows: JobRunRowData[] = [
     runNumber: 119,
     detail: 'queued on runner-east — just now',
     status: 'queued',
-    statusVariant: 'default',
+    statusTone: 'neutral',
     logsDisabled: true,
   },
 ];

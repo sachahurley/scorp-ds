@@ -39,3 +39,5 @@ Start from `0000-template.md`. Number sequentially.
 | [0026](0026-a-spec-is-stable-when-it-meets-the-bar.md) | A spec is `stable` when it meets a checkable bar | `docs/specs/`, the catalog |
 | [0027](0027-half-step-spacing-is-tokenised.md) | Half-step spacing gets tokens; off-scale steps are errors | `global.spacing`, the preset |
 | [0028](0028-composition-rules-are-written-down.md) | Composition rules are written down, and every pattern is a preset | `composition-presets-guidelines.md`, `presets/`, pattern specs |
+| [0029](0029-accessible-names-are-required-by-type.md) | An interactive component's accessible name is required by its type | Switch, Slider, TreeView, TabsList, Avatar, Popover, BottomSheet |
+| [0030](0030-every-data-state-has-a-story.md) | Every state a component's API supports has a story | Stories, doc requirements |

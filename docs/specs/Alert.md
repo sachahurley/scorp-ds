@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
-| API hash | `f5b35d96e7dfe611` |
+| API hash | `abd348e77da29b7e` |
 
 ---
 
@@ -66,8 +66,9 @@ Outer ring plate (`plate-round`, 1px padding) wraps an inner fill plate holding,
 | `variant` | `"default" \| "success" \| "warning" \| "error" \| "info"` | `undefined` | No | **Deprecated: use `tone`.** The old name; `default` maps to `neutral`. Warns once in development; `tone` wins when both are set. |
 | `title` | `string` | `undefined` | No | Short bold heading rendered as an `h4`. Omit for a single-line message. |
 | `description` | `ReactNode` | `undefined` | No | Body copy. Accepts rich content such as a link or inline code. |
-| `iconLeft` | `ReactNode` | tone icon | No | Replaces the severity icon. Keep a 16px 1-bit icon so the icon still signals meaning. |
-| `onDismiss` | `() => void` | `undefined` | No | When set, renders a dismiss button (`type="button"`, 1-bit `X`, `aria-label="Close alert"`, 44px hit area) that calls this. The Alert does not hide itself; the parent removes it. |
+| `iconLeft` | `IconSlot \| ReactNode` | tone icon | No | Replaces the severity icon: a TuiIcon name or an element. Keep a 16px 1-bit icon so the icon still signals meaning. |
+| `onDismiss` | `() => void` | `undefined` | No | When set, renders a dismiss button (`type="button"`, 1-bit `X`, named by `dismissLabel`, 44px hit area) that calls this. The Alert does not hide itself; the parent removes it. |
+| `dismissLabel` | `string` | `"Close alert"` | No | Accessible name of the dismiss button. Name what it dismisses when a page has several alerts. |
 | `onClose` | `() => void` | `undefined` | No | **Deprecated: use `onDismiss`.** The old name. Warns once in development; `onDismiss` wins when both are set. |
 | `className` | `string` | `""` | No | Extra classes on the outer ring element (width, margin). |
 
@@ -149,7 +150,7 @@ Interactive controls: `tone` (select); other args editable via autodocs.
 
 <!-- AUTO-START:hardcoded -->
 
-- `aria-label="Close alert"`: fixed English label, not overridable.
+- `aria-label`: `dismissLabel`, default `"Close alert"`.
 
 No raw color, size, or spacing values. (The close button's focus ring and hit area are token-driven since 2026-09-22.)
 
@@ -179,7 +180,7 @@ No raw color, size, or spacing values. (The close button's focus ring and hit ar
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: `role="alert"` on the outer element for every tone (assertive live region)
-- Required labels: none from the consumer; the dismiss button is labelled `Close alert`
+- Required labels: none from the consumer; the dismiss button is labelled by `dismissLabel` (default `Close alert`)
 - Focus order: the Alert itself is not focusable; the dismiss button is a native `type="button"` control in DOM order, so an Alert inside a form never submits it
 - Focus visible: inset box-shadow ring from `--focus-ring-primary` (error tone: `--focus-ring-error`); an outside ring would be sliced by the plate clip
 - Touch target minimum: met. The dismiss button keeps its 12px glyph but has a centered 44x44px `::before` hit area (the Checkbox recipe). The area reaches into the 12px gap beside the content column, so keep the description clear of the dismiss control
@@ -226,7 +227,7 @@ No raw color, size, or spacing values. (The close button's focus ring and hit ar
 |------|-------|------------|--------|
 | 2026-09-22 | Close button has no `type="button"` (submits an enclosing form), no token focus ring color, and a 12px hit area below the 44px minimum | Added `type="button"`, the inset `--focus-ring-*` ring, and a 44px `::before` hit area; JSDoc added to every prop | Resolved |
 | 2026-09-22 | `role="alert"` is applied to every tone, so neutral and success messages are announced assertively | None yet | Open |
-| 2026-10-28 | The dismiss button's `aria-label="Close alert"` is fixed; decision 0024 names the override `dismissLabel` | None yet (Badge has `dismissLabel`; Alert does not) | Open |
+| 2026-10-28 | The dismiss button's `aria-label="Close alert"` is fixed; decision 0024 names the override `dismissLabel` | `dismissLabel` added (default unchanged) | Resolved |
 
 <!-- AUTO-END:known-gaps -->
 

@@ -49,7 +49,7 @@ export const WithActions: Story = {
   args: {
     // eslint-disable-next-line scorp/no-raw-color -- a build number, not a colour
     title: 'build #4821',
-    status: <Badge size="sm" variant="success">passed</Badge>,
+    status: <Badge size="sm" tone="success">passed</Badge>,
     actions: (
       <>
         <Button variant="ghost" size="sm" aria-label="Copy output">
@@ -91,7 +91,7 @@ export const SplitPanes: Story = {
           className="h-full"
           lines={[
             { id: 1, level: 'info', timestamp: '12:04:01', text: 'connection accepted 127.0.0.1:44122' },
-            { id: 2, level: 'warn', timestamp: '12:04:02', text: 'slow query 840ms users_by_team' },
+            { id: 2, level: 'warning', timestamp: '12:04:02', text: 'slow query 840ms users_by_team' },
             { id: 3, level: 'info', timestamp: '12:04:03', text: 'job=4821 status=ok duration=42s' },
           ]}
         />

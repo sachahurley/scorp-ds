@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-09-22 |
-| API hash | `5f1518e54506f78f` |
+| API hash | `95271937df1da53f` |
 
 ---
 
@@ -58,7 +58,7 @@ Don't use this for: content that is still loading (use Skeleton instead, or Spin
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `icon` | `TuiIconName | null` | `"Archive"` | No | Icon above the title |
+| `icon` | `IconSlot \| null` | `"Archive"` | No | Icon above the title: a TuiIcon name or an element; `null` for none |
 | `title` | `ReactNode` |  | Yes | Situation |
 | `description` | `ReactNode` |  | No | Why / what to do |
 | `primaryAction` | `EmptyStateAction` |  | No | { label, onClick?, href?, icon? } as a primary Button |

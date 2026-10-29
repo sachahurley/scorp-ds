@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
-| API hash | `e385070fb858bc4f` |
+| API hash | `b0c2582df5878004` |
 
 ---
 
@@ -75,7 +75,7 @@ Modifiers that compose with any tone: `caps` (uppercase, `.08em` tracking) and `
 | `size` | `ControlSizeProp` (`"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"`) | `"md"` | No | Chip height. Legacy names are deprecated aliases. |
 | `caps` | `boolean` | `false` | No | Uppercase eyebrow voice for state chips ("EQUIPPED", "LEVEL UP"). |
 | `dashed` | `boolean` | `false` | No | Not-yet-real voice for placeholders, empty slots, free tiers. Drops the plate clip for sharp corners. |
-| `iconLeft` | `ReactNode` | `undefined` | No | Leading icon, boxed to the size's icon slot. |
+| `iconLeft` | `IconSlot \| ReactNode` | `undefined` | No | Leading icon: a TuiIcon name (`"Check"`) or an element, boxed to the size's icon slot. |
 | `onDismiss` | `() => void` | `undefined` | No | Renders a remove button. Click is stopped from propagating to parents. |
 | `onClose` | `() => void` | `undefined` | No | **Deprecated: use `onDismiss`.** The old name. Warns once in development; `onDismiss` wins when both are set. |
 | `dismissLabel` | `string` | `Remove {children}` when `children` is a string, else `"Remove badge"` | No | Accessible name for the remove button. Pass it whenever the label alone does not identify what is removed. |

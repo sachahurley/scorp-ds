@@ -99,3 +99,8 @@ describe("deprecated names (decision 0024)", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 });
+
+it("names the dismiss button with dismissLabel", () => {
+  render(<Alert title="t" onDismiss={() => {}} dismissLabel="Dismiss sync warning" />);
+  expect(screen.getByRole("button", { name: "Dismiss sync warning" })).toBeInTheDocument();
+});

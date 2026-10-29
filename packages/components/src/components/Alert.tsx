@@ -28,6 +28,7 @@
 import { type ReactNode } from "react";
 import { warnDeprecated } from "../lib/deprecate";
 import { TuiIcon, type TuiIconName } from "./TuiIcon";
+import { renderIconSlot, type IconSlot } from "../lib/icon-slot";
 
 /** Semantic colour role of an Alert: picks the colour set and the 1-bit severity icon. */
 export type AlertTone = "neutral" | "info" | "success" | "warning" | "error";
@@ -44,8 +45,8 @@ export interface AlertProps {
   title?: string;
   /** Body copy under the title: what it means and what to do next. */
   description?: ReactNode;
-  /** Replaces the tone's severity icon. Use a `TuiIcon`. */
-  iconLeft?: ReactNode;
+  /** Replaces the tone's severity icon. Takes a TuiIcon name (`"Check"`) or an element. */
+  iconLeft?: IconSlot | ReactNode;
   /** Adds a dismiss control (44px hit area) and is called when it is pressed. */
   onDismiss?: () => void;
   /**
@@ -53,6 +54,11 @@ export interface AlertProps {
    * @deprecated Use `onDismiss`.
    */
   onClose?: () => void;
+  /**
+   * Accessible name of the dismiss button (default "Close alert"). Name what it
+   * dismisses when a page has several alerts ("Dismiss sync warning").
+   */
+  dismissLabel?: string;
   /** Extra classes on the outer ring layer (spacing and width only). */
   className?: string;
 }
@@ -75,6 +81,7 @@ export function Alert({
   iconLeft,
   onDismiss: onDismissProp,
   onClose,
+  dismissLabel = "Close alert",
   className = "",
 }: AlertProps) {
   // Deprecated aliases (decision 0024): the old names keep working, warn once,
@@ -95,7 +102,7 @@ export function Alert({
   };
 
   // Use custom icon if provided, otherwise the tone's 1-bit icon
-  const icon = iconLeft || <TuiIcon name={severityIcons[tone]} size="4" />;
+  const icon = renderIconSlot(iconLeft, { size: "4" }) || <TuiIcon name={severityIcons[tone]} size="4" />;
 
   // TONE STYLES - Color combinations using semantic tokens
   // All tones support light and dark themes.
@@ -208,7 +215,7 @@ export function Alert({
             before:w-touch before:h-touch
             focus:outline-none ${closeFocusRing}
           `}
-          aria-label="Close alert"
+          aria-label={dismissLabel}
         >
           <TuiIcon name="X" size="3" />
         </button>

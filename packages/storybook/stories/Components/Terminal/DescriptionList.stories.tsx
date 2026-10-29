@@ -50,7 +50,7 @@ export const Stacked: Story = {
     items: [
       { term: 'Repository', description: 'sachahurley/scorp-ds' },
       { term: 'Description', description: 'TUI-inspired React design system with 1-bit icons and plate silhouettes.' },
-      { term: 'Status', description: <Badge size="sm" variant="success">healthy</Badge> },
+      { term: 'Status', description: <Badge size="sm" tone="success">healthy</Badge> },
     ],
   },
 };
@@ -61,7 +61,7 @@ export const RichValues: Story = {
     leader: true,
     className: 'w-full max-w-sm',
     items: [
-      { term: 'Build', description: <Badge size="sm" variant="success">passed</Badge> },
+      { term: 'Build', description: <Badge size="sm" tone="success">passed</Badge> },
       { term: 'Coverage', description: '91%' },
       { term: 'Docs', description: <Link href="#docs">storybook</Link> },
     ],

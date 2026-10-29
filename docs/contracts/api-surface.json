@@ -419,6 +419,11 @@
       "from": "packages/components/src/primitives/Grid.tsx"
     },
     {
+      "name": "IconSlot",
+      "kind": "type",
+      "from": "packages/components/src/lib/icon-slot.tsx"
+    },
+    {
       "name": "Inline",
       "kind": "component",
       "from": "packages/components/src/primitives/Inline.tsx"
@@ -1372,9 +1377,9 @@
             },
             {
               "name": "iconLeft",
-              "type": "ReactNode",
+              "type": "IconSlot | ReactNode",
               "required": false,
-              "description": "Replaces the tone's severity icon. Use a `TuiIcon`."
+              "description": "Replaces the tone's severity icon. Takes a TuiIcon name (`\"Check\"`) or an element."
             },
             {
               "name": "onDismiss",
@@ -1390,6 +1395,13 @@
               "description": "Dismiss callback under its old name. When both are set, `onDismiss` wins."
             },
             {
+              "name": "dismissLabel",
+              "type": "string",
+              "required": false,
+              "default": "\"Close alert\"",
+              "description": "Accessible name of the dismiss button (default \"Close alert\"). Name what it dismisses when a page has several alerts (\"Dismiss sync warning\")."
+            },
+            {
               "name": "className",
               "type": "string",
               "required": false,
@@ -1399,7 +1411,7 @@
           ]
         }
       },
-      "apiHash": "f5b35d96e7dfe611"
+      "apiHash": "abd348e77da29b7e"
     },
     "AppHeader": {
       "layer": "component",
@@ -1532,9 +1544,9 @@
             },
             {
               "name": "icon",
-              "type": "ReactNode",
+              "type": "IconSlot | ReactNode",
               "required": false,
-              "description": "Icon shown when there is neither an image nor initials (for a team, a bot, a system account)."
+              "description": "Icon shown when there is neither an image nor initials (for a team, a bot, a system account). Takes a TuiIcon name (`\"Check\"`) or an element."
             },
             {
               "name": "size",
@@ -1584,7 +1596,7 @@
           ]
         }
       },
-      "apiHash": "77099a1d0796b170"
+      "apiHash": "67f97c72b58c2206"
     },
     "Badge": {
       "layer": "component",
@@ -1692,9 +1704,9 @@
             },
             {
               "name": "iconLeft",
-              "type": "ReactNode",
+              "type": "IconSlot | ReactNode",
               "required": false,
-              "description": "Icon before the label, usually a `TuiIcon`, to reinforce the meaning of a status badge."
+              "description": "Icon before the label, to reinforce the meaning of a status badge. Takes a TuiIcon name (`\"Check\"`) or an element."
             },
             {
               "name": "onDismiss",
@@ -1732,7 +1744,7 @@
           ]
         }
       },
-      "apiHash": "e385070fb858bc4f"
+      "apiHash": "b0c2582df5878004"
     },
     "BottomSheet": {
       "layer": "component",
@@ -1984,15 +1996,15 @@
             },
             {
               "name": "iconLeft",
-              "type": "React.ReactNode",
+              "type": "IconSlot | React.ReactNode",
               "required": false,
-              "description": "Icon before the label, usually a `TuiIcon`, to make the action quicker to recognise (\"+ New\"). For an icon-only button, pass the icon as `children` instead (the button squares itself) and give it an `aria-label`."
+              "description": "Icon before the label, usually a `TuiIcon`, to make the action quicker to recognise (\"+ New\"). For an icon-only button, pass the icon as `children` instead (the button squares itself) and give it an `aria-label`. Takes a TuiIcon name (`\"Check\"`) or an element."
             },
             {
               "name": "iconRight",
-              "type": "React.ReactNode",
+              "type": "IconSlot | React.ReactNode",
               "required": false,
-              "description": "Icon after the label, for direction or destination (an arrow on \"Next\", an external-link glyph on a link CTA)."
+              "description": "Icon after the label, for direction or destination (an arrow on \"Next\", an external-link glyph on a link CTA). Takes a TuiIcon name (`\"Check\"`) or an element."
             },
             {
               "name": "loading",
@@ -2028,7 +2040,7 @@
           ]
         }
       },
-      "apiHash": "85e7090cf6a1b413"
+      "apiHash": "1c0b0142028f0d69"
     },
     "Card": {
       "layer": "component",
@@ -2777,15 +2789,15 @@
             },
             {
               "name": "icon",
-              "type": "ReactNode",
+              "type": "IconSlot | ReactNode",
               "required": false,
-              "description": "Left icon grouped with the label (use a `TuiIcon`)."
+              "description": "Left icon grouped with the label. Takes a TuiIcon name (`\"Check\"`) or an element."
             },
             {
               "name": "iconRight",
-              "type": "ReactNode",
+              "type": "IconSlot | ReactNode",
               "required": false,
-              "description": "Right-aligned icon, for a shortcut hint or an external-link marker."
+              "description": "Right-aligned icon, for a shortcut hint or an external-link marker. Takes a TuiIcon name (`\"Check\"`) or an element."
             },
             {
               "name": "variant",
@@ -2866,7 +2878,7 @@
           ]
         }
       },
-      "apiHash": "f9bcd371417881d7"
+      "apiHash": "e2721aa4cdda703d"
     },
     "EmptyState": {
       "layer": "component",
@@ -2910,64 +2922,10 @@
             },
             {
               "name": "icon",
-              "type": "TuiIconName",
+              "type": "IconSlot",
               "required": false,
-              "values": [
-                "\"AlertCircle\"",
-                "\"AlertTriangle\"",
-                "\"Archive\"",
-                "\"ArrowLeft\"",
-                "\"ArrowRight\"",
-                "\"Bell\"",
-                "\"Check\"",
-                "\"CheckCircle\"",
-                "\"ChevronDown\"",
-                "\"ChevronRight\"",
-                "\"ChevronUp\"",
-                "\"Copy\"",
-                "\"Download\"",
-                "\"Edit\"",
-                "\"ExternalLink\"",
-                "\"Eye\"",
-                "\"EyeOff\"",
-                "\"FileText\"",
-                "\"Globe\"",
-                "\"HelpCircle\"",
-                "\"Info\"",
-                "\"Lock\"",
-                "\"LogOut\"",
-                "\"Mail\"",
-                "\"Menu\"",
-                "\"Minus\"",
-                "\"Moon\"",
-                "\"MoreVertical\"",
-                "\"Music2\"",
-                "\"Pause\"",
-                "\"Play\"",
-                "\"Plus\"",
-                "\"Repeat\"",
-                "\"Save\"",
-                "\"Search\"",
-                "\"Send\"",
-                "\"Settings\"",
-                "\"Share2\"",
-                "\"Shield\"",
-                "\"Shuffle\"",
-                "\"SkipBack\"",
-                "\"SkipForward\"",
-                "\"Star\"",
-                "\"Stop\"",
-                "\"Sun\"",
-                "\"Tag\"",
-                "\"Trash2\"",
-                "\"Upload\"",
-                "\"User\"",
-                "\"Volume2\"",
-                "\"VolumeX\"",
-                "\"X\""
-              ],
               "default": "\"Archive\"",
-              "description": "Optional 1-bit icon before the label."
+              "description": "Optional icon before the label: a TuiIcon name or an element."
             }
           ]
         },
@@ -2975,10 +2933,10 @@
           "props": [
             {
               "name": "icon",
-              "type": "TuiIconName | null",
+              "type": "IconSlot | null",
               "required": false,
               "default": "\"Archive\"",
-              "description": "1-bit icon shown above the title (default \"Archive\"). Pass `null` for none."
+              "description": "Icon shown above the title: a TuiIcon name or an element (default \"Archive\"). Pass `null` for none."
             },
             {
               "name": "title",
@@ -3043,7 +3001,7 @@
           ]
         }
       },
-      "apiHash": "5f1518e54506f78f"
+      "apiHash": "95271937df1da53f"
     },
     "Input": {
       "layer": "component",
@@ -4452,63 +4410,9 @@
             },
             {
               "name": "icon",
-              "type": "TuiIconName",
+              "type": "IconSlot",
               "required": false,
-              "values": [
-                "\"AlertCircle\"",
-                "\"AlertTriangle\"",
-                "\"Archive\"",
-                "\"ArrowLeft\"",
-                "\"ArrowRight\"",
-                "\"Bell\"",
-                "\"Check\"",
-                "\"CheckCircle\"",
-                "\"ChevronDown\"",
-                "\"ChevronRight\"",
-                "\"ChevronUp\"",
-                "\"Copy\"",
-                "\"Download\"",
-                "\"Edit\"",
-                "\"ExternalLink\"",
-                "\"Eye\"",
-                "\"EyeOff\"",
-                "\"FileText\"",
-                "\"Globe\"",
-                "\"HelpCircle\"",
-                "\"Info\"",
-                "\"Lock\"",
-                "\"LogOut\"",
-                "\"Mail\"",
-                "\"Menu\"",
-                "\"Minus\"",
-                "\"Moon\"",
-                "\"MoreVertical\"",
-                "\"Music2\"",
-                "\"Pause\"",
-                "\"Play\"",
-                "\"Plus\"",
-                "\"Repeat\"",
-                "\"Save\"",
-                "\"Search\"",
-                "\"Send\"",
-                "\"Settings\"",
-                "\"Share2\"",
-                "\"Shield\"",
-                "\"Shuffle\"",
-                "\"SkipBack\"",
-                "\"SkipForward\"",
-                "\"Star\"",
-                "\"Stop\"",
-                "\"Sun\"",
-                "\"Tag\"",
-                "\"Trash2\"",
-                "\"Upload\"",
-                "\"User\"",
-                "\"Volume2\"",
-                "\"VolumeX\"",
-                "\"X\""
-              ],
-              "description": "1-bit icon shown before the label (strongly recommended; required for a useful collapsed rail)."
+              "description": "Icon shown before the label, a TuiIcon name or an element (strongly recommended; required for a useful collapsed rail)."
             },
             {
               "name": "active",
@@ -4568,7 +4472,7 @@
           ]
         }
       },
-      "apiHash": "f95d9b6962c5e2e9"
+      "apiHash": "2e2dfba824b54462"
     },
     "Skeleton": {
       "layer": "component",
@@ -4837,63 +4741,9 @@
             },
             {
               "name": "icon",
-              "type": "TuiIconName",
+              "type": "IconSlot",
               "required": false,
-              "values": [
-                "\"AlertCircle\"",
-                "\"AlertTriangle\"",
-                "\"Archive\"",
-                "\"ArrowLeft\"",
-                "\"ArrowRight\"",
-                "\"Bell\"",
-                "\"Check\"",
-                "\"CheckCircle\"",
-                "\"ChevronDown\"",
-                "\"ChevronRight\"",
-                "\"ChevronUp\"",
-                "\"Copy\"",
-                "\"Download\"",
-                "\"Edit\"",
-                "\"ExternalLink\"",
-                "\"Eye\"",
-                "\"EyeOff\"",
-                "\"FileText\"",
-                "\"Globe\"",
-                "\"HelpCircle\"",
-                "\"Info\"",
-                "\"Lock\"",
-                "\"LogOut\"",
-                "\"Mail\"",
-                "\"Menu\"",
-                "\"Minus\"",
-                "\"Moon\"",
-                "\"MoreVertical\"",
-                "\"Music2\"",
-                "\"Pause\"",
-                "\"Play\"",
-                "\"Plus\"",
-                "\"Repeat\"",
-                "\"Save\"",
-                "\"Search\"",
-                "\"Send\"",
-                "\"Settings\"",
-                "\"Share2\"",
-                "\"Shield\"",
-                "\"Shuffle\"",
-                "\"SkipBack\"",
-                "\"SkipForward\"",
-                "\"Star\"",
-                "\"Stop\"",
-                "\"Sun\"",
-                "\"Tag\"",
-                "\"Trash2\"",
-                "\"Upload\"",
-                "\"User\"",
-                "\"Volume2\"",
-                "\"VolumeX\"",
-                "\"X\""
-              ],
-              "description": "1-bit icon before the text. Use one with any non-neutral tone."
+              "description": "Icon before the text, a TuiIcon name or an element. Use one with any non-neutral tone."
             },
             {
               "name": "tone",
@@ -4919,7 +4769,7 @@
           ]
         }
       },
-      "apiHash": "4c0cf0c5d10631aa"
+      "apiHash": "eaa56a0d335e029e"
     },
     "Switch": {
       "layer": "component",
@@ -5012,9 +4862,9 @@
             },
             {
               "name": "icon",
-              "type": "ReactNode",
+              "type": "IconSlot | ReactNode",
               "required": false,
-              "description": "Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle)."
+              "description": "Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle). Takes a TuiIcon name (`\"Check\"`) or an element."
             }
           ],
           "inherits": [
@@ -5025,7 +4875,7 @@
           ]
         }
       },
-      "apiHash": "d821debea711ad06"
+      "apiHash": "36196ba7fc1c6767"
     },
     "Table": {
       "layer": "component",
@@ -5910,63 +5760,9 @@
             },
             {
               "name": "icon",
-              "type": "TuiIconName",
+              "type": "IconSlot",
               "required": false,
-              "values": [
-                "\"AlertCircle\"",
-                "\"AlertTriangle\"",
-                "\"Archive\"",
-                "\"ArrowLeft\"",
-                "\"ArrowRight\"",
-                "\"Bell\"",
-                "\"Check\"",
-                "\"CheckCircle\"",
-                "\"ChevronDown\"",
-                "\"ChevronRight\"",
-                "\"ChevronUp\"",
-                "\"Copy\"",
-                "\"Download\"",
-                "\"Edit\"",
-                "\"ExternalLink\"",
-                "\"Eye\"",
-                "\"EyeOff\"",
-                "\"FileText\"",
-                "\"Globe\"",
-                "\"HelpCircle\"",
-                "\"Info\"",
-                "\"Lock\"",
-                "\"LogOut\"",
-                "\"Mail\"",
-                "\"Menu\"",
-                "\"Minus\"",
-                "\"Moon\"",
-                "\"MoreVertical\"",
-                "\"Music2\"",
-                "\"Pause\"",
-                "\"Play\"",
-                "\"Plus\"",
-                "\"Repeat\"",
-                "\"Save\"",
-                "\"Search\"",
-                "\"Send\"",
-                "\"Settings\"",
-                "\"Share2\"",
-                "\"Shield\"",
-                "\"Shuffle\"",
-                "\"SkipBack\"",
-                "\"SkipForward\"",
-                "\"Star\"",
-                "\"Stop\"",
-                "\"Sun\"",
-                "\"Tag\"",
-                "\"Trash2\"",
-                "\"Upload\"",
-                "\"User\"",
-                "\"Volume2\"",
-                "\"VolumeX\"",
-                "\"X\""
-              ],
-              "description": "Optional 1-bit icon before the label."
+              "description": "Optional icon before the label: a TuiIcon name or an element."
             },
             {
               "name": "children",
@@ -6062,7 +5858,7 @@
           ]
         }
       },
-      "apiHash": "fe5a2c5f6fb95a81"
+      "apiHash": "7a14b026477469f7"
     },
     "TuiIcon": {
       "layer": "component",

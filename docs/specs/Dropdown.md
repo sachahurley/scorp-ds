@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-28 |
-| API hash | `f9bcd371417881d7` |
+| API hash | `e2721aa4cdda703d` |
 
 ---
 
@@ -81,8 +81,8 @@ Dropdown does not forward refs, `className`, or native attributes.
 |----------|------|---------|----------|-------------|
 | `label` | `string` | none | Yes | Item text and accessible name. Truncated with an ellipsis when too long. |
 | `onClick` | `() => void` | none | Yes | Called on activation; the menu then closes. |
-| `icon` | `ReactNode` | none | No | Left icon grouped with the label (typically `TuiIcon`). |
-| `iconRight` | `ReactNode` | none | No | Right-aligned icon (for example a shortcut hint or `ExternalLink`). |
+| `icon` | `IconSlot \| ReactNode` | none | No | Left icon grouped with the label: a TuiIcon name or an element. |
+| `iconRight` | `IconSlot \| ReactNode` | none | No | Right-aligned icon, a TuiIcon name or an element (for example a shortcut hint or `ExternalLink`). |
 | `variant` | `"default" \| "destructive"` | `"default"` | No | `destructive` colors the item red for irreversible actions. |
 | `disabled` | `boolean` | `false` | No | Item is dimmed, not clickable, and skipped by arrow keys. |
 
