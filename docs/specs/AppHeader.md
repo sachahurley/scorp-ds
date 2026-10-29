@@ -32,6 +32,8 @@ panel under the bar. `sticky` pins the bar on the `z-index.sticky` layer.
 The navigation slot is wrapped in a named `<nav>` (inline on wide screens, in
 the panel on narrow ones; only one is displayed at a time).
 
+Don't use this for: section navigation down the side of a page (use SideNav instead), a trail showing where the current page sits (use Breadcrumbs instead), or the bottom bar of a terminal-style app (use StatusLine instead). Render one per app.
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

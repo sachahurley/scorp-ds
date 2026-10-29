@@ -37,6 +37,8 @@ the label in a Tooltip; section headings become screen-reader only.
 
 The Patterns/SideNavigation and Patterns/WorkbenchSplit stories now compose it.
 
+Don't use this for: the app's top bar (use AppHeader instead), switching between views inside one page (use Tabs instead), or a nested data hierarchy such as files (use TreeView instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

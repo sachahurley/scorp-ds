@@ -356,22 +356,26 @@
           {
             "name": "src",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Image URL. Shown when set and it loads; otherwise the avatar falls back to `initials`, then `icon`, then an `@` glyph."
           },
           {
             "name": "alt",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Alt text for the image, usually the person's name. Defaults to \"Avatar\", so pass it whenever `src` is set."
           },
           {
             "name": "initials",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "One or two letters shown when there is no image, or the image fails to load."
           },
           {
             "name": "icon",
             "type": "ReactNode",
-            "required": false
+            "required": false,
+            "description": "Icon shown when there is neither an image nor initials (for a team, a bot, a system account)."
           },
           {
             "name": "size",
@@ -391,18 +395,21 @@
               "\"online\"",
               "\"offline\"",
               "\"away\""
-            ]
+            ],
+            "description": "Presence dot in the corner, announced as \"Status: online\" and so on. Omit it to show no dot."
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
-            "default": "\"\""
+            "default": "\"\"",
+            "description": "Extra classes on the outer wrapper (margin, positioning)."
           },
           {
             "name": "onError",
             "type": "() => void",
-            "required": false
+            "required": false,
+            "description": "Called when `src` fails to load (to log it, or swap the URL); the avatar shows its fallback either way."
           }
         ]
       },
@@ -438,7 +445,8 @@
               "\"info\"",
               "\"bone\""
             ],
-            "default": "\"default\""
+            "default": "\"default\"",
+            "description": "Colour role. Pair a semantic role with text that says the same thing, since colour alone is not enough; `bone` is a fixed tint that never follows the theme. Default: \"default\"."
           },
           {
             "name": "size",
@@ -463,17 +471,20 @@
           {
             "name": "children",
             "type": "ReactNode",
-            "required": true
+            "required": true,
+            "description": "The label: a word, a short phrase or a number. Keep it to one line."
           },
           {
             "name": "iconLeft",
             "type": "ReactNode",
-            "required": false
+            "required": false,
+            "description": "Icon before the label, usually a `TuiIcon`, to reinforce the meaning of a status badge."
           },
           {
             "name": "onClose",
             "type": "() => void",
-            "required": false
+            "required": false,
+            "description": "Adds a remove (x) button that calls this when pressed. Use it for filter chips and tags the user can clear."
           },
           {
             "name": "onCloseLabel",
@@ -485,7 +496,8 @@
             "name": "className",
             "type": "string",
             "required": false,
-            "default": "\"\""
+            "default": "\"\"",
+            "description": "Extra classes on the badge (margin, alignment)."
           }
         ]
       },
@@ -698,12 +710,14 @@
           {
             "name": "iconLeft",
             "type": "React.ReactNode",
-            "required": false
+            "required": false,
+            "description": "Icon before the label, usually a `TuiIcon`, to make the action quicker to recognise (\"+ New\"). For an icon-only button, pass the icon as `children` instead (the button squares itself) and give it an `aria-label`."
           },
           {
             "name": "iconRight",
             "type": "React.ReactNode",
-            "required": false
+            "required": false,
+            "description": "Icon after the label, for direction or destination (an arrow on \"Next\", an external-link glyph on a link CTA)."
           },
           {
             "name": "href",
@@ -868,31 +882,36 @@
           {
             "name": "title",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "Short heading for the item: a step name, a finding, a pillar."
           },
           {
             "name": "text",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "One or two sentences under the title explaining it."
           }
         ],
         "CaseStudyOutcome": [
           {
             "name": "value",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "The figure itself, set large in the accent colour (\"43\", \"2x\", \"-60%\"). Keep it short."
           },
           {
             "name": "label",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "What the figure counts, in a few words (\"components shipped\")."
           }
         ],
         "CaseStudyFigure": [
           {
             "name": "src",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Image URL. Omit it to render the hatch placeholder, so a page can be laid out before its art exists."
           },
           {
             "name": "alt",
@@ -909,7 +928,8 @@
           {
             "name": "caption",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Text under the figure; inside a section it is prefixed with the figure number."
           },
           {
             "name": "width",
@@ -918,21 +938,22 @@
             "values": [
               "\"wide\"",
               "\"full\""
-            ]
+            ],
+            "description": "Break out of the text column: `wide` or `full` bleed. Omit it to keep the figure in the column."
           }
         ],
         "CaseStudyContentBlock": {
           "union": [
-            "{ type: \"prose\"; text: string }",
+            "{ type: \"prose\"; /** A paragraph of body copy. */ text: string; }",
             "({ type: \"image\" } & CaseStudyFigure)",
-            "{ type: \"imagePair\"; captions?: [string, string]; width?: \"wide\" | \"full\"; srcs?: [string | undefined, string | undefined]; alts?: [string | undefined, string | undefined]; }",
-            "{ /** A box-drawing diagram kept as live text (generate with * @scorp-ds/tui-art). `label` says what it shows, for screen readers. */ type: \"ascii\"; text: string; caption?: string; width?: \"wide\" | \"full\"; label?: string; }",
-            "{ /** A live region filled through the `slots` prop, keyed by `name`. */ type: \"slot\"; name: string; caption?: string; width?: \"wide\" | \"full\"; aspect?: string; }",
+            "{ type: \"imagePair\"; /** One caption per image, left then right; each gets its own figure number. */ captions?: [string, string]; /** Break the pair out of the text column, as on `CaseStudyFigure`. */ width?: \"wide\" | \"full\"; /** Image URLs, left then right; an `undefined` entry renders the hatch placeholder. */ srcs?: [string | undefined, string | undefined]; /** Alt text for each image, left then right; omit for decorative images. */ alts?: [string | undefined, string | undefined]; }",
+            "{ /** A box-drawing diagram kept as live text (generate with * @scorp-ds/tui-art). `label` says what it shows, for screen readers. */ type: \"ascii\"; /** The diagram, line breaks included, rendered in monospace exactly as written. */ text: string; /** Numbered caption under the diagram. */ caption?: string; /** Break the diagram out of the text column. */ width?: \"wide\" | \"full\"; /** Accessible description of what the diagram shows; falls back to the caption. */ label?: string; }",
+            "{ /** A live region filled through the `slots` prop, keyed by `name`. */ type: \"slot\"; /** Key into the `slots` prop; a name with no entry renders the hatch placeholder. */ name: string; /** Numbered caption under the slot. */ caption?: string; /** Break the slot out of the text column. */ width?: \"wide\" | \"full\"; /** CSS aspect-ratio for the placeholder, e.g. \"4 / 3\". */ aspect?: string; }",
             "{ type: \"list\"; items: CaseStudyItem[] }",
             "{ type: \"insights\"; items: CaseStudyItem[] }",
             "{ type: \"callouts\"; items: CaseStudyItem[] }",
-            "{ type: \"quote\"; text: string; name?: string; role?: string; image?: string }",
-            "{ type: \"statement\"; text: string; kicker?: string }",
+            "{ type: \"quote\"; /** The quotation, without quote marks. */ text: string; /** Who said it. */ name?: string; /** Their role or company, shown under the name. */ role?: string; /** Portrait URL for the small avatar beside the attribution (the attribution only renders with `name`). */ image?: string; }",
+            "{ type: \"statement\"; /** The thesis or challenge in one or two sentences. */ text: string; /** Small accent label above the statement (\"the challenge\"). */ kicker?: string; }",
             "{ type: \"outcomes\"; items: CaseStudyOutcome[] }"
           ]
         },
@@ -946,7 +967,8 @@
           {
             "name": "title",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "The section's heading, a sentence that states its point."
           },
           {
             "name": "intro",
@@ -957,7 +979,8 @@
           {
             "name": "blocks",
             "type": "CaseStudyContentBlock[]",
-            "required": false
+            "required": false,
+            "description": "Content in reading order. Figures inside are numbered across the whole page."
           },
           {
             "name": "hidden",
@@ -976,7 +999,8 @@
           {
             "name": "title",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "The page title, the largest type on the page."
           },
           {
             "name": "summary",
@@ -987,26 +1011,30 @@
           {
             "name": "outcomes",
             "type": "CaseStudyOutcome[]",
-            "required": false
+            "required": false,
+            "description": "Headline results, shown as accent figures in the header."
           },
           {
             "name": "meta",
             "type": "{ label: string; value: string }[]",
-            "required": false
+            "required": false,
+            "description": "Label and value rows in the header: role, team, timeline, year."
           },
           {
             "name": "cover",
             "type": "CaseStudyFigure",
-            "required": false
+            "required": false,
+            "description": "Cover image under the header."
           },
           {
             "name": "sections",
             "type": "CaseStudySection[]",
-            "required": true
+            "required": true,
+            "description": "The body, in reading order; reorder by moving entries and hide one with `hidden`."
           }
         ]
       },
-      "apiHash": "f429192bbc9f083f"
+      "apiHash": "80c21507c5f9caf1"
     },
     "Checkbox": {
       "layer": "component",
@@ -1326,12 +1354,14 @@
               "\"vertical\"",
               "\"withText\""
             ],
-            "default": "\"horizontal\""
+            "default": "\"horizontal\"",
+            "description": "`horizontal` (default) for a full-width rule between stacked blocks, `vertical` for a full-height rule between items in a row (the parent needs a height), `withText` for a horizontal rule with a centred label."
           },
           {
             "name": "text",
             "type": "ReactNode",
-            "required": false
+            "required": false,
+            "description": "Label shown in the middle of a `withText` divider (\"or\", a section name); a string label is also its accessible name. Ignored by the other variants, and `withText` without it renders a plain rule."
           },
           {
             "name": "spacing",
@@ -1347,7 +1377,8 @@
             "name": "className",
             "type": "string",
             "required": false,
-            "default": "\"\""
+            "default": "\"\"",
+            "description": "Extra classes on the rule (width, colour override, alignment)."
           }
         ]
       },
@@ -1987,22 +2018,26 @@
           {
             "name": "isOpen",
             "type": "boolean",
-            "required": true
+            "required": true,
+            "description": "Whether the dialog is shown. The parent owns this state: set it true to open, and false from `onClose`."
           },
           {
             "name": "onClose",
             "type": "() => void",
-            "required": true
+            "required": true,
+            "description": "Called when the user asks to close (close button, Escape, or a scrim click). Set `isOpen` to false here."
           },
           {
             "name": "title",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "Heading in the fixed header; also the dialog's accessible name, so make it say what the dialog is for."
           },
           {
             "name": "children",
             "type": "ReactNode",
-            "required": true
+            "required": true,
+            "description": "Body content. It scrolls inside the panel when it is taller than the viewport allows; header and footer stay fixed."
           },
           {
             "name": "footerContent",
@@ -2948,12 +2983,14 @@
             "name": "checked",
             "type": "boolean",
             "required": false,
-            "default": "false"
+            "default": "false",
+            "description": "Whether the switch is on. The switch is controlled: keep this in state and update it from `onCheckedChange`. Default: false."
           },
           {
             "name": "onCheckedChange",
             "type": "(checked: boolean) => void",
-            "required": false
+            "required": false,
+            "description": "Called with the next value when the user clicks the track or label, or presses Space or Enter. Without it the switch cannot change."
           },
           {
             "name": "size",
@@ -2978,12 +3015,14 @@
             "name": "disabled",
             "type": "boolean",
             "required": false,
-            "default": "false"
+            "default": "false",
+            "description": "Blocks interaction and dims the switch. Prefer explaining nearby why a setting is unavailable."
           },
           {
             "name": "icon",
             "type": "ReactNode",
-            "required": false
+            "required": false,
+            "description": "Icon drawn inside the knob, for a switch whose two states have a picture (a moon and sun for the theme toggle)."
           }
         ]
       },
@@ -3129,24 +3168,28 @@
           {
             "name": "children",
             "type": "ReactNode",
-            "required": true
+            "required": true,
+            "description": "One `TabsList` followed by a `TabsContent` for each trigger."
           },
           {
             "name": "className",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Extra classes on the wrapper (width, spacing between the strip and panels)."
           }
         ],
         "TabsListProps": [
           {
             "name": "children",
             "type": "ReactNode",
-            "required": true
+            "required": true,
+            "description": "The `TabsTrigger` buttons, in the order the arrow keys move through them."
           },
           {
             "name": "className",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Extra classes on the tab strip (alignment, overflow)."
           },
           {
             "name": "aria-label",
@@ -3157,24 +3200,28 @@
           {
             "name": "aria-labelledby",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Id of a visible heading that names the tab strip; use it instead of `aria-label` when such a heading exists."
           }
         ],
         "TabsContentProps": [
           {
             "name": "value",
             "type": "string",
-            "required": true
+            "required": true,
+            "description": "Id of this panel; the `TabsTrigger` with the same `value` opens it."
           },
           {
             "name": "children",
             "type": "ReactNode",
-            "required": true
+            "required": true,
+            "description": "The panel's content, shown while its tab is selected."
           },
           {
             "name": "className",
             "type": "string",
-            "required": false
+            "required": false,
+            "description": "Extra classes on the panel (padding, a min-height so the layout does not jump between tabs)."
           },
           {
             "name": "forceMount",

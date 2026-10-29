@@ -52,8 +52,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ControlSizeProp | "icon";
   /** Disables the button (anchors drop `href` and set `aria-disabled`). */
   disabled?: boolean;
-  // Icon support - can be any React element (TUI: typically TuiIcon or Unicode characters)
+  /**
+   * Icon before the label, usually a `TuiIcon`, to make the action quicker to
+   * recognise ("+ New"). For an icon-only button, pass the icon as `children`
+   * instead (the button squares itself) and give it an `aria-label`.
+   */
   iconLeft?: React.ReactNode;
+  /**
+   * Icon after the label, for direction or destination (an arrow on "Next", an
+   * external-link glyph on a link CTA).
+   */
   iconRight?: React.ReactNode;
   /**
    * Render as an `<a>` with this destination instead of a `<button>` — same
@@ -76,7 +84,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /**
- * Button Component
+ * The control for triggering an action, or for navigating when given `href`; pick the `variant` by the action's weight on the page.
  * 
  * @param variant - Button style variant (default: "primary")
  * @param size - Button size (default: "md")

@@ -24,6 +24,8 @@
 
 Divider is a thin rule that separates groups of content within the same surface: sections of a form, items in a toolbar, blocks inside a Card body. The `withText` variant draws a box-drawing line with a centered label for TUI style section breaks. Use spacing alone when grouping is already clear, and use separate Cards when the groups are independent. Card and Modal already draw their own header and footer hairlines, so do not add a Divider there.
 
+Don't use this for: space alone between items that are already clearly grouped (use the `gap` of Stack or Inline instead), or as the only signal that groups differ in meaning (use a heading instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

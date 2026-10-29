@@ -26,6 +26,8 @@ Stacked sections that expand and collapse under headings. Compound API: Accordio
 
 Motion: grid-rows 0fr to 1fr over duration.normal (200ms) with a rotating 1-bit ChevronRight; both instant under reduced motion. Collapsed bodies are visibility-hidden so they leave the tab order.
 
+Don't use this for: switching between alternative views of the same content (use Tabs instead), a nested hierarchy such as files or an outline (use TreeView instead), or anything the user must not miss, which should stay visible rather than collapsed.
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

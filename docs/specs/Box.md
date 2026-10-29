@@ -24,6 +24,8 @@
 
 Box is the base surface primitive: token-backed padding, a semantic background, and the optional hairline plate ring, on the element of your choice. Reach for it when a wrapper needs a surface, an inset or a ring, so those three decisions come from the token scales instead of from ad-hoc classes. Keep writing a plain `div` when the wrapper only needs layout classes. Box is deliberately narrow: no width, height, display, flex, margin, radius or style API, no arbitrary values, and no raw color scales. Arranging children is Stack, Inline and Grid; page width is Container and Center.
 
+Don't use this for: grouped content with a header or footer on a raised surface (use Card instead) or a framed terminal pane with a title bar (use Window instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

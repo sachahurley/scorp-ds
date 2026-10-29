@@ -50,6 +50,7 @@ type CommonProps = {
    * `aria-current="page"` so the state is announced.
    */
   selected?: boolean;
+  /** Extra classes on the row element (padding overrides, a divider border between rows). */
   className?: string;
 };
 
@@ -73,7 +74,7 @@ export type ListRowProps = CommonProps &
   );
 
 /**
- * ListRow Component
+ * One scannable line in a list of items (a post, a project, a setting), either interactive or display-only.
  *
  * Renders an `<a>` when `href` is set, a `<button>` when `onClick` is set,
  * and a plain `<div>` for display-only rows.

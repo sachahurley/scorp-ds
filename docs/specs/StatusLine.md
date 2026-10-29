@@ -32,6 +32,8 @@ zones of `StatusLineSegment`s. Segments take a 1-bit `icon` and a semantic
 The bar is a named group by default; `live` makes it `role="status"` for polite
 announcements when it reflects results the user is waiting on.
 
+Don't use this for: a message the user must read in full or act on (use Alert instead, or Toast for a transient confirmation) or the app's top bar (use AppHeader instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

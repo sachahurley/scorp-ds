@@ -24,6 +24,8 @@
 
 Grid is the two-dimensional layout primitive: a token-backed gap and a column count that can change per breakpoint. Use it for card galleries, token swatch walls and anything where items must line up across rows as well as along them. It owns only the tracks and the gaps, never padding or a surface, so wrap it in a Box or a Container when it needs either. A single wrapping row is Inline; a single column is Stack.
 
+Don't use this for: a single column or a single wrapping row (use Stack or Inline instead) or tabular data with headers (use Table instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

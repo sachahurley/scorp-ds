@@ -13,6 +13,8 @@ Scorp DS uses a three-layer token architecture:
 2. **Semantic** (`light` / `dark` in tokens.json) — purpose-named tokens that reference foundation values. Components always use these for color roles, elevation, and focus ring *colors*.
 3. **CSS Variables** — defined in `tokens.css` (kebab-case). Tailwind maps to them via `@scorp-ds/tokens` preset.
 
+**Referencing tokens inside this repo** ([decision 0023](docs/decisions/0023-semantic-tokens-are-referenced-by-variable.md)): semantic tokens are written as their CSS variable, `<utility>-[var(--token-name)]` (`text-[var(--text-secondary)]`), with the name copied from `tokens.css`. Foundation scales use the preset classes through the semantic alias (`bg-error-50`, `text-secondary-800`), and geometry uses the preset classes (`h-control-md`, `size-touch`, `plate-round`). The **Tailwind (preset)** class lists in the semantic sections below (`text-foreground-*`, `border-line-*`, `bg-field-*`, `bg-surface-*`) are a convenience for consumer projects; components, stories and presets in this repo do not use them.
+
 ### CSS variable naming
 
 Dot paths in this doc map to custom properties by flattening with hyphens:
@@ -263,7 +265,9 @@ There is no 600 step, so `font-semibold` is off-token: use `font-medium` or `fon
 
 ## Spacing Tokens
 
-Base unit: **4px** per step (see `global.spacing` in `tokens.json`). Tailwind spacing classes (`p-4`, `gap-6`) map to these steps.
+Base unit: **4px** per step (see `global.spacing` in `tokens.json`, `--spacing-*` in `tokens.css`).
+
+**The Tailwind spacing classes are not wired to these tokens yet.** The preset maps no spacing scale except `control-*` and `touch` (see Control Size Tokens), so `p-4` and `gap-6` are Tailwind's own default 4px scale. The values coincide with the tokens, which is why the classes look right, but editing `spacing.4` changes no class. Use the classes as normal; [decision 0027](docs/decisions/0027-half-step-spacing-is-tokenised.md) maps every step, and the half steps components already use (`gap-0.5`, `px-1.5`, `py-2.5`), to these variables.
 
 | Token | Value | Use For |
 |-------|-------|---------|
@@ -285,7 +289,7 @@ Base unit: **4px** per step (see `global.spacing` in `tokens.json`). Tailwind sp
 
 ## Breakpoint Tokens (foundation)
 
-The widths at which the interface is allowed to change (`global.breakpoint`). `sm | md | lg | xl` carry Tailwind's default pixel values, so every existing responsive class keeps behaving exactly as before; the Tailwind preset builds its `screens` by reading this group out of `tokens.json`, so the utilities and the custom properties cannot drift apart. Media queries cannot read custom properties, which is why the `--breakpoint-*` variables exist only for JavaScript that has to make the same decision.
+The widths at which the interface is allowed to change (`global.breakpoint`). `sm | md | lg | xl` carry Tailwind's default pixel values, so every existing responsive class keeps behaving exactly as before; the Tailwind preset declares its `screens` as literal values (`tailwind.preset.js`, top of file) rather than reading `tokens.json`, on purpose: consumer sites vendor the preset as one standalone file with no `src/` beside it. The token-parser drift test asserts the literals match `tokens.json` and `tokens.css`, so the utilities and the custom properties cannot drift apart. Media queries cannot read custom properties, which is why the `--breakpoint-*` variables exist only for JavaScript that has to make the same decision.
 
 | Token | CSS variable | Value | Tailwind | Used by |
 |-------|--------------|-------|----------|---------|
@@ -301,7 +305,19 @@ Tailwind's `2xl:` default (1536px) survives because the preset declares `screens
 
 ## Control Size Tokens
 
-One size scale for every sized component: `sm | md | lg` (Avatar adds `xl`). The old `small | medium | large` names are deprecated aliases that still resolve (one dev warning per component).
+One size scale for sized components: `sm | md | lg` ([decision 0011](docs/decisions/0011-unified-size-scale.md)). The old `small | medium | large` names are deprecated aliases that still resolve (one dev warning per component). Exceptions, where a component's scale differs:
+
+| Component | Prop | Values |
+|-----------|------|--------|
+| Avatar | `size` | `sm \| md \| lg \| xl` |
+| Button | `size` | `sm \| md \| lg`, plus `icon` (deprecated: use `md`; icon-only buttons square themselves) |
+| Container | `size` | `sm \| md \| lg \| xl \| full` (a max-width, not a control height) |
+| EmptyState | `size` | `sm \| md` |
+| Kbd | `size` | `sm \| md` (legacy `small \| medium` still accepted) |
+| Meter | `size` | `sm \| md` (legacy `small \| medium` still accepted) |
+| TuiIcon | `size` | `"3" \| "4" \| "5" \| "6" \| "8"` (Tailwind size steps) |
+| Table | `density` | `compact \| comfortable \| spacious` (no `size` prop) |
+| Divider | `spacing` | `none \| sm \| md \| lg` (margin around the rule, not a size) |
 
 | Token | CSS variable | Value | Tailwind | Used by |
 |-------|--------------|-------|----------|---------|
@@ -340,7 +356,7 @@ The system draws exactly one rule weight. It replaces the ad hoc `0.5px` rules, 
 | `duration.slow` | 300ms | Modal enter/exit |
 | `duration.slower` | 500ms | Full-page transitions |
 
-**Runtime CSS:** `--duration-*` in `packages/tokens/src/styles/tokens.css` matches the table above (kept in sync with `tokens.json`). Prefer `duration-[var(--duration-fast)]` or Tailwind `duration-200` when it maps to the same scale.
+**Runtime CSS:** `--duration-*` in `packages/tokens/src/styles/tokens.css` matches the table above (kept in sync with `tokens.json`). Use the variable, `duration-[var(--duration-fast)]`; a raw duration (`duration-200`, `duration-[250ms]`) is off-token. Interactive state changes use `instant`, `fast` or `normal` (200ms at most); `slow` is for an overlay entering or leaving the viewport, and `slower` is reserved ([decision 0025](docs/decisions/0025-motion-cap-is-for-interactive-states.md)).
 
 Easing curves live in `global.easing` as `--easing-linear`, `--easing-ease-in`, `--easing-ease-out`, `--easing-ease-in-out`.
 
