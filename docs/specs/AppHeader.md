@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-APP HEADER COMPONENT (top bar)
-
 The application top bar: a `<header>` with `brand`, `navigation`, and `actions`
 slots. Below `md` the navigation folds behind a menu toggle (1-bit Menu icon,
 swapping to X when open) with `aria-expanded` / `aria-controls` pointing at a

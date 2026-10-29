@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-STATUS LINE COMPONENT (status bar)
-
 The bottom bar of a terminal app (vim, tmux): `left`, `center`, and `right`
 zones of `StatusLineSegment`s. Segments take a 1-bit `icon` and a semantic
 `tone`: `neutral`, `primary` (mode segment, primary button fill), and

@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-DESCRIPTION LIST COMPONENT (key / value)
-
 Term and value pairs on a real `<dl>`: metadata panels, config readouts,
 neofetch-style summaries. Each pair is a `<div>` holding one `<dt>` and one
 `<dd>`.

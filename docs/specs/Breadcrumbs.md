@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-BREADCRUMBS COMPONENT
-
 Shows where the current page sits in a hierarchy: a `<nav aria-label="Breadcrumb">`
 landmark around an ordered list of links, ending on the current page (plain text
 with `aria-current="page"`). Separators are the 1-bit ChevronRight icon, hidden

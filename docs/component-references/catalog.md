@@ -44,11 +44,11 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | [Inline](#inline) | Layout | draft | Inline is the horizontal cluster: a row of items that wraps onto the next line instead of overflowing. |
 | [Stack](#stack) | Layout | draft | Stack is the layout primitive for spacing a group of elements along one axis with a gap from the spacing scale. |
 | [VisuallyHidden](#visuallyhidden) | Layout | draft | VisuallyHidden renders content that screen readers announce and nobody sees: the word "Close" in an icon button, a caption for a table, the "Skip to content" link at the top of a page. |
-| [AppHeader](#appheader) | Navigation | draft | APP HEADER COMPONENT (top bar) |
-| [Breadcrumbs](#breadcrumbs) | Navigation | draft | BREADCRUMBS COMPONENT |
+| [AppHeader](#appheader) | Navigation | draft | The application top bar: a `<header>` with `brand`, `navigation`, and `actions` slots. |
+| [Breadcrumbs](#breadcrumbs) | Navigation | draft | Shows where the current page sits in a hierarchy: a `<nav aria-label="Breadcrumb">` landmark around an ordered list of links, ending on the current page (plain text with `aria-current="page"`). |
 | [Link](#link) | Navigation | draft | Link is the inline text link for navigation inside prose, captions, nav lists and footers. |
-| [Pagination](#pagination) | Navigation | draft | PAGINATION COMPONENT |
-| [SideNav](#sidenav) | Navigation | draft | SIDE NAV COMPONENT (navigation rail) |
+| [Pagination](#pagination) | Navigation | draft | Page picker for long, paged collections. |
+| [SideNav](#sidenav) | Navigation | draft | The Patterns/SideNavigation recipe as a compound component: `SideNav` > `SideNavSection` (optional heading naming a group) > `SideNavItem`. |
 | [Tabs](#tabs) | Navigation | draft | Tabs switch between related views that share one context, such as the sections of a settings screen, without leaving the page. |
 | [BottomSheet](#bottomsheet) | Overlays | draft | BottomSheet is a panel that slides up from the bottom edge over a scrim, for menus and quick actions that dismiss easily: a site menu on mobile, a short list of options, a share sheet. |
 | [Dropdown](#dropdown) | Overlays | draft | Dropdown is an action menu: a trigger that opens a short list of commands such as Edit, Duplicate, or Delete. |
@@ -56,13 +56,13 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | [Popover](#popover) | Overlays | draft | Anchored, non-modal floating panel for rich interactive content next to a trigger (filters, a small form, a details card). |
 | [Tooltip](#tooltip) | Overlays | draft | Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. |
 | [CaseStudy](#casestudy) | Patterns | draft | CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. |
-| [DescriptionList](#descriptionlist) | Terminal | draft | DESCRIPTION LIST COMPONENT (key / value) |
-| [Kbd](#kbd) | Terminal | draft | KBD COMPONENT |
-| [LogView](#logview) | Terminal | draft | LOG VIEW COMPONENT |
-| [Meter](#meter) | Terminal | draft | METER COMPONENT |
-| [StatusLine](#statusline) | Terminal | draft | STATUS LINE COMPONENT (status bar) |
-| [TreeView](#treeview) | Terminal | draft | TREE VIEW COMPONENT |
-| [Window](#window) | Terminal | draft | WINDOW COMPONENT (pane) |
+| [DescriptionList](#descriptionlist) | Terminal | draft | Term and value pairs on a real `<dl>`: metadata panels, config readouts, neofetch-style summaries. |
+| [Kbd](#kbd) | Terminal | draft | Inline keyboard key for shortcut hints. |
+| [LogView](#logview) | Terminal | draft | A monospace scrolling log: build output, server logs, job runs. |
+| [Meter](#meter) | Terminal | draft | A gauge for a value in a known range (disk, quota, battery), not a progress bar. `role="meter"` with `aria-valuenow` / `min` / `max` / `aria-valuetext`, drawn as stepped blocks on the pixel grid. |
+| [StatusLine](#statusline) | Terminal | draft | The bottom bar of a terminal app (vim, tmux): `left`, `center`, and `right` zones of `StatusLineSegment`s. |
+| [TreeView](#treeview) | Terminal | draft | Hierarchical list with expandable branches (file trees, outlines). |
+| [Window](#window) | Terminal | draft | A framed terminal pane: the large plate ring (stroke layer + fill inset 1px), a TUI title bar (title, a hairline rule filling the gap, optional `status` text and `actions`), and a keyboard-focusable scroll body named by the title. |
 | [ThemeToggle](#themetoggle) | Theme | draft | ThemeToggle is a ready-made light/dark control: a small `Switch` with a 1-bit Moon or Sun icon in the knob and a "Dark" / "Light" label beside it. |
 
 ## Other exports
@@ -936,7 +936,7 @@ Also accepts the native attributes of `AriaAttributes`, `DOMAttributes`, `HTMLAt
 
 ### AppHeader
 
-APP HEADER COMPONENT (top bar)
+The application top bar: a `<header>` with `brand`, `navigation`, and `actions` slots.
 
 **Use instead:** section navigation down the side of a page (use SideNav instead), a trail showing where the current page sits (use Breadcrumbs instead), or the bottom bar of a terminal-style app (use StatusLine instead). Render one per app.
 
@@ -962,7 +962,7 @@ Status: draft · Spec: [`docs/specs/AppHeader.md`](../../docs/specs/AppHeader.md
 
 ### Breadcrumbs
 
-BREADCRUMBS COMPONENT
+Shows where the current page sits in a hierarchy: a `<nav aria-label="Breadcrumb">` landmark around an ordered list of links, ending on the current page (plain text with `aria-current="page"`).
 
 **Use instead:** step progress (use a stepper) or tabs between sibling views (use Tabs).
 
@@ -1016,7 +1016,7 @@ Status: draft · Spec: [`docs/specs/Link.md`](../../docs/specs/Link.md) · Story
 
 ### Pagination
 
-PAGINATION COMPONENT
+Page picker for long, paged collections.
 
 **Use instead:** switching between a few peer views (use Tabs instead) or a feed that loads more in place (use a Button at the end of the list instead).
 
@@ -1044,7 +1044,7 @@ Status: draft · Spec: [`docs/specs/Pagination.md`](../../docs/specs/Pagination.
 
 ### SideNav
 
-SIDE NAV COMPONENT (navigation rail)
+The Patterns/SideNavigation recipe as a compound component: `SideNav` > `SideNavSection` (optional heading naming a group) > `SideNavItem`.
 
 **Use instead:** the app's top bar (use AppHeader instead), switching between views inside one page (use Tabs instead), or a nested data hierarchy such as files (use TreeView instead).
 
@@ -1324,7 +1324,7 @@ Status: draft · Spec: [`docs/specs/CaseStudy.md`](../../docs/specs/CaseStudy.md
 
 ### DescriptionList
 
-DESCRIPTION LIST COMPONENT (key / value)
+Term and value pairs on a real `<dl>`: metadata panels, config readouts, neofetch-style summaries.
 
 **Use instead:** several records that share the same columns (use Table instead) or a list of items people open or act on (use ListRow instead).
 
@@ -1351,7 +1351,7 @@ Status: draft · Spec: [`docs/specs/DescriptionList.md`](../../docs/specs/Descri
 
 ### Kbd
 
-KBD COMPONENT
+Inline keyboard key for shortcut hints.
 
 **Use instead:** code, file names or command text (use a plain `<code>` element instead) or a status or count chip (use Badge instead).
 
@@ -1371,7 +1371,7 @@ Status: draft · Spec: [`docs/specs/Kbd.md`](../../docs/specs/Kbd.md) · Story: 
 
 ### LogView
 
-LOG VIEW COMPONENT
+A monospace scrolling log: build output, server logs, job runs.
 
 **Use instead:** records with columns to compare (use Table instead) or a short list of events people act on (use ListRow instead).
 
@@ -1404,7 +1404,7 @@ Status: draft · Spec: [`docs/specs/LogView.md`](../../docs/specs/LogView.md) ·
 
 ### Meter
 
-METER COMPONENT
+A gauge for a value in a known range (disk, quota, battery), not a progress bar. `role="meter"` with `aria-valuenow` / `min` / `max` / `aria-valuetext`, drawn as stepped blocks on the pixel grid.
 
 **Use instead:** a task moving toward completion (use ProgressBar instead) or work of unknown length (use Spinner instead).
 
@@ -1431,7 +1431,7 @@ Status: draft · Spec: [`docs/specs/Meter.md`](../../docs/specs/Meter.md) · Sto
 
 ### StatusLine
 
-STATUS LINE COMPONENT (status bar)
+The bottom bar of a terminal app (vim, tmux): `left`, `center`, and `right` zones of `StatusLineSegment`s.
 
 **Use instead:** a message the user must read in full or act on (use Alert instead, or Toast for a transient confirmation) or the app's top bar (use AppHeader instead).
 
@@ -1461,7 +1461,7 @@ Status: draft · Spec: [`docs/specs/StatusLine.md`](../../docs/specs/StatusLine.
 
 ### TreeView
 
-TREE VIEW COMPONENT
+Hierarchical list with expandable branches (file trees, outlines).
 
 **Use instead:** site or app navigation (use SideNav instead) or a few collapsible content sections (use Accordion instead).
 
@@ -1501,7 +1501,7 @@ Status: draft · Spec: [`docs/specs/TreeView.md`](../../docs/specs/TreeView.md) 
 
 ### Window
 
-WINDOW COMPONENT (pane)
+A framed terminal pane: the large plate ring (stroke layer + fill inset 1px), a TUI title bar (title, a hairline rule filling the gap, optional `status` text and `actions`), and a keyboard-focusable scroll body named by the title.
 
 **Use instead:** a general content container on a page (use Card instead) or a plain surface with padding (use Box instead). Window is for terminal-style panes, as in Patterns/WorkbenchSplit.
 

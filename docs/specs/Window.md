@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-WINDOW COMPONENT (pane)
-
 A framed terminal pane: the large plate ring (stroke layer + fill inset 1px),
 a TUI title bar (title, a hairline rule filling the gap, optional `status` text
 and `actions`), and a keyboard-focusable scroll body named by the title. Frames

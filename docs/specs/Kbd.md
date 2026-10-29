@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-KBD COMPONENT
-
 Inline keyboard key for shortcut hints. Renders `<kbd>`; a combo
 (`keys={["Ctrl", "K"]}`) renders the HTML-recommended nested form (outer `<kbd>`
 holding one `<kbd>` per key) with a visible "+" separator that screen readers

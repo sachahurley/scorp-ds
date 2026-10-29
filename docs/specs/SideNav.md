@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-SIDE NAV COMPONENT (navigation rail)
-
 The Patterns/SideNavigation recipe as a compound component: `SideNav` >
 `SideNavSection` (optional heading naming a group) > `SideNavItem`. Rows are
 plates: idle rows are secondary text, hover fills with surface.muted and flips

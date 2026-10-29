@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-METER COMPONENT
-
 A gauge for a value in a known range (disk, quota, battery), not a progress
 bar. `role="meter"` with `aria-valuenow` / `min` / `max` / `aria-valuetext`,
 drawn as stepped blocks on the pixel grid.
