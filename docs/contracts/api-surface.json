@@ -2628,7 +2628,7 @@
               "name": "label",
               "type": "ReactNode",
               "required": false,
-              "description": "Centred label on a horizontal rule (\"or\", a section name), drawn between box-drawing runs. Passing it gives the labelled form; a string label is also the separator's accessible name. Ignored when `orientation` is `vertical`."
+              "description": "Centred label on a horizontal rule (\"or\", a section name), drawn between two hairline runs that fill the width beside it. Passing it gives the labelled form; a string label is also the separator's accessible name. Keep it short: a label wider than the row truncates with an ellipsis. Ignored when `orientation` is `vertical`."
             },
             {
               "name": "spacing",
@@ -2648,7 +2648,7 @@
               "type": "string",
               "required": false,
               "default": "\"\"",
-              "description": "Extra classes on the rule (width, colour override, alignment)."
+              "description": "Extra classes on the rule (width, colour override, alignment). They win over the defaults, so `w-64` replaces the default `w-full`."
             }
           ]
         }
