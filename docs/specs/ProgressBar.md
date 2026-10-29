@@ -13,8 +13,8 @@
 | Story | `Components/Feedback/ProgressBar` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `24ad2e6f620a8d4b` |
+| Last updated | 2026-10-28 |
+| API hash | `ae1377fccc1ef7bb` |
 
 ---
 
@@ -34,11 +34,15 @@ Don't use this for: a measured value in a known range that is not heading toward
 
 <!-- AUTO-START:anatomy -->
 
-### Variants
+### Tones
+
+`tone` takes the five shared colour roles of decision 0024 plus ProgressBar's own `primary`, the default accent. The deprecated `variant` prop still takes `primary | success | warning | error`.
 
 | Enum Value | Description |
 |-----------|-------------|
 | `primary` | Default accent |
+| `neutral` | Secondary (sepia) blocks, for progress that carries no judgement |
+| `info` | Info (blue) blocks |
 | `success` | Completed / healthy |
 | `warning` | Approaching a limit |
 | `error` | Failed |
@@ -67,8 +71,11 @@ Don't use this for: a measured value in a known range that is not heading toward
 | `showLabel` | `boolean` | `true` | No | Visible label |
 | `showValue` | `boolean` | `true` | No | Percentage text |
 | `size` | `sm | md | lg` | `"md"` | No | Track thickness |
-| `variant` | `primary | success | warning | error` | `"primary"` | No | Fill meaning |
+| `tone` | `ProgressBarTone`: `primary | neutral | info | success | warning | error` | `"primary"` | No | Fill meaning. Also written to `data-tone` on the progressbar |
+| `variant` | `primary | success | warning | error` | `undefined` | No | **Deprecated: use `tone`.** Warns once in development; `tone` wins when both are set |
 | `segments` | `number` | `20` | No | Blocks across the track |
+
+Exported types: `ProgressBarProps`, `ProgressBarTone`.
 
 <!-- AUTO-END:properties -->
 
@@ -83,7 +90,7 @@ Don't use this for: a measured value in a known range that is not heading toward
 | `--border-default` | Color | semantic | Track ring |
 | `--surface-subtle` | Color | semantic | Track fill |
 | `--surface-muted` | Color | semantic | Empty blocks |
-| `primary/success/warning/error 400-600` | Color | semantic scales | Filled blocks |
+| `primary/secondary/info/success/warning/error 400-600` | Color | semantic scales | Filled blocks (`secondary` is the `neutral` tone) |
 | `--duration-fast` | Motion | 120ms | Indeterminate hop interval |
 
 <!-- AUTO-END:tokens -->
@@ -97,6 +104,7 @@ Don't use this for: a measured value in a known range that is not heading toward
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
 | loading / complete / indeterminate | `data-state` | fill count, animation |
+| Tone | `tone` (deprecated `variant`), mirrored on `data-tone` | filled block colour |
 
 <!-- AUTO-END:states -->
 
@@ -110,7 +118,7 @@ Don't use this for: a measured value in a known range that is not heading toward
 |----------------|---------|--------------|-------|
 | Default | Yes | Yes |  |
 | Indeterminate | Yes | Yes |  |
-| Variants | Yes | Yes |  |
+| Tones | Yes | Yes | `Variants` export (shown as "Tones"): primary, success, warning, error; `neutral` and `info` via the `tone` control |
 | Sizes | Yes | Yes |  |
 | Hidden label | Yes | Yes |  |
 | Live | Yes | Yes |  |
@@ -157,7 +165,7 @@ None
 - Required labels: label (visible via aria-labelledby, or aria-label when hidden)
 - Focus order: Not focusable
 - Touch target minimum: N/A
-- Color independence: Percentage text and label carry meaning; variant color is supplementary
+- Color independence: Percentage text and label carry meaning; tone color is supplementary
 
 <!-- AUTO-END:accessibility -->
 
@@ -201,6 +209,7 @@ None
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial ProgressBar component, story, and unit tests |
+| Unreleased | 2026-10-28 | feat | Decision 0024 vocabulary: `tone` replaces `variant` and adds the `neutral` and `info` roles (`primary` stays the default). `variant` still works, warns once in development, and loses when both are set. New exported type `ProgressBarTone`; `data-tone` on the progressbar. Existing values render identically |
 
 <!-- AUTO-END:changelog -->
 

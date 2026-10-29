@@ -8,7 +8,7 @@ const meta: Meta<typeof ProgressBar> = {
   tags: ['autodocs'],
   argTypes: {
     value: { control: { type: 'range', min: 0, max: 100, step: 1 } },
-    variant: { control: 'select', options: ['primary', 'success', 'warning', 'error'] },
+    tone: { control: 'select', options: ['primary', 'neutral', 'info', 'success', 'warning', 'error'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     segments: { control: { type: 'number', min: 4, max: 40 } },
   },
@@ -35,13 +35,15 @@ export const Indeterminate: Story = {
   args: { label: 'Connecting to server' },
 };
 
+// The export keeps its old name: it is the story id the visual baselines are keyed by.
 export const Variants: Story = {
+  name: 'Tones',
   render: () => (
     <Frame>
       <ProgressBar label="Primary" value={60} />
-      <ProgressBar label="Success" value={100} variant="success" />
-      <ProgressBar label="Warning: storage almost full" value={85} variant="warning" />
-      <ProgressBar label="Error: upload failed" value={30} variant="error" />
+      <ProgressBar label="Success" value={100} tone="success" />
+      <ProgressBar label="Warning: storage almost full" value={85} tone="warning" />
+      <ProgressBar label="Error: upload failed" value={30} tone="error" />
     </Frame>
   ),
 };

@@ -23,10 +23,10 @@ export { Card } from './components/Card';
 export type { CardProps, CardLayout } from './components/Card';
 
 export { Badge } from './components/Badge';
-export type { BadgeProps } from './components/Badge';
+export type { BadgeProps, BadgeTone } from './components/Badge';
 
 export { Alert } from './components/Alert';
-export type { AlertProps } from './components/Alert';
+export type { AlertProps, AlertTone } from './components/Alert';
 
 export { Avatar } from './components/Avatar';
 export type { AvatarProps } from './components/Avatar';
@@ -115,7 +115,7 @@ export type {
 export { Spinner } from './components/Spinner';
 export type { SpinnerProps } from './components/Spinner';
 export { toast, useToast } from './components/Toast';
-export type { ToastProps, ToastVariant, ToastAction, ToastOptions, ToastApi } from './components/Toast';
+export type { ToastProps, ToastTone, ToastVariant, ToastAction, ToastOptions, ToastApi } from './components/Toast';
 
 // --- Popover family (Popover, Combobox, ProgressBar, Skeleton, EmptyState, Accordion) ---
 export { Popover } from './components/Popover';
@@ -125,7 +125,7 @@ export { Combobox } from './components/Combobox';
 export type { ComboboxProps, ComboboxOption } from './components/Combobox';
 
 export { ProgressBar } from './components/ProgressBar';
-export type { ProgressBarProps } from './components/ProgressBar';
+export type { ProgressBarProps, ProgressBarTone } from './components/ProgressBar';
 
 export { Skeleton } from './components/Skeleton';
 export type { SkeletonProps } from './components/Skeleton';

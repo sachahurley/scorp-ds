@@ -7,9 +7,9 @@ const meta: Meta<typeof Badge> = {
   component: Badge,
   tags: ['autodocs'],
   argTypes: {
-    variant: {
+    tone: {
       control: 'select',
-      options: ['default', 'primary', 'success', 'warning', 'error', 'info'],
+      options: ['neutral', 'info', 'success', 'warning', 'error', 'primary', 'bone'],
     },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
   },
@@ -24,12 +24,12 @@ export const Default: Story = {
 };
 
 export const Primary: Story = {
-  args: { variant: 'primary', children: 'New' },
+  args: { tone: 'primary', children: 'New' },
 };
 
 export const WithIcon: Story = {
   args: {
-    variant: 'success',
+    tone: 'success',
     children: 'Synced',
     iconLeft: <TuiIcon name="Check" size="4" />,
   },
@@ -37,22 +37,23 @@ export const WithIcon: Story = {
 
 export const Dismissible: Story = {
   args: {
-    variant: 'info',
+    tone: 'info',
     children: 'Filter on',
-    onClose: fn(),
+    onDismiss: fn(),
   },
 };
 
+// The export keeps its old name: it is the story id the visual baselines are keyed by.
 export const AllVariants: Story = {
-  name: 'All variants',
+  name: 'All tones',
   render: () => (
     <div className="flex flex-wrap gap-2">
-      <Badge variant="default">Default</Badge>
-      <Badge variant="primary">Primary</Badge>
-      <Badge variant="success">Success</Badge>
-      <Badge variant="warning">Warning</Badge>
-      <Badge variant="error">Error</Badge>
-      <Badge variant="info">Info</Badge>
+      <Badge tone="neutral">Default</Badge>
+      <Badge tone="primary">Primary</Badge>
+      <Badge tone="success">Success</Badge>
+      <Badge tone="warning">Warning</Badge>
+      <Badge tone="error">Error</Badge>
+      <Badge tone="info">Info</Badge>
     </div>
   ),
 };
@@ -63,7 +64,7 @@ export const AllVariants: Story = {
  * gear, loot tiers).
  */
 export const Bone: Story = {
-  args: { variant: 'bone', size: 'sm', children: 'equipped' },
+  args: { tone: 'bone', size: 'sm', children: 'equipped' },
 };
 
 /**
@@ -71,13 +72,13 @@ export const Bone: Story = {
  * state chips, baked in so consumers stop pasting className overrides.
  */
 export const Caps: Story = {
-  args: { variant: 'primary', size: 'sm', caps: true, iconLeft: <TuiIcon name="ChevronUp" size="3" />, children: 'level up' },
+  args: { tone: 'primary', size: 'sm', caps: true, iconLeft: <TuiIcon name="ChevronUp" size="3" />, children: 'level up' },
 };
 
 /**
  * Dashed: the not-yet-real voice — transparent fill, 1px dashed hairline in
- * the variant's text color, sharp corners (no plate clip). For placeholders,
- * empty slots, and free tiers. Composes with caps and any variant; dashed
+ * the tone's text color, sharp corners (no plate clip). For placeholders,
+ * empty slots, and free tiers. Composes with caps and any tone; dashed
  * bone keeps the theme-stable sepia-500 dash (the empty-slot counterpart to
  * the filled bone chip) with per-theme text so it stays AA on light.
  */
@@ -85,17 +86,17 @@ export const Dashed: Story = {
   args: { size: 'sm', caps: true, dashed: true, children: 'free' },
 };
 
-/** Dashed composes with every variant; the dash follows the text color. */
+/** Dashed composes with every tone; the dash follows the text color. */
 export const DashedVariants: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       <Badge dashed size="sm" caps>
         free
       </Badge>
-      <Badge dashed variant="primary" size="sm" caps>
+      <Badge dashed tone="primary" size="sm" caps>
         slot open
       </Badge>
-      <Badge dashed variant="bone" size="sm" caps>
+      <Badge dashed tone="bone" size="sm" caps>
         empty slot
       </Badge>
     </div>

@@ -61,4 +61,16 @@ describe("Meter", () => {
     const { container } = render(<Meter label="CPU" value={90} low={60} high={85} optimum={0} tone="primary" />);
     expect(container.firstElementChild).toHaveAttribute("data-tone", "primary");
   });
+
+  it("takes the neutral and info roles of the shared tone vocabulary", () => {
+    for (const [tone, fill] of [
+      ["neutral", "bg-secondary-600"],
+      ["info", "bg-info-600"],
+    ] as const) {
+      const { container, unmount } = render(<Meter label="Quota" value={50} tone={tone} />);
+      expect(container.firstElementChild).toHaveAttribute("data-tone", tone);
+      expect(container.querySelector("[data-filled]")?.className).toContain(fill);
+      unmount();
+    }
+  });
 });
