@@ -24,6 +24,8 @@
 
 VisuallyHidden renders content that screen readers announce and nobody sees: the word "Close" in an icon button, a caption for a table, the "Skip to content" link at the top of a page. It applies the clip-rect recipe, never `display: none` or `visibility: hidden`, which would take the text out of the accessibility tree along with the pixels. Making it a component rather than a bare class means the rule is documented in one place, the `focusable` skip-link variant exists, and the intent is legible in the markup. If content should be hidden from everyone, use `aria-hidden` or do not render it.
 
+Don't use this for: naming an element that already takes a name, such as an icon Button (use `aria-label` instead), or content nobody should perceive (use `aria-hidden` or do not render it instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

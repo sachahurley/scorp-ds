@@ -30,6 +30,8 @@ Every icon renders identically on every OS. Three layers, decided by Sacha on 20
 2. **Scorp Symbols.** `TUI_ICON_GLYPHS` keeps each icon's Unicode text form for plain-text contexts (tui-art frames, terminal strings). Those glyphs render through the Scorp Symbols face, second in `--font-family-mono`: a 5.6 KB subset inlined in `tokens.css`, rescaled onto Fragment Mono's 0.618em cell so box drawing joins and columns align. Built by `packages/tokens/scripts/build-scorp-symbols.py`.
 3. **Glyph audit.** `npm run audit:glyphs` (CI, Storybook a11y workflow) asks Chrome which font paints every character the DS renders and fails on any system fallback.
 
+Don't use this for: a loading state (use Spinner instead) or a person or account (use Avatar instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

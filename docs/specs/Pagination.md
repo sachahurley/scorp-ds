@@ -37,6 +37,8 @@ the primary plate and carries `aria-current="page"`.
 `getPaginationRange(page, pageCount, siblingCount, boundaryCount)` is exported
 for custom renderers.
 
+Don't use this for: switching between a few peer views (use Tabs instead) or a feed that loads more in place (use a Button at the end of the list instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

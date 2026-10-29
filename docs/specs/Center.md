@@ -24,6 +24,8 @@
 
 Center puts one column of content in the middle of its parent: a measured width, optionally centered text, and optionally the full viewport height. Use it for sign-in cards, empty states, 404 screens and any single column that should sit in the middle of the page. Center is about a block of content, not about the page: the page-level wrapper with gutters is Container, and the rhythm inside the column is Stack.
 
+Don't use this for: page width and gutters (use Container instead) or the vertical rhythm inside the column (use Stack instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

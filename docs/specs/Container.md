@@ -24,6 +24,8 @@
 
 Container is the page-width wrapper: one max width, one set of gutters, one place to change either. Use it as the outermost element of a page or of a full-width band, in place of the hand-written `mx-auto max-w-* px-*` runs that the site and the showcase repeat today. It decides width and horizontal inset only: vertical rhythm belongs to Stack, and a background band belongs to a Box around the Container, so the color reaches the viewport edges while the text stays within the measure.
 
+Don't use this for: a background band (wrap the Container in a Box instead), vertical rhythm (use Stack instead) or a single centred column (use Center instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

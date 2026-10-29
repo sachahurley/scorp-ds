@@ -24,6 +24,8 @@
 
 ThemeToggle is a ready-made light/dark control: a small `Switch` with a 1-bit Moon or Sun icon in the knob and a "Dark" / "Light" label beside it. It reads and writes the theme through `next-themes`, so it only works inside `ThemeProvider` (which defaults to dark, the system's canonical theme, with light as the secondary theme). Drop it into app chrome (header, settings, footer) when users should be able to override the theme. It takes no props; if you need a different label, layout or a three-way light/dark/system choice, build it from `Switch` or `Select` with `useTheme` directly.
 
+Don't use this for: any other on/off setting (use Switch instead). ThemeToggle only reads and writes the theme.
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---
