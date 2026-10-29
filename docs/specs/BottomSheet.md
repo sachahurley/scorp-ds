@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/BottomSheet` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `2c19d0c0394d5a29` |
+| Last updated | 2026-10-28 |
+| API hash | `a7af1496101f0806` |
 
 ---
 
@@ -56,13 +56,19 @@ Scrim (`--surface-overlay`, full screen) plus the sheet: fixed to the bottom, ce
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `isOpen` | `boolean` | | Yes | Controls visibility. Setting it to `false` plays the slide out before unmounting. |
-| `onClose` | `() => void` | | Yes | Called by the close button, a scrim click and Escape. The parent sets `isOpen` to `false`. |
-| `ariaLabel` | `string` | | Yes | Accessible name for the dialog (there is no visible title). |
+| `open` | `boolean` | | No | Controls visibility; pair with `onOpenChange`. Setting it to `false` plays the slide out before unmounting. Omit for uncontrolled use. |
+| `defaultOpen` | `boolean` | `false` | No | Initial state when `open` is not passed; the sheet then closes itself. |
+| `onOpenChange` | `(open: boolean) => void` | | No | Called with `false` by the close button, a scrim click and Escape. A controlled parent sets `open` to `false` here. |
+| `aria-label` | `string` | | Yes | Accessible name for the dialog (there is no visible title). The type requires it, or the deprecated `ariaLabel`. |
+| `isOpen` | `boolean` | | No | **Deprecated**, use `open`. Still honoured when `open` is not passed; warns once in development. |
+| `onClose` | `() => void` | | No | **Deprecated**, use `onOpenChange`. Still called whenever `onOpenChange(false)` is; warns once in development. |
+| `ariaLabel` | `string` | | No | **Deprecated**, use `aria-label`. Ignored when `aria-label` is passed; warns once in development. |
 | `closeLabel` | `string` | `"Close"` | No | Accessible name for the close button. Override it when several sheets are announced in the same view. |
 | `children` | `ReactNode` | | Yes | Sheet content, usually a list of buttons or links. Scrolls when taller than the sheet. |
 
-Exported type: `BottomSheetProps`.
+When an old and a new name are both passed, the new one wins. Decision 0024.
+
+Exported type: `BottomSheetProps` (a union, so that one of `aria-label` or the deprecated `ariaLabel` is always required).
 
 <!-- AUTO-END:properties -->
 
@@ -97,12 +103,12 @@ Exported type: `BottomSheetProps`.
 
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Closed | `isOpen={false}` after exit | Not rendered |
-| Opening | `isOpen` to `true` | Sheet `slide-in-from-bottom`, scrim `fade-in`, both over `--duration-slow`; focus moves to the sheet |
-| Open | `isOpen` | Body scroll locked; Tab and Shift+Tab trapped inside the sheet |
+| Closed | `open={false}` after exit | Not rendered |
+| Opening | `open` to `true` | Sheet `slide-in-from-bottom`, scrim `fade-in`, both over `--duration-slow`; focus moves to the sheet |
+| Open | `open` | Body scroll locked; Tab and Shift+Tab trapped inside the sheet |
 | Close button hover | Pointer | Icon from `--text-secondary` to `--text-primary` over `--duration-fast` |
 | Close button focus | `:focus-visible` | Inset `--focus-ring-width` ring in `--focus-ring-primary` |
-| Closing | `isOpen` to `false` | `slide-out-to-bottom` / `fade-out` with `fill-mode-forwards`; unmounts on the sheet's `animationend`; focus returns to the invoker |
+| Closing | `open` to `false` | `slide-out-to-bottom` / `fade-out` with `fill-mode-forwards`; unmounts on the sheet's `animationend`; focus returns to the invoker |
 | Overflowing content | Content taller than `70vh` | Content region scrolls and is keyboard focusable |
 
 <!-- AUTO-END:states -->
@@ -163,11 +169,11 @@ Interactive controls: N/A (render function story).
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic role: `role="dialog"`, `aria-modal="true"`, named by `aria-label={ariaLabel}`; scrim and grabber are `aria-hidden`
-- Required labels: `ariaLabel` is required
+- Semantic role: `role="dialog"`, `aria-modal="true"`, named by `aria-label`; scrim and grabber are `aria-hidden`
+- Required labels: `aria-label` is required (the props type enforces it; the deprecated `ariaLabel` still satisfies it)
 - Focus order: once mounted, focus moves to the sheet (`tabIndex={-1}`); on close it returns to the invoker. The close button is the first Tab stop, then the content region (`tabIndex={0}`, for keyboard scrolling), then whatever you render
 - Focus trap: Tab and Shift+Tab cycle within the sheet (`useFocusTrap`), matching the `aria-modal="true"` promise that nothing behind the scrim is reachable
-- Keyboard: Escape calls `onClose`; the close button is reachable by Tab and activated by Enter or Space
+- Keyboard: Escape calls `onOpenChange(false)`; the close button is reachable by Tab and activated by Enter or Space
 - Touch target minimum: met for the close button (44x44 via `h-touch w-touch` on the button box, inside a 44px header band so it never overlaps content). 44x44 still applies to the items you render
 - The grabber is a static seam marker, NOT a drag handle: no drag or swipe gesture exists, so it is `aria-hidden` and every dismissal path is the close button, the scrim, or Escape
 - Color independence: no color-coded meaning
@@ -182,7 +188,7 @@ Interactive controls: N/A (render function story).
 
 - Do use it for short menus and quick actions, and close the sheet when an item is chosen.
 - Do give each item at least a 44px hit area (the story uses `px-3 py-2.5` plate rows).
-- Do write an `ariaLabel` that names the sheet ("Site menu", "Share").
+- Do write an `aria-label` that names the sheet ("Site menu", "Share").
 - Don't use it for confirmations, destructive actions, or multi-step forms (use Modal).
 - Don't imply swipe to dismiss; the grabber is a visual seam marker and there is no drag gesture.
 
@@ -226,6 +232,7 @@ Interactive controls: N/A (render function story).
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | Visible close button (44px target, `closeLabel` prop) in a new header band |
 | Unreleased | 2026-09-22 | fix | Tab and Shift+Tab are trapped inside the sheet |
+| Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `open` / `defaultOpen` / `onOpenChange` replace `isOpen` / `onClose`, and `aria-label` replaces `ariaLabel`. The old props are deprecated aliases that still work and warn once; nothing renders differently |
 
 <!-- AUTO-END:changelog -->
 

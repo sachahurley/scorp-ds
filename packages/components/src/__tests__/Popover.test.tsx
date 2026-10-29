@@ -7,7 +7,8 @@ import { computePosition } from "../lib/position";
 const rect = (top: number, left: number, width: number, height: number) =>
   ({ top, left, width, height, right: left + width, bottom: top + height, x: left, y: top, toJSON: () => ({}) }) as DOMRect;
 
-function Basic(props: Partial<React.ComponentProps<typeof Popover>>) {
+// The naming props are left out: a dialog Popover's type requires a name, and Basic always passes one.
+function Basic(props: Partial<Omit<React.ComponentProps<typeof Popover>, "role" | "aria-label" | "aria-labelledby">>) {
   return (
     <div>
       <button type="button">Outside</button>
@@ -154,5 +155,36 @@ describe("computePosition", () => {
     expect(computePosition({ anchor: nearLeft, floating, viewport, side: "bottom", align: "center" }).left).toBe(8);
     const nearRight = { top: 100, left: 980, width: 20, height: 40 };
     expect(computePosition({ anchor: nearRight, floating, viewport, side: "bottom", align: "start" }).left).toBe(792);
+  });
+});
+
+describe("Popover accessible name (type level)", () => {
+  afterEach(() => cleanup());
+
+  it("requires a name for a dialog panel and not for other roles", () => {
+    const trigger = <button type="button">Open</button>;
+    render(
+      <>
+        {/* @ts-expect-error a dialog (the default role) needs aria-label or aria-labelledby */}
+        <Popover trigger={trigger}>x</Popover>
+        {/* @ts-expect-error an explicit dialog role needs a name too */}
+        <Popover trigger={trigger} role="dialog">
+          x
+        </Popover>
+        <Popover trigger={trigger} aria-label="Named">
+          x
+        </Popover>
+        <Popover trigger={trigger} aria-labelledby="heading-id">
+          x
+        </Popover>
+        <Popover trigger={trigger} role={null}>
+          x
+        </Popover>
+        <Popover trigger={trigger} role="listbox">
+          x
+        </Popover>
+      </>
+    );
+    expect(screen.getAllByRole("button", { name: "Open" })).toHaveLength(6);
   });
 });

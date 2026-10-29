@@ -110,7 +110,7 @@
     },
     {
       "name": "BottomSheetProps",
-      "kind": "interface",
+      "kind": "type",
       "from": "packages/components/src/components/BottomSheet.tsx"
     },
     {
@@ -555,7 +555,7 @@
     },
     {
       "name": "PopoverProps",
-      "kind": "interface",
+      "kind": "type",
       "from": "packages/components/src/components/Popover.tsx"
     },
     {
@@ -1742,7 +1742,7 @@
       "exports": [
         {
           "name": "BottomSheetProps",
-          "kind": "interface"
+          "kind": "type"
         },
         {
           "name": "BottomSheet",
@@ -1753,22 +1753,35 @@
         "BottomSheetProps": {
           "props": [
             {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the sheet is shown. Pass it with `onOpenChange` to control the sheet: set it true to open, and false when `onOpenChange(false)` fires. Omit it (and use `defaultOpen`) for a sheet that manages its own state."
+            },
+            {
+              "name": "defaultOpen",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Initial open state when `open` is not passed (default false). The sheet then closes itself on Escape, the scrim or the close button."
+            },
+            {
+              "name": "onOpenChange",
+              "type": "(open: boolean) => void",
+              "required": false,
+              "description": "Called with `false` when the user dismisses the sheet (close button, scrim click or Escape). Set `open` to false here when the sheet is controlled."
+            },
+            {
               "name": "isOpen",
               "type": "boolean",
-              "required": true,
-              "description": "Controls whether the sheet is visible."
+              "required": false,
+              "deprecated": "Use `open`. Still honoured when `open` is not passed."
             },
             {
               "name": "onClose",
               "type": "() => void",
-              "required": true,
-              "description": "Called when the user dismisses the sheet (close button, scrim click or ESC)."
-            },
-            {
-              "name": "ariaLabel",
-              "type": "string",
-              "required": true,
-              "description": "Accessible name for the sheet dialog."
+              "required": false,
+              "deprecated": "Use `onOpenChange`. Still called whenever `onOpenChange(false)` is."
             },
             {
               "name": "closeLabel",
@@ -1782,11 +1795,23 @@
               "type": "ReactNode",
               "required": true,
               "description": "Sheet content."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": false,
+              "description": "Accessible name announced for the sheet dialog, e.g. \"Site menu\". Required."
+            },
+            {
+              "name": "ariaLabel",
+              "type": "string",
+              "required": false,
+              "deprecated": "Use `aria-label`. Ignored when `aria-label` is passed."
             }
           ]
         }
       },
-      "apiHash": "2c19d0c0394d5a29"
+      "apiHash": "a7af1496101f0806"
     },
     "Breadcrumbs": {
       "layer": "component",
@@ -2783,14 +2808,20 @@
             },
             {
               "name": "align",
-              "type": "\"left\" | \"right\"",
+              "type": "\"start\" | \"end\" | DeprecatedDropdownAlign",
               "required": false,
               "values": [
+                "\"start\"",
+                "\"end\"",
                 "\"left\"",
                 "\"right\""
               ],
-              "default": "\"left\"",
-              "description": "Which trigger edge the menu aligns to. Use `right` near the viewport edge."
+              "deprecatedValues": [
+                "\"left\"",
+                "\"right\""
+              ],
+              "default": "\"start\"",
+              "description": "Which trigger edge the menu lines up with (default \"start\", the leading edge). Use `end` for a trigger at the trailing edge of a row or header, so the menu opens inward. `left` and `right` are deprecated aliases."
             },
             {
               "name": "size",
@@ -2815,7 +2846,7 @@
           ]
         }
       },
-      "apiHash": "6c28f8e39e4de6e7"
+      "apiHash": "f9bcd371417881d7"
     },
     "EmptyState": {
       "layer": "component",
@@ -3604,16 +3635,35 @@
         "ModalProps": {
           "props": [
             {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the dialog is shown. Pass it with `onOpenChange` to control the dialog: set it true to open, and false when `onOpenChange(false)` fires. Omit it (and use `defaultOpen`) for a dialog that manages its own state."
+            },
+            {
+              "name": "defaultOpen",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Initial open state when `open` is not passed (default false). The dialog then closes itself on Escape, the scrim or the close button."
+            },
+            {
+              "name": "onOpenChange",
+              "type": "(open: boolean) => void",
+              "required": false,
+              "description": "Called with `false` when the user asks to close (close button, Escape, or a scrim click). Set `open` to false here when the dialog is controlled."
+            },
+            {
               "name": "isOpen",
               "type": "boolean",
-              "required": true,
-              "description": "Whether the dialog is shown. The parent owns this state: set it true to open, and false from `onClose`."
+              "required": false,
+              "deprecated": "Use `open`. Still honoured when `open` is not passed."
             },
             {
               "name": "onClose",
               "type": "() => void",
-              "required": true,
-              "description": "Called when the user asks to close (close button, Escape, or a scrim click). Set `isOpen` to false here."
+              "required": false,
+              "deprecated": "Use `onOpenChange`. Still called whenever `onOpenChange(false)` is."
             },
             {
               "name": "title",
@@ -3634,11 +3684,22 @@
               "description": "Optional fixed footer for CTAs. Render DS Buttons here (e.g. a secondary \"Cancel\" + primary confirm); actions align to the right on a subtle band."
             },
             {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"full\"",
+              "required": false,
+              "values": [
+                "\"sm\"",
+                "\"md\"",
+                "\"lg\"",
+                "\"full\""
+              ],
+              "description": "Panel width: `sm` (360px) for a short confirmation or notice, `md` (640px) for a compare card or a short form, `lg` (740px, the default when neither `size` nor `width` is passed) for a full task, `full` for the whole viewport width. The panel never grows past the viewport."
+            },
+            {
               "name": "width",
               "type": "number | string",
               "required": false,
-              "default": "740",
-              "description": "Panel width (default 740). Numbers are px; strings pass through (e.g. \"min(320px, 90vw)\"). Small celebratory dialogs want ~320."
+              "deprecated": "Use `size`. Still honoured when `size` is not passed: numbers are px, strings pass through."
             },
             {
               "name": "docked",
@@ -3650,7 +3711,7 @@
           ]
         }
       },
-      "apiHash": "8f6d820f5b9bf8ac"
+      "apiHash": "5969ee1c25f84e2d"
     },
     "Pagination": {
       "layer": "component",
@@ -3798,7 +3859,7 @@
         },
         {
           "name": "PopoverProps",
-          "kind": "interface"
+          "kind": "type"
         },
         {
           "name": "Popover",
@@ -3890,7 +3951,7 @@
               "type": "number",
               "required": false,
               "default": "8",
-              "description": "Gap between anchor and panel in px (default 8, one plate step multiple)."
+              "description": "Gap between anchor and panel, in px (default 8, one plate step multiple)."
             },
             {
               "name": "closeOnOutsideClick",
@@ -3928,25 +3989,6 @@
               "description": "Make the panel at least as wide as the anchor (default false)."
             },
             {
-              "name": "role",
-              "type": "AriaRole | null",
-              "required": false,
-              "default": "\"dialog\"",
-              "description": "ARIA role of the panel (default \"dialog\", a non-modal dialog). Pass `null` when the content carries its own role (a listbox, a menu)."
-            },
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": false,
-              "description": "Accessible name for the panel. Required for `role=\"dialog\"` unless `aria-labelledby` is set."
-            },
-            {
-              "name": "aria-labelledby",
-              "type": "string",
-              "required": false,
-              "description": "Id of a visible heading inside the panel that names it."
-            },
-            {
               "name": "id",
               "type": "string",
               "required": false,
@@ -3976,11 +4018,30 @@
               "type": "string",
               "required": false,
               "description": "Extra classes for the span that wraps `trigger`."
+            },
+            {
+              "name": "role",
+              "type": "Exclude<NamedRole<AriaRole>, \"dialog\"> | null",
+              "required": false,
+              "default": "\"dialog\"",
+              "description": "ARIA role of the panel: \"dialog\" (the default, a non-modal dialog), any other ARIA role, or `null`. A dialog needs a name, and the type requires one: pass `aria-label` or `aria-labelledby`. Pass `null` when the content carries its own role (a listbox, a menu)."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": false,
+              "description": "Accessible name for the panel. Required for `role=\"dialog\"` unless `aria-labelledby` is set."
+            },
+            {
+              "name": "aria-labelledby",
+              "type": "string",
+              "required": false,
+              "description": "Id of a visible heading inside the panel that names it. Required for `role=\"dialog\"` unless `aria-label` is set."
             }
           ]
         }
       },
-      "apiHash": "0910aa8f0004a044"
+      "apiHash": "7060cf292e4a8f11"
     },
     "ProgressBar": {
       "layer": "component",
@@ -5696,6 +5757,30 @@
               "description": "The trigger. Pass one focusable element so keyboard users can open the tooltip and hear it."
             },
             {
+              "name": "side",
+              "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+              "required": false,
+              "values": [
+                "\"top\"",
+                "\"right\"",
+                "\"bottom\"",
+                "\"left\""
+              ],
+              "description": "Preferred side of the trigger (default \"top\"). It flips to the opposite side when this one would overflow the viewport."
+            },
+            {
+              "name": "align",
+              "type": "\"start\" | \"center\" | \"end\"",
+              "required": false,
+              "values": [
+                "\"start\"",
+                "\"center\"",
+                "\"end\""
+              ],
+              "default": "\"center\"",
+              "description": "Where the balloon sits along the trigger edge (default \"center\"). `start` and `end` line its leading or trailing edge up with the trigger's, for a trigger at the edge of a row; the caret still points at the trigger."
+            },
+            {
               "name": "position",
               "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
               "required": false,
@@ -5705,22 +5790,21 @@
                 "\"left\"",
                 "\"right\""
               ],
-              "default": "\"top\"",
-              "description": "Preferred side of the trigger (default: \"top\"). It flips to the opposite side when this one would overflow the viewport."
+              "deprecated": "Use `side`. Still honoured when `side` is not passed."
             },
             {
               "name": "delay",
               "type": "number",
               "required": false,
               "default": "200",
-              "description": "Milliseconds before showing on hover or focus (default: 200)."
+              "description": "Delay in milliseconds before showing on hover or focus (default 200). Hiding is immediate."
             },
             {
               "name": "maxWidth",
               "type": "string",
               "required": false,
               "default": "\"200px\"",
-              "description": "Max width of the balloon, any CSS length (default: \"200px\")."
+              "description": "Max width of the balloon, any CSS length (default \"200px\"); text wraps inside it. This stays a free CSS length because no token describes a reading width: the spacing scale stops at 96px and the breakpoints are page widths. Widen it for a long hint rather than shortening the copy."
             },
             {
               "name": "className",
@@ -5732,7 +5816,7 @@
           ]
         }
       },
-      "apiHash": "620dadbe0afcd167"
+      "apiHash": "605caa2136e4605d"
     },
     "TreeView": {
       "layer": "component",

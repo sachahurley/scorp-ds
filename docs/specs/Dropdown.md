@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/Dropdown` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `6c28f8e39e4de6e7` |
+| Last updated | 2026-10-28 |
+| API hash | `f9bcd371417881d7` |
 
 ---
 
@@ -40,8 +40,9 @@ A `relative inline-block` wrapper containing the trigger and, when open, the men
 |-----------|-------------|
 | Item `default` | Primary text, `--surface-muted` hover; the keyboard highlight adds `--accent` text. |
 | Item `destructive` | `error-600` text, `--field-background-error` hover and keyboard highlight (it keeps its red text). |
-| `align="left"` (default) | Menu aligned to the trigger's left edge. |
-| `align="right"` | Menu aligned to the trigger's right edge. |
+| `align="start"` (default) | Menu aligned to the trigger's leading (left) edge. |
+| `align="end"` | Menu aligned to the trigger's trailing (right) edge. |
+| `align="left"` / `"right"` (deprecated) | Aliases of `start` / `end`; still work and warn once in development. |
 
 ### Sizes
 
@@ -69,7 +70,7 @@ Size affects the default trigger and item icon boxes only; items are always `px-
 | `items` | `DropdownItem[]` | none | Yes | Menu entries, in order. |
 | `trigger` | `ReactNode` | default button | No | Custom trigger. A valid React element is cloned and the toggle handler, `aria-haspopup` and `aria-expanded` are attached to it, so pass something focusable (a `Button`). Its own `onClick` still runs. Anything that is not an element (a string, an array) falls back to a `div` with `role="button"` and `tabIndex=0` that toggles on click, Enter, or Space. |
 | `label` | `string` | `"Actions"` | No | Text of the default trigger button (and its accessible name). Ignored with a custom `trigger`. |
-| `align` | `"left" \| "right"` | `"left"` | No | Which trigger edge the menu aligns to. Use `right` near the right edge of the viewport. |
+| `align` | `"start" \| "end" \| "left" \| "right"` | `"start"` | No | Which trigger edge the menu lines up with. Use `end` for a trigger at the trailing edge of a row or header. `left` and `right` are deprecated aliases of `start` and `end` (decision 0024). |
 | `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Default trigger height and item icon size. Legacy names are deprecated. |
 
 Dropdown does not forward refs, `className`, or native attributes.
@@ -129,7 +130,7 @@ Dropdown does not forward refs, `className`, or native attributes.
 | Item keyboard highlight | arrow keys | `--surface-muted` fill plus `--accent` text (destructive keeps `error-600` on `--field-background-error`); the index is a raw `items` index, so the highlighted row is the row Enter activates |
 | Item destructive | `variant: "destructive"` | `error-600` text |
 | Item disabled | `disabled: true` | `opacity-50`, `cursor-not-allowed` |
-| Align | `align` | `left-0` or `right-0` on the menu |
+| Align | `align` | `start-0` or `end-0` (logical insets, identical to `left-0` / `right-0` in left-to-right text) on the menu |
 | Closed by Tab | `Tab` while open | Menu unmounts, focus moves on normally |
 
 <!-- AUTO-END:states -->
@@ -144,7 +145,7 @@ Dropdown does not forward refs, `className`, or native attributes.
 |----------------|---------|--------------|-------|
 | Default trigger, md | Yes | Yes | `Default` |
 | Destructive item | Yes | Yes | `Default`, `AlignRight` |
-| align right | Yes | Yes | `AlignRight` |
+| align end | Yes | Yes | `AlignRight` (shown as "Align: end"; the export name keeps the story id and baseline) |
 | sm size | Yes | Yes | `Small` |
 | lg size | Yes | Controls only | |
 | Item icons (`icon`, `iconRight`) | Yes | Yes | `Disabled item` (iconRight) |
@@ -210,7 +211,7 @@ Interactive controls: `align`, `size` on each story.
 
 - Do keep menus short (about seven items or fewer) and put destructive items last.
 - Do write item labels as verbs ("Duplicate", "Delete project").
-- Do use `align="right"` for triggers at the right edge of a row or header.
+- Do use `align="end"` for triggers at the right edge of a row or header.
 - Don't use Dropdown to pick a form value; use `Select`.
 - Don't hide the only way to do a primary action inside a Dropdown.
 - Do pass a focusable control (a `Button`) as a custom `trigger`: it is cloned, not wrapped, so there is one control and one tab stop.
@@ -260,6 +261,7 @@ Interactive controls: `align`, `size` on each story.
 | Unreleased | 2026-09-21 | feat | Trigger arrow uses the 1-bit ChevronDown icon |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | `type="button"` on trigger and items, one raw-index keyboard model that skips disabled items, Tab closes the menu, custom element triggers are cloned instead of double-wrapped, menu uses `--z-index-dropdown` and `min-w-52`, highlight moved to `--surface-muted` + `--accent`, stale "Unicode" comments removed, first tests added |
+| Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `align` takes `start \| end` (default `start`); `left` and `right` are deprecated values behind a `@deprecated` alias type, still work and warn once. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

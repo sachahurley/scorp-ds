@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/Popover` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `0910aa8f0004a044` |
+| Last updated | 2026-10-28 |
+| API hash | `7060cf292e4a8f11` |
 
 ---
 
@@ -66,14 +66,14 @@ Don't use this for: short hints (Tooltip), action lists (Dropdown), blocking tas
 | `anchorRef` | `RefObject<HTMLElement>` |  | No | Position against your own element instead of trigger |
 | `side` | `PopoverSide` | `"bottom"` | No | Preferred side |
 | `align` | `PopoverAlign` | `"start"` | No | Cross-axis alignment |
-| `offset` | `number` | `8` | No | Gap in px |
+| `offset` | `number` | `8` | No | Gap between anchor and panel, in px |
 | `closeOnOutsideClick` | `boolean` | `true` | No | Close on outside press |
 | `closeOnEscape` | `boolean` | `true` | No | Close on Escape |
 | `autoFocus` | `boolean` | `true` | No | Focus first focusable (or the panel) on open |
 | `returnFocus` | `boolean` | `true` | No | Return focus to trigger on Escape / trigger close |
 | `matchAnchorWidth` | `boolean` | `false` | No | Min width equals anchor width |
-| `role` | `AriaRole | null` | `"dialog"` | No | Panel role; null when content has its own |
-| `aria-label / aria-labelledby` | `string` |  | For dialog | Panel name |
+| `role` | `"dialog"`, any other ARIA role, or `null` | `"dialog"` | No | Panel role; `null` when content has its own (a listbox, a menu) |
+| `aria-label / aria-labelledby` | `string` |  | For dialog | Panel name. When the role is `"dialog"` (the default) the props type requires one of the two, so a nameless dialog does not compile |
 | `portal` | `boolean` | `false` | No | Render into document.body (needed inside plate-clipped containers) |
 | `className / contentClassName` | `string` |  | No | Ring / fill classes; fill defaults to p-4 |
 
@@ -161,7 +161,7 @@ lib/position.ts, lib/use-anchored-position.ts, lib/use-controllable-state.ts
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: role="dialog" (non-modal) by default
-- Required labels: aria-label or aria-labelledby on the panel
+- Required labels: aria-label or aria-labelledby on the panel; enforced by the type when the role is dialog (`PopoverProps` is a union: a dialog branch per naming prop, plus a branch for every other role and `null`)
 - Focus order: Trigger, then panel content in DOM order; Escape returns focus to trigger
 - Touch target minimum: Trigger owns the target size (Button meets 44px via its hit area)
 - Color independence: N/A
@@ -210,6 +210,7 @@ lib/position.ts, lib/use-anchored-position.ts, lib/use-controllable-state.ts
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial Popover component, story, and unit tests |
+| Unreleased | 2026-10-28 | change | `PopoverProps` is now a union that requires `aria-label` or `aria-labelledby` when the panel is a dialog (the default role); `role` takes the named ARIA roles or `null` (decision 0024). Runtime unchanged |
 
 <!-- AUTO-END:changelog -->
 
