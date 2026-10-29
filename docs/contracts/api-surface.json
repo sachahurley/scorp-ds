@@ -5497,6 +5497,19 @@
               "description": "Type-ahead on printable keys (default true)."
             },
             {
+              "name": "loading",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Set while the nodes are on their way: three Skeleton rows replace the nodes and the tree gets `aria-busy` until it is false again. Wins over `emptyState`."
+            },
+            {
+              "name": "emptyState",
+              "type": "ReactNode",
+              "required": false,
+              "description": "What to show when `nodes` is empty: a sentence, or an `EmptyState size=\"sm\"` with `titleAs=\"p\"`. It renders in place of the tree, in a `role=\"group\"` carrying the tree's name. Without it an empty tree renders nothing. Ignored while `loading`."
+            },
+            {
               "name": "className",
               "type": "string",
               "required": false,
@@ -5505,7 +5518,7 @@
           ]
         }
       },
-      "apiHash": "7a14b026477469f7"
+      "apiHash": "e68f0d1f6c81ab7b"
     },
     "TuiIcon": {
       "layer": "component",
