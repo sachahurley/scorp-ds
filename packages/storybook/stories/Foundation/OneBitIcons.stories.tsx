@@ -145,7 +145,7 @@ function OneBitIconsPage() {
 }
 
 const meta: Meta = {
-  title: 'Foundation/1-bit icons',
+  title: 'Foundation/OneBitIcons',
   component: OneBitIconsPage,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },

@@ -258,7 +258,7 @@ function ZIndexPage() {
 }
 
 const meta: Meta = {
-  title: 'Foundation/Z-index',
+  title: 'Foundation/ZIndex',
   component: ZIndexPage,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },

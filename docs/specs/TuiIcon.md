@@ -141,7 +141,7 @@ Each size also sets a text size (`text-xs` to `text-2xl`) that only applies to t
 | Single icon | Yes | Yes | `Check` (size 4), `ChevronDown` (size 5) |
 | Sizes 3 / 4 / 5 / 6 / 8 | Yes | Yes | `Size scale` |
 | Common set | Yes | Yes | `Common glyphs` (7 names) |
-| Full catalog (all 52 names, glyphs, code points) | Yes | Yes | `Foundation/1-bit icons` > `Catalog` |
+| Full catalog (all 52 names, glyphs, code points) | Yes | Yes | `Foundation/OneBitIcons` > `Catalog` |
 | Unknown-name fallback `?` | Yes | No | |
 
 Interactive controls: `name` (text), `size` (select) on the arg-driven stories.
@@ -222,7 +222,7 @@ Imported by `Alert`, `Badge`, `Checkbox` (`Check`, `Minus`), `Dropdown`, `Link`,
 
 - `Button` centers React-element icons in a 16/20/24px box (sm/md/lg) but does not resize them; TuiIcon keeps its own `size` (16px by default), so the glyph stays 16px unless you pass a larger size.
 - Use size `"3"` for inline suffixes next to `text-sm` / `text-base` text (`Link` external glyph, `ListRow` `titleSuffix`).
-- To add an icon: add the Lucide-style key and Unicode text form to `TUI_ICON_GLYPHS`, a 7x7 bitmap to `TUI_ICON_BITMAPS` (the `Record` type forces it), add the code point to the Scorp Symbols build if the glyph is new, then run `npm run audit:glyphs`. New names appear in the `Foundation/1-bit icons` catalog automatically.
+- To add an icon: add the Lucide-style key and Unicode text form to `TUI_ICON_GLYPHS`, a 7x7 bitmap to `TUI_ICON_BITMAPS` (the `Record` type forces it), add the code point to the Scorp Symbols build if the glyph is new, then run `npm run audit:glyphs`. New names appear in the `Foundation/OneBitIcons` catalog automatically.
 
 <!-- /HUMAN-SECTION:composition -->
 

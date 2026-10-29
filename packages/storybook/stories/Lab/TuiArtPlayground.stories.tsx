@@ -218,7 +218,7 @@ function TuiArtPlaygroundPage() {
 }
 
 const meta: Meta = {
-  title: 'Lab/Tui art playground',
+  title: 'Lab/TuiArtPlayground',
   component: TuiArtPlaygroundPage,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },

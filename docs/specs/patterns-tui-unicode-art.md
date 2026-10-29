@@ -2,17 +2,17 @@
 
 > Maintained with `/update-spec`. The repo copy is the only copy: human-written sections are preserved across updates.
 
-String utilities and conventions, not a single React component. Package: `@scorp-ds/tui-art` · Story: `Lab/Tui art playground` · Icons: `Foundation/1-bit icons` + `TuiIcon`.
+String utilities and conventions, not a single React component. Package: `@scorp-ds/tui-art` · Story: `Lab/TuiArtPlayground` · Icons: `Foundation/OneBitIcons` + `TuiIcon`.
 
 ## Status
 
 | Field | Value |
 |-------|-------|
-| Pattern | `Lab/Tui art playground` (package `@scorp-ds/tui-art`, no React) |
+| Pattern | `Lab/TuiArtPlayground` (package `@scorp-ds/tui-art`, no React) |
 | Layer | `pattern` |
 | Category | `Lab` |
 | File | `packages/tui-art/src/index.ts` (plus `box.ts`, `frame.ts`, `row.ts`, `text.ts`, `ranges.ts`, `cli.ts`) |
-| Story | `Lab/Tui art playground` |
+| Story | `Lab/TuiArtPlayground` |
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-09-22 |
@@ -79,8 +79,8 @@ Optional: `npm run tui-art -- frame @path/to/file.txt` reads lines from a file (
 
 ## Storybook
 
-- **Foundation / 1-bit icons**: full `TuiIcon` registry plus a static line-art sample.
-- **Lab / Tui art playground**: live `frameBox` and `formatTableRow` preview with title, body, width, style and dense controls.
+- **Foundation / OneBitIcons**: full `TuiIcon` registry plus a static line-art sample.
+- **Lab / TuiArtPlayground**: live `frameBox` and `formatTableRow` preview with title, body, width, style and dense controls.
 - **Tests:** `packages/tui-art/src/frame.test.ts` and `row.test.ts`.
 
 ---
