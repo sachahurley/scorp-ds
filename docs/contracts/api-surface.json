@@ -110,7 +110,7 @@
     },
     {
       "name": "BottomSheetProps",
-      "kind": "type",
+      "kind": "interface",
       "from": "packages/components/src/components/BottomSheet.tsx"
     },
     {
@@ -310,11 +310,6 @@
     },
     {
       "name": "ControlSize",
-      "kind": "type",
-      "from": "packages/components/src/lib/size.ts"
-    },
-    {
-      "name": "ControlSizeProp",
       "kind": "type",
       "from": "packages/components/src/lib/size.ts"
     },
@@ -899,11 +894,6 @@
       "from": "packages/components/src/components/Toast.tsx"
     },
     {
-      "name": "ToastVariant",
-      "kind": "type",
-      "from": "packages/components/src/components/Toast.tsx"
-    },
-    {
       "name": "Tooltip",
       "kind": "component",
       "from": "packages/components/src/components/Tooltip.tsx"
@@ -1347,21 +1337,8 @@
                 "\"warning\"",
                 "\"error\""
               ],
+              "default": "\"neutral\"",
               "description": "Severity: picks the colour set and the 1-bit severity icon. Default: \"neutral\"."
-            },
-            {
-              "name": "variant",
-              "type": "\"default\" | \"success\" | \"warning\" | \"error\" | \"info\"",
-              "required": false,
-              "values": [
-                "\"default\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"info\""
-              ],
-              "deprecated": "Use `tone`.",
-              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "title",
@@ -1388,13 +1365,6 @@
               "description": "Adds a dismiss control (44px hit area) and is called when it is pressed."
             },
             {
-              "name": "onClose",
-              "type": "() => void",
-              "required": false,
-              "deprecated": "Use `onDismiss`.",
-              "description": "Dismiss callback under its old name. When both are set, `onDismiss` wins."
-            },
-            {
               "name": "dismissLabel",
               "type": "string",
               "required": false,
@@ -1411,7 +1381,7 @@
           ]
         }
       },
-      "apiHash": "abd348e77da29b7e"
+      "apiHash": "03cf4240f4d95486"
     },
     "AppHeader": {
       "layer": "component",
@@ -1550,24 +1520,16 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp | \"xl\"",
+              "type": "ControlSize | \"xl\"",
               "required": false,
               "values": [
                 "\"xl\"",
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. Legacy names are deprecated aliases."
+              "description": "Diameter: sm 24px, md 40px (default), lg 64px, xl 96px."
             },
             {
               "name": "status",
@@ -1596,7 +1558,7 @@
           ]
         }
       },
-      "apiHash": "67f97c72b58c2206"
+      "apiHash": "b0d20ad04fc99fd1"
     },
     "Badge": {
       "layer": "component",
@@ -1644,43 +1606,20 @@
                 "\"primary\"",
                 "\"bone\""
               ],
+              "default": "\"neutral\"",
               "description": "Colour role. Pair a semantic role with text that says the same thing, since colour alone is not enough; `bone` is a fixed tint that never follows the theme. Default: \"neutral\"."
             },
             {
-              "name": "variant",
-              "type": "\"default\" | \"primary\" | \"success\" | \"warning\" | \"error\" | \"info\" | \"bone\"",
-              "required": false,
-              "values": [
-                "\"default\"",
-                "\"primary\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"info\"",
-                "\"bone\""
-              ],
-              "deprecated": "Use `tone`.",
-              "description": "Colour role under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
-            },
-            {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Badge height: sm 20px, md 24px (default), lg 28px. Legacy names are deprecated aliases."
+              "description": "Badge height: sm 20px, md 24px (default), lg 28px."
             },
             {
               "name": "caps",
@@ -1715,24 +1654,10 @@
               "description": "Adds a remove (x) button that calls this when pressed. Use it for filter chips and tags the user can clear."
             },
             {
-              "name": "onClose",
-              "type": "() => void",
-              "required": false,
-              "deprecated": "Use `onDismiss`.",
-              "description": "Remove callback under its old name. When both are set, `onDismiss` wins."
-            },
-            {
               "name": "dismissLabel",
               "type": "string",
               "required": false,
               "description": "Accessible name for the remove button. Defaults to `Remove {children}` when the badge label is a plain string (so a list of filter chips reads as \"Remove Draft\", \"Remove Archived\"), and to \"Remove badge\" otherwise. Pass it explicitly whenever the label alone does not identify what is removed."
-            },
-            {
-              "name": "onCloseLabel",
-              "type": "string",
-              "required": false,
-              "deprecated": "Use `dismissLabel`.",
-              "description": "Remove button name under its old name. When both are set, `dismissLabel` wins."
             },
             {
               "name": "className",
@@ -1744,7 +1669,7 @@
           ]
         }
       },
-      "apiHash": "b0c2582df5878004"
+      "apiHash": "32b4cf7afd092142"
     },
     "BottomSheet": {
       "layer": "component",
@@ -1754,7 +1679,7 @@
       "exports": [
         {
           "name": "BottomSheetProps",
-          "kind": "type"
+          "kind": "interface"
         },
         {
           "name": "BottomSheet",
@@ -1784,18 +1709,6 @@
               "description": "Called with `false` when the user dismisses the sheet (close button, scrim click or Escape). Set `open` to false here when the sheet is controlled."
             },
             {
-              "name": "isOpen",
-              "type": "boolean",
-              "required": false,
-              "deprecated": "Use `open`. Still honoured when `open` is not passed."
-            },
-            {
-              "name": "onClose",
-              "type": "() => void",
-              "required": false,
-              "deprecated": "Use `onOpenChange`. Still called whenever `onOpenChange(false)` is."
-            },
-            {
               "name": "closeLabel",
               "type": "string",
               "required": false,
@@ -1811,19 +1724,13 @@
             {
               "name": "aria-label",
               "type": "string",
-              "required": false,
+              "required": true,
               "description": "Accessible name announced for the sheet dialog, e.g. \"Site menu\". Required."
-            },
-            {
-              "name": "ariaLabel",
-              "type": "string",
-              "required": false,
-              "deprecated": "Use `aria-label`. Ignored when `aria-label` is passed."
             }
           ]
         }
       },
-      "apiHash": "a7af1496101f0806"
+      "apiHash": "a096c3596c999823"
     },
     "Breadcrumbs": {
       "layer": "component",
@@ -1967,25 +1874,15 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp | DeprecatedButtonSize",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\"",
-                "\"icon\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\"",
-                "\"icon\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Height: sm 32px, md 40px (default), lg 48px, from the control-height tokens. Legacy small/medium/large still work (deprecated). Icon-only buttons are squared automatically. `\"icon\"` is deprecated: use \"md\"."
+              "description": "Height: sm 32px, md 40px (default), lg 48px, from the control-height tokens. Icon-only buttons are squared automatically."
             },
             {
               "name": "disabled",
@@ -2040,7 +1937,7 @@
           ]
         }
       },
-      "apiHash": "1c0b0142028f0d69"
+      "apiHash": "a495c5d46fe08c6e"
     },
     "Card": {
       "layer": "component",
@@ -2108,7 +2005,8 @@
                 "\"block\"",
                 "\"flex\""
               ],
-              "description": "Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. Pass it explicitly: when it is omitted, a standalone `flex` class in `className` still switches the card to `flex` (legacy behaviour), and that inference logs a one-time development warning asking for `layout=\"flex\"`."
+              "default": "\"block\"",
+              "description": "Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. A `flex` class in `className` does not switch the layout: pass `layout=\"flex\"`."
             },
             {
               "name": "className",
@@ -2120,7 +2018,7 @@
           ]
         }
       },
-      "apiHash": "94c2c8f3fbb456ea"
+      "apiHash": "49a004d38d2f7a7f"
     },
     "CaseStudy": {
       "layer": "component",
@@ -2356,20 +2254,12 @@
           "props": [
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
               "description": "Box size. The tap target is 44×44px at every size."
@@ -2421,7 +2311,7 @@
           ]
         }
       },
-      "apiHash": "e7d0557036a9f901"
+      "apiHash": "7fed86b9cfc4023a"
     },
     "Combobox": {
       "layer": "component",
@@ -2521,20 +2411,12 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
               "description": "Field height: sm 32px, md 40px (default), lg 48px."
@@ -2587,7 +2469,7 @@
           ]
         }
       },
-      "apiHash": "e136982a2a63a51f"
+      "apiHash": "b5b954feeddab44e"
     },
     "DescriptionList": {
       "layer": "component",
@@ -2694,6 +2576,7 @@
                 "\"horizontal\"",
                 "\"vertical\""
               ],
+              "default": "\"horizontal\"",
               "description": "`horizontal` (default) for a full-width rule between stacked blocks; `vertical` for a full-height rule between items in a row (the parent needs a height)."
             },
             {
@@ -2703,42 +2586,17 @@
               "description": "Centred label on a horizontal rule (\"or\", a section name), drawn between box-drawing runs. Passing it gives the labelled form; a string label is also the separator's accessible name. Ignored when `orientation` is `vertical`."
             },
             {
-              "name": "variant",
-              "type": "\"horizontal\" | \"vertical\" | \"withText\"",
-              "required": false,
-              "values": [
-                "\"horizontal\"",
-                "\"vertical\"",
-                "\"withText\""
-              ],
-              "deprecated": "Use `orientation`, and `label` for the labelled form (`withText`). `horizontal` and `vertical` map onto `orientation`; `withText` is a horizontal rule that shows `text`. `orientation` and `label` win when both forms are passed."
-            },
-            {
-              "name": "text",
-              "type": "ReactNode",
-              "required": false,
-              "deprecated": "Use `label`. Shown only with `variant=\"withText\"`; `label` wins when both are passed."
-            },
-            {
               "name": "spacing",
-              "type": "\"none\" | ControlSizeProp",
+              "type": "\"none\" | ControlSize",
               "required": false,
               "values": [
                 "\"none\"",
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Margin around the rule: none, sm 4px, md 16px (default), lg 32px. Above and below a horizontal rule (labelled or not), either side of a vertical one. Legacy names are deprecated aliases."
+              "description": "Margin around the rule: none, sm 4px, md 16px (default), lg 32px. Above and below a horizontal rule (labelled or not), either side of a vertical one."
             },
             {
               "name": "className",
@@ -2750,7 +2608,7 @@
           ]
         }
       },
-      "apiHash": "049bc86a9acdcce7"
+      "apiHash": "05ac33e012d192f9"
     },
     "Dropdown": {
       "layer": "component",
@@ -2840,45 +2698,31 @@
             },
             {
               "name": "align",
-              "type": "\"start\" | \"end\" | DeprecatedDropdownAlign",
+              "type": "\"start\" | \"end\"",
               "required": false,
               "values": [
                 "\"start\"",
-                "\"end\"",
-                "\"left\"",
-                "\"right\""
-              ],
-              "deprecatedValues": [
-                "\"left\"",
-                "\"right\""
+                "\"end\""
               ],
               "default": "\"start\"",
-              "description": "Which trigger edge the menu lines up with (default \"start\", the leading edge). Use `end` for a trigger at the trailing edge of a row or header, so the menu opens inward. `left` and `right` are deprecated aliases."
+              "description": "Which trigger edge the menu lines up with (default \"start\", the leading edge). Use `end` for a trigger at the trailing edge of a row or header, so the menu opens inward."
             },
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Trigger height, matching Button/Input: sm, md (default), lg. Legacy names are deprecated aliases."
+              "description": "Trigger height, matching Button/Input: sm, md (default), lg."
             }
           ]
         }
       },
-      "apiHash": "e2721aa4cdda703d"
+      "apiHash": "e25c44b778dfe29b"
     },
     "EmptyState": {
       "layer": "component",
@@ -3023,23 +2867,15 @@
           "props": [
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Field height: sm 32px, md 40px (default), lg 48px. Legacy small/medium/large are deprecated aliases."
+              "description": "Field height: sm 32px, md 40px (default), lg 48px."
             },
             {
               "name": "variant",
@@ -3086,7 +2922,7 @@
           ]
         }
       },
-      "apiHash": "7e500be69eee7212"
+      "apiHash": "467d55214352a268"
     },
     "Kbd": {
       "layer": "component",
@@ -3120,17 +2956,11 @@
             },
             {
               "name": "size",
-              "type": "Extract<ControlSizeProp, \"sm\" | \"md\" | \"small\" | \"medium\">",
+              "type": "Extract<ControlSize, \"sm\" | \"md\">",
               "required": false,
               "values": [
                 "\"sm\"",
-                "\"md\"",
-                "\"small\"",
-                "\"medium\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\""
+                "\"md\""
               ],
               "default": "\"sm\"",
               "description": "Key size: sm 20px (default) or md 24px."
@@ -3151,7 +2981,7 @@
           ]
         }
       },
-      "apiHash": "6658e73daaac639a"
+      "apiHash": "455d8d8ede90f344"
     },
     "Link": {
       "layer": "component",
@@ -3351,7 +3181,6 @@
             "\"info\"",
             "\"warning\"",
             "\"error\"",
-            "\"warn\"",
             "\"debug\""
           ]
         },
@@ -3377,11 +3206,7 @@
                 "\"info\"",
                 "\"warning\"",
                 "\"error\"",
-                "\"warn\"",
                 "\"debug\""
-              ],
-              "deprecatedValues": [
-                "\"warn\""
               ],
               "description": "Severity. Lines without a level render no tag."
             },
@@ -3457,7 +3282,7 @@
           ]
         }
       },
-      "apiHash": "6daa84d25c351dc9"
+      "apiHash": "e52d07cbe79940ba"
     },
     "Meter": {
       "layer": "component",
@@ -3568,17 +3393,11 @@
             },
             {
               "name": "size",
-              "type": "Extract<ControlSizeProp, \"sm\" | \"md\" | \"small\" | \"medium\">",
+              "type": "Extract<ControlSize, \"sm\" | \"md\">",
               "required": false,
               "values": [
                 "\"sm\"",
-                "\"md\"",
-                "\"small\"",
-                "\"medium\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\""
+                "\"md\""
               ],
               "default": "\"md\"",
               "description": "Block height: sm 8px, md 12px (default)."
@@ -3592,7 +3411,7 @@
           ]
         }
       },
-      "apiHash": "36bbb103e2f4c636"
+      "apiHash": "f800093b823cf880"
     },
     "Modal": {
       "layer": "component",
@@ -3630,18 +3449,6 @@
               "type": "(open: boolean) => void",
               "required": false,
               "description": "Called with `false` when the user asks to close (close button, Escape, or a scrim click). Set `open` to false here when the dialog is controlled."
-            },
-            {
-              "name": "isOpen",
-              "type": "boolean",
-              "required": false,
-              "deprecated": "Use `open`. Still honoured when `open` is not passed."
-            },
-            {
-              "name": "onClose",
-              "type": "() => void",
-              "required": false,
-              "deprecated": "Use `onOpenChange`. Still called whenever `onOpenChange(false)` is."
             },
             {
               "name": "title",
@@ -3689,7 +3496,7 @@
           ]
         }
       },
-      "apiHash": "5969ee1c25f84e2d"
+      "apiHash": "818f02381340ff68"
     },
     "Pagination": {
       "layer": "component",
@@ -3758,20 +3565,12 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
               "description": "Plate height from the Button scale: sm 32px, md 40px (default), lg 48px. Hit areas stay 44px or more."
@@ -3819,7 +3618,7 @@
           ]
         }
       },
-      "apiHash": "e940d7d5c3844f0a"
+      "apiHash": "3c6402add0a5159f"
     },
     "Popover": {
       "layer": "component",
@@ -4088,20 +3887,12 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
               "description": "Track thickness: sm, md (default), lg."
@@ -4118,20 +3909,8 @@
                 "\"error\"",
                 "\"primary\""
               ],
+              "default": "\"primary\"",
               "description": "Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error."
-            },
-            {
-              "name": "variant",
-              "type": "\"primary\" | \"success\" | \"warning\" | \"error\"",
-              "required": false,
-              "values": [
-                "\"primary\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\""
-              ],
-              "deprecated": "Use `tone`.",
-              "description": "Fill colour under its old name. When both are set, `tone` wins."
             },
             {
               "name": "segments",
@@ -4149,7 +3928,7 @@
           ]
         }
       },
-      "apiHash": "ae1377fccc1ef7bb"
+      "apiHash": "7153a12f4c4c0039"
     },
     "Radio": {
       "layer": "component",
@@ -4171,20 +3950,12 @@
           "props": [
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
               "description": "Box size: sm 16px, md 20px (default), lg 24px. The tap target is 44×44px at every size."
@@ -4229,7 +4000,7 @@
           ]
         }
       },
-      "apiHash": "1644dd9933fcf583"
+      "apiHash": "c5dcfc971c7b208c"
     },
     "Select": {
       "layer": "component",
@@ -4257,23 +4028,15 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Trigger height: sm 32px, md 40px (default), lg 48px. Legacy names are deprecated aliases."
+              "description": "Trigger height: sm 32px, md 40px (default), lg 48px."
             },
             {
               "name": "error",
@@ -4303,7 +4066,7 @@
           ]
         }
       },
-      "apiHash": "65dfd5b76166695c"
+      "apiHash": "a6b550477a65af49"
     },
     "SideNav": {
       "layer": "component",
@@ -4513,23 +4276,15 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Avatar square size: sm 32px, md 40px (default), lg 48px (control heights). Only the `avatar` variant reads it: `text` and `rect` ignore it, so size those with `lines` and `className`. Legacy small/medium/large are deprecated aliases."
+              "description": "Avatar square size: sm 32px, md 40px (default), lg 48px (control heights). Only the `avatar` variant reads it: `text` and `rect` ignore it, so size those with `lines` and `className`."
             },
             {
               "name": "animated",
@@ -4547,7 +4302,7 @@
           ]
         }
       },
-      "apiHash": "21b3906bc6330462"
+      "apiHash": "f99cf0bdd05a253f"
     },
     "Slider": {
       "layer": "component",
@@ -4616,20 +4371,12 @@
           "props": [
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
               "description": "Box size: sm 12px (inline, 32px controls), md 16px (default), lg 24px (48px controls, empty states)."
@@ -4650,7 +4397,7 @@
           ]
         }
       },
-      "apiHash": "58a1eff407e1af12"
+      "apiHash": "7e089aa1de2e3839"
     },
     "StatusLine": {
       "layer": "component",
@@ -4810,20 +4557,12 @@
             },
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
               "description": "Track size. The tap target is at least 44px tall at every size."
@@ -4875,7 +4614,7 @@
           ]
         }
       },
-      "apiHash": "36196ba7fc1c6767"
+      "apiHash": "6f40dd69ae0527ad"
     },
     "Table": {
       "layer": "component",
@@ -5229,23 +4968,15 @@
           "props": [
             {
               "name": "size",
-              "type": "ControlSizeProp",
+              "type": "ControlSize",
               "required": false,
               "values": [
                 "\"sm\"",
                 "\"md\"",
-                "\"lg\"",
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
-              ],
-              "deprecatedValues": [
-                "\"small\"",
-                "\"medium\"",
-                "\"large\""
+                "\"lg\""
               ],
               "default": "\"md\"",
-              "description": "Minimum height and padding: sm, md (default), lg, matching Input. Legacy names are deprecated aliases."
+              "description": "Minimum height and padding: sm, md (default), lg, matching Input."
             },
             {
               "name": "error",
@@ -5281,7 +5012,7 @@
           ]
         }
       },
-      "apiHash": "e6c807a63c893a0d"
+      "apiHash": "4f235131fe4c2317"
     },
     "ThemeToggle": {
       "layer": "component",
@@ -5305,10 +5036,6 @@
       "exports": [
         {
           "name": "ToastTone",
-          "kind": "type"
-        },
-        {
-          "name": "ToastVariant",
           "kind": "type"
         },
         {
@@ -5362,15 +5089,6 @@
             "\"error\""
           ]
         },
-        "ToastVariant": {
-          "union": [
-            "\"info\"",
-            "\"success\"",
-            "\"warning\"",
-            "\"error\"",
-            "\"default\""
-          ]
-        },
         "ToastAction": {
           "props": [
             {
@@ -5412,28 +5130,8 @@
                 "\"warning\"",
                 "\"error\""
               ],
+              "default": "\"neutral\"",
               "description": "Severity (default: \"neutral\"). \"error\" is announced assertively."
-            },
-            {
-              "name": "variant",
-              "type": "ToastVariant",
-              "required": false,
-              "values": [
-                "\"info\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"default\""
-              ],
-              "deprecatedValues": [
-                "\"info\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"default\""
-              ],
-              "deprecated": "Use `tone`.",
-              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "action",
@@ -5484,28 +5182,8 @@
                 "\"warning\"",
                 "\"error\""
               ],
+              "default": "\"neutral\"",
               "description": "Severity (default: \"neutral\"): icon, colors, and `role` (error = alert)."
-            },
-            {
-              "name": "variant",
-              "type": "ToastVariant",
-              "required": false,
-              "values": [
-                "\"info\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"default\""
-              ],
-              "deprecatedValues": [
-                "\"info\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"default\""
-              ],
-              "deprecated": "Use `tone`.",
-              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "action",
@@ -5552,28 +5230,8 @@
                 "\"warning\"",
                 "\"error\""
               ],
+              "default": "\"neutral\"",
               "description": "Severity (default: \"neutral\"). The `toast.success()` style helpers set it for you."
-            },
-            {
-              "name": "variant",
-              "type": "ToastVariant",
-              "required": false,
-              "values": [
-                "\"info\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"default\""
-              ],
-              "deprecatedValues": [
-                "\"info\"",
-                "\"success\"",
-                "\"warning\"",
-                "\"error\"",
-                "\"default\""
-              ],
-              "deprecated": "Use `tone`.",
-              "description": "Severity under its old name; `default` maps to `neutral`. When both are set, `tone` wins."
             },
             {
               "name": "action",
@@ -5624,7 +5282,7 @@
           ]
         }
       },
-      "apiHash": "845883b5f4719c24"
+      "apiHash": "668be764a3cee7f7"
     },
     "Tooltip": {
       "layer": "component",
@@ -5666,6 +5324,7 @@
                 "\"bottom\"",
                 "\"left\""
               ],
+              "default": "\"top\"",
               "description": "Preferred side of the trigger (default \"top\"). It flips to the opposite side when this one would overflow the viewport."
             },
             {
@@ -5679,18 +5338,6 @@
               ],
               "default": "\"center\"",
               "description": "Where the balloon sits along the trigger edge (default \"center\"). `start` and `end` line its leading or trailing edge up with the trigger's, for a trigger at the edge of a row; the caret still points at the trigger."
-            },
-            {
-              "name": "position",
-              "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
-              "required": false,
-              "values": [
-                "\"top\"",
-                "\"bottom\"",
-                "\"left\"",
-                "\"right\""
-              ],
-              "deprecated": "Use `side`. Still honoured when `side` is not passed."
             },
             {
               "name": "delay",
@@ -5716,7 +5363,7 @@
           ]
         }
       },
-      "apiHash": "605caa2136e4605d"
+      "apiHash": "6e02c20625d0c90e"
     },
     "TreeView": {
       "layer": "component",

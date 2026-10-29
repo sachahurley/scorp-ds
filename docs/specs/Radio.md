@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `1644dd9933fcf583` |
+| API hash | `c5dcfc971c7b208c` |
 
 ---
 
@@ -47,7 +47,6 @@ An outer `flex flex-col gap-1` wrapper (receives `className`) holding a `<label>
 | `sm` | 16x16px box, 6px square dot (`w-1.5 h-1.5`) |
 | `md` (default) | 20x20px box, 8px square dot (`w-2 h-2`) |
 | `lg` | 24x24px box, 10px square dot (`w-2.5 h-2.5`) |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
 Label text is `text-sm` at every size; the hit area is 44x44px at every size.
 
@@ -64,7 +63,7 @@ Label text is `text-sm` at every size; the hit area is 44x44px at every size.
 | `name` | `string` | none | Yes, for grouping | Shared by every radio in a group; the browser enforces one selection per name. |
 | `value` | `string \| number \| readonly string[]` | none | Yes, for forms | The value submitted when this radio is selected. |
 | `label` | `string \| ReactNode` | none | No | Visible label; clicking it selects the radio. Without one, pass `aria-label`. |
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Box size. Legacy names are deprecated. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Box size. |
 | `checked` | `boolean` | none | No | Controlled state. Omit to use native uncontrolled behavior (`defaultChecked` plus the group `name`). |
 | `defaultChecked` | `boolean` | none | No | Native uncontrolled initial selection (passed through). |
 | `onCheckedChange` | `(checked: boolean) => void` | none | No | Called with this radio's own checked state (read from `event.currentTarget`). Native radios only fire on becoming selected, so this is always called with `true`. |
@@ -248,6 +247,7 @@ None.
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | `helperText` / `errorMessage` under the label (wired through `aria-describedby`), JSDoc on `label`, `error` and `onCheckedChange`, selected-error dot tokenized, and `onCheckedChange` now reads `event.currentTarget.checked`. The wrapper is `flex flex-col gap-1` so the message can sit under the label |
 | Unreleased | 2026-10-29 | fix | `aria-invalid` removed from the radio input (ARIA 1.2 does not support it on `role="radio"`); the group carries the invalid state |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

@@ -13,8 +13,8 @@
 | Story | `Components/Feedback/Skeleton` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `21b3906bc6330462` |
+| Last updated | 2026-10-29 |
+| API hash | `f99cf0bdd05a253f` |
 
 ---
 
@@ -64,7 +64,7 @@ Don't use this for: a wait where the shape of the coming content is unknown, or 
 |----------|------|---------|----------|-------------|
 | `variant` | `text | rect | avatar` | `"text"` | No | Shape |
 | `lines` | `number` | `1` | No | Text line count |
-| `size` | `sm | md | lg` | `"md"` | No | Avatar square size (32 / 40 / 48px). Only `variant="avatar"` reads it; `text` and `rect` ignore it. Legacy small/medium/large are deprecated aliases |
+| `size` | `sm | md | lg` | `"md"` | No | Avatar square size (32 / 40 / 48px). Only `variant="avatar"` reads it; `text` and `rect` ignore it. |
 | `animated` | `boolean` | `true` | No | Whether the stepped pulse runs; `false` holds the placeholder still. Reduced motion always stops it |
 | `className` | `string` |  | No | Sizing |
 
@@ -196,6 +196,7 @@ None
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial Skeleton component, story, and unit tests |
 | Unreleased | 2026-10-28 | docs | `size` documented as avatar-only; `animated` documented by its default (`true`) |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

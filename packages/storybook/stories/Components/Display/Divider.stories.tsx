@@ -9,9 +9,6 @@ const meta: Meta<typeof Divider> = {
     orientation: { control: 'select', options: ['horizontal', 'vertical'] },
     label: { control: 'text' },
     spacing: { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
-    // Deprecated aliases for orientation and label (decision 0024): they still work, so keep them out of the controls.
-    variant: { table: { disable: true } },
-    text: { table: { disable: true } },
   },
   parameters: { layout: 'centered' },
 };

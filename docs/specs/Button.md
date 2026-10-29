@@ -13,8 +13,8 @@
 | Story | `Components/Actions/Button` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `1c0b0142028f0d69` |
+| Last updated | 2026-10-29 |
+| API hash | `a495c5d46fe08c6e` |
 
 ---
 
@@ -34,7 +34,7 @@ Button triggers an action in place: submitting a form, opening a dialog, saving,
 
 A `<button>` (or an `<a>` when `href` is set) containing optional `iconLeft`, the children, and optional `iconRight`. Icons are wrapped in a centered span sized to the button (16/20/24px). A button whose only child is a React element (or whose `variant` is `icon`) is detected as icon-only and rendered as a square plate.
 
-While `loading`, that content is wrapped in an `opacity-0` span that stays in the layout (so the width holds and the label stays in the accessible name), and an `aria-hidden` overlay (`absolute inset-0`) centers a `Spinner` at the button's size (`sm` / `md` / `lg`; the deprecated `size="icon"` uses `md`).
+While `loading`, that content is wrapped in an `opacity-0` span that stays in the layout (so the width holds and the label stays in the accessible name), and an `aria-hidden` overlay (`absolute inset-0`) centers a `Spinner` at the button's size (`sm` / `md` / `lg`).
 
 ### Variants
 
@@ -55,8 +55,6 @@ While `loading`, that content is wrapped in an `opacity-0` span that stays in th
 | `sm` | 32px tall (`h-control-sm`), `px-4`, 16px icons, 6px icon gap. Icon-only: 32x32 (`size-control-sm`). |
 | `md` (default) | 40px tall (`h-control-md`), `px-5`, 20px icons, 8px icon gap. Icon-only: 40x40. |
 | `lg` | 48px tall (`h-control-lg`), `px-6`, 24px icons, 10px icon gap. Icon-only: 48x48. |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg`; resolved by `resolveSize` with a one-time dev warning. |
-| `icon` | Deprecated: 40x40 square with a dev warning. Icon-only buttons are squared automatically, so use `md`. |
 
 <!-- AUTO-END:anatomy -->
 
@@ -69,7 +67,7 @@ While `loading`, that content is wrapped in an `opacity-0` span that stays in th
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `variant` | `"primary" \| "secondary" \| "ghost" \| "link" \| "outline" \| "destructive" \| "icon"` | `"primary"` | No | Visual style. See Variants. |
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large" \| "icon"` | `"md"` | No | Height from the control-height tokens. Legacy names and `"icon"` are deprecated. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Height from the control-height tokens. Icon-only buttons are squared at every size. |
 | `disabled` | `boolean` | `false` | No | Disables the button (50% opacity, `not-allowed` cursor). On an anchor it removes `href`, sets `aria-disabled`, and blocks pointer events. Wins over `loading`. |
 | `loading` | `boolean` | `false` | No | Busy state for async actions. Shows a Spinner over the hidden label, sets `aria-busy` and `aria-disabled`, and swallows clicks (`preventDefault`, so a submit button does not resubmit its form; `onClick` is not called). No native `disabled`, so the button stays focusable, and the width does not change. Works on icon-only buttons and the `href` anchor form. |
 | `iconLeft` | `IconSlot \| ReactNode` | none | No | Icon before the label: a TuiIcon name (`"Plus"`) or an element. React elements are wrapped in a size-matched box. |
@@ -196,7 +194,7 @@ Icons are passed in by the consumer (typically `TuiIcon`).
 
 ### Foundation Files Referenced
 
-- `packages/components/src/lib/size.ts` (`resolveSize`, `ControlSizeProp`)
+- `packages/components/src/lib/size.ts` (`ControlSize`)
 - `packages/tokens/src/styles/tokens.css` (button, focus-ring, control-height, plate, duration tokens)
 - `packages/tokens/tailwind.preset.js` (`plate-round`, `h-control-*`, `size-control-*`)
 
@@ -230,7 +228,6 @@ Icons are passed in by the consumer (typically `TuiIcon`).
 - Do use `href` (with `rel="noopener noreferrer"` for `_blank`) for plate-styled navigation CTAs.
 - Do use `loading` for async submits instead of `disabled` or swapping the label for "Saving..."; it keeps focus and width stable.
 - Don't use `variant="link"` for navigation; use `Link` so it has anchor semantics.
-- Don't use `size="icon"` or the `small|medium|large` names in new code.
 - Don't pass a single wrapper element (for example `<span>Save</span>`) as children: it is detected as icon-only and squared. Pass plain text.
 - Don't override the shape with `rounded-*` or outside focus outlines.
 
@@ -257,7 +254,7 @@ Icons are passed in by the consumer (typically `TuiIcon`).
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-21 | `size="icon"` duplicated automatic icon-only squaring; `link` variant purpose undocumented | `size="icon"` deprecated with a dev warning (use "medium"); JSDoc explains link variant vs Link | Resolved |
+| 2026-09-21 | `size="icon"` duplicated automatic icon-only squaring; `link` variant purpose undocumented | `size="icon"` deprecated with a dev warning (use "medium"), then removed in decision 0031; JSDoc explains link variant vs Link | Resolved |
 | 2026-09-22 | `sm` (32px) and `md` (40px) are below the 44px touch target and have no pseudo-element hit area like Checkbox/Radio/Switch | None yet | Open |
 | 2026-09-22 | Icon-only detection treats any single React element child as an icon, so `<span>Label</span>` renders as a square | None yet | Open |
 
@@ -277,6 +274,7 @@ Icons are passed in by the consumer (typically `TuiIcon`).
 | Unreleased | 2026-09-21 | fix | Deprecated `size="icon"`; documented `variant="link"` |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-10-28 | feat | `ButtonProps` is a type union: `target` and `rel` are accepted only with a string `href`. Every repo and consumer call site already passes them with `href` |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `size="icon"` (the `DeprecatedButtonSize` alias) and the `small \| medium \| large` size names, with their dev warnings; use `sm \| md \| lg` (icon-only buttons square themselves). Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/Tooltip` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `605caa2136e4605d` |
+| Last updated | 2026-10-29 |
+| API hash | `6e02c20625d0c90e` |
 
 ---
 
@@ -67,12 +67,9 @@ Viewport fit: after the balloon mounts (still at `opacity-0`), a layout effect m
 | `children` | `ReactNode` | | Yes | The trigger. Pass a single focusable element (Button, link) so it receives `aria-describedby` and keyboard users can open the tooltip. |
 | `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | No | Preferred side of the trigger. Flips to the opposite side when this one would overflow the viewport and the opposite side has room; top/bottom also clamp horizontally. The rendered side is exposed as `data-placement` on the balloon. |
 | `align` | `"start" \| "center" \| "end"` | `"center"` | No | Cross-axis alignment along the trigger edge. `start` / `end` line the balloon's leading / trailing edge up with the trigger's; the caret still points at the trigger's center. Exposed as `data-align`. |
-| `position` | `"top" \| "bottom" \| "left" \| "right"` | | No | **Deprecated**, use `side`. Honoured when `side` is not passed; warns once in development. |
 | `delay` | `number` | `200` | No | Delay in milliseconds before showing on hover or focus. Hiding is immediate. |
 | `maxWidth` | `string` | `"200px"` | No | Balloon max width, any CSS length (inline style). Stays a free CSS length: no token describes a reading width (the spacing scale stops at 96px and the breakpoints are page widths). |
 | `className` | `string` | `""` | No | Extra classes on the wrapper, e.g. `w-full` for a full-width trigger. |
-
-When `side` and the deprecated `position` are both passed, `side` wins. Decision 0024.
 
 Exported type: `TooltipProps`.
 
@@ -245,6 +242,7 @@ None (the trigger is supplied by the consumer).
 | Unreleased | 2026-09-21 | fix | Added keyboard focus, Escape dismiss, hoverable content, aria-describedby on the trigger |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `side` replaces `position` (deprecated alias, still works, warns once) and a new `align` (`start \| center \| end`, default `center`) lines the balloon up with a trigger edge. Story moved from `Components/Display` to `Components/Overlays`; baselines renamed, not recaptured. Default render unchanged |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `position` prop and its dev warning; use `side`. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

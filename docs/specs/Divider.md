@@ -13,8 +13,8 @@
 | Story | `Components/Display/Divider` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `049bc86a9acdcce7` |
+| Last updated | 2026-10-29 |
+| API hash | `05ac33e012d192f9` |
 
 ---
 
@@ -43,10 +43,6 @@ A plain rule (`orientation="horizontal"` or `"vertical"`) is a single `div` with
 | `orientation` | `horizontal` | Full-width 1px rule (default). |
 | `orientation` | `vertical` | Full-height 1px rule; the parent must give it height (e.g. `self-stretch` in a flex row). Ignores `label`. |
 | `label` | any node | Labelled form: box-drawing line with a centered `text-xs` label. An empty label renders the plain horizontal rule. |
-| `variant` | `horizontal`, `vertical`, `withText` | Deprecated (decision 0024). `horizontal` and `vertical` map onto `orientation`; `withText` shows `text` as the label. Logs a one-time dev warning. |
-| `text` | any node | Deprecated alias for `label`, read only with `variant="withText"`. Logs a one-time dev warning. |
-
-When both the old and new names are passed, `orientation` and `label` win.
 
 ### Sizes
 
@@ -58,7 +54,6 @@ When both the old and new names are passed, `orientation` and `label` win.
 | `sm` | 4px (`my-1` / `mx-1`) |
 | `md` | 16px (`my-4` / `mx-4`) (default) |
 | `lg` | 32px (`my-8` / `mx-8`) |
-| `small`, `medium`, `large` | Deprecated aliases for `sm`, `md`, `lg`; log a one-time dev warning |
 
 <!-- AUTO-END:anatomy -->
 
@@ -72,9 +67,7 @@ When both the old and new names are passed, `orientation` and `label` win.
 |----------|------|---------|----------|-------------|
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | No | Which way the rule runs. |
 | `label` | `ReactNode` | `undefined` | No | Centered label; gives the labelled form on a horizontal rule, ignored on a vertical one. A string label also becomes the separator's `aria-label`. |
-| `variant` | `"horizontal" \| "vertical" \| "withText"` | `undefined` | No | **Deprecated:** use `orientation`, and `label` for `withText`. Loses to `orientation` / `label`. |
-| `text` | `ReactNode` | `undefined` | No | **Deprecated:** use `label`. Read only with `variant="withText"`. |
-| `spacing` | `"none" \| ControlSizeProp` | `"md"` | No | Margin around the rule: none, `sm` 4px, `md` 16px, `lg` 32px; above and below a horizontal rule, either side of a vertical one. Legacy names are deprecated aliases. |
+| `spacing` | `"none" \| ControlSize` | `"md"` | No | Margin around the rule: none, `sm` 4px, `md` 16px, `lg` 32px; above and below a horizontal rule, either side of a vertical one. |
 | `className` | `string` | `""` | No | Extra classes (width, `self-stretch`). |
 
 Exported type: `DividerProps`.
@@ -105,9 +98,9 @@ Exported type: `DividerProps`.
 
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Orientation | `orientation` (deprecated `variant`) | Border side, `aria-orientation` |
-| Labelled | `label` (deprecated `variant="withText"` with `text`) | Box-drawing runs and label |
-| Label fallback | empty `label` (or `withText` without `text`) | Renders the plain horizontal rule |
+| Orientation | `orientation` | Border side, `aria-orientation` |
+| Labelled | `label` | Box-drawing runs and label |
+| Label fallback | empty `label` | Renders the plain horizontal rule |
 | Margin | `spacing` | Margin utility |
 
 Static element: no interactive states.
@@ -130,7 +123,6 @@ Static element: no interactive states.
 | `spacing="md"` | Yes | Yes | Default in `Horizontal`, `WithText` |
 | `spacing="lg"` | Yes | No | Only via the `spacing` control |
 | Empty label fallback | Yes | No | Unit test only |
-| Deprecated `variant` / `text` | Yes | No | Hidden from the controls; unit test only |
 
 Interactive controls: `orientation` (select), `label` (text), `spacing` (select).
 
@@ -160,7 +152,7 @@ None.
 
 ### Foundation Files Referenced
 
-- `packages/components/src/lib/size.ts` (`resolveSize`, `ControlSizeProp`)
+- `packages/components/src/lib/size.ts` (`ControlSize`)
 - `packages/tokens/src/styles/tokens.css` (`--color-term-dim`)
 - `packages/tokens/tailwind.preset.js` (`term.dim` color mapping)
 
@@ -231,6 +223,7 @@ None.
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-10-28 | feat | `orientation` and `label` replace `variant` and `text` (decision 0024); the old props are deprecated aliases with a one-time dev warning |
 | Unreleased | 2026-10-28 | fix | The labelled form takes vertical `my-*` spacing like the plain horizontal rule, not side `mx-*` margins |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `variant` and `text` props and the `small \| medium \| large` spacing names, with their dev warnings; use `orientation`, `label` and `sm \| md \| lg`. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

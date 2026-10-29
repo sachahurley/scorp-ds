@@ -104,20 +104,4 @@ describe("LogView", () => {
     rerender(<LogView lines={lines} autoScroll={false} />);
     expect(log.scrollTop).toBe(0);
   });
-
-  it('still accepts the deprecated level "warn", renders it as "warning", and warns once', () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const row = (level: LogLine["level"]) => {
-      const { unmount } = render(<LogView lines={[{ id: 1, text: "slow query", level }]} />);
-      const tag = screen.getByText("WARN");
-      const out = { tag: tag.className, icon: tag.querySelector("svg path")?.getAttribute("d") };
-      unmount();
-      return out;
-    };
-    expect(row("warn")).toEqual(row("warning"));
-    row("warn");
-    const messages = warn.mock.calls.map((c) => String(c[0]));
-    expect(messages.filter((m) => m.includes('LogView: level="warn" is deprecated. Use level="warning".'))).toHaveLength(1);
-    warn.mockRestore();
-  });
 });

@@ -13,8 +13,8 @@
 | Story | `Components/Inputs/Input` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `7e500be69eee7212` |
+| Last updated | 2026-10-29 |
+| API hash | `467d55214352a268` |
 
 ---
 
@@ -48,7 +48,6 @@ Optional `<label>` (rendered only when `label` is set), the control, and an opti
 | `sm` | 32px (`h-control-sm`), `px-3 py-1.5` |
 | `md` (default) | 40px (`h-control-md`), `px-4 py-2.5` |
 | `lg` | 48px (`h-control-lg`), `px-5 py-3.5` |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
 <!-- AUTO-END:anatomy -->
 
@@ -60,7 +59,7 @@ Optional `<label>` (rendered only when `label` is set), the control, and an opti
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Field height, matching Button. Legacy names are deprecated. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Field height, matching Button. |
 | `variant` | `"box" \| "quiet"` | `"box"` | No | Plate field or underline field. |
 | `label` | `ReactNode` | none | No | Visible label, associated via `htmlFor`/`id` (an id is generated if you do not pass one). Use this or `aria-label`. |
 | `helperText` | `ReactNode` | none | No | Hint under the field, linked via `aria-describedby`. Hidden while `errorMessage` is set. |
@@ -246,6 +245,7 @@ None in `Input.tsx`. The shared `FieldMessage` uses `h-[1lh]` (one line-height b
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | 2px inset focus ring in every state (error included), disabled dims the ring wrapper, and `--field-placeholder` raised to 6.28:1 in light |
 | Unreleased | 2026-10-28 | fix | Focus is a colour change only: the 2px inset ring and the quiet underline thickening are gone; focus wins over error |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

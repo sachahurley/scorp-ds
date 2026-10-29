@@ -13,8 +13,8 @@
 | Story | `Components/Inputs/Checkbox` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `e7d0557036a9f901` |
+| Last updated | 2026-10-29 |
+| API hash | `7fed86b9cfc4023a` |
 
 ---
 
@@ -47,7 +47,6 @@ An outer `flex flex-col gap-1` wrapper (receives `className`) holding a `<label>
 | `sm` | 16x16px box, Check / Minus icon size `3` (12px), message indent `pl-6` |
 | `md` (default) | 20x20px box, Check / Minus icon size `4` (16px), message indent `pl-7` |
 | `lg` | 24x24px box, Check / Minus icon size `5` (20px), message indent `pl-8` |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
 Label text is `text-sm` at every size. The hit area is 44x44px at every size.
 
@@ -62,7 +61,7 @@ Label text is `text-sm` at every size. The hit area is 44x44px at every size.
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `label` | `string \| ReactNode` | none | No | Visible label; clicking it toggles the box. Without one, pass `aria-label`. |
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Box size. Legacy names are deprecated. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Box size. |
 | `checked` | `boolean` | none | No | Controlled state. Omit to use native uncontrolled behavior (`defaultChecked`). |
 | `defaultChecked` | `boolean` | none | No | Native uncontrolled initial state (passed through). |
 | `indeterminate` | `boolean` | `false` | No | Mixed state for a parent box whose children are partly checked ("select all" over a half-selected list). Sets the native `indeterminate` DOM property (there is no HTML attribute) through a ref merged with the forwarded one, re-asserted after every render, and draws the 1-bit Minus bar instead of the Check. The prop is the source of truth: a click still fires `onChange` / `onCheckedChange`, and the box stays mixed until you pass `false`. |
@@ -249,6 +248,7 @@ None. The error Check and Minus use `--button-destructive-text`, the system's in
 | Unreleased | 2026-09-21 | fix | 44px hit area, unlabeled click fix, `helperText`, `errorMessage` |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Disabled opacity applied once (the box no longer renders at about 25%); error mark tokenized to `--button-destructive-text` |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

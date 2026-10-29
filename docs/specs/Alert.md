@@ -13,8 +13,8 @@
 | Story | `Components/Feedback/Alert` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `abd348e77da29b7e` |
+| Last updated | 2026-10-29 |
+| API hash | `03cf4240f4d95486` |
 
 ---
 
@@ -36,7 +36,7 @@ Outer ring plate (`plate-round`, 1px padding) wraps an inner fill plate holding,
 
 ### Tones
 
-`tone` takes the shared colour roles of decision 0024. The deprecated `variant` prop still takes the old values, with `default` meaning `neutral`.
+`tone` takes the shared colour roles of decision 0024.
 
 | Enum Value | Description |
 |-----------|-------------|
@@ -63,13 +63,11 @@ Outer ring plate (`plate-round`, 1px padding) wraps an inner fill plate holding,
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `tone` | `AlertTone`: `"neutral" \| "info" \| "success" \| "warning" \| "error"` | `"neutral"` | No | Severity. Sets ring, fill, text colors, and the default icon. |
-| `variant` | `"default" \| "success" \| "warning" \| "error" \| "info"` | `undefined` | No | **Deprecated: use `tone`.** The old name; `default` maps to `neutral`. Warns once in development; `tone` wins when both are set. |
 | `title` | `string` | `undefined` | No | Short bold heading rendered as an `h4`. Omit for a single-line message. |
 | `description` | `ReactNode` | `undefined` | No | Body copy. Accepts rich content such as a link or inline code. |
 | `iconLeft` | `IconSlot \| ReactNode` | tone icon | No | Replaces the severity icon: a TuiIcon name or an element. Keep a 16px 1-bit icon so the icon still signals meaning. |
 | `onDismiss` | `() => void` | `undefined` | No | When set, renders a dismiss button (`type="button"`, 1-bit `X`, named by `dismissLabel`, 44px hit area) that calls this. The Alert does not hide itself; the parent removes it. |
 | `dismissLabel` | `string` | `"Close alert"` | No | Accessible name of the dismiss button. Name what it dismisses when a page has several alerts. |
-| `onClose` | `() => void` | `undefined` | No | **Deprecated: use `onDismiss`.** The old name. Warns once in development; `onDismiss` wins when both are set. |
 | `className` | `string` | `""` | No | Extra classes on the outer ring element (width, margin). |
 
 Exported types: `AlertProps`, `AlertTone`.
@@ -113,10 +111,10 @@ Exported types: `AlertProps`, `AlertTone`.
 
 | State / Tone | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Severity | `tone` (deprecated `variant`) | Ring, fill, icon, title, description colors; default icon |
+| Severity | `tone` | Ring, fill, icon, title, description colors; default icon |
 | Title only / description only / both | `title`, `description` | Layout only |
 | Custom icon | `iconLeft` | Icon slot content (color still from the tone) |
-| Dismissible | `onDismiss` (deprecated `onClose`) | Dismiss button rendered |
+| Dismissible | `onDismiss` | Dismiss button rendered |
 | Dismiss hover | Pointer | Dismiss button text to `error-800` / `error-300` over `--duration-fast` |
 | Dismiss focus | `:focus-visible` | Inset ring `--focus-ring-primary` (`--focus-ring-error` on the error tone), `--focus-ring-width` thick |
 
@@ -243,6 +241,7 @@ No raw color, size, or spacing values. (The close button's focus ring and hit ar
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Close button is `type="button"` (no stray form submits), uses the inset token focus ring instead of `focus:ring-1 focus:ring-offset-1`, and gets a 44px pseudo-element hit area; `AlertProps` gained per-prop JSDoc |
 | Unreleased | 2026-10-28 | feat | Decision 0024 vocabulary: `tone` (`neutral \| info \| success \| warning \| error`) replaces `variant`, `onDismiss` replaces `onClose`. The old props still work, warn once in development, and lose when both are set. New exported type `AlertTone`. Renders identically |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `variant` (and its `default` value) and `onClose` props with their dev warnings; use `tone` and `onDismiss`. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

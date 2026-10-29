@@ -48,33 +48,4 @@ describe("Divider", () => {
     render(<Divider spacing="none" />);
     expect(screen.getByRole("separator").className).not.toMatch(/\bm[xy]-/);
   });
-
-  describe("deprecated variant and text", () => {
-    it("still render the labelled form, with vertical margins, and warn once", () => {
-      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-      render(<Divider variant="withText" text="Legacy" spacing="sm" />);
-      const rule = screen.getByRole("separator", { name: "Legacy" });
-      expect(rule).toHaveClass("my-1");
-      expect(warn).toHaveBeenCalledWith(expect.stringContaining("Divider: variant is deprecated"));
-      expect(warn).toHaveBeenCalledWith(expect.stringContaining("Divider: text is deprecated. Use label"));
-    });
-
-    it("still map variant onto orientation", () => {
-      vi.spyOn(console, "warn").mockImplementation(() => {});
-      render(<Divider variant="vertical" />);
-      expect(screen.getByRole("separator")).toHaveAttribute("aria-orientation", "vertical");
-    });
-
-    it("fall back to a plain horizontal rule when withText has no text", () => {
-      vi.spyOn(console, "warn").mockImplementation(() => {});
-      render(<Divider variant="withText" />);
-      expect(screen.getByRole("separator")).toHaveAttribute("aria-orientation", "horizontal");
-    });
-
-    it("lose to orientation and label when both forms are passed", () => {
-      vi.spyOn(console, "warn").mockImplementation(() => {});
-      render(<Divider variant="vertical" orientation="horizontal" text="Old" label="New" />);
-      expect(screen.getByRole("separator", { name: "New" })).toBeInTheDocument();
-    });
-  });
 });

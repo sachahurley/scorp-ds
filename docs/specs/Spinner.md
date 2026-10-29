@@ -13,8 +13,8 @@
 | Story | `Components/Feedback/Spinner` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `58a1eff407e1af12` |
+| Last updated | 2026-10-29 |
+| API hash | `7e089aa1de2e3839` |
 
 ---
 
@@ -65,7 +65,7 @@ Don't use this for: a button that is submitting (use `<Button loading>` instead)
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Box size (legacy small/medium/large accepted, deprecated) |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Box size |
 | `label` | `string` | `"Loading"` | No | Visually hidden status text read by screen readers |
 | `className` | `string` | `undefined` | No | Extra wrapper classes, e.g. a text color |
 
@@ -137,7 +137,7 @@ None.
 
 ### Foundation Files Referenced
 
-- `packages/components/src/lib/size.ts` (`resolveSize`, `ControlSizeProp`)
+- `packages/components/src/lib/size.ts` (`ControlSize`)
 - `packages/components/src/lib/utils.ts` (`cn`)
 
 ### Used by
@@ -207,6 +207,7 @@ with short text for long waits.
 |---------|------|------|---------|
 | Unreleased | 2026-09-22 | docs | Spec aligned to the current template (Component and Last updated rows, repo-only header) |
 | Unreleased | 2026-09-21 | feat | New component: 1-bit dot ring spinner, sm/md/lg, visually hidden label, reduced-motion static frame |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

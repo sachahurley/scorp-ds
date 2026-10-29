@@ -72,7 +72,6 @@ Exported from `@scorp-ds/components` but not a component file of their own.
 |---|---|---|
 | `cn` | function | `packages/components/src/lib/utils.ts` |
 | `ControlSize` | type | `packages/components/src/lib/size.ts` |
-| `ControlSizeProp` | type | `packages/components/src/lib/size.ts` |
 | `IconSlot` | type | `packages/components/src/lib/icon-slot.tsx` |
 | `ThemeProvider` | component | `packages/components/src/theme/ThemeProvider.tsx` |
 
@@ -93,7 +92,7 @@ Status: draft · Spec: [`docs/specs/Button.md`](../../docs/specs/Button.md) · S
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `variant` | `"primary"` `"secondary"` `"ghost"` `"link"` `"outline"` `"destructive"` `"icon"` | `"primary"` | Visual style (default: "primary"). |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ ~~`"icon"`~~ | `"md"` | Height: sm 32px, md 40px (default), lg 48px, from the control-height tokens. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Height: sm 32px, md 40px (default), lg 48px, from the control-height tokens. |
 | `disabled` | `boolean` | `false` | Disables the button (anchors drop `href` and set `aria-disabled`). |
 | `iconLeft` | `IconSlot \| React.ReactNode` |  | Icon before the label, usually a `TuiIcon`, to make the action quicker to recognise ("+ New"). |
 | `iconRight` | `IconSlot \| React.ReactNode` |  | Icon after the label, for direction or destination (an arrow on "Next", an external-link glyph on a link CTA). |
@@ -199,7 +198,7 @@ Status: draft · Spec: [`docs/specs/Avatar.md`](../../docs/specs/Avatar.md) · S
 | `alt` (required) | `string` |  | Who the avatar shows, usually the person's name. |
 | `initials` | `string` |  | One or two letters shown when there is no image, or the image fails to load. |
 | `icon` | `IconSlot \| ReactNode` |  | Icon shown when there is neither an image nor initials (for a team, a bot, a system account). |
-| `size` | `"xl"` `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. |
+| `size` | `"xl"` `"sm"` `"md"` `"lg"` | `"md"` | Diameter: sm 24px, md 40px (default), lg 64px, xl 96px. |
 | `status` | `"online"` `"offline"` `"away"` |  | Presence dot in the corner, announced as "Status: online" and so on. |
 | `className` | `string` | `""` | Extra classes on the outer wrapper (margin, positioning). |
 | `onError` | `() => void` |  | Called when `src` fails to load (to log it, or swap the URL); the avatar shows its fallback either way. |
@@ -223,7 +222,7 @@ Status: draft · Spec: [`docs/specs/Card.md`](../../docs/specs/Card.md) · Story
 | `headerContent` | `ReactNode` |  | Custom header node, for a header that needs more than a title and subtitle (a badge, an action). |
 | `children` (required) | `ReactNode` |  | Main card content. |
 | `footerContent` | `ReactNode` |  | Footer node (buttons, links) behind a hairline rule. |
-| `layout` | `"block"` `"flex"` |  | Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. |
+| `layout` | `"block"` `"flex"` | `"block"` | Section layout. `block` (default) lets the card grow with its content. `flex` makes the card a flex column whose content section fills the remaining height, so a fixed-height card can pin its footer to the bottom. |
 | `className` | `string` | `""` | Additional CSS classes (width, height, margin). |
 
 ### Divider
@@ -240,11 +239,9 @@ Status: draft · Spec: [`docs/specs/Divider.md`](../../docs/specs/Divider.md) ·
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `orientation` | `"horizontal"` `"vertical"` |  | `horizontal` (default) for a full-width rule between stacked blocks; `vertical` for a full-height rule between items in a row (the parent needs a height). |
+| `orientation` | `"horizontal"` `"vertical"` | `"horizontal"` | `horizontal` (default) for a full-width rule between stacked blocks; `vertical` for a full-height rule between items in a row (the parent needs a height). |
 | `label` | `ReactNode` |  | Centred label on a horizontal rule ("or", a section name), drawn between box-drawing runs. |
-| ~~`variant`~~ | `"horizontal"` `"vertical"` `"withText"` |  |  |
-| ~~`text`~~ | `ReactNode` |  |  |
-| `spacing` | `"none"` `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Margin around the rule: none, sm 4px, md 16px (default), lg 32px. |
+| `spacing` | `"none"` `"sm"` `"md"` `"lg"` | `"md"` | Margin around the rule: none, sm 4px, md 16px (default), lg 32px. |
 | `className` | `string` | `""` | Extra classes on the rule (width, colour override, alignment). |
 
 ### ListRow
@@ -340,13 +337,11 @@ Status: draft · Spec: [`docs/specs/Alert.md`](../../docs/specs/Alert.md) · Sto
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity: picks the colour set and the 1-bit severity icon. |
-| ~~`variant`~~ | `"default"` `"success"` `"warning"` `"error"` `"info"` |  | Severity under its old name; `default` maps to `neutral`. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` | `"neutral"` | Severity: picks the colour set and the 1-bit severity icon. |
 | `title` | `string` |  | Short bold headline, one line. |
 | `description` | `ReactNode` |  | Body copy under the title: what it means and what to do next. |
 | `iconLeft` | `IconSlot \| ReactNode` |  | Replaces the tone's severity icon. |
 | `onDismiss` | `() => void` |  | Adds a dismiss control (44px hit area) and is called when it is pressed. |
-| ~~`onClose`~~ | `() => void` |  | Dismiss callback under its old name. |
 | `dismissLabel` | `string` | `"Close alert"` | Accessible name of the dismiss button (default "Close alert"). |
 | `className` | `string` | `""` | Extra classes on the outer ring layer (spacing and width only). |
 
@@ -364,17 +359,14 @@ Status: draft · Spec: [`docs/specs/Badge.md`](../../docs/specs/Badge.md) · Sto
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` `"bone"` |  | Colour role. |
-| ~~`variant`~~ | `"default"` `"primary"` `"success"` `"warning"` `"error"` `"info"` `"bone"` |  | Colour role under its old name; `default` maps to `neutral`. |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Badge height: sm 20px, md 24px (default), lg 28px. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` `"bone"` | `"neutral"` | Colour role. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Badge height: sm 20px, md 24px (default), lg 28px. |
 | `caps` | `boolean` | `false` | Uppercase eyebrow voice: uppercase text with .08em tracking. |
 | `dashed` | `boolean` | `false` | Not-yet-real voice: transparent fill with a 1px dashed border in the tone's text color, for placeholders, empty slots, and free tiers. |
 | `children` (required) | `ReactNode` |  | The label: a word, a short phrase or a number. |
 | `iconLeft` | `IconSlot \| ReactNode` |  | Icon before the label, to reinforce the meaning of a status badge. |
 | `onDismiss` | `() => void` |  | Adds a remove (x) button that calls this when pressed. |
-| ~~`onClose`~~ | `() => void` |  | Remove callback under its old name. |
 | `dismissLabel` | `string` |  | Accessible name for the remove button. |
-| ~~`onCloseLabel`~~ | `string` |  | Remove button name under its old name. |
 | `className` | `string` | `""` | Extra classes on the badge (margin, alignment). |
 
 ### EmptyState
@@ -429,9 +421,8 @@ Status: draft · Spec: [`docs/specs/ProgressBar.md`](../../docs/specs/ProgressBa
 | `label` (required) | `string` |  | Accessible name, e.g. "Uploading report.pdf". |
 | `showLabel` | `boolean` | `true` | Show the label visually (default true). |
 | `showValue` | `boolean` | `true` | Show the percentage next to the label for determinate bars (default true). |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Track thickness: sm, md (default), lg. |
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` |  | Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error. |
-| ~~`variant`~~ | `"primary"` `"success"` `"warning"` `"error"` |  | Fill colour under its old name. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Track thickness: sm, md (default), lg. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` | `"primary"` | Fill colour by meaning: primary (the default accent), or a semantic role: neutral, info, success, warning, error. |
 | `segments` | `number` | `20` | Number of blocks across the track (default 20, so each block is 5%). |
 | `className` | `string` |  | Extra classes for the root (width). |
 
@@ -451,7 +442,7 @@ Status: draft · Spec: [`docs/specs/Skeleton.md`](../../docs/specs/Skeleton.md) 
 |---|---|---|---|
 | `variant` | `"text"` `"rect"` `"avatar"` | `"text"` | Placeholder shape: text lines (default), a rect block, or an avatar square. |
 | `lines` | `number` | `1` | Number of text lines for `variant="text"` (default 1). |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Avatar square size: sm 32px, md 40px (default), lg 48px (control heights). |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Avatar square size: sm 32px, md 40px (default), lg 48px (control heights). |
 | `animated` | `boolean` | `true` | Whether the stepped pulse runs. |
 | `className` | `string` |  | Sizing classes. |
 
@@ -469,7 +460,7 @@ Status: draft · Spec: [`docs/specs/Spinner.md`](../../docs/specs/Spinner.md) ·
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Box size: sm 12px (inline, 32px controls), md 16px (default), lg 24px (48px controls, empty states). |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Box size: sm 12px (inline, 32px controls), md 16px (default), lg 24px (48px controls, empty states). |
 | `label` | `string` | `"Loading"` | What is loading, read by screen readers and never shown (default "Loading"). |
 | `className` | `string` |  | Extra classes for the wrapper, e.g. a text color (`text-[var(--text-secondary)]`). |
 
@@ -496,8 +487,7 @@ Status: draft · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Sto
 |---|---|---|---|
 | `id` (required) | `string \| number` |  | Stable key for the toast (also used by dismissal callbacks). |
 | `message` (required) | `ReactNode` |  | Toast content. |
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity (default: "neutral"). "error" is announced assertively. |
-| ~~`variant`~~ | ~~`"info"`~~ ~~`"success"`~~ ~~`"warning"`~~ ~~`"error"`~~ ~~`"default"`~~ |  | Severity under its old name; `default` maps to `neutral`. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` | `"neutral"` | Severity (default: "neutral"). "error" is announced assertively. |
 | `action` | `ToastAction` |  | Optional inline action, such as Undo. |
 | `duration` | `number` |  | Milliseconds before auto-dismiss; `Infinity` persists. |
 
@@ -513,8 +503,7 @@ Status: draft · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Sto
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `onClick` | `() => void` |  | Called when the plate is clicked (pointer shortcut; wire to dismiss). |
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity (default: "neutral"): icon, colors, and `role` (error = alert). |
-| ~~`variant`~~ | ~~`"info"`~~ ~~`"success"`~~ ~~`"warning"`~~ ~~`"error"`~~ ~~`"default"`~~ |  | Severity under its old name; `default` maps to `neutral`. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` | `"neutral"` | Severity (default: "neutral"): icon, colors, and `role` (error = alert). |
 | `action` | `ToastAction` |  | Optional inline action button, such as Undo. |
 | `duration` | `number` |  | Auto-dismiss after this many ms, paused on hover and focus. `Infinity` persists and shows a dismiss button. |
 | `onDismiss` | `() => void` |  | Removes the toast (timer, action, or the dismiss button call it). |
@@ -525,8 +514,7 @@ Status: draft · Spec: [`docs/specs/Toast.md`](../../docs/specs/Toast.md) · Sto
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `id` | `ToastItem["id"]` |  | Reuse an id to replace a toast in place (e.g. "Saving..." then "Saved"). |
-| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` |  | Severity (default: "neutral"). |
-| ~~`variant`~~ | ~~`"info"`~~ ~~`"success"`~~ ~~`"warning"`~~ ~~`"error"`~~ ~~`"default"`~~ |  | Severity under its old name; `default` maps to `neutral`. |
+| `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` | `"neutral"` | Severity (default: "neutral"). |
 | `action` | `ToastAction` |  | Optional inline action, such as Undo. |
 | `duration` | `number` |  | Milliseconds before auto-dismiss (default 5000); `Infinity` persists. |
 
@@ -556,7 +544,7 @@ Status: draft · Spec: [`docs/specs/Checkbox.md`](../../docs/specs/Checkbox.md) 
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Box size. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Box size. |
 | `label` | `string \| ReactNode` |  | Visible label; clicking it toggles the box. |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Secondary line under the label (explains the consequence of checking). |
@@ -596,7 +584,7 @@ Status: draft · Spec: [`docs/specs/Combobox.md`](../../docs/specs/Combobox.md) 
 | `onInputChange` | `(query: string) => void` |  | Called on every keystroke with the raw query text. |
 | `filter` | `(option: ComboboxOption, query: string) => boolean` | `defaultFilter` | Custom matcher. |
 | `emptyText` | `ReactNode` | `"No matches"` | Message shown when nothing matches (default "No matches"). |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Field height: sm 32px, md 40px (default), lg 48px. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Field height: sm 32px, md 40px (default), lg 48px. |
 | `helperText` | `ReactNode` |  | Hint under the field. |
 | `errorMessage` | `ReactNode` |  | Validation message under the field; sets `aria-invalid` and replaces `helperText`. |
 | `error` | `boolean` | `false` | Error styling without a message. |
@@ -620,7 +608,7 @@ Status: draft · Spec: [`docs/specs/Input.md`](../../docs/specs/Input.md) · Sto
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Field height: sm 32px, md 40px (default), lg 48px. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Field height: sm 32px, md 40px (default), lg 48px. |
 | `variant` | `"box"` `"quiet"` | `"box"` | Visual variant. "box" (default) is the plate field; "quiet" is the underline recipe — transparent, bottom hairline only, the site's voice for inline fields (passwords, rename-in-place). |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Hint shown under the field (format, constraints). |
@@ -643,7 +631,7 @@ Status: draft · Spec: [`docs/specs/Radio.md`](../../docs/specs/Radio.md) · Sto
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Box size: sm 16px, md 20px (default), lg 24px. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Box size: sm 16px, md 20px (default), lg 24px. |
 | `label` | `string \| ReactNode` |  | Visible label next to the box; clicking it selects the radio. |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Secondary line under the label (explains what picking this option means). |
@@ -667,7 +655,7 @@ Status: draft · Spec: [`docs/specs/Select.md`](../../docs/specs/Select.md) · S
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
 | `label` | `ReactNode` |  | Optional visible label; associates with the custom trigger (the combobox) via `htmlFor` / `id`. |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Trigger height: sm 32px, md 40px (default), lg 48px. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Trigger height: sm 32px, md 40px (default), lg 48px. |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Hint shown under the trigger. |
 | `errorMessage` | `ReactNode` |  | Validation message shown under the trigger. |
@@ -711,7 +699,7 @@ Status: draft · Spec: [`docs/specs/Switch.md`](../../docs/specs/Switch.md) · S
 | `checked` | `boolean` |  | Whether the switch is on, for a controlled switch: keep it in state and update it from `onCheckedChange`. |
 | `defaultChecked` | `boolean` | `false` | Whether an uncontrolled switch starts on. |
 | `onCheckedChange` | `(checked: boolean) => void` |  | Called with the next value when the user clicks the track or label, or presses Space or Enter. |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Track size. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Track size. |
 | `label` | `string` |  | Visible label and accessible name; one of `label`, `aria-label` or `aria-labelledby` is required. |
 | `aria-label` | `string` |  | Accessible name when there is no `label` (a theme toggle whose state is shown by an icon). |
 | `aria-labelledby` | `string` |  | Id of visible text elsewhere that names the switch, such as a settings row heading. |
@@ -735,7 +723,7 @@ Status: draft · Spec: [`docs/specs/Textarea.md`](../../docs/specs/Textarea.md) 
 
 | Prop | Accepts | Default | Use |
 |---|---|---|---|
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Minimum height and padding: sm, md (default), lg, matching Input. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Minimum height and padding: sm, md (default), lg, matching Input. |
 | `error` | `boolean` | `false` | Error styling without a message. |
 | `helperText` | `ReactNode` |  | Hint shown under the field (length, format). |
 | `errorMessage` | `ReactNode` |  | Validation message shown under the field. |
@@ -1007,7 +995,7 @@ Status: draft · Spec: [`docs/specs/Pagination.md`](../../docs/specs/Pagination.
 | `onPageChange` | `(page: number) => void` |  | Fires with the requested 1-based page when the user picks a page or steps prev/next. |
 | `siblingCount` | `number` | `1` | Pages shown on each side of the current page (default 1). |
 | `boundaryCount` | `number` | `1` | Pages always shown at the start and end (default 1). |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Plate height from the Button scale: sm 32px, md 40px (default), lg 48px. |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Plate height from the Button scale: sm 32px, md 40px (default), lg 48px. |
 | `showPrevNext` | `boolean` | `true` | Show the previous/next arrow buttons (default true). |
 | `getPageLabel` | `(page: number) => string` | `(p) => `Page ${p}`` | Accessible name of each page button (default "Page 3"). |
 | `previousLabel` | `string` | `"Previous page"` | Accessible name of the previous button (default "Previous page"). |
@@ -1117,12 +1105,9 @@ Status: draft · Spec: [`docs/specs/BottomSheet.md`](../../docs/specs/BottomShee
 | `open` | `boolean` |  | Whether the sheet is shown. |
 | `defaultOpen` | `boolean` | `false` | Initial open state when `open` is not passed (default false). |
 | `onOpenChange` | `(open: boolean) => void` |  | Called with `false` when the user dismisses the sheet (close button, scrim click or Escape). |
-| ~~`isOpen`~~ | `boolean` |  |  |
-| ~~`onClose`~~ | `() => void` |  |  |
 | `closeLabel` | `string` | `"Close"` | Accessible name for the close button. |
 | `children` (required) | `ReactNode` |  | Sheet content. |
-| `aria-label` | `string` |  | Accessible name announced for the sheet dialog, e.g. "Site menu". |
-| ~~`ariaLabel`~~ | `string` |  |  |
+| `aria-label` (required) | `string` |  | Accessible name announced for the sheet dialog, e.g. "Site menu". |
 
 ### Dropdown
 
@@ -1152,8 +1137,8 @@ Status: draft · Spec: [`docs/specs/Dropdown.md`](../../docs/specs/Dropdown.md) 
 | `label` | `string` | `"Actions"` | Text (and accessible name) of the default trigger button. |
 | `trigger` | `ReactNode` |  | Custom trigger, replacing the default button. |
 | `items` (required) | `DropdownItem[]` |  | Menu entries, in order. |
-| `align` | `"start"` `"end"` ~~`"left"`~~ ~~`"right"`~~ | `"start"` | Which trigger edge the menu lines up with (default "start", the leading edge). |
-| `size` | `"sm"` `"md"` `"lg"` ~~`"small"`~~ ~~`"medium"`~~ ~~`"large"`~~ | `"md"` | Trigger height, matching Button/Input: sm, md (default), lg. |
+| `align` | `"start"` `"end"` | `"start"` | Which trigger edge the menu lines up with (default "start", the leading edge). |
+| `size` | `"sm"` `"md"` `"lg"` | `"md"` | Trigger height, matching Button/Input: sm, md (default), lg. |
 
 ### Modal
 
@@ -1172,8 +1157,6 @@ Status: draft · Spec: [`docs/specs/Modal.md`](../../docs/specs/Modal.md) · Sto
 | `open` | `boolean` |  | Whether the dialog is shown. |
 | `defaultOpen` | `boolean` | `false` | Initial open state when `open` is not passed (default false). |
 | `onOpenChange` | `(open: boolean) => void` |  | Called with `false` when the user asks to close (close button, Escape, or a scrim click). |
-| ~~`isOpen`~~ | `boolean` |  |  |
-| ~~`onClose`~~ | `() => void` |  |  |
 | `title` (required) | `string` |  | Heading in the fixed header; also the dialog's accessible name, so make it say what the dialog is for. |
 | `children` (required) | `ReactNode` |  | Body content. |
 | `footerContent` | `ReactNode` |  | Optional fixed footer for CTAs. |
@@ -1234,9 +1217,8 @@ Status: draft · Spec: [`docs/specs/Tooltip.md`](../../docs/specs/Tooltip.md) ·
 |---|---|---|---|
 | `content` (required) | `ReactNode` |  | Short supplementary hint. |
 | `children` (required) | `ReactNode` |  | The trigger. |
-| `side` | `"top"` `"right"` `"bottom"` `"left"` |  | Preferred side of the trigger (default "top"). |
+| `side` | `"top"` `"right"` `"bottom"` `"left"` | `"top"` | Preferred side of the trigger (default "top"). |
 | `align` | `"start"` `"center"` `"end"` | `"center"` | Where the balloon sits along the trigger edge (default "center"). `start` and `end` line its leading or trailing edge up with the trigger's, for a trigger at the edge of a row; the caret still points at the trigger. |
-| ~~`position`~~ | `"top"` `"bottom"` `"left"` `"right"` |  |  |
 | `delay` | `number` | `200` | Delay in milliseconds before showing on hover or focus (default 200). |
 | `maxWidth` | `string` | `"200px"` | Max width of the balloon, any CSS length (default "200px"); text wraps inside it. |
 | `className` | `string` | `""` | Extra classes for the wrapper (e.g. a width class for a full-width trigger). |
@@ -1344,7 +1326,7 @@ Status: draft · Spec: [`docs/specs/Kbd.md`](../../docs/specs/Kbd.md) · Story: 
 |---|---|---|---|
 | `keys` | `string[]` |  | Keys of a combo, in press order (`["Ctrl", "Shift", "P"]`). |
 | `children` | `ReactNode` |  | A single key label (`<Kbd>Esc</Kbd>`). |
-| `size` | `"sm"` `"md"` ~~`"small"`~~ ~~`"medium"`~~ | `"sm"` | Key size: sm 20px (default) or md 24px. |
+| `size` | `"sm"` `"md"` | `"sm"` | Key size: sm 20px (default) or md 24px. |
 | `separator` | `ReactNode` | `"+"` | Visible separator between combo keys (default "+"). |
 | `className` | `string` |  | Extra classes for the outer `<kbd>`. |
 
@@ -1364,7 +1346,7 @@ Status: draft · Spec: [`docs/specs/LogView.md`](../../docs/specs/LogView.md) ·
 |---|---|---|---|
 | `id` (required) | `string \| number` |  | Stable id (used as the React key; keep it unique and stable across appends). |
 | `text` (required) | `ReactNode` |  | The message. |
-| `level` | `"info"` `"warning"` `"error"` ~~`"warn"`~~ `"debug"` |  | Severity. |
+| `level` | `"info"` `"warning"` `"error"` `"debug"` |  | Severity. |
 | `timestamp` | `string` |  | Timestamp text, pre-formatted ("12:04:01"). |
 
 **`LogViewProps`**
@@ -1405,7 +1387,7 @@ Status: draft · Spec: [`docs/specs/Meter.md`](../../docs/specs/Meter.md) · Sto
 | `valueText` | `string` |  | Human-readable value, shown next to the label and used as `aria-valuetext` ("42 GB of 64 GB"). |
 | `tone` | `"neutral"` `"info"` `"success"` `"warning"` `"error"` `"primary"` |  | Force a tone instead of deriving it from the thresholds. |
 | `segments` | `number` | `20` | Number of blocks the range is divided into (default 20). |
-| `size` | `"sm"` `"md"` ~~`"small"`~~ ~~`"medium"`~~ | `"md"` | Block height: sm 8px, md 12px (default). |
+| `size` | `"sm"` `"md"` | `"md"` | Block height: sm 8px, md 12px (default). |
 | `className` | `string` |  | Extra classes for the wrapper. |
 
 ### StatusLine

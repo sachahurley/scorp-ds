@@ -41,24 +41,7 @@ describe("Card layout", () => {
     expect((container.firstElementChild as HTMLElement).className).toContain("flex-col");
   });
 
-  it("keeps the legacy standalone `flex` className working, and warns once to pass layout", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { container } = renderCard({ className: "h-72 flex flex-col" });
-    expect(isFlexLayout(container)).toBe(true);
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn.mock.calls[0][0]).toContain('Use layout="flex"');
-    cleanup();
-    renderCard({ className: "flex" });
-    expect(warn).toHaveBeenCalledTimes(1);
-  });
-
-  it("does not warn when layout is passed", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    renderCard({ layout: "flex", className: "flex" });
-    expect(warn).not.toHaveBeenCalled();
-  });
-
-  it.each(["inline-flex", "flex-1", "flex-wrap", "md:flex"])(
+  it.each(["flex", "h-72 flex flex-col", "inline-flex", "flex-1", "flex-wrap", "md:flex"])(
     "does not switch to flex layout for %s",
     (cls) => {
       const { container } = renderCard({ className: cls });

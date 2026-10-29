@@ -13,8 +13,8 @@
 | Story | `Components/Feedback/ProgressBar` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `ae1377fccc1ef7bb` |
+| Last updated | 2026-10-29 |
+| API hash | `7153a12f4c4c0039` |
 
 ---
 
@@ -36,7 +36,7 @@ Don't use this for: a measured value in a known range that is not heading toward
 
 ### Tones
 
-`tone` takes the five shared colour roles of decision 0024 plus ProgressBar's own `primary`, the default accent. The deprecated `variant` prop still takes `primary | success | warning | error`.
+`tone` takes the five shared colour roles of decision 0024 plus ProgressBar's own `primary`, the default accent.
 
 | Enum Value | Description |
 |-----------|-------------|
@@ -72,7 +72,6 @@ Don't use this for: a measured value in a known range that is not heading toward
 | `showValue` | `boolean` | `true` | No | Percentage text |
 | `size` | `sm | md | lg` | `"md"` | No | Track thickness |
 | `tone` | `ProgressBarTone`: `primary | neutral | info | success | warning | error` | `"primary"` | No | Fill meaning. Also written to `data-tone` on the progressbar |
-| `variant` | `primary | success | warning | error` | `undefined` | No | **Deprecated: use `tone`.** Warns once in development; `tone` wins when both are set |
 | `segments` | `number` | `20` | No | Blocks across the track |
 
 Exported types: `ProgressBarProps`, `ProgressBarTone`.
@@ -104,7 +103,7 @@ Exported types: `ProgressBarProps`, `ProgressBarTone`.
 | State / Variant | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
 | loading / complete / indeterminate | `data-state` | fill count, animation |
-| Tone | `tone` (deprecated `variant`), mirrored on `data-tone` | filled block colour |
+| Tone | `tone`, mirrored on `data-tone` | filled block colour |
 
 <!-- AUTO-END:states -->
 
@@ -210,6 +209,7 @@ None
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial ProgressBar component, story, and unit tests |
 | Unreleased | 2026-10-28 | feat | Decision 0024 vocabulary: `tone` replaces `variant` and adds the `neutral` and `info` roles (`primary` stays the default). `variant` still works, warns once in development, and loses when both are set. New exported type `ProgressBarTone`; `data-tone` on the progressbar. Existing values render identically |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `variant` prop and its dev warning; use `tone`. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

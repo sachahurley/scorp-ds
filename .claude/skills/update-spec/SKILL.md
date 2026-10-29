@@ -82,8 +82,7 @@ the resolved value per theme, since light and dark differ.
 Extract from the source code:
 
 **Variants, sizes and states** - These are union-typed props in TypeScript, not enums.
-Read the prop type union members and the JSDoc on each. Sizes are `sm | md | lg`
-(legacy `small | medium | large` aliases still resolve with a dev warning).
+Read the prop type union members and the JSDoc on each. Sizes are `sm | md | lg`.
 
 **Public props** - Parse the props interface or type. For each prop record: name, type
 (including full union members), default value, whether required, and its JSDoc.

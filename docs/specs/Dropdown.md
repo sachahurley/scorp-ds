@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/Dropdown` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `e2721aa4cdda703d` |
+| Last updated | 2026-10-29 |
+| API hash | `e25c44b778dfe29b` |
 
 ---
 
@@ -42,7 +42,6 @@ A `relative inline-block` wrapper containing the trigger and, when open, the men
 | Item `destructive` | `error-600` text, `--field-background-error` hover and keyboard highlight (it keeps its red text). |
 | `align="start"` (default) | Menu aligned to the trigger's leading (left) edge. |
 | `align="end"` | Menu aligned to the trigger's trailing (right) edge. |
-| `align="left"` / `"right"` (deprecated) | Aliases of `start` / `end`; still work and warn once in development. |
 
 ### Sizes
 
@@ -51,7 +50,6 @@ A `relative inline-block` wrapper containing the trigger and, when open, the men
 | `sm` | Default trigger 32px (`h-control-sm`), `px-4 py-1.5`, 16px icon boxes |
 | `md` (default) | Default trigger 40px (`h-control-md`), `px-5 py-2.5`, 20px icon boxes |
 | `lg` | Default trigger 48px (`h-control-lg`), `px-6 py-3.5`, 24px icon boxes |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
 Size affects the default trigger and item icon boxes only; items are always `px-4 py-3` `text-sm` (44px rows) and the menu is at least `min-w-52` (208px) wide.
 
@@ -70,8 +68,8 @@ Size affects the default trigger and item icon boxes only; items are always `px-
 | `items` | `DropdownItem[]` | none | Yes | Menu entries, in order. |
 | `trigger` | `ReactNode` | default button | No | Custom trigger. A valid React element is cloned and the toggle handler, `aria-haspopup` and `aria-expanded` are attached to it, so pass something focusable (a `Button`). Its own `onClick` still runs. Anything that is not an element (a string, an array) falls back to a `div` with `role="button"` and `tabIndex=0` that toggles on click, Enter, or Space. |
 | `label` | `string` | `"Actions"` | No | Text of the default trigger button (and its accessible name). Ignored with a custom `trigger`. |
-| `align` | `"start" \| "end" \| "left" \| "right"` | `"start"` | No | Which trigger edge the menu lines up with. Use `end` for a trigger at the trailing edge of a row or header. `left` and `right` are deprecated aliases of `start` and `end` (decision 0024). |
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Default trigger height and item icon size. Legacy names are deprecated. |
+| `align` | `"start" \| "end"` | `"start"` | No | Which trigger edge the menu lines up with. Use `end` for a trigger at the trailing edge of a row or header. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Default trigger height and item icon size. |
 
 Dropdown does not forward refs, `className`, or native attributes.
 
@@ -262,6 +260,7 @@ Interactive controls: `align`, `size` on each story.
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | `type="button"` on trigger and items, one raw-index keyboard model that skips disabled items, Tab closes the menu, custom element triggers are cloned instead of double-wrapped, menu uses `--z-index-dropdown` and `min-w-52`, highlight moved to `--surface-muted` + `--accent`, stale "Unicode" comments removed, first tests added |
 | Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `align` takes `start \| end` (default `start`); `left` and `right` are deprecated values behind a `@deprecated` alias type, still work and warn once. Rendering unchanged |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `align` values `left` and `right` and the `small \| medium \| large` size names, with their dev warnings; use `start`, `end` and `sm \| md \| lg`. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

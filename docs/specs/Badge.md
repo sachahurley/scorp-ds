@@ -13,8 +13,8 @@
 | Story | `Components/Feedback/Badge` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `b0c2582df5878004` |
+| Last updated | 2026-10-29 |
+| API hash | `32b4cf7afd092142` |
 
 ---
 
@@ -36,7 +36,7 @@ A `span` plate (`plate-round`, or a dashed square border when `dashed`) containi
 
 ### Tones
 
-`tone` takes the five shared colour roles of decision 0024 plus Badge's own `primary` and `bone`. The deprecated `variant` prop still takes the old values, with `default` meaning `neutral`.
+`tone` takes the five shared colour roles of decision 0024 plus Badge's own `primary` and `bone`.
 
 | Enum Value | Description |
 |-----------|-------------|
@@ -57,7 +57,6 @@ Modifiers that compose with any tone: `caps` (uppercase, `.08em` tracking) and `
 | `sm` | 20px tall (`h-5`), `px-2 py-1`, `text-xs`, 12px icon box |
 | `md` | 24px tall (`h-6`), `px-2.5 py-1`, `text-xs`, 14px icon box (default) |
 | `lg` | 28px tall (`h-7`), `px-3 py-1.5`, `text-sm`, 16px icon box |
-| `small`, `medium`, `large` | Deprecated aliases for `sm`, `md`, `lg`; log a one-time dev warning |
 
 <!-- AUTO-END:anatomy -->
 
@@ -71,18 +70,15 @@ Modifiers that compose with any tone: `caps` (uppercase, `.08em` tracking) and `
 |----------|------|---------|----------|-------------|
 | `children` | `ReactNode` | | Yes | Label text or count. Keep to one or two words. |
 | `tone` | `BadgeTone`: `"neutral" \| "info" \| "success" \| "warning" \| "error" \| "primary" \| "bone"` | `"neutral"` | No | Color treatment. |
-| `variant` | `"default" \| "primary" \| "success" \| "warning" \| "error" \| "info" \| "bone"` | `undefined` | No | **Deprecated: use `tone`.** The old name; `default` maps to `neutral`. Warns once in development; `tone` wins when both are set. |
-| `size` | `ControlSizeProp` (`"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"`) | `"md"` | No | Chip height. Legacy names are deprecated aliases. |
+| `size` | `ControlSize` (`"sm" \| "md" \| "lg"`) | `"md"` | No | Chip height. |
 | `caps` | `boolean` | `false` | No | Uppercase eyebrow voice for state chips ("EQUIPPED", "LEVEL UP"). |
 | `dashed` | `boolean` | `false` | No | Not-yet-real voice for placeholders, empty slots, free tiers. Drops the plate clip for sharp corners. |
 | `iconLeft` | `IconSlot \| ReactNode` | `undefined` | No | Leading icon: a TuiIcon name (`"Check"`) or an element, boxed to the size's icon slot. |
 | `onDismiss` | `() => void` | `undefined` | No | Renders a remove button. Click is stopped from propagating to parents. |
-| `onClose` | `() => void` | `undefined` | No | **Deprecated: use `onDismiss`.** The old name. Warns once in development; `onDismiss` wins when both are set. |
 | `dismissLabel` | `string` | `Remove {children}` when `children` is a string, else `"Remove badge"` | No | Accessible name for the remove button. Pass it whenever the label alone does not identify what is removed. |
-| `onCloseLabel` | `string` | `undefined` | No | **Deprecated: use `dismissLabel`.** The old name. Warns once in development; `dismissLabel` wins when both are set. |
 | `className` | `string` | `""` | No | Extra classes on the root `span`. |
 
-Exported types: `BadgeProps`, `BadgeTone`. `ControlSizeProp` is exported from the package barrel.
+Exported types: `BadgeProps`, `BadgeTone`. `ControlSize` is exported from the package barrel.
 
 <!-- AUTO-END:properties -->
 
@@ -119,11 +115,11 @@ Exported types: `BadgeProps`, `BadgeTone`. `ControlSizeProp` is exported from th
 
 | State / Tone | Controlled By | Tokens Affected |
 |----------------|--------------|-----------------|
-| Colour role | `tone` (deprecated `variant`) | Fill and text |
+| Colour role | `tone` | Fill and text |
 | Size | `size` | Height, padding, font size, icon box |
 | Caps | `caps` | `uppercase`, `letter-spacing: .08em` |
 | Dashed | `dashed` | Fill removed, dashed 1px border, `rounded-none` instead of plate clip |
-| Removable | `onDismiss` (deprecated `onClose`) | Remove button rendered, named from `dismissLabel` (deprecated `onCloseLabel`) or the string label |
+| Removable | `onDismiss` | Remove button rendered, named from `dismissLabel` or the string label |
 | Remove hover | Pointer | Button text to `error-700` / `error-400` |
 | Remove focus | Keyboard | 2px `--focus-ring-primary` ring with 1px offset |
 
@@ -181,7 +177,7 @@ Interactive controls: `tone` (select, every role including `bone`), `size` (sele
 
 ### Foundation Files Referenced
 
-- `packages/components/src/lib/size.ts` (`resolveSize`, `ControlSizeProp`)
+- `packages/components/src/lib/size.ts` (`ControlSize`)
 - `packages/tokens/src/styles/tokens.css` (surface, focus, motion variables)
 - `packages/tokens/tailwind.preset.js` (`plate-round` utility, semantic color scales)
 
@@ -214,7 +210,6 @@ Interactive controls: `tone` (select, every role including `bone`), `size` (sele
 - Do use `dashed` for placeholders and empty slots, not as a second colour role.
 - Don't make a Badge clickable by wrapping it in an `onClick`; use Button or a link for actions.
 - Don't pass `className` overrides for uppercase text; use `caps`.
-- Don't use the deprecated `small | medium | large` names in new code.
 
 <!-- /HUMAN-SECTION:do-dont -->
 
@@ -239,7 +234,7 @@ Interactive controls: `tone` (select, every role including `bone`), `size` (sele
 
 | Date | Issue | Resolution | Status |
 |------|-------|------------|--------|
-| 2026-09-22 | Heights use `h-5` / `h-6` / `h-7` (20/24/28px), not the control-height tokens the 2026-09-21 changelog row mentions; remove button is below the 44px target and its label does not name the badge | Remove button: 44x44 pseudo-element hit area (clipped to the chip height by the plate, see Accessibility) and a new `onCloseLabel` prop defaulting to `Remove {children}`. The height scale is unchanged and stays intentional: badges are inline text markers, not controls | Partially resolved |
+| 2026-09-22 | Heights use `h-5` / `h-6` / `h-7` (20/24/28px), not the control-height tokens the 2026-09-21 changelog row mentions; remove button is below the 44px target and its label does not name the badge | Remove button: 44x44 pseudo-element hit area (clipped to the chip height by the plate, see Accessibility) and a new `onCloseLabel` prop (now `dismissLabel`) defaulting to `Remove {children}`. The height scale is unchanged and stays intentional: badges are inline text markers, not controls | Partially resolved |
 | 2026-09-22 | Story `variant` control omits `bone`; test "renders bracket-wrapped label" name is stale (brackets were retired) | The control is now `tone` and lists `bone`; the stale test name is gone | Resolved |
 
 <!-- AUTO-END:known-gaps -->
@@ -257,6 +252,7 @@ Interactive controls: `tone` (select, every role including `bone`), `size` (sele
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | feat | `onCloseLabel` prop; the remove button is named after the badge by default and gains a 44px hit area |
 | Unreleased | 2026-10-28 | feat | Decision 0024 vocabulary: `tone` replaces `variant` (`neutral` replaces `default`; `primary` and `bone` stay), `onDismiss` replaces `onClose`, `dismissLabel` replaces `onCloseLabel`. The old props still work, warn once in development, and lose when both are set. New exported type `BadgeTone`. Renders identically |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `variant` (and its `default` value), `onClose` and `onCloseLabel` props, and the `small \| medium \| large` size names, with their dev warnings; use `tone`, `onDismiss`, `dismissLabel` and `sm \| md \| lg`. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

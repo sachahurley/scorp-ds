@@ -131,27 +131,3 @@ describe("Tooltip align", () => {
     expect(caretOf(tip).style.marginLeft).toBe("24px");
   });
 });
-
-describe("Tooltip deprecated position", () => {
-  afterEach(() => {
-    cleanup();
-    vi.restoreAllMocks();
-    vi.useRealTimers();
-  });
-
-  it("still honours position and warns once", () => {
-    vi.useFakeTimers();
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    mockLayout({ top: 300, left: 400, width: 80, height: 32 });
-    expect(openTooltip({ position: "bottom" })).toHaveAttribute("data-placement", "bottom");
-    const messages = warn.mock.calls.map((c) => String(c[0]));
-    expect(messages.filter((m) => m.includes("Tooltip: position is deprecated. Use side."))).toHaveLength(1);
-  });
-
-  it("lets side win over position", () => {
-    vi.useFakeTimers();
-    vi.spyOn(console, "warn").mockImplementation(() => {});
-    mockLayout({ top: 300, left: 400, width: 80, height: 32 });
-    expect(openTooltip({ side: "left", position: "right" })).toHaveAttribute("data-placement", "left");
-  });
-});

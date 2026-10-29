@@ -13,8 +13,8 @@
 | Story | `Components/Terminal/Kbd` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `6658e73daaac639a` |
+| Last updated | 2026-10-29 |
+| API hash | `455d8d8ede90f344` |
 
 ---
 
@@ -137,7 +137,7 @@ No hardcoded values found.
 
 ### Child Components
 
-- lib/size (resolveSize)
+- lib/size (`ControlSize` type)
 
 ### Foundation Files Referenced
 
@@ -203,6 +203,7 @@ No hardcoded values found.
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 | Unreleased | 2026-10-28 | docs | Documented that `keys` wins over `children` when both are passed |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

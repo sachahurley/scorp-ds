@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `36196ba7fc1c6767` |
+| API hash | `6f40dd69ae0527ad` |
 
 ---
 
@@ -47,7 +47,6 @@ An outer `flex items-center gap-3` wrapper (receives `className`) holding the sw
 | `sm` | Track 24x44px, knob 20px, knob x 2px off / 22px on, 12px icon box |
 | `md` (default) | Track 32x56px, knob 24px, knob x 3px off / 29px on, 12px icon box |
 | `lg` | Track 40x72px, knob 32px, knob x 3px off / 37px on, 16px icon box |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
 Every measurement comes from `global.switch` (`--switch-track-height/width-*`, `--switch-knob-size/inset/travel-*`), so none of it is typed into the component. The `md` and `lg` track heights alias `control.height.sm` and `control.height.md`; `sm`'s 24px track is one step below the control scale and has no other token, and its 44px width aliases `touch.target`. The knob's on offset is `track width - knob size - inset`. The hit area is 44px tall at every size (44x44 for `sm`).
 
@@ -68,7 +67,7 @@ Every measurement comes from `global.switch` (`--switch-track-height/width-*`, `
 | `aria-label` | `string` | none | One name is required | Accessible name when there is no `label` (the theme toggle). Wins over `label`. |
 | `aria-labelledby` | `string` | none | One name is required | Id of visible text elsewhere that names the switch (a settings row heading). Wins over both. |
 | `hideLabel` | `boolean` | `false` | No | Keeps `label` as the accessible name only, with no visible text. Use in rows that already show a heading, such as settings rows. |
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Track size. Legacy names are deprecated. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Track size. |
 | `disabled` | `boolean` | `false` | No | Native disabled; switch dims to 50% and the label uses `secondary-700` / `dark:secondary-400`. |
 | `icon` | `IconSlot \| ReactNode` | none | No | Glyph inside the knob: a TuiIcon name or an element. |
 | `className` | `string` | `""` | No | Applied to the outer wrapper. |
@@ -246,6 +245,7 @@ None imported. `ThemeToggle` composes Switch with a knob `icon`.
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | Off track moved to `--control-track` and the on track to `--accent` so both states clear the 3:1 non-text rule; visible label now toggles; knob glide is reduced-motion safe; track and knob geometry moved to `global.switch` tokens |
 | Unreleased | 2026-10-29 | feat (breaking type) | Accessible name required by the type (`label`, `aria-label` or `aria-labelledby`); "On" / "Off" fallback removed; `defaultChecked` for uncontrolled use. `SwitchProps` is now a type alias |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

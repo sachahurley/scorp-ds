@@ -163,8 +163,7 @@ keys in `tokens.json`. Dark is the default theme.
 
 - **Color tokens:** camelCase `{group}{Variant}{State}`, e.g. `textDefault`,
   `surfaceElevated`, `borderFocused`
-- **Control sizing:** `sm` / `md` / `lg` (legacy `small` / `medium` / `large` aliases
-  still resolve, with a dev warning)
+- **Control sizing:** `sm` / `md` / `lg`
 - **Components:** PascalCase and **unprefixed**, e.g. `Button`, not `ScorpButton`. The
   `@{project.package}/components` import provides the namespace.
 - **Files:** PascalCase for components (`Button.tsx`), kebab-case for utilities

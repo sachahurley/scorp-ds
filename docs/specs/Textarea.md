@@ -13,8 +13,8 @@
 | Story | `Components/Inputs/Textarea` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `e6c807a63c893a0d` |
+| Last updated | 2026-10-29 |
+| API hash | `4f235131fe4c2317` |
 
 ---
 
@@ -47,7 +47,6 @@ Optional `<label>`, a ring wrapper (`plate-round p-px`, background = border colo
 | `sm` | min-height 32px (`min-h-control-sm`), `px-3 py-1.5` |
 | `md` (default) | min-height 40px (`min-h-control-md`), `px-4 py-2.5` |
 | `lg` | min-height 48px (`min-h-control-lg`), `px-5 py-3.5` |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
 Actual height is usually driven by the native `rows` attribute; the size sets the floor and padding.
 
@@ -61,7 +60,7 @@ Actual height is usually driven by the native `rows` attribute; the size sets th
 
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Minimum height and padding, matching Input. Legacy names are deprecated. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Minimum height and padding, matching Input. |
 | `label` | `ReactNode` | none | No | Visible label, associated via `htmlFor`/`id` (id generated when not passed). |
 | `helperText` | `ReactNode` | none | No | Hint under the field (length, format), linked via `aria-describedby`. Hidden while `errorMessage` is set. |
 | `errorMessage` | `ReactNode` | none | No | Validation message. Sets error styling and `aria-invalid`, replaces `helperText`, leads with the AlertCircle icon. |
@@ -241,6 +240,7 @@ None in `Textarea.tsx`. The shared `FieldMessage` uses `h-[1lh]`.
 | Unreleased | 2026-09-22 | fix | 2px inset focus ring in every state (error included), disabled dims the ring wrapper, and `--field-placeholder` raised to 6.28:1 in light |
 | Unreleased | 2026-10-28 | fix | Focus is a colour change only: the 2px inset ring is gone; focus wins over error |
 | Unreleased | 2026-10-28 | fix | Textarea is `block`, removing the thick bar the baseline gap painted under the field |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 
