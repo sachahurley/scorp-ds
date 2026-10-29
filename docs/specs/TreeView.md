@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-TREE VIEW COMPONENT
-
 Hierarchical list with expandable branches (file trees, outlines). Implements
 the WAI-ARIA tree pattern: `role="tree"` / `treeitem` / `group`,
 `aria-expanded` on branches, `aria-level` / `aria-setsize` / `aria-posinset` on

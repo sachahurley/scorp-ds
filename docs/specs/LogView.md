@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-LOG VIEW COMPONENT
-
 A monospace scrolling log: build output, server logs, job runs. Each line shows
 an optional line number, an optional timestamp, the level as a 1-bit icon plus a
 text tag (INFO / WARN / ERROR / DEBUG, never color alone), and the message.

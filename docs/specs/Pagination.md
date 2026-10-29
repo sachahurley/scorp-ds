@@ -22,8 +22,6 @@
 
 <!-- HUMAN-SECTION:intent (preserved across auto-updates) -->
 
-PAGINATION COMPONENT
-
 Page picker for long, paged collections. Boundary pages, sibling pages around
 the current one, and an ellipsis where a gap is skipped; the list length stays
 constant while paging so the control never jumps. Prev/next use the 1-bit
