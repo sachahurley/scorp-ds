@@ -64,6 +64,11 @@
       "from": "packages/components/src/components/Alert.tsx"
     },
     {
+      "name": "AlertTone",
+      "kind": "type",
+      "from": "packages/components/src/components/Alert.tsx"
+    },
+    {
       "name": "AppHeader",
       "kind": "component",
       "from": "packages/components/src/components/AppHeader.tsx"
@@ -91,6 +96,11 @@
     {
       "name": "BadgeProps",
       "kind": "interface",
+      "from": "packages/components/src/components/Badge.tsx"
+    },
+    {
+      "name": "BadgeTone",
+      "kind": "type",
       "from": "packages/components/src/components/Badge.tsx"
     },
     {
@@ -564,6 +574,11 @@
       "from": "packages/components/src/components/ProgressBar.tsx"
     },
     {
+      "name": "ProgressBarTone",
+      "kind": "type",
+      "from": "packages/components/src/components/ProgressBar.tsx"
+    },
+    {
       "name": "Radio",
       "kind": "component",
       "from": "packages/components/src/components/Radio.tsx"
@@ -871,6 +886,11 @@
     {
       "name": "ToastProps",
       "kind": "interface",
+      "from": "packages/components/src/components/Toast.tsx"
+    },
+    {
+      "name": "ToastTone",
+      "kind": "type",
       "from": "packages/components/src/components/Toast.tsx"
     },
     {
