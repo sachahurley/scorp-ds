@@ -41,5 +41,14 @@ updates:
     ignore:
       - dependency-name: '*'
         update-types: ['version-update:semver-major']
+      # 0.x versions make every minor a breaking change, so the majors rule above
+      # does not hold the test-runner back: 0.20+ requires Storybook 9 (CLAUDE.md
+      # pins 0.19.x to Storybook 8). It moves with the Storybook 9 migration PR.
+      - dependency-name: '@storybook/test-runner'
+        versions: ['>=0.20.0']
+      # A Playwright bump changes the browser that renders every visual baseline,
+      # so it lands on its own with a full baseline refresh, not in a tooling group.
+      - dependency-name: 'playwright'
+        update-types: ['version-update:semver-minor']
     commit-message:
       prefix: 'chore(deps)'

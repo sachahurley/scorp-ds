@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,19 +7,31 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 /** Repo root (packages/storybook/.storybook → ../../../) */
 const repoRoot = path.resolve(dirname, '../../..');
 
+/**
+ * Resolves a framework or addon to its folder from THIS package, not from wherever
+ * the `storybook` CLI happens to be hoisted. npm may nest `@storybook/react-vite`
+ * under packages/storybook/node_modules (beside the Vite 6 that only this package
+ * uses) while the CLI sits at the root; a bare name then fails with
+ * "Cannot find module '@storybook/react-vite/preset'". Storybook documents this
+ * pattern for monorepos.
+ */
+const require = createRequire(import.meta.url);
+const getAbsolutePath = (value: string): string =>
+  path.dirname(require.resolve(path.join(value, 'package.json')));
+
 const config: StorybookConfig = {
   stories: [
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    '@storybook/addon-a11y',
-    '@storybook/addon-viewport',
+    getAbsolutePath('@storybook/addon-essentials'),
+    getAbsolutePath('@storybook/addon-interactions'),
+    getAbsolutePath('@storybook/addon-a11y'),
+    getAbsolutePath('@storybook/addon-viewport'),
   ],
   framework: {
-    name: '@storybook/react-vite',
+    name: getAbsolutePath('@storybook/react-vite') as '@storybook/react-vite',
     options: {},
   },
   docs: {
