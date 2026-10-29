@@ -14,8 +14,8 @@
 | Story | `Components/Chat/Transcript` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `3b2800f4536a62c0` |
+| Last updated | 2026-10-29 |
+| API hash | `84ad744a629e1f7d` |
 
 ---
 
@@ -29,6 +29,8 @@ It differs from LogView in what it follows. A log grows by whole lines; a conver
 
 The follow logic is pulled out of LogView into one shared hook, so the two regions cannot drift apart in behavior.
 
+Don't use this for: machine output with no turns, such as build or server logs (use `LogView` instead), a list of records people scan and act on (use `ListRow` or `Table` instead), or a feed of notifications (use `Toast` instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---
@@ -41,7 +43,7 @@ A relative wrapper (`flex min-h-0 flex-col`) holding:
 
 1. **Scroll region**: `role="log"`, focusable, `overflow-y-auto`.
 2. **Content column**: centered, `max-w-screen-md` by default (`width`), `p-4`, `gap-6` between turns. It is always rendered, even when empty, so the size observer is attached before the first turn arrives. With no children it centers `emptyState`.
-3. **Jump button**: `Button variant="secondary" size="sm"` with `ChevronDown`, floating at the bottom center while following is paused. Same control and copy as LogView.
+3. **Jump button**: `Button type="button" variant="secondary" size="sm" iconLeft="ChevronDown"`, floating at the bottom center while following is paused. Same control and copy as LogView.
 4. **Status region**: a visually hidden `role="status"` that says "Responding" and "Response complete" as `busy` changes.
 
 <!-- AUTO-END:anatomy -->
@@ -52,15 +54,17 @@ A relative wrapper (`flex min-h-0 flex-col`) holding:
 
 <!-- AUTO-START:properties -->
 
+The log region's accessible name is required by the type (decision 0029): pass `aria-label` or `aria-labelledby`. Leaving both out is a compile error. The manifest lists them as optional because the generator records only props every union member shares.
+
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
-| `children` | `ReactNode` | none | No | `Message`s and separators, oldest first. Append to the end. |
+| `aria-label` / `aria-labelledby` | `string` | none | One of them | Name of the log region: `aria-label` ("Conversation"), or `aria-labelledby` pointing at visible text such as the pane title. There is no default name. |
+| `children` | `ReactNode` | none | No | `Message`s, oldest first. Append to the end; a streaming reply grows in place as the last child. |
 | `busy` | `boolean` | `false` | No | A reply is streaming. Drives the status announcements. |
 | `autoScroll` | `boolean` | `true` | No | Follow new content. Pauses while the reader is scrolled up. |
 | `emptyState` | `ReactNode` | none | No | Shown when there are no children. Usually an `EmptyState` with starter prompts. |
-| `width` | `"sm" \| "md" \| "lg" \| "full"` | `"md"` | No | Max width of the content column, from the Container scale. |
+| `width` | `"sm" \| "md" \| "lg" \| "full"` | `"md"` | No | Max width of the content column, on the Container scale (`sm` 640px, `md` 768px, `lg` 1024px). `full` inside a narrow pane. |
 | `framed` | `boolean` | `false` | No | Draw the plate ring, as LogView does. Off by default because a Transcript usually fills a pane that is already framed. |
-| `aria-label` | `string` | `"Conversation"` | No | Accessible name of the log region. |
 | `onFollowChange` | `(following: boolean) => void` | none | No | Fires when following pauses or resumes. |
 | `className` | `string` | none | No | Applied to the wrapper. Set the height here or let a flex parent size it. |
 
@@ -114,10 +118,13 @@ No new tokens.
 | Empty state | Yes | Yes | `Empty` (EmptyState with starter prompts) |
 | Framed | Yes | Yes | `Framed` |
 | Paused, with a count | Yes | Yes | `Paused` (`play` scrolls up and appends a turn) |
-| Streaming | Yes | Yes | `Streaming`, `skip-visual` (grows on a timer); stays in the a11y pass |
+| Busy, a reply streaming | Yes | Yes | `Responding` (a still frame: `busy` and a streaming last turn) |
+| Streaming, live | Yes | Yes | `Streaming`, `skip-visual` (grows on a timer); stays in the a11y pass |
 | Widths | Yes | Controls only | `width` |
 
-**Coverage:** 83% (5/6)
+There is no loading state: the API has no `loading` prop. If history ever loads asynchronously, add one the way Table and TreeView do (Skeleton rows, `aria-busy`), with its story (decision 0030).
+
+**Coverage:** 86% (6/7)
 
 <!-- AUTO-END:storybook -->
 
@@ -140,7 +147,7 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 ### Child Components
 
 - `Message` (expected children)
-- `Button`, `TuiIcon` (Jump button)
+- `Button` (Jump button, icon by name through `iconLeft`)
 - `VisuallyHidden` (status region)
 - `useFollowScroll` (`lib/use-follow-scroll.ts`), shared with LogView: follows on turn count and on content height (`ResizeObserver` on the content column)
 
@@ -156,7 +163,7 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 
 <!-- AUTO-START:accessibility -->
 
-- Semantic role: `role="log"` with `aria-live="polite"` and `aria-relevant="additions"`, named by `aria-label`. Each turn is an `<article>`, so turn-by-turn navigation works inside it.
+- Semantic role: `role="log"` with `aria-live="polite"` and `aria-relevant="additions"`, named by `aria-label` or `aria-labelledby`, one of which the type requires (decision 0029). Each turn is an `<article>`, so turn-by-turn navigation works inside it.
 - Streaming noise: a streaming `Message` sets `aria-busy`, so the log should announce the finished turn, not each token. Because `aria-busy` support varies, the separate status region also announces "Response complete".
 - Keyboard: the region is focusable (`tabIndex=0`) so it can be scrolled with arrow keys and Page Up/Down; it is the scrollable-region-focusable case axe checks for.
 - Jump button: a real button in tab order while visible, with the count in its text.
@@ -212,6 +219,7 @@ Expected: the 8px bottom threshold, shared with LogView through the hook. Nothin
 |---------|------|------|---------|
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
 | v1 | 2026-10-28 | added | Built to the reviewed spec. The content column is always rendered so streaming growth is followed from the first turn |
+| v1 | 2026-10-29 | changed | Rebuilt on current main (takeover of #99): the name is required by type (`aria-label` or `aria-labelledby`, no default "Conversation"); the Jump button takes its icon by name; a still `Responding` story covers the busy state |
 
 <!-- AUTO-END:changelog -->
 

@@ -14,8 +14,8 @@
 | Story | `Components/Terminal/CodeBlock` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `73b52fa2da0040b9` |
+| Last updated | 2026-10-29 |
+| API hash | `10508666b4affdc0` |
 
 ---
 
@@ -26,6 +26,8 @@
 CodeBlock shows read-only code: a snippet in a chat reply, the generated source of a layout, a config file. It has a title bar with the file name or language, optional line numbers, and a copy button. It uses the same frame as LogView (plate ring, page fill), so code and logs read as the same kind of surface.
 
 There is no syntax highlighting in v1. Scorp DS has no syntax color roles yet, and inventing them inside a component would break the semantic-aliases-only rule (decision 0006). Monospace on the page fill is already legible; color roles are a separate token proposal.
+
+Don't use this for: output that streams in line by line, such as build or server logs (use `LogView` instead), a key or shortcut inside a sentence (use `Kbd` instead), or a terminal pane with its own title and actions around other content (use `Window` instead, with an unframed CodeBlock inside if it holds code).
 
 <!-- /HUMAN-SECTION:intent -->
 
@@ -136,7 +138,7 @@ No new tokens.
 | Horizontal scroll and wrap | Yes | Yes | `Long lines` |
 | Unframed in a Window | Yes | Yes | `Unframed` |
 | Keyboard focus on the code | Yes | Yes | `Focused` (`play` tabs past the copy button) |
-| Copied / failed | Yes | Interactive only | Click Copy in any story |
+| Copied / failed | Yes | Interactive only | Click Copy in any story. No story of its own: the result reverts on a two-second timer, so it could not hold a stable frame, and it depends on clipboard permission in the runner. Covered by `CodeBlock.test.tsx` |
 
 Interactive controls: `showLineNumbers`, `wrap`, `copyable`, `framed`.
 
@@ -182,7 +184,8 @@ Interactive controls: `showLineNumbers`, `wrap`, `copyable`, `framed`.
 - Semantic structure: `<figure>` named by `aria-label`; the code is `<pre><code>`.
 - Keyboard: the `<pre>` is focusable (`tabIndex=0`), after the copy button, so overflowing code can be scrolled without a mouse (axe scrollable-region-focusable).
 - Line numbers and highlight markers are `aria-hidden` and `select-none`, so a screen reader reads only the code and a manual copy gives clean code.
-- Copy: the button's name is "Copy code" (visible "Copy" plus hidden " code"), then "Copied" or "Copy failed", which is also announced through a polite status region.
+- Copy: a `type="button"` Button whose name is "Copy code" (visible "Copy" plus hidden " code"), then "Copied" or "Copy failed", which is also announced through a polite status region. Its icon is passed by name (`iconLeft="Copy"` / `"Check"`), so Button sizes it.
+- Name: the figure is not interactive, so its type does not require a name (decision 0029 covers interactive components); it derives one from the title or language and falls back to "Code". Pass `aria-label` when the title is a node.
 - Color independence: highlighted lines carry a gutter marker as well as a fill.
 
 <!-- AUTO-END:accessibility -->
@@ -234,6 +237,7 @@ Interactive controls: `showLineNumbers`, `wrap`, `copyable`, `framed`.
 |---------|------|------|---------|
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
 | v1 | 2026-10-28 | added | Built to the reviewed spec. The figure is named with `aria-label`; the copy button keeps its visible text in its name |
+| v1 | 2026-10-29 | changed | Rebuilt on current main (takeover of #99): the copy button takes its icon by name and is `type="button"`; the focusable `<pre>` carries a justified `no-noninteractive-tabindex` exception, as LogView; prop docs say when to use each prop |
 
 <!-- AUTO-END:changelog -->
 

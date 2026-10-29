@@ -28,27 +28,27 @@ import { Button } from "./Button";
 import { TuiIcon } from "./TuiIcon";
 
 export interface CodeBlockProps {
-  /** The code. Rendered as text, never as HTML. */
+  /** The code, as one string with `\n` line breaks. Rendered as text, never as HTML, so it is safe for generated source. */
   code: string;
-  /** Language name ("tsx", "json"). A label only in v1; also set as `data-language`. */
+  /** Language name ("tsx", "json"). A label only for now (no syntax colors); also set as `data-language`, and the title when `title` is unset. */
   language?: string;
-  /** Title bar text, usually a file name (default: `language`). */
+  /** Title bar text, usually the file name ("settings-screen.tsx"). Defaults to `language`. */
   title?: ReactNode;
-  /** Show a gutter of 1-based line numbers (default false). */
+  /** Show a gutter of 1-based line numbers (default false), for code people will discuss by line. Numbers are hidden from screen readers and from copying. */
   showLineNumbers?: boolean;
-  /** 1-based lines to mark with a muted row and a gutter marker. */
+  /** 1-based lines to mark with a muted row and a gutter marker (never color alone), for the lines an answer is about. */
   highlightLines?: number[];
-  /** Wrap long lines instead of scrolling horizontally (default false). */
+  /** Wrap long lines instead of scrolling horizontally (default false). Turn on for prose-like content such as JSON in a narrow pane. */
   wrap?: boolean;
-  /** Show the copy button (default true). Hidden anyway without the Clipboard API. */
+  /** Show the copy button (default true). It is not rendered without the Clipboard API. */
   copyable?: boolean;
-  /** Fires after a successful copy. */
+  /** Fires with the code after a successful copy, for analytics or a toast. */
   onCopy?: (code: string) => void;
-  /** Draw the plate ring (default true). Set false inside a Window body. */
+  /** Draw the plate ring (default true). Set false inside a Window body or a tab panel that already frames it. */
   framed?: boolean;
-  /** Accessible name of the block (default: the title when it is text, else the language, else "Code"). */
+  /** Accessible name of the block. Defaults to the title when it is text, else the language, else "Code"; set it when the title is a node. */
   "aria-label"?: string;
-  /** Extra classes for the figure. Cap the height here (max-h-96); the code scrolls. */
+  /** Extra classes for the figure. Cap the height here (`max-h-96`); the code then scrolls. */
   className?: string;
 }
 
@@ -58,7 +58,9 @@ const COPY_RESULT_MS = 2000;
 type CopyState = "idle" | "copied" | "failed";
 
 /**
- * CodeBlock
+ * Read-only code in a terminal frame: a title bar with the file name and a
+ * copy button, then the code with optional line numbers and highlighted
+ * lines. Use `LogView` for streaming output and `Kbd` for keys in a sentence.
  *
  * ```tsx
  * <CodeBlock title="settings-screen.tsx" language="tsx" code={source} showLineNumbers />
@@ -117,10 +119,11 @@ export function CodeBlock({
             <span aria-hidden="true" className="h-px min-w-4 flex-1 bg-[var(--surface-container-stroke)]" />
             {canCopy && (
               <Button
+                type="button"
                 variant="ghost"
                 size="sm"
                 onClick={handleCopy}
-                iconLeft={<TuiIcon name={copy === "copied" ? "Check" : "Copy"} size="3" />}
+                iconLeft={copy === "copied" ? "Check" : "Copy"}
               >
                 {copy === "copied" ? "Copied" : copy === "failed" ? "Copy failed" : "Copy"}
                 {copy === "idle" && <VisuallyHidden> code</VisuallyHidden>}
@@ -129,6 +132,7 @@ export function CodeBlock({
           </figcaption>
         )}
         <pre
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- overflowing code must be keyboard-scrollable (axe scrollable-region-focusable), as in LogView
           tabIndex={0}
           className={cn(
             "min-h-0 flex-1 overflow-auto py-2 text-xs leading-relaxed text-[var(--text-primary)]",

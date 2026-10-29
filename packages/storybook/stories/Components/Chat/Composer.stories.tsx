@@ -12,12 +12,12 @@ const meta: Meta<typeof Composer> = {
         component:
           'The prompt box of a chat surface. It grows as you type, sends on Enter (Shift+Enter adds a line), and turns its send button into a stop button while a reply is streaming. The field and its buttons share one plate, like a command line. Use `Textarea` instead in forms, where Enter must add a line break.\n\n' +
           '- **Keyboard:** Enter sends and Shift+Enter breaks the line, or Cmd/Ctrl+Enter sends with `submitKey="mod-enter"`. The visible hint says which, and is linked to the field so screen readers announce it. Enter never sends during IME composition.\n' +
-          '- **Label:** the field is named by `aria-label` (default "Message") or `aria-labelledby`; the send and stop buttons by `sendLabel` and `stopLabel`.\n' +
-          '- **Focus:** the 2px inset ring covers the whole plate while the field has focus. Focus stays in the field after a send and while busy.',
+          '- **Label:** the field needs a name, as `label`, `aria-label` or `aria-labelledby` (required by the type); the send and stop buttons are named by `sendLabel` and `stopLabel`.\n' +
+          '- **Focus:** the 1px ring turns the focus colour while the field has focus, as in every text field; the action and send buttons show their own inset ring.',
       },
     },
   },
-  args: { onSubmit: fn(), onStop: fn() },
+  args: { 'aria-label': 'Message', onSubmit: fn(), onStop: fn() },
   argTypes: {
     size: { control: 'select', options: ['md', 'lg'] },
     submitKey: { control: 'select', options: ['enter', 'mod-enter'] },
@@ -35,16 +35,23 @@ export default meta;
 
 type Story = StoryObj<typeof Composer>;
 
-/** Empty, with the placeholder and the shortcut hint. */
+/** Empty, with the placeholder and the shortcut hint. Send stays disabled until there is text. */
 export const Default: Story = {};
 
 const attach = (
-  <Button variant="ghost" size="sm" aria-label="Attach a file">
-    <TuiIcon name="Plus" size="4" />
+  <Button type="button" variant="ghost" size="sm" aria-label="Attach a file">
+    <TuiIcon name="Plus" />
   </Button>
 );
 
-/** Context chips above the field and a leading action. */
+/** A visible label above the plate, for a prompt that sits in a form-like page rather than a chat pane. */
+export const WithLabel: Story = {
+  name: 'With label',
+  // The meta names every story with aria-label, which would win over the label.
+  render: (args) => <Composer {...args} aria-label={undefined} label="Describe a screen" />,
+};
+
+/** Context chips above the field and a leading action. With text, send is enabled. */
 export const WithContext: Story = {
   name: 'With context',
   args: {
@@ -68,12 +75,19 @@ export const Growing: Story = {
   },
 };
 
-/** A reply is streaming: send becomes stop, and the field stays editable. */
+/** A reply is streaming and can be stopped: send becomes stop, and the field stays editable for the next message. */
 export const Busy: Story = {
   args: { busy: true, defaultValue: 'Now add a sign-out row' },
 };
 
-/** Over the limit: the error replaces the helper text. */
+/** A reply is streaming and cannot be stopped (no `onStop`): send shows Button's loading state. */
+export const Sending: Story = {
+  args: { busy: true, defaultValue: 'Now add a sign-out row' },
+  // The meta passes onStop to every story; this state is the one without it.
+  render: (args) => <Composer {...args} onStop={undefined} />,
+};
+
+/** Over the limit: the error replaces the helper text, the ring and fill turn to the error colours. */
 export const Error: Story = {
   args: {
     maxLength: 2000,
@@ -83,7 +97,7 @@ export const Error: Story = {
   },
 };
 
-/** The whole plate dims, actions included. */
+/** Typing is off: the whole plate dims, actions included, and the helper text says why. */
 export const Disabled: Story = {
   args: { disabled: true, actions: attach, helperText: 'Replaying a recorded session.' },
 };
@@ -104,12 +118,24 @@ export const ModEnter: Story = {
   args: { submitKey: 'mod-enter' },
 };
 
-/** Keyboard focus: the inset ring covers the whole plate. */
+/** Keyboard focus: the ring turns the focus colour (decision 0022). */
 export const Focused: Story = {
   args: { actions: attach, defaultValue: 'Make a settings screen' },
   play: async ({ canvasElement }) => {
     canvasElement.ownerDocument.defaultView?.focus();
     // The field is the first tab stop; the actions come after it
+    await userEvent.tab();
+  },
+};
+
+/** Focus on the send button: only the button's inset ring shows, the field's ring stays idle. */
+export const SendFocused: Story = {
+  name: 'Send focused',
+  args: { defaultValue: 'Make a settings screen' },
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    // Field, then the send button (there are no leading actions here)
+    await userEvent.tab();
     await userEvent.tab();
   },
 };

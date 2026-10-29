@@ -12,12 +12,13 @@ const meta: Meta<typeof Transcript> = {
       description: {
         component:
           'The scrolling list of messages in a conversation. It stays pinned to the newest text while a reply streams in, pauses when you scroll up so you keep your place, and offers "Jump to latest" with a count of new turns. Use `LogView` for logs, which keeps line numbers and levels.\n\n' +
-          '- **Role:** `role="log"`, polite and additions only, named by `aria-label` (default "Conversation"). Each turn inside is an article.\n' +
+          '- **Role:** `role="log"`, polite and additions only, named by `aria-label` or `aria-labelledby` (one is required by the type). Each turn inside is an article.\n' +
           '- **Announcements:** a separate status region says "Responding" and "Response complete", once each, not every token.\n' +
           '- **Keyboard:** the region is focusable, so arrow keys and Page Up/Down scroll it.',
       },
     },
   },
+  args: { 'aria-label': 'Conversation' },
   tags: ['autodocs'],
 };
 
@@ -79,7 +80,7 @@ export const Paused: Story = {
       const [turns, setTurns] = useState(exchange.slice(0, 4));
       return (
         <div className="space-y-3">
-          <Transcript className="h-64" framed>
+          <Transcript aria-label="Conversation" className="h-64" framed>
             {turns}
           </Transcript>
           <Button variant="secondary" size="sm" onClick={() => setTurns(exchange)}>
@@ -103,6 +104,21 @@ export const Paused: Story = {
   },
 };
 
+/** A reply is streaming: the last turn carries the steady cursor and `aria-busy`, and the region follows it. */
+export const Responding: Story = {
+  args: {
+    className: 'h-96',
+    framed: true,
+    busy: true,
+    children: [
+      ...exchange.slice(0, 4),
+      <Message key="a2" author="assistant" status="streaming">
+        Added a ListRow with a sign-out action. It uses the secondary button so
+      </Message>,
+    ],
+  },
+};
+
 const words =
   'Here is a settings screen composed from Card, Switch and a destructive Button. The danger zone sits last, in its own card, so it is never the first thing a thumb reaches.'.split(
     ' '
@@ -111,8 +127,8 @@ const words =
 /** A reply streaming in, a word every 120ms, then starting over. */
 export const Streaming: Story = {
   // Excluded from visual regression: the reply grows on a timer, so the frame
-  // depends on when the capture lands. Default and Framed cover the layout, and
-  // this story stays in the a11y pass.
+  // depends on when the capture lands. Responding covers the same state as a
+  // still frame, and this story stays in the a11y pass.
   tags: ['skip-visual'],
   render: () => {
     const Demo = () => {
@@ -123,7 +139,7 @@ export const Streaming: Story = {
       }, []);
       const streaming = n < words.length;
       return (
-        <Transcript className="h-64" framed busy={streaming}>
+        <Transcript aria-label="Conversation" className="h-64" framed busy={streaming}>
           {exchange.slice(0, 2)}
           <Message author="assistant" status={streaming ? 'streaming' : 'done'}>
             {words.slice(0, Math.max(n, 1)).join(' ')}

@@ -156,6 +156,7 @@ Every documentation page in Storybook MUST follow the rules in `design-system-do
 - `Primitives/Layout/<Name>`: layout primitives (`Primitives/Layout/Box`, `Primitives/Layout/Stack`, `Primitives/Layout/Grid`)
 - `Components/<Group>/<Name>`, where `<Group>` is one of:
   - `Actions` (`Components/Actions/Button`)
+  - `Chat` (`Components/Chat/Composer`)
   - `Display` (`Components/Display/Card`, `Components/Display/Table`)
   - `Feedback` (`Components/Feedback/Badge`, `Components/Feedback/ProgressBar`)
   - `Inputs` (`Components/Inputs/Input`, `Components/Inputs/Combobox`)
@@ -205,7 +206,7 @@ those markers stays hand-written.
 6. Add a visual example to the relevant Foundation story
 
 ### New Component
-1. Scaffold it: `npm run new:component -- <Name> --group <Actions|Display|Feedback|Inputs|Navigation|Overlays|Terminal|Theme>`
+1. Scaffold it: `npm run new:component -- <Name> --group <Actions|Chat|Display|Feedback|Inputs|Navigation|Overlays|Terminal|Theme>`
    (`--primitive` for a primitive, `--dry-run` to list the files first). It writes
    `packages/components/src/components/<Name>.tsx`, the barrel export in `packages/components/src/index.ts`,
    a Playground story in `packages/storybook/stories/Components/<Group>/`, a rendering test and

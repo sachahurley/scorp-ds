@@ -11,8 +11,10 @@
  * - system: one muted line (a mode change, "Replaying a recorded session").
  *
  * STREAMING: `status="streaming"` appends a block cursor (the full block
- * character, one cell wide in the mono stack) that blinks on the
- * --duration-slower beat and holds still under prefers-reduced-motion. The
+ * character, one cell wide in the mono stack) after the last character. It
+ * is steady, not blinking: a reply can stream for longer than five seconds,
+ * and blinking content that runs that long needs a way to stop it (WCAG
+ * 2.2.2). A steady block is also a stable frame for visual regression. The
  * article is `aria-busy` meanwhile, so the transcript announces the finished
  * turn rather than every token.
  *
@@ -20,12 +22,11 @@
  * - surface.muted (user plate; surface.subtle equals surface.page in dark,
  *   so it would vanish on the default theme), plate.round
  * - accent (prompt marker, cursor)
- * - text.primary (body), text.secondary (label, meta, system line)
- * - error AA pair 700 / 400 (error footer)
- * - duration.slower (cursor blink)
+ * - text.primary (body), text.secondary (label, meta, system line, stopped)
+ * - error AA pair 700 / 400 (error footer), as FieldMessage
  */
 
-import { useEffect, useId, useState, type ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { cn } from "../lib/utils";
 import { VisuallyHidden } from "../primitives/VisuallyHidden";
 import { Button } from "./Button";
@@ -38,56 +39,43 @@ export type MessageAuthor = "user" | "assistant" | "system";
 export type MessageStatus = "done" | "streaming" | "stopped" | "error";
 
 export interface MessageProps {
-  /** Who the turn is from. Named `author`, not `role`, so it never collides with the ARIA attribute. */
+  /** Who the turn is from: `user` (prompt marker and plate), `assistant` (plain output) or `system` (one muted line). Named `author`, not `role`, so it never collides with the ARIA attribute. */
   author: MessageAuthor;
-  /** Visible role label (default "You", "Scorp" or "System"). */
+  /** Visible role label, which also names the turn for screen readers (default "You", "Scorp" or "System"). Set it to the model or product name when that is clearer. */
   label?: ReactNode;
-  /** Secondary header text: time, model, "replayed". */
+  /** Secondary header text after the label: a time, the model, "replayed". */
   meta?: ReactNode;
-  /** done (default), streaming (cursor, aria-busy), stopped or error (footer). */
+  /** `done` (default); `streaming` adds the block cursor and `aria-busy`; `stopped` adds a "Stopped" footer; `error` adds the error footer with `errorMessage`. */
   status?: MessageStatus;
-  /** Footer text when `status="error"` (default "Something went wrong."). */
+  /** Footer text when `status="error"` (default "Something went wrong."). Say what failed and, with `onRetry`, that it can be retried. */
   errorMessage?: ReactNode;
-  /** Adds a Retry button to the error footer. */
+  /** Adds a Retry button to the error footer. Only shown when `status="error"`. */
   onRetry?: () => void;
-  /** Header actions (copy, retry, edit): ghost `size="sm"` icon Buttons with aria-labels. */
+  /** Header actions (copy, retry, edit): ghost `size="sm"` icon-only Buttons with `type="button"` and an `aria-label`. Always rendered, never only on hover. */
   actions?: ReactNode;
-  /** The turn's content. Strings keep their line breaks; nodes render as given. */
+  /** The turn's content. A string keeps its line breaks; nodes (paragraphs, a CodeBlock) render as given, `spacing.3` apart. */
   children: ReactNode;
   /** Anchor id, for linking to a turn. */
   id?: string;
-  /** Extra classes for the article. */
+  /** Extra classes for the article (margin). Spacing between turns belongs to `Transcript`. */
   className?: string;
 }
 
 const DEFAULT_LABEL: Record<MessageAuthor, string> = { user: "You", assistant: "Scorp", system: "System" };
 
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-/** The streaming block cursor. Blinks on --duration-slower; solid under reduced motion. */
+/** The streaming block cursor: steady, hidden from assistive tech. */
 function Cursor() {
-  const [on, setOn] = useState(true);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia?.(REDUCED_MOTION_QUERY).matches) return;
-    // The beat is the motion token, read from CSS (motion tokens are global,
-    // on :root); no token, no blink.
-    const beat = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--duration-slower"));
-    if (!Number.isFinite(beat) || beat <= 0) return;
-    const timer = window.setInterval(() => setOn((v) => !v), beat);
-    return () => window.clearInterval(timer);
-  }, []);
-
   return (
-    <span aria-hidden="true" data-cursor="" className={cn("text-[var(--accent)]", !on && "invisible")}>
+    <span aria-hidden="true" data-cursor="" className="text-[var(--accent)]">
       {"█"}
     </span>
   );
 }
 
 /**
- * Message
+ * One turn in a conversation, drawn as a line of terminal transcript rather
+ * than a chat bubble. Place Messages inside a `Transcript`, which owns the
+ * scrolling and the space between turns.
  *
  * ```tsx
  * <Message author="user" meta="12:04">Make a settings screen</Message>
@@ -180,7 +168,7 @@ export function Message({
               {errorMessage}
             </p>
             {onRetry && (
-              <Button variant="secondary" size="sm" onClick={onRetry} iconLeft={<TuiIcon name="Repeat" size="3" />}>
+              <Button type="button" variant="secondary" size="sm" onClick={onRetry} iconLeft="Repeat">
                 Retry
               </Button>
             )}

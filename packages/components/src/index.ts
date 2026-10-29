@@ -184,7 +184,7 @@ export type { KbdProps } from './components/Kbd';
 
 // Chat
 export { Composer } from './components/Composer';
-export type { ComposerProps, ComposerSubmitKey } from './components/Composer';
+export type { ComposerProps, ComposerSize, ComposerSubmitKey } from './components/Composer';
 
 export { Message } from './components/Message';
 export type { MessageProps, MessageAuthor, MessageStatus } from './components/Message';

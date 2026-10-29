@@ -7,14 +7,14 @@
 
 | Field | Value |
 |-------|-------|
-| Pattern | `Patterns/ChatComposer` (story-only, not an exported component) |
+| Pattern | `Patterns/ChatComposer` (preset `ChatComposerWorkbench`, not an exported component) |
 | Layer | `pattern` |
 | Category | `Patterns` |
-| File | `packages/storybook/stories/Patterns/ChatComposer.stories.tsx` |
+| File | `packages/storybook/presets/chatComposer.tsx` (story shell: `packages/storybook/stories/Patterns/ChatComposer.stories.tsx`) |
 | Story | `Patterns/ChatComposer` |
-| Version | `v1` |
+| Version | `v2` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
+| Last updated | 2026-10-29 |
 
 ---
 
@@ -36,19 +36,22 @@ Don't use this for: a source list beside a detail view with no conversation (use
 
 ## Composition
 
+The composition is the preset `ChatComposerWorkbench` in `packages/storybook/presets/chatComposer.tsx` (decision 0028), which also exports its parts: `ChatPane`, `ChatCanvasPane`, `ChatSessionStatus` and the specimen `chatGeneratedSource`. The story is only the page shell.
+
 | Building block | Role |
 |----------------|------|
-| Frame | `flex h-screen flex-col gap-3 p-4` on `--surface-page`: the panes above, the StatusLine below. |
-| Desktop (`Desktop` story, 1280) | The chat pane `w-96 shrink-0` beside the canvas pane `min-w-0 flex-1`, `gap-3`. |
-| Below `lg` (`Mobile` story, 375) | One pane at a time: `Tabs` with Chat and Canvas triggers above the panes. |
+| Shell (story) | `flex h-screen flex-col p-4 md:p-6` on `--surface-page`: the tool-screen page edge from the composition rules. |
+| `ChatComposerWorkbench` | A `Stack gap="4"` filling the shell (`min-h-0 flex-1`): the panes above, the StatusLine below. |
+| `layout="split"` (`Desktop` story, 1280) | A horizontal `Stack` with `align="stretch"` and `gap="4"` (the split spacing from the composition rules): the chat pane `w-96 shrink-0` beside the canvas pane `min-w-0 flex-1`. |
+| `layout="tabs"` (`Mobile` story, 375) | Below `lg`, one pane at a time: `Tabs` with Chat and Canvas triggers (`TabsList aria-label="Panes"`) above the panes. Product code picks the layout from the viewport. |
 | `Window` (chat pane) | `title="chat"`, `status="replay"`, `scroll={false}`, body `flex flex-col p-0`. |
-| `Transcript` | `width="full"`, `min-h-0 flex-1`, so only the transcript scrolls. |
+| `Transcript` | `aria-label="Conversation"`, `width="full"`, `min-h-0 flex-1`, so only the transcript scrolls. |
 | `Message` | One per turn: a system "Replaying a recorded session.", the user prompt, the assistant reply with `meta="replayed"`. |
-| `Composer` | Pinned under the Transcript (`p-3 pt-0`). In replay it is `disabled`, with `helperText` "Replaying a recorded session. Typing is off." |
-| `Window` (canvas pane) | `title` = the generated screen's name, `status` = node count, `scroll={false}`. Body holds `Tabs`: Preview, Code, Spec. |
-| Preview tab | The rendered layout (here two `Card`s with `Switch`es and a destructive `Button`), centered `max-w-md`. |
-| Code tab | `CodeBlock`, `framed={false}`, with line numbers, titled with the file name. |
-| Spec tab | `DescriptionList`: components used, node count, gaps (a `Badge`). |
+| `Composer` | `aria-label="Message"`, pinned under the Transcript (`p-3 pt-0`). In replay it is `disabled`, with `helperText` "Replaying a recorded session. Typing is off." |
+| `Window` (canvas pane) | `title` = the generated screen's name, `status` = node count, `scroll={false}`. Body holds `Tabs` (`TabsList aria-label="Canvas views"`): Preview, Code, Spec. |
+| Preview tab | The rendered layout (here two `Card`s, one with a `Stack gap="3"` of `Switch`es, one with a `type="button"` destructive `Button`), in a `Stack gap="4"` centered at `max-w-md`. |
+| Code tab | `CodeBlock`, `framed={false}` (the Window is the frame), with line numbers, titled with the file name. |
+| Spec tab | `DescriptionList`: components used, node count, gaps (a `Badge`, tone `success` at zero, `warning` above). |
 | `StatusLine` | Left: `REPLAY` (tone `info`, `Play` icon). Center: the session name. Right: components used, and gaps (tone `success` at zero, `warning` above). |
 
 ---
@@ -79,13 +82,14 @@ Later, each with its own spec when it is next:
 | `CommandMenu` | Slash commands in the Composer (`/screen`, `/component`, `/theme`), built on Combobox and Popover |
 | `SplitView` | A resizable divider between the panes. The pattern ships with a fixed split until then |
 
-Also needed: a `Stop` glyph in TuiIcon (with Composer), and syntax color roles as a token proposal (with CodeBlock, later).
+The `Stop` glyph the Composer needed landed in TuiIcon (#97). Still needed: syntax color roles, as a token proposal (with CodeBlock, later).
 
 ---
 
 ## Accessibility
 
 - Each pane is a `Window`, so each has a named region and a visible focus marker.
+- Every named part is named in the preset, as the types require (decision 0029): the Transcript ("Conversation"), the Composer ("Message") and both tab strips ("Panes", "Canvas views").
 - Below `lg`, switching panes is a real `Tabs` control, not a hidden layout swap.
 - The `REPLAY` mode is in text, in the StatusLine and in each turn's meta, not color alone.
 - Focus returns to the Composer after every send.
@@ -113,5 +117,6 @@ Also needed: a `Stop` glyph in TuiIcon (with Composer), and syntax color roles a
 |---------|------|------|---------|
 | Unreleased | 2026-10-28 | docs | Proposed pattern, written with the four Phase 1 component specs |
 | v1 | 2026-10-28 | added | `Patterns/ChatComposer` story: `Desktop` (1280) and `Mobile` (375), since the layout changes structure at `lg` |
+| v2 | 2026-10-29 | changed | Rebuilt on current main (takeover of #99): the composition moved into the preset `ChatComposerWorkbench` (decision 0028) with `layout="split" \| "tabs"`; the split is a horizontal `Stack` at `gap="4"` and the shell edge is `p-4 md:p-6`, per the composition rules (was `gap-3` and `p-4`); tab strips, Transcript and Composer are named; the gaps Badge uses `tone` |
 
 <!-- AUTO-END:changelog -->

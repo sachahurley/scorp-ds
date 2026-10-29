@@ -12,7 +12,7 @@ const meta: Meta<typeof Message> = {
         component:
           'One turn in a conversation, drawn as a terminal transcript, not chat bubbles. Every turn is full width and left aligned. Your turns have a prompt marker and a shaded plate; the assistant\'s have neither; system turns are one muted line. Don\'t use it outside a `Transcript`, which owns scrolling and spacing.\n\n' +
           '- **Structure:** each turn is an `<article>` named by its role label, so screen reader users can move turn by turn.\n' +
-          '- **Streaming:** the turn is `aria-busy` and the block cursor is hidden from assistive tech, so the finished turn is announced, not every token.\n' +
+          '- **Streaming:** the turn is `aria-busy` and the block cursor is hidden from assistive tech, so the finished turn is announced, not every token. The cursor is steady: a blink lasting the length of a reply would need a way to stop it (WCAG 2.2.2).\n' +
           '- **Actions:** always in the DOM and in tab order. Icon buttons need `aria-label`s.',
       },
     },
@@ -31,11 +31,11 @@ type Story = StoryObj<typeof Message>;
 
 const actions = (
   <>
-    <Button variant="ghost" size="sm" aria-label="Copy message">
-      <TuiIcon name="Copy" size="3" />
+    <Button type="button" variant="ghost" size="sm" aria-label="Copy message">
+      <TuiIcon name="Copy" />
     </Button>
-    <Button variant="ghost" size="sm" aria-label="Retry">
-      <TuiIcon name="Repeat" size="3" />
+    <Button type="button" variant="ghost" size="sm" aria-label="Retry">
+      <TuiIcon name="Repeat" />
     </Button>
   </>
 );
@@ -61,16 +61,12 @@ export const System: Story = {
   args: { author: 'system', children: 'Replaying a recorded session.' },
 };
 
-/** Streaming: the block cursor follows the last character. */
+/** Streaming: a steady block cursor follows the last character, and the turn is `aria-busy`. */
 export const Streaming: Story = {
-  // Excluded from visual regression: the cursor blinks every 500ms
-  // (--duration-slower), so a frame lands on or off by chance. The Exchange and
-  // Stopped stories cover the turn's layout, and this one stays in the a11y pass.
-  tags: ['skip-visual'],
   args: { author: 'assistant', status: 'streaming', children: 'Here is a settings screen composed from' },
 };
 
-/** Stopped by the reader. */
+/** Stopped by the reader: the partial reply stays, with a "Stopped" footer in text. */
 export const Stopped: Story = {
   args: { author: 'assistant', status: 'stopped', children: 'Here is a settings screen composed from Card,' },
 };

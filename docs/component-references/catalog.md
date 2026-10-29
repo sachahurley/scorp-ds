@@ -14,6 +14,9 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | Component | Category | Status | For |
 |---|---|---|---|
 | [Button](#button) | Actions | stable | Button triggers an action in place: submitting a form, opening a dialog, saving, deleting. |
+| [Composer](#composer) | Chat | draft | Composer is the prompt box of a chat surface. |
+| [Message](#message) | Chat | draft | Message is one turn in a conversation. |
+| [Transcript](#transcript) | Chat | draft | Transcript is the scrolling region that holds a conversation's `Message`s, oldest first. |
 | [Accordion](#accordion) | Display | stable | Stacked sections that expand and collapse under headings. |
 | [Avatar](#avatar) | Display | stable | Avatar is a square plate that represents a person or entity in profiles, comments, identity headers, and team lists. |
 | [Card](#card) | Display | stable | Card is the standard container for a self-contained group of content on a page: a settings group, a profile, a testimonial, a deploy summary. |
@@ -56,6 +59,7 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | [Popover](#popover) | Overlays | stable | Anchored, non-modal floating panel for rich interactive content next to a trigger (filters, a small form, a details card). |
 | [Tooltip](#tooltip) | Overlays | stable | Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. |
 | [CaseStudy](#casestudy) | Patterns | stable | CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. |
+| [CodeBlock](#codeblock) | Terminal | draft | CodeBlock shows read-only code: a snippet in a chat reply, the generated source of a layout, a config file. |
 | [DescriptionList](#descriptionlist) | Terminal | stable | Term and value pairs on a real `<dl>`: metadata panels, config readouts, neofetch-style summaries. |
 | [Kbd](#kbd) | Terminal | stable | Inline keyboard key for shortcut hints. |
 | [LogView](#logview) | Terminal | stable | A monospace scrolling log: build output, server logs, job runs. |
@@ -103,6 +107,98 @@ Status: stable · Spec: [`docs/specs/Button.md`](../../docs/specs/Button.md) · 
 | `rel` | `string` |  | Anchor rel; pair `target="_blank"` with "noopener noreferrer". |
 
 Also accepts the native attributes of `AriaAttributes`, `ButtonHTMLAttributes`, `DOMAttributes`, `HTMLAttributes`.
+
+## Chat
+
+### Composer
+
+Composer is the prompt box of a chat surface.
+
+**Use instead:** a multi-line field in a form, where Enter must insert a line break (use `Textarea` instead), a one-line search or filter (use `Input` instead), or picking from a known list of commands (use `Combobox` instead).
+
+`import { Composer } from '@scorp-ds/components';`
+
+Status: draft · Spec: [`docs/specs/Composer.md`](../../docs/specs/Composer.md) · Story: `Components/Chat/Composer`
+
+**`ComposerProps`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `value` | `string` |  | Controlled text. |
+| `defaultValue` | `string` | `""` | Starting text when uncontrolled (default ""). |
+| `onValueChange` | `(value: string) => void` |  | Fires on every edit with the new text, and with "" when an uncontrolled Composer clears itself after a send. |
+| `onSubmit` (required) | `(value: string) => void` |  | Fires with the trimmed text on Enter (per `submitKey`) or the send button, only when the text is not blank and the Composer is neither `busy` nor `disabled`. |
+| `busy` | `boolean` | `false` | A reply is streaming. |
+| `onStop` | `() => void` |  | Called by the stop button while `busy`. |
+| `submitKey` | `"enter"` `"mod-enter"` | `"enter"` | `enter` (default): Enter sends, Shift+Enter breaks the line. `mod-enter`: Cmd/Ctrl+Enter sends, for long multi-paragraph messages. |
+| `minRows` | `number` | `1` | Rows shown when empty (default 1). |
+| `maxRows` | `number` | `8` | Rows the field grows to before it scrolls instead (default 8). |
+| `size` | `"md"` `"lg"` | `"md"` | Type size, padding and send button size: `md` (default), or `lg` for a prompt that leads the page. |
+| `context` | `ReactNode` |  | Row of chips above the field for what the message refers to: attachments, referenced components (`@Card`). |
+| `actions` | `ReactNode` |  | Leading actions in the action row (attach, insert): ghost icon-only Buttons with `type="button"` and an `aria-label`. |
+| `hint` | `ReactNode \| false` |  | Text before the send button, linked to the field as its description. |
+| `placeholder` | `string` | `"Message"` | Placeholder text (default "Message"). |
+| `label` | `ReactNode` |  | Visible label above the plate, wired to the field; one of `label`, `aria-label` or `aria-labelledby` is required. |
+| `aria-label` | `string` |  | Accessible name of the field when there is no visible label, such as "Message"; one of `label`, `aria-label` or `aria-labelledby` is required. |
+| `aria-labelledby` | `string` |  | Id of visible text elsewhere that names the field, such as the pane title. |
+| `helperText` | `ReactNode` |  | Hint under the plate (a character limit, why typing is off), linked as a description. |
+| `errorMessage` | `ReactNode` |  | Error under the plate. |
+| `disabled` | `boolean` | `false` | Disables the field, the actions and the send button together (one disabled fieldset) and dims the plate to 50%. |
+| `maxLength` | `number` |  | Native character limit on the field. |
+| `sendLabel` | `string` | `"Send message"` | Accessible name of the send button (default "Send message"). |
+| `stopLabel` | `string` | `"Stop response"` | Accessible name of the stop button (default "Stop response"). |
+| `name` | `string` |  | Field `name`, for native form handling. |
+| `className` | `string` |  | Extra classes for the ring wrapper (margin). |
+
+### Message
+
+Message is one turn in a conversation.
+
+**Use instead:** Don't use this for: a line of machine output with no speaker (use `LogView` instead), a notice about the page or a failed action outside a conversation (use `Alert` instead), or an item in a list people pick from (use `ListRow` instead).
+
+`import { Message } from '@scorp-ds/components';`
+
+Status: draft · Spec: [`docs/specs/Message.md`](../../docs/specs/Message.md) · Story: `Components/Chat/Message`
+
+**`MessageProps`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `author` (required) | `"user"` `"assistant"` `"system"` |  | Who the turn is from: `user` (prompt marker and plate), `assistant` (plain output) or `system` (one muted line). |
+| `label` | `ReactNode` |  | Visible role label, which also names the turn for screen readers (default "You", "Scorp" or "System"). |
+| `meta` | `ReactNode` |  | Secondary header text after the label: a time, the model, "replayed". |
+| `status` | `"done"` `"streaming"` `"stopped"` `"error"` | `"done"` | `done` (default); `streaming` adds the block cursor and `aria-busy`; `stopped` adds a "Stopped" footer; `error` adds the error footer with `errorMessage`. |
+| `errorMessage` | `ReactNode` | `"Something went wrong."` | Footer text when `status="error"` (default "Something went wrong."). |
+| `onRetry` | `() => void` |  | Adds a Retry button to the error footer. |
+| `actions` | `ReactNode` |  | Header actions (copy, retry, edit): ghost `size="sm"` icon-only Buttons with `type="button"` and an `aria-label`. |
+| `children` (required) | `ReactNode` |  | The turn's content. |
+| `id` | `string` |  | Anchor id, for linking to a turn. |
+| `className` | `string` |  | Extra classes for the article (margin). |
+
+### Transcript
+
+Transcript is the scrolling region that holds a conversation's `Message`s, oldest first.
+
+**Use instead:** machine output with no turns, such as build or server logs (use `LogView` instead), a list of records people scan and act on (use `ListRow` or `Table` instead), or a feed of notifications (use `Toast` instead).
+
+`import { Transcript } from '@scorp-ds/components';`
+
+Status: draft · Spec: [`docs/specs/Transcript.md`](../../docs/specs/Transcript.md) · Story: `Components/Chat/Transcript`
+
+**`TranscriptProps`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `children` | `ReactNode` |  | Messages, oldest first. |
+| `busy` | `boolean` | `false` | A reply is streaming. |
+| `autoScroll` | `boolean` | `true` | Follow new content to the bottom (default true). |
+| `emptyState` | `ReactNode` |  | Shown centered when there are no children. |
+| `width` | `"sm"` `"md"` `"lg"` `"full"` | `"md"` | Max width of the content column: `sm`, `md` (default), `lg` or `full`, on the Container scale. |
+| `framed` | `boolean` | `false` | Draw the plate ring, as LogView does (default false: a Transcript usually fills a pane that is already framed, such as a Window). |
+| `aria-label` | `string` |  | Accessible name of the log region, such as "Conversation"; this or `aria-labelledby` is required. |
+| `aria-labelledby` | `string` |  | Id of visible text that names the log region, such as the pane title. |
+| `onFollowChange` | `(following: boolean) => void` |  | Fires with `false` when following pauses (the reader scrolled up) and `true` when it resumes. |
+| `className` | `string` |  | Extra classes for the wrapper. |
 
 ## Display
 
@@ -1320,6 +1416,32 @@ Status: stable · Spec: [`docs/specs/CaseStudy.md`](../../docs/specs/CaseStudy.m
 | `sections` (required) | `CaseStudySection[]` |  | The body, in reading order; reorder by moving entries and hide one with `hidden`. |
 
 ## Terminal
+
+### CodeBlock
+
+CodeBlock shows read-only code: a snippet in a chat reply, the generated source of a layout, a config file.
+
+**Use instead:** output that streams in line by line, such as build or server logs (use `LogView` instead), a key or shortcut inside a sentence (use `Kbd` instead), or a terminal pane with its own title and actions around other content (use `Window` instead, with an unframed CodeBlock inside if it holds code).
+
+`import { CodeBlock } from '@scorp-ds/components';`
+
+Status: draft · Spec: [`docs/specs/CodeBlock.md`](../../docs/specs/CodeBlock.md) · Story: `Components/Terminal/CodeBlock`
+
+**`CodeBlockProps`**
+
+| Prop | Accepts | Default | Use |
+|---|---|---|---|
+| `code` (required) | `string` |  | The code, as one string with `\n` line breaks. |
+| `language` | `string` |  | Language name ("tsx", "json"). |
+| `title` | `ReactNode` |  | Title bar text, usually the file name ("settings-screen.tsx"). |
+| `showLineNumbers` | `boolean` | `false` | Show a gutter of 1-based line numbers (default false), for code people will discuss by line. |
+| `highlightLines` | `number[]` |  | 1-based lines to mark with a muted row and a gutter marker (never color alone), for the lines an answer is about. |
+| `wrap` | `boolean` | `false` | Wrap long lines instead of scrolling horizontally (default false). |
+| `copyable` | `boolean` | `true` | Show the copy button (default true). |
+| `onCopy` | `(code: string) => void` |  | Fires with the code after a successful copy, for analytics or a toast. |
+| `framed` | `boolean` | `true` | Draw the plate ring (default true). |
+| `aria-label` | `string` |  | Accessible name of the block. |
+| `className` | `string` |  | Extra classes for the figure. |
 
 ### DescriptionList
 
