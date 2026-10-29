@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `67f97c72b58c2206` |
+| API hash | `b0d20ad04fc99fd1` |
 
 ---
 
@@ -55,7 +55,6 @@ Content priority: image, initials, icon, default glyph. A failed image falls bac
 | `md` | 40px (`w-10 h-10`), `text-sm`, 20px icon, 8px status dot (default) |
 | `lg` | 64px (`w-16 h-16`), `text-lg`, 32px icon, 12px dot inset 4px |
 | `xl` | 96px (`w-24 h-24`), `text-2xl`, 48px icon, 16px dot inset 8px |
-| `small`, `medium`, `large` | Deprecated aliases for `sm`, `md`, `lg`; log a one-time dev warning |
 
 <!-- AUTO-END:anatomy -->
 
@@ -71,7 +70,7 @@ Content priority: image, initials, icon, default glyph. A failed image falls bac
 | `alt` | `string` | none | Yes | Who the avatar shows. Names the image, or the box (`role="img"`) when it renders initials, an icon or the `@` glyph, including after a broken image. `""` marks it decorative: the image gets `alt=""` and the fallback box `aria-hidden`. |
 | `initials` | `string` | `undefined` | No | One or two letters shown when there is no usable image. |
 | `icon` | `IconSlot \| ReactNode` | `undefined` | No | Icon (a TuiIcon name or an element) shown when there is no image or initials. |
-| `size` | `ControlSizeProp \| "xl"` | `"md"` | No | Square size: `sm` 24px, `md` 40px, `lg` 64px, `xl` 96px. Legacy names are deprecated aliases. |
+| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | No | Square size: `sm` 24px, `md` 40px, `lg` 64px, `xl` 96px. |
 | `status` | `"online" \| "offline" \| "away"` | `undefined` | No | Presence dot, announced as `Status: {status}`. |
 | `className` | `string` | `""` | No | Extra classes on the wrapper. |
 | `onError` | `() => void` | `undefined` | No | Called when the image fails to load (after the internal fallback is set). |
@@ -167,7 +166,7 @@ None (consumers may pass `TuiIcon` via `icon`).
 
 ### Foundation Files Referenced
 
-- `packages/components/src/lib/size.ts` (`resolveSize`, `ControlSizeProp`)
+- `packages/components/src/lib/size.ts` (`ControlSize`)
 - `packages/tokens/src/styles/tokens.css` (`--field-background`)
 - `packages/tokens/tailwind.preset.js` (`plate-round` utility, semantic color scales)
 
@@ -237,6 +236,7 @@ None (consumers may pass `TuiIcon` via `icon`).
 | Unreleased | 2026-09-21 | feat | Size scale is now `sm | md | lg` | xl (fixed 24/40/64/96px boxes, not control-height tokens); small/medium/large are deprecated aliases |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-10-29 | feat (breaking type) | `alt` is required and names every mode (the fallback box becomes `role="img"`); `alt=""` is decorative and no longer becomes "Avatar". `Image fallback` story added |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg \| xl` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

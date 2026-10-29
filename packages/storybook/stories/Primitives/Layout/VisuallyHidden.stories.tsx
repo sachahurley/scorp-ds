@@ -45,13 +45,13 @@ export const Default: Story = {
 export const IconButtonLabel: Story = {
   render: () => (
     <Inline gap="3">
-      <Button variant="icon" size="icon">
+      <Button variant="icon">
         <span aria-hidden="true" className="font-mono">
           x
         </span>
         <VisuallyHidden>Close panel</VisuallyHidden>
       </Button>
-      <Button variant="icon" size="icon">
+      <Button variant="icon">
         <span aria-hidden="true" className="font-mono">
           +
         </span>

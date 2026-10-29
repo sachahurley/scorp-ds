@@ -256,45 +256,26 @@ describe("Modal sizes and uncontrolled use", () => {
   });
 });
 
-describe("Modal deprecated props", () => {
+describe("Modal deprecated width", () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
   });
 
-  it("still honours isOpen, onClose and width, and warns once for each", () => {
+  it("still honours width, and warns once", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const onClose = vi.fn();
-    const onOpenChange = vi.fn();
     render(
-      <Modal isOpen onClose={onClose} onOpenChange={onOpenChange} title="Legacy" width={320}>
+      <Modal open onOpenChange={() => {}} title="Legacy" width={320}>
         x
       </Modal>
     );
     expect(screen.getByRole("dialog", { name: "Legacy" })).toHaveStyle({ width: "320px" });
-    fireEvent.keyDown(document, { key: "Escape" });
-    // onClose fires exactly when onOpenChange(false) does
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-    expect(onClose).toHaveBeenCalledTimes(1);
     const messages = warn.mock.calls.map((c) => String(c[0]));
-    for (const expected of [
-      "Modal: isOpen is deprecated. Use open.",
-      "Modal: onClose is deprecated. Use onOpenChange.",
-      "Modal: width is deprecated. Use size.",
-    ]) {
-      expect(messages.filter((m) => m.includes(expected))).toHaveLength(1);
-    }
+    expect(messages.filter((m) => m.includes("Modal: width is deprecated. Use size."))).toHaveLength(1);
   });
 
-  it("lets the new names win when both are passed", () => {
+  it("lets size win over width when both are passed", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
-    render(
-      <Modal open={false} isOpen onClose={() => {}} title="Both">
-        x
-      </Modal>
-    );
-    expect(screen.queryByRole("dialog")).toBeNull();
-    cleanup();
     render(
       <Modal open onOpenChange={() => {}} title="Sized" size="sm" width={500}>
         x

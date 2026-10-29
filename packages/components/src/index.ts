@@ -116,7 +116,7 @@ export type {
 export { Spinner } from './components/Spinner';
 export type { SpinnerProps } from './components/Spinner';
 export { toast, useToast } from './components/Toast';
-export type { ToastProps, ToastTone, ToastVariant, ToastAction, ToastOptions, ToastApi } from './components/Toast';
+export type { ToastProps, ToastTone, ToastAction, ToastOptions, ToastApi } from './components/Toast';
 
 // --- Popover family (Popover, Combobox, ProgressBar, Skeleton, EmptyState, Accordion) ---
 export { Popover } from './components/Popover';
@@ -228,4 +228,4 @@ export { ThemeProvider } from './theme/ThemeProvider';
 
 // Utilities
 export { cn } from './lib/utils';
-export type { ControlSize, ControlSizeProp } from './lib/size';
+export type { ControlSize } from './lib/size';

@@ -12,6 +12,7 @@ interface Prop {
   name: string;
   values?: string[];
   deprecatedValues?: string[];
+  deprecated?: string | true;
 }
 interface PropSet {
   props?: Prop[];
@@ -31,14 +32,16 @@ const prop = (component: string, set: string, name: string) =>
 
 describe('api-surface.json', () => {
   it('expands aliases into the values a prop accepts', () => {
-    expect(prop('Badge', 'BadgeProps', 'size')?.values).toEqual(['"sm"', '"md"', '"lg"', '"small"', '"medium"', '"large"']);
+    expect(prop('Badge', 'BadgeProps', 'size')?.values).toEqual(['"sm"', '"md"', '"lg"']);
+    // Reached through Extract<ControlSize, …>, not a direct reference.
+    expect(prop('Kbd', 'KbdProps', 'size')?.values).toEqual(['"sm"', '"md"']);
   });
 
-  it('marks values that come from a @deprecated alias', () => {
-    expect(prop('Button', 'ButtonProps', 'size')?.deprecatedValues).toEqual(['"small"', '"medium"', '"large"', '"icon"']);
-    // Reached through Extract<ControlSizeProp, …>, not a direct reference.
-    expect(prop('Kbd', 'KbdProps', 'size')?.deprecatedValues).toEqual(['"small"', '"medium"']);
-    // `icon` is a current Button variant: only the size alias deprecates it.
+  it('marks a @deprecated prop, and lists no deprecated values once an alias is removed', () => {
+    expect(prop('Modal', 'ModalProps', 'width')?.deprecated).toBeTruthy();
+    expect(prop('Modal', 'ModalProps', 'size')?.deprecated).toBeUndefined();
+    // The 0024 aliases are gone (0031): the size scale carries no deprecated values.
+    expect(prop('Button', 'ButtonProps', 'size')?.deprecatedValues).toBeUndefined();
     expect(prop('Button', 'ButtonProps', 'variant')?.deprecatedValues).toBeUndefined();
   });
 

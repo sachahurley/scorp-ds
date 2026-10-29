@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `draft` |
 | Last updated | 2026-10-29 |
-| API hash | `65dfd5b76166695c` |
+| API hash | `a6b550477a65af49` |
 
 ---
 
@@ -47,7 +47,6 @@ Outer `w-full` wrapper (receives `className`), optional `<label>` (targets the t
 | `sm` | Trigger 32px (`h-control-sm`), `px-4 py-1.5`, 16px icon box |
 | `md` (default) | Trigger 40px (`h-control-md`), `px-4 py-2.5`, 20px icon box |
 | `lg` | Trigger 48px (`h-control-lg`), `px-4 py-3.5`, 24px icon box |
-| `small` / `medium` / `large` | Deprecated aliases for `sm` / `md` / `lg` (one-time dev warning) |
 
 Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows). Group headings are `px-4 py-2`, `text-xs`, uppercase, in `--text-secondary`.
 
@@ -62,7 +61,7 @@ Menu options are the same at every size: `px-4 py-3`, `text-sm` (44px rows). Gro
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `children` | `<option>` / `<optgroup>` elements | none | Yes | Options, read from each child's `value`, text `children` and `disabled`. Children are flattened, so arrays, fragments and a static option mixed with a mapped list all work; `<optgroup>` children are read with the group's `label` and `disabled` inherited. An option with no `value` submits its text, as in a native select. |
-| `size` | `"sm" \| "md" \| "lg" \| "small" \| "medium" \| "large"` | `"md"` | No | Trigger height. Legacy names are deprecated. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Trigger height. |
 | `label` | `ReactNode` | none | No | Visible label, associated with the trigger (the combobox) via `htmlFor`/`id`. Preferred over `aria-label`. |
 | `aria-label` | `string` | `"Select an option"` when there is no `label` | No | Accessible name for the trigger when no visible label is set. |
 | `value` | `string \| number \| readonly string[]` | none | No | Controlled value (stringified). When set, selection does not change until the parent updates `value`. |
@@ -259,6 +258,7 @@ Interactive controls: `size`, `error`, `helperText`, `errorMessage`, `disabled` 
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-22 | fix | `aria-activedescendant` / `aria-controls` and option ids, one raw-index keyboard model, Tab closes the menu, children flattened (fragments, arrays, `<optgroup>`), an option with no `value` falls back to its text, highlight moved to `--surface-muted` + `--accent`, menu uses `--z-index-dropdown`, `min-w-52` and `max-h-80`, stale "Unicode" comments removed |
 | Unreleased | 2026-10-29 | fix | Trigger moved to the APG select-only combobox pattern (`role="combobox"`), so `aria-invalid` is supported; query it with `getByRole("combobox")`, not `"button"` |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

@@ -35,3 +35,11 @@ buttons are squared automatically, so `md` is the correct value.
 - A component that needs a size outside the scale is a signal to question the design,
   not to add a step.
 - Icon-only detection is by shape, not by a size value, so `size` stays one axis.
+
+## Amendment 2026-10-29
+
+The legacy names were removed on 2026-10-29, once the consumers had migrated
+([0031](0031-the-0024-aliases-are-removed.md)). `small | medium | large`, Button's
+`size="icon"`, `LegacyControlSize`, `ControlSizeProp` and `resolveSize` are gone: every
+sized component takes `ControlSize` (`sm | md | lg`, plus Avatar's `xl`) with a default in
+its props, so passing an old name is now a type error rather than a warning.

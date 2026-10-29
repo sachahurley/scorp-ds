@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/Modal` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `5969ee1c25f84e2d` |
+| Last updated | 2026-10-29 |
+| API hash | `818f02381340ff68` |
 
 ---
 
@@ -64,8 +64,6 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 | `open` | `boolean` | | No | Controls visibility; pair with `onOpenChange`. Setting it to `false` plays the fade out before unmounting. Omit for uncontrolled use. |
 | `defaultOpen` | `boolean` | `false` | No | Initial state when `open` is not passed; the dialog then closes itself. |
 | `onOpenChange` | `(open: boolean) => void` | | No | Called with `false` on Escape, the close button, and (centered only) a scrim click. A controlled parent sets `open` to `false` here. |
-| `isOpen` | `boolean` | | No | **Deprecated**, use `open`. Still honoured when `open` is not passed; warns once in development. |
-| `onClose` | `() => void` | | No | **Deprecated**, use `onOpenChange`. Still called whenever `onOpenChange(false)` is; warns once in development. |
 | `title` | `string` | | Yes | Header text (truncated on one line) and the dialog's `aria-label`. |
 | `children` | `ReactNode` | | Yes | Body content; scrolls when it exceeds the panel height. The body already has `px-6 py-5` padding. |
 | `footerContent` | `ReactNode` | `undefined` | No | Fixed footer band, actions right-aligned with `gap-3`. Render DS Buttons (secondary cancel, primary confirm). |
@@ -73,7 +71,7 @@ Scrim (`--surface-overlay`, full screen, centers the panel with 20px padding) ar
 | `width` | `number \| string` | | No | **Deprecated**, use `size`. Honoured when `size` is not passed (numbers are px, strings pass through); warns once in development. |
 | `docked` | `boolean` | `false` | No | Non-modal bottom-center panel on viewports of 960px and up; falls back to the centered modal below. |
 
-When an old and a new name are both passed, the new one wins (`open` over `isOpen`, `size` over `width`). Decision 0024.
+When `size` and the deprecated `width` are both passed, `size` wins (decision 0024). `width` is the one 0024 alias kept: it stays until a size decision covers the widths callers still pass it (decision 0031).
 
 Exported type: `ModalProps`.
 
@@ -249,6 +247,7 @@ Interactive controls: N/A (render function stories).
 | Unreleased | 2026-09-22 | fix | Focus trap while modal (docked stays non-modal); 44px close-button hit area; 66vh comment corrected; story double padding removed |
 | Unreleased | 2026-09-22 | change | Docked breakpoint comes from the `--breakpoint-docked` token instead of a hardcoded 960 (same 960px switch point) |
 | Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `open` / `defaultOpen` / `onOpenChange` replace `isOpen` / `onClose`, and `size` (`sm \| md \| lg \| full`) replaces `width`. The old props are deprecated aliases that still work and warn once; the default render is unchanged (740px) |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `isOpen` and `onClose` props and their dev warnings; use `open` and `onOpenChange`. The deprecated `width` stays, pending a decision on the missing sizes. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

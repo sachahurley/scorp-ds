@@ -13,8 +13,8 @@
 | Story | `Components/Feedback/Toast` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `845883b5f4719c24` |
+| Last updated | 2026-10-29 |
+| API hash | `668be764a3cee7f7` |
 
 ---
 
@@ -36,7 +36,7 @@ Toast is a brief, non-blocking confirmation that rises from the bottom edge and 
 
 ### Tones
 
-`tone` takes the shared colour roles of decision 0024 (`ToastTone`). The deprecated `variant` (`ToastVariant`) still takes the old values, with `default` meaning `neutral`.
+`tone` takes the shared colour roles of decision 0024 (`ToastTone`).
 
 | Enum Value | Description |
 |-----------|-------------|
@@ -67,7 +67,7 @@ Icons and color pairs match Alert, so the two read as one family.
 | Call | Returns | Description |
 |------|---------|-------------|
 | `toast(message, options?)` | `ToastItem["id"]` | Queues a toast (tone from `options.tone`, default `"neutral"`). Seen only while a `<Toaster />` without `toasts` is mounted. |
-| `toast.success(message, options?)` | id | Queues a `success` toast. Options exclude `tone` and `variant`. |
+| `toast.success(message, options?)` | id | Queues a `success` toast. Options exclude `tone`. |
 | `toast.warning(message, options?)` | id | Queues a `warning` toast. |
 | `toast.error(message, options?)` | id | Queues an `error` toast (`role="alert"`). |
 | `toast.info(message, options?)` | id | Queues an `info` toast. |
@@ -80,7 +80,6 @@ Icons and color pairs match Alert, so the two read as one family.
 | Property | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | `tone` | `ToastTone` | `"neutral"` | No | Severity. The `toast.success()` style helpers set it for you. |
-| `variant` | `ToastVariant` | `undefined` | No | **Deprecated: use `tone`.** The old name; `default` maps to `neutral`. Warns once in development; `tone` wins when both are set. `toast()` stores it as `tone`. |
 | `action` | `ToastAction` | none | No | Inline action such as Undo. Pressing it runs `onClick`, then dismisses the toast. |
 | `duration` | `number` | `5000` | No | Milliseconds before auto-dismiss, paused while the plate is hovered or holds focus. `Infinity` persists and shows a dismiss button. |
 | `id` | `string \| number` | `toast-{n}` | No | Reuse an id to replace a toast in place (for example "Saving..." then "Saved"). |
@@ -102,7 +101,6 @@ Returns `{ toasts, toast, dismiss }`: the live imperative queue (`ToastItem[]`) 
 |----------|------|---------|----------|-------------|
 | `children` | `ReactNode` | | Yes | Toast content, one short line. |
 | `tone` | `ToastTone` | `"neutral"` | No | Icon, colors, and `role` (`error` is `alert`). |
-| `variant` | `ToastVariant` | `undefined` | No | **Deprecated: use `tone`.** The old name; `default` maps to `neutral`. Warns once in development; `tone` wins when both are set. |
 | `action` | `ToastAction` | `undefined` | No | Inline action button. Pressing it calls `action.onClick`, then `onDismiss`; the click does not bubble to `onClick`. |
 | `duration` | `number` | `undefined` | No | Auto-dismiss after this many ms, paused on hover and focus (remaining time is kept across pauses). `Infinity` persists and shows a dismiss button. Needs `onDismiss`. |
 | `onDismiss` | `() => void` | `undefined` | No | Removes the toast; called by the timer, the action, and the dismiss button. |
@@ -115,7 +113,6 @@ Returns `{ toasts, toast, dismiss }`: the live imperative queue (`ToastItem[]`) 
 | `id` | `string \| number` | | Yes | Stable React key, passed back to dismissal callbacks. |
 | `message` | `ReactNode` | | Yes | Content for the plate. |
 | `tone` | `ToastTone` | `"neutral"` | No | Severity. |
-| `variant` | `ToastVariant` | `undefined` | No | **Deprecated: use `tone`.** The old name; `default` maps to `neutral`. Warns once in development; `tone` wins when both are set. |
 | `action` | `ToastAction` | `undefined` | No | Inline action. |
 | `duration` | `number` | `undefined` | No | Auto-dismiss time. Imperative items always have one (default 5000). Controlled items only auto-dismiss when they set it, so existing callers keep their own timing. |
 
@@ -126,7 +123,7 @@ Returns `{ toasts, toast, dismiss }`: the live imperative queue (`ToastItem[]`) 
 | `label` | `string` | | Yes | Short verb shown as the button text ("Undo", "Retry", "View"). |
 | `onClick` | `() => void` | | Yes | Runs when pressed; the toast dismisses itself afterwards. |
 
-Exported types: `ToastItem`, `ToasterProps`, `ToastProps`, `ToastTone`, `ToastVariant` (deprecated: use `ToastTone`), `ToastAction`, `ToastOptions`, `ToastApi`.
+Exported types: `ToastItem`, `ToasterProps`, `ToastProps`, `ToastTone`, `ToastAction`, `ToastOptions`, `ToastApi`.
 
 <!-- AUTO-END:properties -->
 
@@ -170,7 +167,7 @@ Exported types: `ToastItem`, `ToasterProps`, `ToastProps`, `ToastTone`, `ToastVa
 | Persistent | `duration: Infinity` with `onDismiss` | Shows the `X` dismiss button (`aria-label="Dismiss notification"`) |
 | With action | `action` | Underlined text button; pressing runs the action, then dismisses |
 | Replaced in place | `toast(..., { id })` with an existing id | Old item removed, new one appended with the same key |
-| Tone | `tone` (deprecated `variant`) | Ring, fill, icon, text colors; `role="alert"` for `error`, `role="status"` otherwise |
+| Tone | `tone` | Ring, fill, icon, text colors; `role="alert"` for `error`, `role="status"` otherwise |
 | Clickable | `onClick` / `onDismiss` set | `cursor-pointer` |
 | Removed | Timer, action, dismiss button, click, `toast.dismiss`, or the app drops the item from `toasts` | Unmounts immediately (no exit animation) |
 | Overflowing text | Long message | Truncated with an ellipsis on one line |
@@ -303,6 +300,7 @@ Interactive controls: N/A (render function stories).
 | Unreleased | 2026-10-28 | feat | Decision 0024 vocabulary: `tone` (`neutral \| info \| success \| warning \| error`, type `ToastTone`) replaces `variant` on `Toast`, `ToastItem` and `ToastOptions`. `variant` and `ToastVariant` still work and are deprecated (`default` maps to `neutral`); using `variant` warns once in development and `tone` wins when both are set. Renders identically |
 | Unreleased | 2026-09-22 | docs | Spec rewritten from source; Notion fields removed |
 | Unreleased | 2026-09-21 | feat | Variants (default/success/warning/error/info, Alert icons and colors), `action`, `duration` with hover/focus pause, error `role="alert"`, imperative `toast()` / `useToast()` with `<Toaster />`; controlled API unchanged |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `variant` (and its `default` value) from `Toast`, `ToastItem` and `toast()` options, with its dev warnings, and the deprecated `ToastVariant` type; use `tone` and `ToastTone`. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

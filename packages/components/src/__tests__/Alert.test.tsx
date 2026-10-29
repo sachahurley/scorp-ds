@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { Alert } from "../components/Alert";
 
@@ -57,47 +57,6 @@ it("close button carries a 44px hit area and the inset token focus ring", () => 
 it("uses the error focus ring token on the error tone", () => {
   render(<Alert tone="error" title="t" onDismiss={vi.fn()} />);
   expect(screen.getByRole("button", { name: "Close alert" }).className).toContain("var(--focus-ring-error)");
-});
-
-describe("deprecated names (decision 0024)", () => {
-  afterEach(() => vi.restoreAllMocks());
-
-  it("still accepts variant, maps default to neutral, and warns once", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const look = (el: React.ReactElement) => {
-      const { container, unmount } = render(el);
-      const d = container.querySelector("svg path")?.getAttribute("d");
-      const ring = (container.firstElementChild as HTMLElement).className;
-      unmount();
-      return { d, ring };
-    };
-    expect(look(<Alert variant="default" title="t" />)).toEqual(look(<Alert tone="neutral" title="t" />));
-    expect(look(<Alert variant="error" title="t" />)).toEqual(look(<Alert tone="error" title="t" />));
-    const messages = warn.mock.calls.map((c) => String(c[0]));
-    expect(messages.filter((m) => m.includes("Alert: variant is deprecated. Use tone."))).toHaveLength(1);
-  });
-
-  it("lets tone win over variant", () => {
-    vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { container } = render(<Alert tone="success" variant="error" title="t" />);
-    expect((container.firstElementChild as HTMLElement).className).toContain("bg-success-300");
-  });
-
-  it("still accepts onClose, warns, and loses to onDismiss", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const onClose = vi.fn();
-    render(<Alert title="old" onClose={onClose} />);
-    fireEvent.click(screen.getByRole("button", { name: "Close alert" }));
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(warn.mock.calls.some((c) => String(c[0]).includes("Alert: onClose is deprecated. Use onDismiss."))).toBe(true);
-    cleanup();
-    onClose.mockClear();
-    const onDismiss = vi.fn();
-    render(<Alert title="both" onClose={onClose} onDismiss={onDismiss} />);
-    fireEvent.click(screen.getByRole("button", { name: "Close alert" }));
-    expect(onDismiss).toHaveBeenCalledTimes(1);
-    expect(onClose).not.toHaveBeenCalled();
-  });
 });
 
 it("names the dismiss button with dismissLabel", () => {

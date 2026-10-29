@@ -13,8 +13,8 @@
 | Story | `Components/Overlays/BottomSheet` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `a7af1496101f0806` |
+| Last updated | 2026-10-29 |
+| API hash | `a096c3596c999823` |
 
 ---
 
@@ -59,16 +59,13 @@ Scrim (`--surface-overlay`, full screen) plus the sheet: fixed to the bottom, ce
 | `open` | `boolean` | | No | Controls visibility; pair with `onOpenChange`. Setting it to `false` plays the slide out before unmounting. Omit for uncontrolled use. |
 | `defaultOpen` | `boolean` | `false` | No | Initial state when `open` is not passed; the sheet then closes itself. |
 | `onOpenChange` | `(open: boolean) => void` | | No | Called with `false` by the close button, a scrim click and Escape. A controlled parent sets `open` to `false` here. |
-| `aria-label` | `string` | | Yes | Accessible name for the dialog (there is no visible title). The type requires it, or the deprecated `ariaLabel`. |
-| `isOpen` | `boolean` | | No | **Deprecated**, use `open`. Still honoured when `open` is not passed; warns once in development. |
-| `onClose` | `() => void` | | No | **Deprecated**, use `onOpenChange`. Still called whenever `onOpenChange(false)` is; warns once in development. |
-| `ariaLabel` | `string` | | No | **Deprecated**, use `aria-label`. Ignored when `aria-label` is passed; warns once in development. |
+| `aria-label` | `string` | | Yes | Accessible name for the dialog (there is no visible title). The type requires it. |
 | `closeLabel` | `string` | `"Close"` | No | Accessible name for the close button. Override it when several sheets are announced in the same view. |
 | `children` | `ReactNode` | | Yes | Sheet content, usually a list of buttons or links. Scrolls when taller than the sheet. |
 
 When an old and a new name are both passed, the new one wins. Decision 0024.
 
-Exported type: `BottomSheetProps` (a union, so that one of `aria-label` or the deprecated `ariaLabel` is always required).
+Exported type: `BottomSheetProps`.
 
 <!-- AUTO-END:properties -->
 
@@ -170,7 +167,7 @@ Interactive controls: N/A (render function story).
 <!-- AUTO-START:accessibility -->
 
 - Semantic role: `role="dialog"`, `aria-modal="true"`, named by `aria-label`; scrim and grabber are `aria-hidden`
-- Required labels: `aria-label` is required (the props type enforces it; the deprecated `ariaLabel` still satisfies it)
+- Required labels: `aria-label` is required (the props type enforces it)
 - Focus order: once mounted, focus moves to the sheet (`tabIndex={-1}`); on close it returns to the invoker. The close button is the first Tab stop, then the content region (`tabIndex={0}`, for keyboard scrolling), then whatever you render
 - Focus trap: Tab and Shift+Tab cycle within the sheet (`useFocusTrap`), matching the `aria-modal="true"` promise that nothing behind the scrim is reachable
 - Keyboard: Escape calls `onOpenChange(false)`; the close button is reachable by Tab and activated by Enter or Space
@@ -233,6 +230,7 @@ Interactive controls: N/A (render function story).
 | Unreleased | 2026-09-22 | feat | Visible close button (44px target, `closeLabel` prop) in a new header band |
 | Unreleased | 2026-09-22 | fix | Tab and Shift+Tab are trapped inside the sheet |
 | Unreleased | 2026-10-28 | change | Decision 0024 vocabulary: `open` / `defaultOpen` / `onOpenChange` replace `isOpen` / `onClose`, and `aria-label` replaces `ariaLabel`. The old props are deprecated aliases that still work and warn once; nothing renders differently |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `isOpen`, `onClose` and `ariaLabel` props and their dev warnings; use `open`, `onOpenChange` and `aria-label`. `BottomSheetProps` is a single interface again. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

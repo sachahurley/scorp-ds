@@ -13,8 +13,8 @@
 | Story | `Components/Navigation/Pagination` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `e940d7d5c3844f0a` |
+| Last updated | 2026-10-29 |
+| API hash | `3c6402add0a5159f` |
 
 ---
 
@@ -79,7 +79,7 @@ Don't use this for: switching between a few peer views (use Tabs instead) or a f
 | `onPageChange` | `(page) => void` | - | No | Requested page. |
 | `siblingCount` | `number` | `1` | No | Pages each side of current. |
 | `boundaryCount` | `number` | `1` | No | Pages at each end. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Plate height (legacy names deprecated). |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | No | Plate height. |
 | `showPrevNext` | `boolean` | `true` | No | Arrow buttons. |
 | `getPageLabel` | `(page) => string` | "Page n" | No | Page button name. |
 | `previousLabel` / `nextLabel` | `string` | "Previous page" / "Next page" | No | Arrow button names. |
@@ -159,7 +159,7 @@ No hardcoded values found.
 ### Child Components
 
 - TuiIcon
-- lib/size (resolveSize)
+- lib/size (`ControlSize` type)
 
 ### Foundation Files Referenced
 
@@ -223,6 +223,7 @@ No hardcoded values found.
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (navigation batch, ds-nav-terminal) |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

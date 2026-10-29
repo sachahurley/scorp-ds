@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { Toast, Toaster, toast } from "../components/Toast";
+import { Toaster, toast } from "../components/Toast";
 
 describe("toast() + <Toaster />", () => {
   beforeEach(() => {
@@ -103,38 +103,5 @@ describe("controlled <Toaster toasts>", () => {
   it("takes tone on items: error is announced as an alert", () => {
     render(<Toaster toasts={[{ id: 1, message: "Failed", tone: "error" }]} />);
     expect(screen.getByRole("alert")).toHaveTextContent("Failed");
-  });
-});
-
-describe("deprecated variant (decision 0024)", () => {
-  afterEach(() => {
-    act(() => toast.dismiss());
-    cleanup();
-    vi.restoreAllMocks();
-  });
-
-  const look = (el: React.ReactElement) => {
-    const { container, unmount } = render(el);
-    const plate = container.firstElementChild as HTMLElement;
-    const out = { role: plate.getAttribute("role"), ring: plate.className, icon: plate.querySelector("svg path")?.getAttribute("d") };
-    unmount();
-    return out;
-  };
-
-  it("Toast still accepts variant, maps default to neutral, lets tone win, and warns once", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    expect(look(<Toast variant="default">m</Toast>)).toEqual(look(<Toast tone="neutral">m</Toast>));
-    expect(look(<Toast variant="error">m</Toast>)).toEqual(look(<Toast tone="error">m</Toast>));
-    expect(look(<Toast tone="info" variant="error">m</Toast>)).toEqual(look(<Toast tone="info">m</Toast>));
-    const messages = warn.mock.calls.map((c) => String(c[0]));
-    expect(messages.filter((m) => m.includes("Toast: variant is deprecated. Use tone."))).toHaveLength(1);
-  });
-
-  it("toast() still accepts variant and warns", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    render(<Toaster />);
-    act(() => void toast("Old call", { variant: "error" }));
-    expect(screen.getByRole("alert")).toHaveTextContent("Old call");
-    expect(warn.mock.calls.some((c) => String(c[0]).includes("toast(): variant is deprecated. Use tone."))).toBe(true);
   });
 });

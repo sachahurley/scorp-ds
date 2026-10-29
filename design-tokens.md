@@ -347,16 +347,15 @@ Tailwind's `2xl:` default (1536px) survives because the preset declares `screens
 
 ## Control Size Tokens
 
-One size scale for sized components: `sm | md | lg` ([decision 0011](docs/decisions/0011-unified-size-scale.md)). The old `small | medium | large` names are deprecated aliases that still resolve (one dev warning per component). Exceptions, where a component's scale differs:
+One size scale for sized components: `sm | md | lg` ([decision 0011](docs/decisions/0011-unified-size-scale.md)). The old `small | medium | large` names were removed ([decision 0031](docs/decisions/0031-the-0024-aliases-are-removed.md)). Exceptions, where a component's scale differs:
 
 | Component | Prop | Values |
 |-----------|------|--------|
 | Avatar | `size` | `sm \| md \| lg \| xl` |
-| Button | `size` | `sm \| md \| lg`, plus `icon` (deprecated: use `md`; icon-only buttons square themselves) |
 | Container | `size` | `sm \| md \| lg \| xl \| full` (a max-width, not a control height) |
 | EmptyState | `size` | `sm \| md` |
-| Kbd | `size` | `sm \| md` (legacy `small \| medium` still accepted) |
-| Meter | `size` | `sm \| md` (legacy `small \| medium` still accepted) |
+| Kbd | `size` | `sm \| md` |
+| Meter | `size` | `sm \| md` |
 | TuiIcon | `size` | `"3" \| "4" \| "5" \| "6" \| "8"` (Tailwind size steps) |
 | Table | `density` | `compact \| comfortable \| spacious` (no `size` prop) |
 | Divider | `spacing` | `none \| sm \| md \| lg` (margin around the rule, not a size) |

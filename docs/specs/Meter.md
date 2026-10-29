@@ -13,8 +13,8 @@
 | Story | `Components/Terminal/Meter` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-10-28 |
-| API hash | `36bbb103e2f4c636` |
+| Last updated | 2026-10-29 |
+| API hash | `f800093b823cf880` |
 
 ---
 
@@ -154,7 +154,7 @@ No hardcoded values found.
 ### Child Components
 
 - TuiIcon
-- lib/size (resolveSize)
+- lib/size (`ControlSize` type)
 
 ### Foundation Files Referenced
 
@@ -219,6 +219,7 @@ No hardcoded values found.
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
 | Unreleased | 2026-10-28 | feat | `MeterTone` aligned with decision 0024: adds the `neutral` and `info` roles (forced via `tone` only); `primary` stays as Meter's own role. Existing tones render identically |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 

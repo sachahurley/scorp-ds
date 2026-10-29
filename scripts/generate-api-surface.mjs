@@ -7,8 +7,8 @@
  *
  * Props are read through the TypeScript type checker, not by reading the source
  * text, so the manifest says what a caller can actually pass:
- *   - aliases are expanded: `size: ControlSizeProp` lists `sm | md | lg | small |
- *     medium | large`, and `name: TuiIconName` lists every icon;
+ *   - aliases are expanded: `size: ControlSize` lists `sm | md | lg`, and
+ *     `name: TuiIconName` lists every icon;
  *   - props behind a type alias (`type LinkProps = A & (B | C)`) are listed, not `{}`;
  *   - props inherited from React's DOM types are summarised in `inherits` instead of
  *     being dropped, so `Slider` no longer looks like it takes only `label`;
@@ -104,10 +104,10 @@ function deprecationOf(node) {
 // ─── Deprecated aliases ─────────────────────────────────────────────────────
 //
 // TypeScript cannot deprecate one member of a union, so a deprecated value is
-// expressed as a deprecated alias (`/** @deprecated */ type LegacyControlSize =
+// expressed as a deprecated alias (`/** @deprecated */ type LegacySize =
 // "small" | …`) referenced from the prop's type. A value is deprecated for a prop
 // when it is a literal of such an alias and the prop's type reaches that alias,
-// directly or through other aliases (`ControlSizeProp`, `Extract<ControlSizeProp, …>`).
+// directly or through other aliases (`SizeProp = Size | LegacySize`, `Extract<SizeProp, …>`).
 
 /** alias name → { deprecated, literals, references } across the components package. */
 const aliases = new Map();

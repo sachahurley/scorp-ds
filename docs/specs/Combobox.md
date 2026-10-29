@@ -13,8 +13,8 @@
 | Story | `Components/Inputs/Combobox` |
 | Version | `v1` |
 | Status | `draft` |
-| Last updated | 2026-09-22 |
-| API hash | `e136982a2a63a51f` |
+| Last updated | 2026-10-29 |
+| API hash | `b5b954feeddab44e` |
 
 ---
 
@@ -217,6 +217,7 @@ Popover, TuiIcon, FieldMessage
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
 | v1 | 2026-09-21 | added | Initial Combobox component, story, and unit tests |
+| Unreleased | 2026-10-29 | change | Decision 0031 removed the deprecated `small \| medium \| large` size names and their dev warning; `size` takes `sm \| md \| lg` only. Rendering unchanged |
 
 <!-- AUTO-END:changelog -->
 
