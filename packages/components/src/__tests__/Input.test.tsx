@@ -1,5 +1,6 @@
-import { afterEach, describe, expect, it } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { useState } from "react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { Input } from "../components/Input";
 
 describe("Input", () => {
@@ -74,4 +75,101 @@ it("error message leads with the 1-bit AlertCircle icon instead of a text prefix
   expect(message.querySelector("svg")).not.toBeNull();
   expect(message.textContent).toBe("Too short");
   expect(el).toHaveAccessibleDescription("Too short");
+});
+
+describe("Input trailingAction", () => {
+  afterEach(() => cleanup());
+
+  it("renders a real button named by its label", () => {
+    render(
+      <Input
+        label="Password"
+        type="password"
+        trailingAction={{ icon: "Eye", label: "Show password", onClick: () => {} }}
+      />
+    );
+    const button = screen.getByRole("button", { name: "Show password" });
+    expect(button).toHaveAttribute("type", "button");
+    // A one-shot action carries no toggle state
+    expect(button).not.toHaveAttribute("aria-pressed");
+    // The icon is decorative: the label is the whole name
+    expect(button).toHaveAccessibleName("Show password");
+    expect(button.querySelector("svg")).not.toBeNull();
+  });
+
+  it("toggles aria-pressed with `pressed` while the label stays fixed", () => {
+    function Reveal() {
+      const [visible, setVisible] = useState(false);
+      return (
+        <Input
+          label="Password"
+          type={visible ? "text" : "password"}
+          trailingAction={{
+            icon: visible ? "EyeOff" : "Eye",
+            label: "Show password",
+            pressed: visible,
+            onClick: () => setVisible((v) => !v),
+          }}
+        />
+      );
+    }
+    render(<Reveal />);
+    const button = screen.getByRole("button", { name: "Show password" });
+    const input = screen.getByLabelText("Password");
+    expect(button).toHaveAttribute("aria-pressed", "false");
+    expect(input).toHaveAttribute("type", "password");
+    fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-pressed", "true");
+    expect(input).toHaveAttribute("type", "text");
+    fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("calls onClick when the action is clicked", () => {
+    const onClick = vi.fn();
+    render(<Input aria-label="Search" trailingAction={{ icon: "X", label: "Clear search", onClick }} />);
+    fireEvent.click(screen.getByRole("button", { name: "Clear search" }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("disabled disables the action too", () => {
+    const onClick = vi.fn();
+    render(
+      <Input aria-label="Search" disabled trailingAction={{ icon: "X", label: "Clear search", onClick }} />
+    );
+    const button = screen.getByRole("button", { name: "Clear search" });
+    expect(button).toBeDisabled();
+    fireEvent.click(button);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("puts the action after the input in the tab order", () => {
+    render(
+      <Input aria-label="Search" trailingAction={{ icon: "X", label: "Clear search", onClick: () => {} }} />
+    );
+    const input = screen.getByRole("textbox", { name: "Search" });
+    const button = screen.getByRole("button", { name: "Clear search" });
+    // Neither sets a tabindex, so the tab order is document order: input, then action
+    expect(input.tabIndex).toBe(0);
+    expect(button.tabIndex).toBe(0);
+    expect(input.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("pads the input by the action's width at every size and on quiet", () => {
+    const action = { icon: "X" as const, label: "Clear", onClick: () => {} };
+    const { rerender } = render(<Input aria-label="F" size="sm" trailingAction={action} />);
+    expect(screen.getByRole("textbox").className).toContain("pr-8");
+    rerender(<Input aria-label="F" size="md" trailingAction={action} />);
+    expect(screen.getByRole("textbox").className).toContain("pr-10");
+    rerender(<Input aria-label="F" size="lg" trailingAction={action} />);
+    expect(screen.getByRole("textbox").className).toContain("pr-12");
+    rerender(<Input aria-label="F" variant="quiet" trailingAction={action} />);
+    expect(screen.getByRole("textbox").className).toContain("!pr-10");
+  });
+
+  it("renders no button and no extra wrapper without trailingAction", () => {
+    render(<Input aria-label="Plain" />);
+    expect(screen.queryByRole("button")).toBeNull();
+    expect(screen.getByRole("textbox").parentElement?.className).toContain("plate-round");
+  });
 });

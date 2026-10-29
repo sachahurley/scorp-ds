@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { userEvent } from '@storybook/test';
-import { Input } from '@scorp-ds/components';
+import { Input, type InputProps } from '@scorp-ds/components';
 
 /**
  * Components / Inputs / Input
@@ -110,6 +111,70 @@ export const Focus: Story = {
   ...Default,
   play: async ({ canvasElement }) => {
     canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
+  },
+};
+
+/**
+ * A password field with a reveal toggle, the canonical trailing action. The
+ * button's name stays "Show password"; its state is `aria-pressed`, and the
+ * icon swaps between Eye and EyeOff. Input pads the text clear of it.
+ */
+function PasswordField(props: Omit<InputProps, 'type' | 'trailingAction'>) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <Input
+      {...props}
+      type={visible ? 'text' : 'password'}
+      trailingAction={{
+        icon: visible ? 'EyeOff' : 'Eye',
+        label: 'Show password',
+        pressed: visible,
+        onClick: () => setVisible((shown) => !shown),
+      }}
+    />
+  );
+}
+
+/**
+ * Trailing action at every size, on the quiet variant, and disabled. The button
+ * is square at the field height (32 / 40 / 48px), the icon steps 16 / 20 / 24px,
+ * and the hit area is at least 44px at every size. The values are long so they
+ * show the text stopping where the button starts.
+ */
+export const TrailingAction: Story = {
+  name: 'Trailing action',
+  render: () => (
+    <div className="flex w-72 flex-col gap-4">
+      <PasswordField label="Small" size="sm" defaultValue="correct horse battery staple" />
+      <PasswordField label="Medium" size="md" defaultValue="correct horse battery staple" />
+      <PasswordField label="Large" size="lg" defaultValue="correct horse battery staple" />
+      <Input
+        variant="quiet"
+        label="Search (quiet)"
+        defaultValue="plate ring recipe, stepped corners"
+        trailingAction={{ icon: 'X', label: 'Clear search', onClick: () => {} }}
+      />
+      <PasswordField label="Disabled" size="md" defaultValue="correct horse battery staple" disabled />
+    </div>
+  ),
+};
+
+/**
+ * Keyboard focus on the trailing action: Tab reaches the input first, then the
+ * action, which draws the system's 2px inset ring clipped to the plate (decision
+ * 0002). The field ring goes back to idle, because focus has left the input.
+ */
+export const TrailingActionFocus: Story = {
+  name: 'Trailing action: focus',
+  render: () => (
+    <div className="w-72">
+      <PasswordField label="Password" defaultValue="correct horse battery staple" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    canvasElement.ownerDocument.defaultView?.focus();
+    await userEvent.tab();
     await userEvent.tab();
   },
 };
