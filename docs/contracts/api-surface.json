@@ -3099,7 +3099,8 @@
             {
               "name": "href",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Destination URL. Renders a plain `<a href>`; use `as` instead for a router link."
             },
             {
               "name": "as",
@@ -3190,17 +3191,18 @@
               "description": "Extra classes on the row element (padding overrides, a divider border between rows)."
             },
             {
-              "name": "as",
+              "name": "href",
+              "type": "string",
+              "required": false,
+              "description": "Destination URL: the row renders as an `<a>` and navigates."
+            },
+            {
+              "name": "onClick",
               "type": "never",
               "required": false
             },
             {
-              "name": "href",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "onClick",
+              "name": "as",
               "type": "never",
               "required": false
             }

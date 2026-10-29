@@ -464,6 +464,58 @@ module.exports = {
       },
     },
 
+    "prop-jsdoc": {
+      meta: {
+        type: "suggestion",
+        docs: {
+          description:
+            "Every member of an exported *Props interface or type has a JSDoc comment. JSDoc on the prop is what autodocs, the IDE and api-surface.json read; @param on the function reaches none of them.",
+        },
+        schema: [],
+        messages: {
+          missing:
+            "Prop '{{name}}' of {{owner}} has no JSDoc comment. Say how to use it (what it changes, when to set it), not what it is called.",
+          empty: "Prop '{{name}}' of {{owner}} has an empty JSDoc comment.",
+        },
+      },
+      create(context) {
+        const source = context.sourceCode || context.getSourceCode();
+        const jsdocBefore = (node) =>
+          source.getCommentsBefore(node).filter((c) => c.type === "Block" && c.value.startsWith("*")).pop();
+
+        function checkMembers(members, owner) {
+          for (const m of members) {
+            if (m.type !== "TSPropertySignature" && m.type !== "TSMethodSignature") continue;
+            const name = m.key && (m.key.name ?? m.key.value);
+            if (typeof name !== "string") continue;
+            // `as?: never` in a discriminated union is a guard, not a prop anyone sets.
+            if (m.typeAnnotation && m.typeAnnotation.typeAnnotation.type === "TSNeverKeyword") continue;
+            const doc = jsdocBefore(m);
+            if (!doc) context.report({ node: m.key, messageId: "missing", data: { name, owner } });
+            else if (!doc.value.replace(/^\*/, "").replace(/[\s*]/g, "")) {
+              context.report({ node: m.key, messageId: "empty", data: { name, owner } });
+            }
+          }
+        }
+
+        /** Walks a type: object literals are checked, unions and intersections are entered. */
+        function checkType(type, owner) {
+          if (!type) return;
+          if (type.type === "TSTypeLiteral") checkMembers(type.members, owner);
+          else if (type.type === "TSUnionType" || type.type === "TSIntersectionType") type.types.forEach((t) => checkType(t, owner));
+        }
+
+        return {
+          ExportNamedDeclaration(node) {
+            const decl = node.declaration;
+            if (!decl || !decl.id || !/Props$/.test(decl.id.name)) return;
+            if (decl.type === "TSInterfaceDeclaration") checkMembers(decl.body.body, decl.id.name);
+            else if (decl.type === "TSTypeAliasDeclaration") checkType(decl.typeAnnotation, decl.id.name);
+          },
+        };
+      },
+    },
+
     "no-legacy-package": {
       meta: {
         type: "problem",
@@ -610,7 +662,8 @@ module.exports = {
 
         function hasJsdoc(node) {
           const comments = source.getCommentsBefore(node);
-          return comments.some((c) => c.type === "Block" && c.value.startsWith("*"));
+          // An empty `/** */` is not documentation.
+          return comments.some((c) => c.type === "Block" && c.value.startsWith("*") && c.value.replace(/[\s*]/g, "") !== "");
         }
 
         function isComponentName(name) {

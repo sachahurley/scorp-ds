@@ -42,6 +42,7 @@ export default tseslint.config(
       "scorp/no-sans": "error",
       "scorp/no-legacy-package": "error",
       "scorp/public-jsdoc": "error",
+      "scorp/prop-jsdoc": "error",
       "scorp/no-default-tailwind": "error",
       "scorp/no-style-literals": "error",
       "scorp/no-slow-motion": [

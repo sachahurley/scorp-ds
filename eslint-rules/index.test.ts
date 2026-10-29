@@ -144,3 +144,26 @@ tester.run("story-interaction-needs-play", rules["story-interaction-needs-play"]
     { code: `export const HoverState = { ...Primary };`, errors: [{ messageId: "play" }] },
   ],
 });
+
+tester.run("prop-jsdoc", rules["prop-jsdoc"], {
+  valid: [
+    { code: `export interface ButtonProps {\n  /** Visual treatment. */\n  variant?: string;\n}` },
+    // Discriminated-union guards typed \`never\` are not props anyone sets.
+    { code: `export type LinkProps = { /** Destination. */ href: string; as?: never } | { /** Component. */ as: unknown; href?: never };` },
+    // Only *Props types are public prop surfaces.
+    { code: `export interface Internal { value: string }` },
+  ],
+  invalid: [
+    { code: `export interface ButtonProps {\n  variant?: string;\n}`, errors: [{ messageId: "missing" }] },
+    { code: `export interface ButtonProps {\n  /** */\n  variant?: string;\n}`, errors: [{ messageId: "empty" }] },
+    { code: `export type LinkProps = { href: string } | { /** C. */ as: unknown };`, errors: [{ messageId: "missing" }] },
+  ],
+});
+
+tester.run("public-jsdoc", rules["public-jsdoc"], {
+  valid: [{ code: `/** A button for in-place actions. */\nexport function Button() { return null; }` }],
+  invalid: [
+    { code: `export function Button() { return null; }`, errors: [{ messageId: "missing" }] },
+    { code: `/** */\nexport function Button() { return null; }`, errors: [{ messageId: "missing" }] },
+  ],
+});
