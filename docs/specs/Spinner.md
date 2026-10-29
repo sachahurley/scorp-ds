@@ -31,6 +31,8 @@ color of whatever surface holds it.
 Use for waits of unknown length. For a submitting button, use
 `<Button loading>` instead of placing a Spinner by hand.
 
+Don't use this for: a button that is submitting (use `<Button loading>` instead) or work with known progress (use ProgressBar instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

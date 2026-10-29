@@ -24,6 +24,8 @@
 
 CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. A page is a structured `CaseStudy`: a header every page must fill (a title and a one-line summary, plus outcomes, meta and a cover when there are any), then an ordered list of sections. Sections can be moved by moving them in the array and dropped with `hidden: true`; section and figure numbers are counted, never authored, so they close up on their own. Each content block has one shape per meaning, so a reader can tell steps from findings from pillars at a glance. Every figure renders the hatch placeholder until it has real content, so a page can be laid out before its art exists. Use it for editorial pages. Don't use it for app UI or dashboards; compose those from components.
 
+Don't use this for: a landing page or any page that is not a narrative write-up (compose Container, Stack and Card instead).
+
 <!-- /HUMAN-SECTION:intent -->
 
 ---

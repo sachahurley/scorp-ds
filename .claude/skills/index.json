@@ -10,7 +10,7 @@
     },
     "component-pipeline": {
       "category": "Pipeline",
-      "description": "End-to-end component workflow: Figma import → review → storybook → Figma viz → token sync"
+      "description": "End-to-end component workflow: Figma import \u2192 review \u2192 storybook \u2192 Figma viz \u2192 token sync"
     },
     "compose-screen": {
       "category": "Core",
@@ -30,7 +30,7 @@
     },
     "generate-component-refs": {
       "category": "Core",
-      "description": "Generate portable component reference files for consumer projects"
+      "description": "Regenerate the generated component catalog (docs/component-references/catalog.md)"
     },
     "release-notes": {
       "category": "Core",
@@ -62,7 +62,7 @@
     },
     "token-pipeline": {
       "category": "Pipeline",
-      "description": "End-to-end token workflow: audit → sync to Figma → rebuild visualizations"
+      "description": "End-to-end token workflow: audit \u2192 sync to Figma \u2192 rebuild visualizations"
     },
     "update-component": {
       "category": "Core",
