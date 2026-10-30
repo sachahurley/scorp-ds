@@ -1637,7 +1637,8 @@ Status: stable · Spec: [`docs/specs/Window.md`](../../docs/specs/Window.md) · 
 | `title` (required) | `ReactNode` |  | Pane title shown in the title bar; also names the pane and its scroll region. |
 | `status` | `ReactNode` |  | Short status text at the right of the title bar ("tail -f", "3 errors", "12:04"). |
 | `actions` | `ReactNode` |  | Title bar actions (icon Buttons, a Badge). |
-| `variant` | `"default"` `"active"` | `"default"` | `active` marks the focused pane (accent ring + marker); default is `default`. |
+| `active` | `boolean` |  | Marks the focused pane: the accent ring, a muted title bar and a ChevronRight marker, so focus never relies on colour alone. |
+| ~~`variant`~~ | `"default"` `"active"` |  | The focused-pane marker under its old name: `"active"` is `active`. |
 | `titleAs` | `"h1"` `"h2"` `"h3"` `"h4"` `"h5"` `"h6"` `"span"` | `"h2"` | Heading element used for the title (default "h2"). |
 | `scroll` | `boolean` | `true` | Scrolling body (default true). |
 | `children` (required) | `ReactNode` |  | Pane content. |

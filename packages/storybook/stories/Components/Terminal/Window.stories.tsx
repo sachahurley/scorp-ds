@@ -9,7 +9,7 @@ const meta: Meta<typeof Window> = {
     docs: {
       description: {
         component:
-          'A framed terminal pane: large plate ring, a TUI title bar (title, a hairline rule, optional `status` text and `actions`), and a keyboard-focusable scroll body. `variant="active"` marks the focused pane with the accent ring, a muted title bar, and a ChevronRight marker, so focus never relies on color alone. Set the pane size with `className`; set `scroll={false}` when the child scrolls itself (an unframed LogView: `framed={false}`).',
+          'A framed terminal pane: large plate ring, a TUI title bar (title, a hairline rule, optional `status` text and `actions`), and a keyboard-focusable scroll body. `active` marks the focused pane with the accent ring, a muted title bar, and a ChevronRight marker, so focus never relies on color alone. Set the pane size with `className`; set `scroll={false}` when the child scrolls itself (an unframed LogView: `framed={false}`).',
       },
     },
   },
@@ -41,7 +41,7 @@ export const Default: Story = {
 
 /** The focused pane: accent ring and a marker before the title. */
 export const Active: Story = {
-  args: { title: 'sessions.log', status: 'tail -f', variant: 'active', children: body, className: 'h-72 w-full max-w-lg' },
+  args: { title: 'sessions.log', status: 'tail -f', active: true, children: body, className: 'h-72 w-full max-w-lg' },
 };
 
 /** Title bar actions (keep them small). */
@@ -84,7 +84,7 @@ export const SplitPanes: Story = {
         <p>12:04:09 retry scheduled</p>
         <p>12:05:13 connection reset</p>
       </Window>
-      <Window title="sessions.log" status="tail -f" variant="active" scroll={false} bodyClassName="p-0">
+      <Window title="sessions.log" status="tail -f" active scroll={false} bodyClassName="p-0">
         <LogView
           aria-label="Session log"
           framed={false}

@@ -27,7 +27,7 @@ export const workbenchLogLines: LogLine[] = [
 /**
  * Workbench split preset: two terminal panes in the shape of a multiplexer layout.
  * A narrow `Window` holds the buffer index (a `SideNav` with one `SideNavItem` per
- * buffer); the focused `Window` (`variant="active"`) holds a toolbar (filter Input,
+ * buffer); the focused `Window` (`active`) holds a toolbar (filter Input,
  * secondary then primary action) over a `LogView` tail.
  *
  * The split is a `Stack` with a responsive axis (`{ base: 'vertical', md: 'horizontal' }`,
@@ -68,7 +68,7 @@ export function LogInspectorSplit() {
         title={workbenchBuffers.find((n) => n.id === active)?.label}
         titleAs="h3"
         status="tail · last 200 lines"
-        variant="active"
+        active
         scroll={false}
         className="min-w-0 flex-1"
       >
