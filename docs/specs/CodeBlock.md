@@ -13,7 +13,7 @@
 | File | `packages/components/src/components/CodeBlock.tsx` |
 | Story | `Components/Terminal/CodeBlock` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `10508666b4affdc0` |
 
@@ -235,6 +235,7 @@ Interactive controls: `showLineNumbers`, `wrap`, `copyable`, `framed`.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
 | v1 | 2026-10-28 | added | Built to the reviewed spec. The figure is named with `aria-label`; the copy button keeps its visible text in its name |
 | v1 | 2026-10-29 | changed | Rebuilt on current main (takeover of #99): the copy button takes its icon by name and is `type="button"`; the focusable `<pre>` carries a justified `no-noninteractive-tabindex` exception, as LogView; prop docs say when to use each prop |

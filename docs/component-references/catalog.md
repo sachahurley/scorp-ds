@@ -14,9 +14,9 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | Component | Category | Status | For |
 |---|---|---|---|
 | [Button](#button) | Actions | stable | Button triggers an action in place: submitting a form, opening a dialog, saving, deleting. |
-| [Composer](#composer) | Chat | draft | Composer is the prompt box of a chat surface. |
-| [Message](#message) | Chat | draft | Message is one turn in a conversation. |
-| [Transcript](#transcript) | Chat | draft | Transcript is the scrolling region that holds a conversation's `Message`s, oldest first. |
+| [Composer](#composer) | Chat | stable | Composer is the prompt box of a chat surface. |
+| [Message](#message) | Chat | stable | Message is one turn in a conversation. |
+| [Transcript](#transcript) | Chat | stable | Transcript is the scrolling region that holds a conversation's `Message`s, oldest first. |
 | [Accordion](#accordion) | Display | stable | Stacked sections that expand and collapse under headings. |
 | [Avatar](#avatar) | Display | stable | Avatar is a square plate that represents a person or entity in profiles, comments, identity headers, and team lists. |
 | [Card](#card) | Display | stable | Card is the standard container for a self-contained group of content on a page: a settings group, a profile, a testimonial, a deploy summary. |
@@ -59,7 +59,7 @@ import { ThemeProvider, Button } from '@scorp-ds/components';
 | [Popover](#popover) | Overlays | stable | Anchored, non-modal floating panel for rich interactive content next to a trigger (filters, a small form, a details card). |
 | [Tooltip](#tooltip) | Overlays | stable | Tooltip shows a short supplementary hint next to a trigger when it is hovered or focused, most often to name an icon-only button or add a detail to a label. |
 | [CaseStudy](#casestudy) | Patterns | stable | CaseStudy renders long-form narrative pages (case studies, write-ups, project pages) from data. |
-| [CodeBlock](#codeblock) | Terminal | draft | CodeBlock shows read-only code: a snippet in a chat reply, the generated source of a layout, a config file. |
+| [CodeBlock](#codeblock) | Terminal | stable | CodeBlock shows read-only code: a snippet in a chat reply, the generated source of a layout, a config file. |
 | [DescriptionList](#descriptionlist) | Terminal | stable | Term and value pairs on a real `<dl>`: metadata panels, config readouts, neofetch-style summaries. |
 | [Kbd](#kbd) | Terminal | stable | Inline keyboard key for shortcut hints. |
 | [LogView](#logview) | Terminal | stable | A monospace scrolling log: build output, server logs, job runs. |
@@ -118,7 +118,7 @@ Composer is the prompt box of a chat surface.
 
 `import { Composer } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Composer.md`](../../docs/specs/Composer.md) · Story: `Components/Chat/Composer`
+Status: stable · Spec: [`docs/specs/Composer.md`](../../docs/specs/Composer.md) · Story: `Components/Chat/Composer`
 
 **`ComposerProps`**
 
@@ -158,7 +158,7 @@ Message is one turn in a conversation.
 
 `import { Message } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Message.md`](../../docs/specs/Message.md) · Story: `Components/Chat/Message`
+Status: stable · Spec: [`docs/specs/Message.md`](../../docs/specs/Message.md) · Story: `Components/Chat/Message`
 
 **`MessageProps`**
 
@@ -183,7 +183,7 @@ Transcript is the scrolling region that holds a conversation's `Message`s, oldes
 
 `import { Transcript } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/Transcript.md`](../../docs/specs/Transcript.md) · Story: `Components/Chat/Transcript`
+Status: stable · Spec: [`docs/specs/Transcript.md`](../../docs/specs/Transcript.md) · Story: `Components/Chat/Transcript`
 
 **`TranscriptProps`**
 
@@ -1425,7 +1425,7 @@ CodeBlock shows read-only code: a snippet in a chat reply, the generated source 
 
 `import { CodeBlock } from '@scorp-ds/components';`
 
-Status: draft · Spec: [`docs/specs/CodeBlock.md`](../../docs/specs/CodeBlock.md) · Story: `Components/Terminal/CodeBlock`
+Status: stable · Spec: [`docs/specs/CodeBlock.md`](../../docs/specs/CodeBlock.md) · Story: `Components/Terminal/CodeBlock`
 
 **`CodeBlockProps`**
 

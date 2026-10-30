@@ -13,7 +13,7 @@
 | File | `packages/components/src/components/Composer.tsx` |
 | Story | `Components/Chat/Composer` |
 | Version | `v1` |
-| Status | `draft` |
+| Status | `stable` |
 | Last updated | 2026-10-29 |
 | API hash | `cb5c8b802244a86c` |
 
@@ -275,6 +275,7 @@ None in `Composer.tsx`. Heights are set inline by `useAutosize`, measured from t
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | Unreleased | 2026-10-28 | docs | Proposed spec, written ahead of the code for review |
 | v1 | 2026-10-28 | added | Built to the reviewed spec. Changes from the proposal: the fill is a `<fieldset>` so `disabled` reaches the actions; the form is unnamed; busy announcements moved to Transcript; heights come from `useAutosize` in px, not inline `lh` units |
 | v1 | 2026-10-29 | changed | Rebuilt on current main (takeover of #99): the name is required by type (`label`, `aria-label` or `aria-labelledby`, no default "Message"), with a new visible `label`; focus is the ring colour change only (decision 0022), keyed on the field so a focused button is not ringed twice; `autoFocus` removed (use the ref); `size` typed `ComposerSize`; `Sending`, `With label` and `Send focused` stories |
