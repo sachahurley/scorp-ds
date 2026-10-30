@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { asciiFontSize, CaseStudyContent, CaseStudyPage, type CaseStudy } from "../components/CaseStudy";
 
@@ -93,5 +93,51 @@ describe("CaseStudyContent", () => {
     );
     expect(screen.getByText("live content")).toBeTruthy();
     expect(screen.getByText("empty")).toBeTruthy();
+  });
+});
+
+describe("items with identical text", () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  it("renders every item without a duplicate key warning", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const twice = (title: string) => [
+      { title, text: "text" },
+      { title, text: "text" },
+    ];
+    render(
+      <CaseStudyPage
+        study={{
+          title: "Repeats",
+          summary: "Authored items that share their text.",
+          outcomes: [
+            { value: "1", label: "same outcome" },
+            { value: "1", label: "same outcome" },
+          ],
+          meta: [
+            { label: "same meta", value: "value" },
+            { label: "same meta", value: "value" },
+          ],
+          sections: [
+            {
+              kicker: "repeats",
+              title: "Repeats",
+              blocks: [
+                { type: "list", items: twice("same list") },
+                { type: "insights", items: twice("same insight") },
+                { type: "callouts", items: twice("same callout") },
+              ],
+            },
+          ],
+        }}
+      />,
+    );
+    expect(error).not.toHaveBeenCalled();
+    for (const text of ["same outcome", "same meta", "same list", "same insight", "same callout"]) {
+      expect(screen.getAllByText(text)).toHaveLength(2);
+    }
   });
 });

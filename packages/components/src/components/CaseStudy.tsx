@@ -298,11 +298,11 @@ function Outcomes({ items }: { items: CaseStudyOutcome[] }) {
     items.length >= 4 ? "sm:grid-cols-4" : items.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2";
   return (
     <dl className={`m-0 grid grid-cols-2 gap-x-8 gap-y-6 ${cols}`}>
-      {items.map((it) => (
+      {items.map((it, i) => (
         // dt stays first for screen readers; the figure is moved above it
         // visually, so every figure hangs from the top of its cell however
         // its label wraps. Figure and label centre in their cell.
-        <div key={it.label} className="flex flex-col items-center text-center">
+        <div key={i} className="flex flex-col items-center text-center">
           <dt className={`mt-2 text-xs ${LABEL_TEXT}`}>{it.label}</dt>
           <dd className={`order-first m-0 text-2xl leading-none ${ACCENT_TEXT}`}>{it.value}</dd>
         </div>
@@ -392,7 +392,7 @@ function Block({
             const last = i === b.items.length - 1;
             const trunk = `${first ? "top-3" : "top-0"} ${last ? "h-3" : "bottom-0"}`;
             return (
-              <li key={it.title} className={`relative pl-8 ${last ? "" : "pb-6"}`}>
+              <li key={i} className={`relative pl-8 ${last ? "" : "pb-6"}`}>
                 {!(first && last) && (
                   <span aria-hidden="true" className={`absolute left-1 border-l-hairline ${RULE} ${trunk}`} />
                 )}
@@ -410,7 +410,7 @@ function Block({
         <ol className={`my-10 list-none border-b-hairline p-0 ${RULE}`}>
           {b.items.map((it, i) => (
             <li
-              key={it.title}
+              key={i}
               className={`grid grid-cols-[theme(spacing.16)_1fr] border-t-hairline py-6 ${RULE}`}
             >
               <span className={`text-2xl leading-none ${ACCENT_TEXT}`}>{pad2(i + 1)}</span>
@@ -431,8 +431,8 @@ function Block({
         <div
           className={`my-10 grid grid-cols-1 gap-4 ${three ? `sm:grid-cols-3${breakClass("wide")}` : "sm:grid-cols-2"}`}
         >
-          {b.items.map((it) => (
-            <div key={it.title} className="plate-round bg-[var(--surface-muted)] p-5">
+          {b.items.map((it, i) => (
+            <div key={i} className="plate-round bg-[var(--surface-muted)] p-5">
               <div className={`text-base leading-snug ${TITLE_TEXT}`}>{it.title}</div>
               <p className={`m-0 mt-2 text-sm leading-relaxed ${BODY_TEXT}`}>{it.text}</p>
             </div>
@@ -532,8 +532,8 @@ export function CaseStudyHeader({
         // One fact a line: label and value joined by a dotted leader, like a
         // contents page. A long value wraps and stays flush right.
         <dl className="m-0 mt-10 flex flex-col gap-2">
-          {meta.map((it) => (
-            <div key={it.label} className="flex items-baseline gap-3 text-sm">
+          {meta.map((it, i) => (
+            <div key={i} className="flex items-baseline gap-3 text-sm">
               <dt className={`flex-none text-xs uppercase tracking-wider ${LABEL_TEXT}`}>{it.label}</dt>
               <span
                 aria-hidden="true"
