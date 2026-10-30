@@ -99,3 +99,10 @@ The portfolio's dialogs moved onto the scale in its vendor PR, leaving no caller
 `lib/deprecate.ts` (`warnDeprecated`) stays as the shared tool decision 0024 prescribes for
 the next rename, although nothing calls it today.
 
+## Amendment 2026-10-29: Window `variant` removed
+
+Window's `variant="active"` became an `active` boolean (0024 amendment: a focused pane is
+a state, not a treatment) and stayed one release as a `warnDeprecated` alias. The
+portfolio, the only consumer passing it, moved to `active` in its vendor PR, so the alias
+is removed and no deprecated prop is left again. `lib/deprecate.ts` stays for the next
+rename, as above.

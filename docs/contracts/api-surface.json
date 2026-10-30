@@ -6558,18 +6558,8 @@
               "name": "active",
               "type": "boolean",
               "required": false,
+              "default": "false",
               "description": "Marks the focused pane: the accent ring, a muted title bar and a ChevronRight marker, so focus never relies on colour alone. Set it on the one pane the user is working in."
-            },
-            {
-              "name": "variant",
-              "type": "\"default\" | \"active\"",
-              "required": false,
-              "values": [
-                "\"default\"",
-                "\"active\""
-              ],
-              "deprecated": "Use `active`. A focused pane is a state, not a visual treatment (decision 0024).",
-              "description": "The focused-pane marker under its old name: `\"active\"` is `active`. When both are passed, `active` wins."
             },
             {
               "name": "titleAs",
@@ -6615,7 +6605,7 @@
           ]
         }
       },
-      "apiHash": "5562be9448fafd10"
+      "apiHash": "3b23b7efc1dd95ae"
     },
     "Box": {
       "layer": "primitive",

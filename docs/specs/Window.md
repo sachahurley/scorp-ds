@@ -14,7 +14,7 @@
 | Version | `v1` |
 | Status | `stable` |
 | Last updated | 2026-10-29 |
-| API hash | `5562be9448fafd10` |
+| API hash | `3b23b7efc1dd95ae` |
 
 ---
 
@@ -41,12 +41,12 @@ Don't use this for: a general content container on a page (use Card instead) or 
 
 <!-- AUTO-START:anatomy -->
 
-### Variants
+### Active state
 
-| Enum Value | Description |
-|------------|-------------|
-| `default` | Container stroke ring |
-| `active` | Accent ring, muted title bar, ChevronRight marker |
+| `active` | Description |
+|----------|-------------|
+| `false` (default) | Container stroke ring |
+| `true` | Accent ring, muted title bar, ChevronRight marker |
 
 ### Sizes
 
@@ -68,7 +68,6 @@ Don't use this for: a general content container on a page (use Card instead) or 
 | `status` | `ReactNode` | - | No | Right-side status text. |
 | `actions` | `ReactNode` | - | No | Title bar actions (small buttons). |
 | `active` | `boolean` | `false` | No | Marks the focused pane: accent ring, muted title bar, ChevronRight marker. |
-| `variant` | `"default" \| "active"` | | No | **Deprecated**, use `active`. `"active"` still marks the pane and warns once in development; `active` wins when both are passed (decision 0024). |
 | `titleAs` | `"h1".."h6" \| "span"` | `"h2"` | No | Title element. |
 | `scroll` | `boolean` | `true` | No | Scrollable, focusable body. |
 | `className` / `bodyClassName` | `string` | - | No | Frame / body classes. |
@@ -206,6 +205,7 @@ No hardcoded values found.
 
 | Version | Date | Type | Summary |
 |---------|------|------|---------|
+| Unreleased | 2026-10-29 | breaking | Deprecated `variant` removed: pass `active`. All three consumers had moved to `active` (decision 0031 amendment) |
 | Unreleased | 2026-10-29 | change | `active?: boolean` replaces `variant="active"`: a focused pane is a state, not a treatment (0024 amendment). `variant` stays as a deprecated alias that warns once. Rendering unchanged |
 | Unreleased | 2026-10-29 | docs | Promoted to `stable`: meets the decision 0026 bar and was reviewed by Sacha |
 | v1 | 2026-09-21 | added | Initial component (terminal batch, ds-nav-terminal) |
