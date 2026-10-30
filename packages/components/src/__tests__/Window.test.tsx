@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { Window } from "../components/Window";
 
@@ -43,18 +43,6 @@ describe("Window", () => {
     );
     expect(screen.getByText("3 new")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
-  });
-});
-
-describe("Window deprecated variant", () => {
-  it("still marks the pane active with variant=\"active\", warns once, and loses to active", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { rerender } = render(<Window title="Logs" variant="active">body</Window>);
-    expect(screen.getByRole("region")).toHaveAttribute("data-active", "true");
-    rerender(<Window title="Logs" variant="active" active={false}>body</Window>);
-    expect(screen.getByRole("region")).not.toHaveAttribute("data-active");
-    expect(warn.mock.calls.filter((c) => String(c[0]).includes("Window: variant is deprecated"))).toHaveLength(1);
-    warn.mockRestore();
   });
 });
 

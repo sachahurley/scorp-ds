@@ -14,7 +14,7 @@ const meta: Meta<typeof Window> = {
     },
   },
   argTypes: {
-    variant: { control: 'radio', options: ['default', 'active'] },
+    active: { control: 'boolean' },
     scroll: { control: 'boolean' },
   },
   tags: ['autodocs'],

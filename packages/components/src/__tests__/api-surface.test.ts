@@ -44,6 +44,8 @@ describe('api-surface.json', () => {
     // The 0024 aliases are gone (0031): the size scale carries no deprecated values.
     expect(prop('Button', 'ButtonProps', 'size')?.deprecatedValues).toBeUndefined();
     expect(prop('Button', 'ButtonProps', 'variant')?.deprecatedValues).toBeUndefined();
+    // Window variant="active" became the active boolean (0024 amendment) and is gone.
+    expect(prop('Window', 'WindowProps', 'variant')).toBeUndefined();
   });
 
   it('lists props declared behind a type alias', () => {
